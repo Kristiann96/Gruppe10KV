@@ -13,4 +13,14 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\FrontPageBackground.png" />
+    <None Include="wwwroot\Images\LogoKartverket.png" />
+    <None Include="wwwroot\Images\MapIcon.png" />
+  </ItemGroup>
+
 </Project>
