@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="~/css/form.css" />
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model Gruppe10KVprototype.Models.IncidentFormModel
+
+@{
+    ViewData["Title"] = "Form";
+    Layout = "_Layout";
+}
+
+<html>
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avviksrapport</title>
+
+    
+</head>
+<body>
+<h1>Form</h1>
+<div class="form-container">
+    <h1>SUBJEKT</h1>
+    <form asp-action="SubmitForm" method="post">
+        <div class="form-group">
+            <input type="text" id="subject" name="subject" required>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="uttrykning" name="Uttrykning">
+            <label for="uttrykning">FARLIG FOR UTTRYKNINGSETATER</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="something" name="something">
+            <label for="something">NOE Å HUKE AV</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="attachFile" name="attachFile">
+            <label for="attachFile">LEGG VED FIL</label>
+            <button type="button" id="uploadButton" class="secondary-button">LAST OPP</button>
+        </div>
+        <h2>BESKRIV AVVIK</h2>
+        <div class="form-group">
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div class="button-group">
+            <button type="button" id="backButton" class="secondary-button">TILBAKE TIL KART</button>
+            <button type="button" id="advancedButton" class="secondary-button">AVANSERT KNAPP</button>
+            <button type="submit" class="primary-button">MELD INN</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+
+

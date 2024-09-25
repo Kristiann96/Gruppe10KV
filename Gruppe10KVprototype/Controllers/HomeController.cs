@@ -27,11 +27,29 @@ namespace Gruppe10KVprototype.Controllers
         {
             return View();
         }
-
+        public IActionResult Form()
+         {
+        return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        
+        [HttpPost]
+        public IActionResult SubmitForm(IncidentFormModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("FormResult", model);
+            }
+            return View("Form", model);
+        }
+
+        public IActionResult FormResult(IncidentFormModel model)
+        {
+            return View(model);
         }
     }
 }
