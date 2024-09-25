@@ -1,0 +1,115 @@
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "Form";
+    Layout = "_Layout";
+}
+
+<html>
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avviksrapport</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-container {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        textarea {
+            height: 150px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .checkbox-group button {
+            margin-left: 10px;
+        }
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .button-group {
+            
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .primary-button {
+            background-color: #007bff;
+            color: white;
+        }
+        .secondary-button {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+    
+</head>
+<body>
+<h1>Form</h1>
+<div class="form-container">
+    <h1>SUBJEKT</h1>
+    <form id="incidentForm">
+        <div class="form-group">
+            <input type="text" id="subject" name="subject" required>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="dangerous1" name="dangerous1">
+            <label for="dangerous1">FARLIG FOR UTTRYKNINGSETATER</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="something" name="something">
+            <label for="something">NOE Å HUKE AV</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="attachFile" name="attachFile">
+            <label for="attachFile">LEGG VED FIL</label>
+            <button type="button" id="uploadButton" class="secondary-button">LAST OPP</button>
+        </div>
+        <h2>BESKRIV AVVIK</h2>
+        <div class="form-group">
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div class="button-group">
+            <button type="button" id="backButton" class="secondary-button">TILBAKE TIL KART</button>
+            <button type="button" id="advancedButton" class="secondary-button">AVANSERT KNAPP</button>
+            <button type="submit" class="primary-button">MELD INN</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+
+
