@@ -1,0 +1,22 @@
+@model Gruppe10KVprototype.Models.IncidentFormModel
+
+@{
+    ViewData["Title"] = "Form Result";
+    Layout = "_Layout";
+}
+
+<h1>Form Result</h1>
+<div class="form-container">
+    <h2>SUBJEKT</h2>
+    <p>@Model.Subject</p>
+    <h2>FARLIG FOR UTTRYKNINGSETATER</h2>
+    <p>@Model.Uttrykning</p>
+    <h2>NOE Å HUKE AV</h2>
+    <p>@Model.Something</p>
+    <h2>LEGG VED FIL</h2>
+    <p>@Model.AttachFile</p>
+    <h2>BESKRIV AVVIK</h2>
+    <p>@Model.Description</p>
+</div>
+
+
