@@ -10,11 +10,11 @@
     <h2>SUBJEKT</h2>
     <p>@Model.Subject</p>
     <h2>FARLIG FOR UTTRYKNINGSETATER</h2>
-    <p>@Model.Uttrykning</p>
+    <p>@(Model.Uttrykning ? "true" : "false")</p>
     <h2>NOE Å HUKE AV</h2>
-    <p>@Model.Something</p>
+    <p>@(Model.Something ? "true" : "false")</p>
     <h2>LEGG VED FIL</h2>
-    <p>@Model.AttachFile</p>
+    <p>@(Model.AttachFile ? "true" : "false")</p>
     <h2>BESKRIV AVVIK</h2>
     <p>@Model.Description</p>
 </div>
