@@ -1,6 +1,37 @@
 ﻿* {
     margin: 0;
+    padding: 0;
     width: auto;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+header, footer {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    z-index: 100;
+    overflow: hidden;
+}
+
+header {
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    background-color: #ffffff;
+}
+
+footer {
+    bottom: 0;
+    height: 3em;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 body {
@@ -12,35 +43,105 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
+    min-height: 100vh;
 }
 
-.header {
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5em 1em 0.5em 1em;
-    border-bottom: solid black 1px;
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+    padding: 1em;
+    background-color: #fff;
+    width: 100%;
 }
 
+.navbar-brand img {
+    height: 40px;
+}
+
+.navbartop {
+    display: flex;
+    flex-direction: row;
+}
+
+.navbarlist {
+    display: flex;
+    list-style-type: none;
+}
+
+.navbarlist li {
+    margin-left: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #000;
+    font-size: 1rem;
+}
+
+#navbar-menu {
+    display: none;
+}
+
+.navbar-toggler {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .navbartop {
+        flex-direction: column;
+    }
+}
+
+.navbar-toggler {
+    display: block;
+}
+
+#navbar-menu {
+    display: nonce;
+    flex-direction: column;
+}
+
+.navbarlist {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#navbar-menu.open {
+    display: flex;
+}
+
+.Button-MeldInn {
+    display: inline-block;
+    padding: 1em 2em;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    background-color: darkblue;
+    border-radius: 50px;
+    font-size: larger;
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+.Button-MeldInn:hover {
+    background-color: dodgerblue;
+}
 
 .posterPage {
     display: flex;
+    flex-grow: 1;
     justify-content: center;
     align-items: center;
-    /*background-image: url(../Images/FrontPageBackground.png);
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;*/
-    height: 100vh;
+    height: 100%;
     width: 100%;
-    max-width: 100vw;
     box-sizing: border-box;
 }
 
-/*.background {
+.background {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,7 +151,7 @@ body {
     padding-top: 0;
     margin-top: 0;
     
-}*/
+}
 
 .innmeldCard {
     display: flex;
@@ -69,7 +170,7 @@ h1 {
     font-weight: 100;
 }
 
-button {
+/*button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -80,7 +181,7 @@ button {
     color: #ffffff;
     font-size: larger;
     box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.2);
-}
+}*/
 
 .cardText {
     display: flex;
@@ -95,3 +196,4 @@ button {
     flex-direction: column;
     justify-content: end;
 }
+

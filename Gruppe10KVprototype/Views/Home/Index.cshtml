@@ -1,5 +1,6 @@
 ﻿<link rel="stylesheet" href="~/css/style.css" />
 
+
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -11,12 +12,15 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Kartverket index</title>
 </head>
+
 <body>
     <div class="posterPage">
         <div class="innmeldCard">
             <h1>Hei!</h1>
             <div class="cardText">Er du en flittig turgåer og irriterer deg grønn over feil og mangler i turstien din?</div>
-            <a href="@Url.Action("MapView", "Home")" class="btn btn-primary">Meld inn feil</a>
+            <a class="Button-MeldInn" href="@Url.Action("MapView", "Home")">Meld inn feil</a>
         </div>
     </div>
 </body>
+
+<script src="~/js/Pages.js"></script>
