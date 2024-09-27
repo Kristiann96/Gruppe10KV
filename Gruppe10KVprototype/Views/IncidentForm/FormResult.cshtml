@@ -9,14 +9,17 @@
 <div class="form-container">
     <h2>SUBJEKT</h2>
     <p>@Model.Subject</p>
+
     <h2>FARLIG FOR UTTRYKNINGSETATER</h2>
-    <p>@(Model.Uttrykning ? "true" : "false")</p>
+    <p>@(Model.Uttrykning ? "Ja" : "Nei")</p>
+
     <h2>NOE Å HUKE AV</h2>
-    <p>@(Model.Something ? "true" : "false")</p>
+    <p>@(Model.Something ? "Ja" : "Nei")</p>
+
     <h2>LEGG VED FIL</h2>
-    <p>@(Model.AttachFile ? "true" : "false")</p>
+    <p>@(Model.AttachFile ? "Ja" : "Nei")</p>
+
     <h2>BESKRIV AVVIK</h2>
     <p>@Model.Description</p>
 </div>
-
 
