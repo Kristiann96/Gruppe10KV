@@ -8,5 +8,3 @@ public class IncidentFormModel
     public bool AttachFile { get; set; }
     public string Description { get; set; }
 }
-
-

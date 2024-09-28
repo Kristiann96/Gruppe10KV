@@ -6,16 +6,36 @@
     ViewData["Title"] = "Map View";
 }
 
-@section Styles{
+@section Styles {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
+    <style>
+        /* Stil for knappen */
+        .custom-button {
+            background-color: #FF5733; /* Overraskelsesfarge! */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+            .custom-button:hover {
+                background-color: #FF6F61; /* En lett endring ved hover */
+            }
+    </style>
 }
 
-@section Scripts{
+@section Scripts {
     @* plugin for leaflet map view *@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    @* plugin for leafled Draw *@
+    @* plugin for leaflet Draw *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     @* plugin for search bar *@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
@@ -25,11 +45,19 @@
 
 
 <html>
-    <head>
+<head>
+</head>
+<body>
+    <h1>Map View</h1>
+    <div id="map" style="height: 600px; width: 100%"></div>
 
-    </head>
-    <body>
-        <h1>Map View</h1>
-        <div id="map" style="height: 600px; width: 100%"></div>
-    </body>
+    <!-- Legg til en knapp som går til skjemaet -->
+    <div style="margin-top: 20px;">
+        <a href="/form/form">
+            <button type="button" class="custom-button">
+                Gå til Skjema
+            </button>
+        </a>
+    </div>
+</body>
 </html>
