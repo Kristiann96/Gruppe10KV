@@ -23,4 +23,8 @@
     <None Include="wwwroot\Images\MapIcon.png" />
   </ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\SaksbehandlerProject\SaksbehandlerProject.csproj" />
+	</ItemGroup>
+
 </Project>
