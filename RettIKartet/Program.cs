@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Registrer MariaDbContext som en service
+// Legg til nye services og context her.
 builder.Services.AddScoped<MariaDbContext>();
 builder.Services.AddScoped<IncidentFormService>();
 
