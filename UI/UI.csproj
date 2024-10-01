@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,10 +10,6 @@
         <PackageReference Include="bootstrap" Version="5.3.3" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
         <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="wwwroot\Images\" />
     </ItemGroup>
 
   <ItemGroup>

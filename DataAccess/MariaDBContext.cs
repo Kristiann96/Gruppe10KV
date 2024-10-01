@@ -5,6 +5,10 @@ namespace DataAccess;
 
 public class MariaDbContext
 {
+    [STAThread]
+    static void Main()
+    {
+    }
     private readonly string _connectionString;
 
     public MariaDbContext(IConfiguration configuration)
