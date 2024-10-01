@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Models;
 using System.Diagnostics;
 
-namespace UI.Controllers;
+namespace RettIKartet.Controllers;
 
 public class HomeController : Controller
 {
@@ -16,7 +15,6 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        _logger.LogInformation("Index page visited");
         return View();
     }
 

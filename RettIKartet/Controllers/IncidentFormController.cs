@@ -1,40 +1,38 @@
-﻿using DataAccess;
+﻿using BusinessLogic;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
-namespace Gruppe10KVprototype.Controllers
+namespace RettIKartet.Controllers;
+
+public class IncidentFormController : Controller
 {
-    public class IncidentFormController : Controller
+    private readonly IncidentFormService _service;
+
+    public IncidentFormController(IncidentFormService service)
     {
-        private readonly MariaDbContext _dbContext;
+        _service = service;
+    }
+    // Viser skjemaet
+    public IActionResult Form()
+    {
+        return View("Form");
+    }
 
-        public IncidentFormController(MariaDbContext dbContext)
+    // Tar imot skjemaet og lagrer det i databasen
+    [HttpPost]
+    public async Task<IActionResult> SubmitForm(IncidentFormModel model)
+    {
+        if (ModelState.IsValid)
         {
-            _dbContext = dbContext;
+            await _service.SubmitIncidentFormAsync(model);  // Lagrer skjemaet i databasen
+            return View("FormResult", model);          // Viser resultatet
         }
+        return View("Form", model);  // Viser skjemaet igjen hvis validering feiler
+    }
 
-        // Viser skjemaet
-        public IActionResult Form()
-        {
-            return View("Form");
-        }
-
-        // Tar imot skjemaet og lagrer det i databasen
-        [HttpPost]
-        public async Task<IActionResult> SubmitForm(IncidentFormModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await _dbContext.SaveIncidentFormAsync(model);  // Lagrer skjemaet i databasen
-                return View("FormResult", model);          // Viser resultatet
-            }
-            return View("Form", model);  // Viser skjemaet igjen hvis validering feiler
-        }
-
-        // Viser resultatet etter skjemaet er sendt inn
-        public IActionResult FormResult(IncidentFormModel model)
-        {
-            return View(model);
-        }
+    // Viser resultatet etter skjemaet er sendt inn
+    public IActionResult FormResult(IncidentFormModel model)
+    {
+        return View(model);
     }
 }

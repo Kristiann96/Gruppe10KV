@@ -1,3 +1,4 @@
+using BusinessLogic;
 using DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ builder.Services.AddControllersWithViews();
 
 // Registrer MariaDbContext som en service
 builder.Services.AddScoped<MariaDbContext>();
+builder.Services.AddScoped<IncidentFormService>();
 
 var app = builder.Build();
 
