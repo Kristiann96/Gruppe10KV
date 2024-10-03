@@ -1,12 +1,11 @@
-﻿namespace Gruppe10KVprototype.wwwroot.js
-{
-    window.addEventListener('scroll', function() {
-        var scrollTop = window.scrollY;
-        var scrollBottom = window.scrollY + window.innerHeight;
-        var documentHeight = document.body.scrollHeight;
+﻿namespace Gruppe10KVprototype.wwwroot.js {
+    window.addEventListener('scroll', function () {
+        let scrollTop = window.scrollY;
+        let scrollBottom = window.scrollY + window.innerHeight;
+        let documentHeight = document.body.scrollHeight;
 
-        var header = document.querySelector('header');
-        var footer = document.querySelector('footer');
+        let header = document.querySelector('header');
+        let footer = document.querySelector('footer');
 
         // Show header if at top of page
         if (scrollTop === 0) {
@@ -23,18 +22,18 @@
         }
     }
 
-   function toggleNavbar() {
-        var navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('open');
-        }
+   let toggleNavbar = () => {
+        let navLinks = document.getElementById('navLinks');
+        navLinks.classList.toggle('open');
+    }
 
         document.getElementById("menu-toggle").addEventListener("click", function () {
-            var menu = document.getElementById("navbar-menu");
-            if (menu.classList.contains("open")) {
-                menu.classList.remove("open");
-            } else {
-                menu.classList.add("open");
-            }
-        });
+        let menu = document.getElementById("navbar-menu");
+        if (menu.classList.contains("open")) {
+            menu.classList.remove("open");
+        } else {
+            menu.classList.add("open");
+        }
+    });
 
 }
