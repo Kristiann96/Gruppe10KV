@@ -1,12 +1,12 @@
 {
   "profiles": {
-    "DataAccess": {
+    "InmelderVC": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:55283;http://localhost:55284"
+      "applicationUrl": "https://localhost:55762;http://localhost:55763"
     }
   }
 }

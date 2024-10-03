@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogic", "BusinessLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RettIKartet", "RettIKartet\RettIKartet.csproj", "{C649DDD9-DD9F-4994-9774-217745EEA374}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InmelderVC", "InmelderVC\InmelderVC.csproj", "{31D5AF95-64BC-40DD-AE13-036AC3F72229}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C649DDD9-DD9F-4994-9774-217745EEA374}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C649DDD9-DD9F-4994-9774-217745EEA374}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C649DDD9-DD9F-4994-9774-217745EEA374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31D5AF95-64BC-40DD-AE13-036AC3F72229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D5AF95-64BC-40DD-AE13-036AC3F72229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31D5AF95-64BC-40DD-AE13-036AC3F72229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D5AF95-64BC-40DD-AE13-036AC3F72229}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

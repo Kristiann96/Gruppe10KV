@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
-namespace RettIKartet.Controllers;
+namespace InmelderVC.Controllers;
 
 public class IncidentFormController : Controller
 {
