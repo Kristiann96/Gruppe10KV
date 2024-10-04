@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Retrieve\" />
-    <Folder Include="Store\" />
+    <ProjectReference Include="..\SaksbehandlerDataAccess\SaksbehandlerDataAccess.csproj" />
   </ItemGroup>
 
 </Project>

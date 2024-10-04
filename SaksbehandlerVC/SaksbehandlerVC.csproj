@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InnmelderModel\InnmelderModels.csproj" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SaksbehandlerModels\SaksbehandlerModels.csproj" />
     <ProjectReference Include="..\SakVC\InnmeldingVC.csproj" />
   </ItemGroup>
 

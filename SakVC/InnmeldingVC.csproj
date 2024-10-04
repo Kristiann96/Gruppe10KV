@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Retrieve\" />
-    <Folder Include="Store\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SakModel\InnmeldingModels.csproj" />
   </ItemGroup>
 
 </Project>

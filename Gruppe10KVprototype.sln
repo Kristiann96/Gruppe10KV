@@ -3,23 +3,57 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gruppe10KVprototype", "Gruppe10KVprototype\Gruppe10KVprototype.csproj", "{014870E9-4DE9-42A8-920C-50EBE2ADEC45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Main", "Gruppe10KVprototype\Main.csproj", "{014870E9-4DE9-42A8-920C-50EBE2ADEC45}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0A0BAE45-0430-4627-B47D-956E891BD090} = {0A0BAE45-0430-4627-B47D-956E891BD090}
+		{9B6DE5AB-65D9-4C31-95BE-B25CBD0D084F} = {9B6DE5AB-65D9-4C31-95BE-B25CBD0D084F}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnmelderVC", "InnmelderVC\InnmelderVC.csproj", "{0A0BAE45-0430-4627-B47D-956E891BD090}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnmelderVC", "InnmelderVC\InnmelderVC.csproj", "{0A0BAE45-0430-4627-B47D-956E891BD090}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ECA01E44-D849-400A-8408-C55CAFD36548} = {ECA01E44-D849-400A-8408-C55CAFD36548}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnmelderModel", "InnmelderModel\InnmelderModel.csproj", "{ECA01E44-D849-400A-8408-C55CAFD36548}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnmelderModels", "InnmelderModel\InnmelderModels.csproj", "{ECA01E44-D849-400A-8408-C55CAFD36548}"
+	ProjectSection(ProjectDependencies) = postProject
+		{36391910-7B3A-4075-99E1-7ECECF2CB68D} = {36391910-7B3A-4075-99E1-7ECECF2CB68D}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SakVC", "SakVC\SakVC.csproj", "{C4FC85A8-4E4E-4290-844B-2578A61D7D80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnmeldingVC", "SakVC\InnmeldingVC.csproj", "{C4FC85A8-4E4E-4290-844B-2578A61D7D80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{15E2BD32-CD73-410F-8446-43E5AEF60174} = {15E2BD32-CD73-410F-8446-43E5AEF60174}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SakModel", "SakModel\SakModel.csproj", "{15E2BD32-CD73-410F-8446-43E5AEF60174}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnmeldingModels", "SakModel\InnmeldingModels.csproj", "{15E2BD32-CD73-410F-8446-43E5AEF60174}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1A348C70-8F17-4785-A773-202901EC3834} = {1A348C70-8F17-4785-A773-202901EC3834}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Innmelder", "Innmelder", "{46BF3DD3-E4C9-49E6-B458-5701A1C16402}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sak", "Sak", "{AEA8542D-62F2-4E2D-B5BC-C1AB830FCC58}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Innmelding", "Innmelding", "{AEA8542D-62F2-4E2D-B5BC-C1AB830FCC58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SakDataAccess", "SakDataAccess\SakDataAccess.csproj", "{1A348C70-8F17-4785-A773-202901EC3834}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnmeldingDataAccess", "SakDataAccess\InnmeldingDataAccess.csproj", "{1A348C70-8F17-4785-A773-202901EC3834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnmelderDataAccess", "InnmelderDataAccess\InnmelderDataAccess.csproj", "{36391910-7B3A-4075-99E1-7ECECF2CB68D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnmelderDataAccess", "InnmelderDataAccess\InnmelderDataAccess.csproj", "{36391910-7B3A-4075-99E1-7ECECF2CB68D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Saksbehandler", "Saksbehandler", "{75B4E8F8-BE72-4690-B776-3BBF87727B1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaksbehandlerVC", "SaksbehandlerVC\SaksbehandlerVC.csproj", "{9B6DE5AB-65D9-4C31-95BE-B25CBD0D084F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{936858E8-09C8-4E58-913E-B3151D86E16A} = {936858E8-09C8-4E58-913E-B3151D86E16A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaksbehandlerModels", "SaksbehandlerModels\SaksbehandlerModels.csproj", "{936858E8-09C8-4E58-913E-B3151D86E16A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2DD29D86-65A1-4719-A327-D157E6797C87} = {2DD29D86-65A1-4719-A327-D157E6797C87}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaksbehandlerDataAccess", "SaksbehandlerDataAccess\SaksbehandlerDataAccess.csproj", "{2DD29D86-65A1-4719-A327-D157E6797C87}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LoggInn", "LoggInn", "{13D0B550-910E-4005-B08A-7B627E8E1AB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifications", "Notifications", "{F1FC4F6C-1142-44E0-BB97-CFAD31A44D71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +89,18 @@ Global
 		{36391910-7B3A-4075-99E1-7ECECF2CB68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36391910-7B3A-4075-99E1-7ECECF2CB68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36391910-7B3A-4075-99E1-7ECECF2CB68D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B6DE5AB-65D9-4C31-95BE-B25CBD0D084F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B6DE5AB-65D9-4C31-95BE-B25CBD0D084F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B6DE5AB-65D9-4C31-95BE-B25CBD0D084F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B6DE5AB-65D9-4C31-95BE-B25CBD0D084F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{936858E8-09C8-4E58-913E-B3151D86E16A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{936858E8-09C8-4E58-913E-B3151D86E16A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{936858E8-09C8-4E58-913E-B3151D86E16A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{936858E8-09C8-4E58-913E-B3151D86E16A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DD29D86-65A1-4719-A327-D157E6797C87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DD29D86-65A1-4719-A327-D157E6797C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DD29D86-65A1-4719-A327-D157E6797C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DD29D86-65A1-4719-A327-D157E6797C87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +112,9 @@ Global
 		{15E2BD32-CD73-410F-8446-43E5AEF60174} = {AEA8542D-62F2-4E2D-B5BC-C1AB830FCC58}
 		{1A348C70-8F17-4785-A773-202901EC3834} = {AEA8542D-62F2-4E2D-B5BC-C1AB830FCC58}
 		{36391910-7B3A-4075-99E1-7ECECF2CB68D} = {46BF3DD3-E4C9-49E6-B458-5701A1C16402}
+		{9B6DE5AB-65D9-4C31-95BE-B25CBD0D084F} = {75B4E8F8-BE72-4690-B776-3BBF87727B1D}
+		{936858E8-09C8-4E58-913E-B3151D86E16A} = {75B4E8F8-BE72-4690-B776-3BBF87727B1D}
+		{2DD29D86-65A1-4719-A327-D157E6797C87} = {75B4E8F8-BE72-4690-B776-3BBF87727B1D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F707D98B-289B-4CB1-B297-FF443D0F1A69}
