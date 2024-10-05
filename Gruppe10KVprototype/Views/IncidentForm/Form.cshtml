@@ -1,51 +1,61 @@
 @model Gruppe10KVprototype.Models.IncidentFormModel
 
 @{
-    ViewData["Title"] = "Form";
+    ViewData["Title"] = "Meld inn hendelse";
     Layout = "_Layout";
 }
 
-<html>
+<!-- Link til ekstern CSS-fil -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avviksrapport</title>
-    <link rel="stylesheet" href="~/css/form.css" />
+    <link rel="stylesheet" href="~/css/form-styles.css" />
 </head>
-<body>
-    <h1>Form</h1>
-    <div class="form-container">
-        <h1>SUBJEKT</h1>
-        <form asp-controller="IncidentForm" asp-action="SubmitForm" method="post">
-            <div class="form-group">
-                <input type="text" id="subject" name="Subject" required>
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="uttrykning" name="Uttrykning" value="true">
-                <input type="hidden" name="Uttrykning" value="false">
-                <label for="uttrykning">FARLIG FOR UTTRYKNINGSETATER</label>
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="something" name="Something" value="true">
-                <input type="hidden" name="Something" value="false">
-                <label for="something">NOE Å HUKE AV</label>
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="attachFile" name="AttachFile" value="true">
-                <input type="hidden" name="AttachFile" value="false">
-                <label for="attachFile">LEGG VED FIL</label>
-                <button type="button" id="uploadButton" class="secondary-button">LAST OPP</button>
-            </div>
-            <h2>BESKRIV AVVIK</h2>
-            <div class="form-group">
-                <textarea id="description" name="Description" required></textarea>
-            </div>
-            <div class="button-group">
-                <button type="button" id="backButton" class="secondary-button">TILBAKE TIL KART</button>
-                <button type="button" id="advancedButton" class="secondary-button">AVANSERT KNAPP</button>
-                <button type="submit" class="primary-button">MELD INN</button>
-            </div>
-        </form>
-    </div>
-</body>
-</html>
+
+<h1 class="form-title">Meld inn hendelse</h1>
+<div class="form-container">
+    <form asp-controller="IncidentForm" asp-action="SubmitForm" method="post" class="form">
+        <!-- Subject -->
+        <div class="form-group">
+            <label for="subject">Subjekt</label>
+            <input type="text" id="subject" name="Subject" asp-for="Subject" required />
+        </div>
+
+        <!-- GeoJSON Data -->
+        <div class="form-group">
+            <label for="geoJson">Lokasjonsdata (GeoJSON)</label>
+            <textarea id="geoJson" name="GeoJson" asp-for="GeoJson" readonly></textarea>
+        </div>
+
+        <!-- Checkbox Options -->
+        <div class="checkbox-group">
+            <input type="checkbox" id="uttrykning" name="Uttrykning" value="true" asp-for="Uttrykning" />
+            <input type="hidden" name="Uttrykning" value="false" />
+            <label for="uttrykning">Farlig for utrykningstjenester</label>
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="something" name="Something" value="true" asp-for="Something" />
+            <input type="hidden" name="Something" value="false" />
+            <label for="something">Noe å huke av</label>
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="attachFile" name="AttachFile" value="true" asp-for="AttachFile" />
+            <input type="hidden" name="AttachFile" value="false" />
+            <label for="attachFile">Legg ved fil</label>
+            <button type="button" id="uploadButton" class="secondary-button">Last opp</button>
+        </div>
+
+        <!-- Beskrivelse -->
+        <div class="form-group">
+            <label for="description">Beskrivelse</label>
+            <textarea id="description" name="Description" asp-for="Description" required></textarea>
+        </div>
+
+        <!-- Knappeseksjon -->
+        <div class="button-group">
+            <button type="button" id="backButton" class="secondary-button">Tilbake til kart</button>
+            <button type="button" id="advancedButton" class="secondary-button">Avansert knapp</button>
+            <button type="submit" class="primary-button">Meld inn</button>
+        </div>
+    </form>
+</div>

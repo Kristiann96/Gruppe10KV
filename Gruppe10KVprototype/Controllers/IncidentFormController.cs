@@ -14,8 +14,10 @@ namespace Gruppe10KVprototype.Controllers
         }
 
         // Viser skjemaet
-        public IActionResult Form()
+        public IActionResult Form(string geoJson)
         {
+            // Setter geoJson-dataen som ViewBag for å sende til skjemaet
+            ViewBag.geoJson = geoJson;
             return View("Form");
         }
 
