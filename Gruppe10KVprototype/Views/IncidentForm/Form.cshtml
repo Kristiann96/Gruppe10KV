@@ -59,3 +59,41 @@
         </div>
     </form>
 </div>
+
+@section Styles {
+    <style>
+        /* Generelle stilendringer for checkbox-gruppene */
+        .checkbox-group {
+            margin-bottom: 20px; /* Avstand mellom hver gruppe */
+            display: flex;
+            align-items: center;
+        }
+
+            .checkbox-group input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px; /* Avstand mellom boksen og teksten */
+            }
+
+            .checkbox-group label {
+                font-size: 16px; /* Gjør teksten større */
+                color: #555; /* Gråfarge for bedre lesbarhet */
+            }
+
+        /* Styling av knappen */
+        #uploadButton {
+            background-color: #777; /* Grå bakgrunnsfarge */
+            color: white;
+            padding: 10px 20px;
+            margin-left: 20px; /* Avstand fra label */
+            font-size: 16px; /* Større tekst på knappen */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            #uploadButton:hover {
+                background-color: #555; /* Mørkere gråfarge ved hover */
+            }
+    </style>
+}

@@ -18,6 +18,7 @@ namespace Gruppe10KVprototype.Controllers
         {
             // Setter geoJson-dataen som ViewBag for å sende til skjemaet
             ViewBag.geoJson = geoJson;
+            var model = new IncidentFormModel { GeoJson = geoJson };  // Setter GeoJson i modellen
             return View("Form");
         }
 

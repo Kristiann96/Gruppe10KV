@@ -18,7 +18,7 @@ namespace Gruppe10KVprototype.Models
             {
                 await connection.OpenAsync();
                 var command = new MySqlCommand(
-                    "INSERT INTO incident_form (subject, uttrykning, something, attach_file, description) VALUES (@subject, @uttrykning, @something, @attach_file, @description)",
+                    "INSERT INTO incident_form (subject, uttrykning, something, attach_file, description, location_data) VALUES (@subject, @uttrykning, @something, @attach_file, @description, @location_data)",
                     connection);
 
                 command.Parameters.AddWithValue("@subject", form.Subject);
@@ -26,6 +26,7 @@ namespace Gruppe10KVprototype.Models
                 command.Parameters.AddWithValue("@something", form.Something);
                 command.Parameters.AddWithValue("@attach_file", form.AttachFile);
                 command.Parameters.AddWithValue("@description", form.Description);
+                command.Parameters.AddWithValue("@location_data", form.GeoJson);  // Legger til GeoJSON-data
 
                 await command.ExecuteNonQueryAsync();
             }
