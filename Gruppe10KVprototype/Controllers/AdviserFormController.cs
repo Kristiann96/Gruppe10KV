@@ -23,5 +23,20 @@ namespace Gruppe10KVprototype.Controllers
             // Send dataene til viewet
             return View("AdviserFormView", forms);
         }
+
+        public async Task<IActionResult> AdviserSingleFormView(int id)
+        {
+            // Hent en enkelt sak fra databasen basert på id
+            var incident = await _dbContext.GetIncidentById(id);
+
+            if (incident == null)
+            {
+                return NotFound();
+            }
+
+            return View("AdviserSingleFormView", incident);  // Sender saken til viewet
+        }
+
     }
+
 }

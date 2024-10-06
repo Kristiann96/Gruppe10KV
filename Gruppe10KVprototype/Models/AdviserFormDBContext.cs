@@ -46,5 +46,38 @@ namespace Gruppe10KVprototype.Models
 
             return incidents;
         }
+
+        public async Task<AdviserFormModel?> GetIncidentById(int id)
+        {
+            AdviserFormModel? incident = null;
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                var command = new MySqlCommand("SELECT id, subject, uttrykning, something, attach_file, description, location_data FROM incident_form WHERE id = @id", connection);
+                command.Parameters.AddWithValue("@id", id);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        incident = new AdviserFormModel
+                        {
+                            Id = reader.GetInt32("id"),
+                            Subject = reader.GetString("subject"),
+                            Uttrykning = reader.GetBoolean("uttrykning"),
+                            Something = reader.GetBoolean("something"),
+                            AttachFile = reader.GetBoolean("attach_file"),
+                            Description = reader.GetString("description"),
+                            GeoJson = reader.GetString("location_data")
+                        };
+                    }
+                }
+            }
+
+            return incident;
+        }
+
+
     }
 }
