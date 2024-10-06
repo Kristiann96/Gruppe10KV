@@ -33,9 +33,9 @@ namespace Gruppe10KVprototype.Models
         }
     
         // Hent alle sakene fra incident_form-tabellen
-        public async Task<List<IncidentFormModel>> GetAllIncidents()
+        public async Task<List<AdvisorFormModel>> GetAllIncidents()
         {
-            var incidents = new List<IncidentFormModel>();
+            var incidents = new List<AdvisorFormModel>();
 
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -46,7 +46,7 @@ namespace Gruppe10KVprototype.Models
                 {
                     while (await reader.ReadAsync())
                     {
-                        var incident = new IncidentFormModel
+                        var incident = new AdvisorFormModel
                         {
                             Id = reader.GetInt32("id"),
                             Subject = reader.GetString("subject"),

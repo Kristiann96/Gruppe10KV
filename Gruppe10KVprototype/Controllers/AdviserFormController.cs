@@ -18,7 +18,7 @@ namespace Gruppe10KVprototype.Controllers
         public async Task<IActionResult> Index()
         {
             // Hent alle oppføringer fra incident_form
-            List<IncidentFormModel> forms = await _dbContext.GetAllIncidents();
+            List<AdvisorFormModel> forms = await _dbContext.GetAllIncidents();
 
             // Send dataene til viewet
             return View("AdviserFormView", forms);
