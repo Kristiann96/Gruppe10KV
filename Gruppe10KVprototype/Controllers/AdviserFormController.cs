@@ -7,9 +7,9 @@ namespace Gruppe10KVprototype.Controllers
 {
     public class AdviserFormController : Controller
     {
-        private readonly MariaDbContext _dbContext;
+        private readonly AdviserFormDBContext _dbContext;
 
-        public AdviserFormController(MariaDbContext dbContext)
+        public AdviserFormController(AdviserFormDBContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -18,7 +18,7 @@ namespace Gruppe10KVprototype.Controllers
         public async Task<IActionResult> Index()
         {
             // Hent alle oppføringer fra incident_form
-            List<AdvisorFormModel> forms = await _dbContext.GetAllIncidents();
+            List<AdviserFormModel> forms = await _dbContext.GetAllIncidents();
 
             // Send dataene til viewet
             return View("AdviserFormView", forms);

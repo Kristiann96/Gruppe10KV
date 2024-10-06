@@ -1,6 +1,6 @@
 ﻿namespace Gruppe10KVprototype.Models
 { 
-    public class AdvisorFormModel
+    public class AdviserFormModel
     {
         public int Id { get; set; }  // Ny Id-egenskap
         public string Subject { get; set; }

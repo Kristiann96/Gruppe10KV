@@ -3,39 +3,21 @@ using System.Threading.Tasks;
 
 namespace Gruppe10KVprototype.Models
 {
-    public class MariaDbContext
+    public class AdviserFormDBContext
+
     {
         private readonly string _connectionString;
 
-        public MariaDbContext(IConfiguration configuration)
+        public AdviserFormDBContext(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("MariaDbConnection")!;
         }
 
-        public async Task SaveIncidentForm(IncidentFormModel form)
-        {
-            using (var connection = new MySqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                var command = new MySqlCommand(
-                    "INSERT INTO incident_form (subject, uttrykning, something, attach_file, description, location_data) VALUES (@subject, @uttrykning, @something, @attach_file, @description, @location_data)",
-                    connection);
 
-                command.Parameters.AddWithValue("@subject", form.Subject);
-                command.Parameters.AddWithValue("@uttrykning", form.Uttrykning);
-                command.Parameters.AddWithValue("@something", form.Something);
-                command.Parameters.AddWithValue("@attach_file", form.AttachFile);
-                command.Parameters.AddWithValue("@description", form.Description);
-                command.Parameters.AddWithValue("@location_data", form.GeoJson);  // Legger til GeoJSON-data
-
-                await command.ExecuteNonQueryAsync();
-            }
-        }
-    
         // Hent alle sakene fra incident_form-tabellen
-        public async Task<List<AdvisorFormModel>> GetAllIncidents()
+        public async Task<List<AdviserFormModel>> GetAllIncidents()
         {
-            var incidents = new List<AdvisorFormModel>();
+            var incidents = new List<AdviserFormModel>();
 
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -46,7 +28,7 @@ namespace Gruppe10KVprototype.Models
                 {
                     while (await reader.ReadAsync())
                     {
-                        var incident = new AdvisorFormModel
+                        var incident = new AdviserFormModel
                         {
                             Id = reader.GetInt32("id"),
                             Subject = reader.GetString("subject"),
@@ -66,6 +48,3 @@ namespace Gruppe10KVprototype.Models
         }
     }
 }
-
-
-
