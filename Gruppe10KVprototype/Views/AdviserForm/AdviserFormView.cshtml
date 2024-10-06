@@ -1,0 +1,38 @@
+﻿using Gruppe10KVprototype.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+@model List<Gruppe10KVprototype.Models.AdvisorFormModel>
+
+@{
+    ViewData["Title"] = "Oversikt over saker";
+}
+
+<h2>Oversikt over alle saker</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Subject</th>
+            <th>Beskrivelse</th>
+            <th>Uttrykning</th>
+            <th>Handling</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in Model)
+        {
+            <tr>
+                <td>@incident.Id</td>
+                <td>@incident.Subject</td>
+                <td>@incident.Description</td>
+                <td>@(incident.Uttrykning ? "Ja" : "Nei")</td>
+                <td>
+                    <!-- Link til visning av enkel sak med kart (AdviserSingleFormView) -->
+                    <a href="@Url.Action("AdviserSingleFormView", "AdviserForm", new { id = incident.Id })">Vis detaljer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

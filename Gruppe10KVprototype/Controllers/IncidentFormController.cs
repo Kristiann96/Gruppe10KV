@@ -14,8 +14,11 @@ namespace Gruppe10KVprototype.Controllers
         }
 
         // Viser skjemaet
-        public IActionResult Form()
+        public IActionResult Form(string geoJson)
         {
+            // Setter geoJson-dataen som ViewBag for å sende til skjemaet
+            ViewBag.geoJson = geoJson;
+            var model = new IncidentFormModel { GeoJson = geoJson };  // Setter GeoJson i modellen
             return View("Form");
         }
 
@@ -25,10 +28,19 @@ namespace Gruppe10KVprototype.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _dbContext.SaveIncidentForm(model);  // Lagrer skjemaet i databasen
-                return View("FormResult", model);          // Viser resultatet
+                try
+                {
+                    await _dbContext.SaveIncidentForm(model);  // Forsøk å lagre i databasen
+                }
+                catch (Exception)
+                {
+                    // Logg feilen her om nødvendig
+                    ModelState.AddModelError("", "Kunne ikke lagre dataene, databasen er nede. Vi viser deg likevel skjemaet.");
+                }
+
+                return View("FormResult", model);  // Viser FormResult selv om det er en databasefeil
             }
-            return View("Form", model);  // Viser skjemaet igjen hvis validering feiler
+            return View("Form", model);  // Gå tilbake til skjemaet hvis validering feiler
         }
 
         // Viser resultatet etter skjemaet er sendt inn
