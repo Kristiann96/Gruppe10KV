@@ -7,13 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <Compile Remove="InnmelderContext\**" />
+    <Compile Remove="InnmelderModels\**" />
+    <Compile Remove="SaksbehandlerContext\**" />
+    <EmbeddedResource Remove="InnmelderContext\**" />
+    <EmbeddedResource Remove="InnmelderModels\**" />
+    <EmbeddedResource Remove="SaksbehandlerContext\**" />
+    <None Remove="InnmelderContext\**" />
+    <None Remove="InnmelderModels\**" />
+    <None Remove="SaksbehandlerContext\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="InnmelderModels\" />
-    <Folder Include="InnmelderContext\" />
-    <Folder Include="SaksbehandlerContext\" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
