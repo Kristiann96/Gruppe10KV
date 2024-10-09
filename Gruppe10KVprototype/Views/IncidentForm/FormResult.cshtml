@@ -5,18 +5,28 @@
     Layout = "_Layout";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/form-styles.css" />
+</head>
+
+
 <h1>Form Result</h1>
 <div class="form-container">
     <h2>SUBJEKT</h2>
     <p>@Model.Subject</p>
+
+    <h2>TEGNING PÅ KARTET</h2>
+    <p>@Model.GeoJson</p> <!-- Viser GeoJSON-data -->
+
     <h2>FARLIG FOR UTTRYKNINGSETATER</h2>
-    <p>@(Model.Uttrykning ? "true" : "false")</p>
+    <p>@(Model.Uttrykning ? "Ja" : "Nei")</p>
+
     <h2>NOE Å HUKE AV</h2>
-    <p>@(Model.Something ? "true" : "false")</p>
+    <p>@(Model.Something ? "Ja" : "Nei")</p>
+
     <h2>LEGG VED FIL</h2>
-    <p>@(Model.AttachFile ? "true" : "false")</p>
+    <p>@(Model.AttachFile ? "Ja" : "Nei")</p>
+
     <h2>BESKRIV AVVIK</h2>
     <p>@Model.Description</p>
 </div>
-
-
