@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\LandingPageAdviser\" />
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
