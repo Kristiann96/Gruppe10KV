@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Models.SaksbehandlerModels;
 
 namespace ViewsControllers.Controllers;
 

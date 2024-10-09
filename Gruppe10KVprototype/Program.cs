@@ -1,4 +1,3 @@
-using Gruppe10KVprototype.Models;
 using Models.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Registrer DBContext som en service
-builder.Services.AddScoped<IncidentFormDBContext>();
+builder.Services.AddScoped<IncidentFormDbContext>();
 builder.Services.AddScoped<AdviserFormDBContext>();
 
 var app = builder.Build();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Models;
+using Microsoft.AspNetCore.Mvc;
 using Models.InnmeldingModels;
 
 namespace ViewsControllers.Controllers
