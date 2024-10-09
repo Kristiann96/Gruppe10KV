@@ -15,4 +15,10 @@ public class TempSaksbehandlerController : Controller
     {
         return View();
     }
+
+
+    public IActionResult OversiktSakerSaksbehandler()
+    {
+        return View();
+    }
 }
