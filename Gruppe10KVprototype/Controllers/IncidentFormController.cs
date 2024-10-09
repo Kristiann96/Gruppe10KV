@@ -1,9 +1,8 @@
-﻿using Gruppe10KVprototype.Models;
+﻿using Models;
 using Microsoft.AspNetCore.Mvc;
-using Models.Models.InnmeldingModels;
-using System.Threading.Tasks;
+using Models.InnmeldingModels;
 
-namespace Gruppe10KVprototype.Controllers
+namespace ViewsControllers.Controllers
 {
     public class IncidentFormController : Controller
     {

@@ -1,9 +1,7 @@
-using Gruppe10KVprototype.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Gruppe10KVprototype.Controllers
+namespace ViewsControllers.Controllers
 {
     public class HomeController : Controller
     {

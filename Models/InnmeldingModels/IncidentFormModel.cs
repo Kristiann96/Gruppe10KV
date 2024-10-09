@@ -1,4 +1,4 @@
-namespace Models.Models.InnmeldingModels;
+namespace Models.InnmeldingModels;
 
 public class IncidentFormModel
 {

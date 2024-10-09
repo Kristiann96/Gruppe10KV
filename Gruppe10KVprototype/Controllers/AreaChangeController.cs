@@ -1,7 +1,7 @@
-using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models.SaksbehandlerModels;
 
-namespace Gruppe10KVprototype.Controllers;
+namespace ViewsControllers.Controllers;
 
 public class AreaChangeController : Controller
 {

@@ -1,5 +1,7 @@
 ﻿using MySqlConnector;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Models.InnmeldingModels;
 
 namespace Gruppe10KVprototype.Models
 {

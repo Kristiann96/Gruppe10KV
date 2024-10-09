@@ -6,10 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-	<ItemGroup>
-		<Reference Include="DataAccess.dll" />
-	</ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
   </ItemGroup>
@@ -17,6 +13,7 @@
   <ItemGroup>
     <Folder Include="InnmelderModels\" />
     <Folder Include="InnmelderContext\" />
+    <Folder Include="SaksbehandlerContext\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,9 @@
 ﻿using MySqlConnector;
 using Gruppe10KVprototype.Models;
+using Microsoft.Extensions.Configuration;
+using Models.SaksbehandlerModels;
 
-namespace DataAccess.SaksbehandlerDB;
+namespace Models.Contexts;
 public class AdviserFormDBContext
 
 {

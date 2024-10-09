@@ -1,5 +1,5 @@
-using DataAccess.SaksbehandlerDB;
 using Gruppe10KVprototype.Models;
+using Models.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
