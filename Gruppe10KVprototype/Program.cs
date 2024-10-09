@@ -27,7 +27,7 @@ app.UseAuthorization();
 // Definer routing for HomeController og IncidentFormController
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=InnmelderHome}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "incidentForm",

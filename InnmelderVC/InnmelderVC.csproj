@@ -11,4 +11,8 @@
     <ProjectReference Include="..\SakVC\InnmeldingVC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\NewFolder\" />
+  </ItemGroup>
+
 </Project>
