@@ -15,7 +15,8 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #c0c0c0
+            background-color: #c0c0c0; 
+            height: 100vh;
         }
         .container {
             display: flex;
@@ -28,11 +29,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100%; /* Sørger for full høyde */
         }
         .login-box {
             background-color: #d3d3d3;
             padding: 40px;
             border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Skygge for å gi boksen et løft */
+            max-width: 400px; /* Setter maksimal bredde */
+            width: 100%; /* Fleksibel bredde for responsivt design */
+            text-align: center; /* Sentrer teksten */
         }
         .login-form {
             display: flex;
