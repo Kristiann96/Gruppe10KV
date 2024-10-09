@@ -1,5 +1,5 @@
-﻿namespace Gruppe10KVprototype.Models
-{ 
+﻿namespace Models.Models.SaksbehandlerModels
+{
     public class AdviserFormModel
     {
         public int Id { get; set; }  // Ny Id-egenskap

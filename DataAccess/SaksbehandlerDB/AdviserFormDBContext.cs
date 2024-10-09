@@ -1,7 +1,6 @@
 ﻿using MySqlConnector;
-using System.Threading.Tasks;
 
-namespace Gruppe10KVprototype.Models
+namespace DataAccess.SaksbehandlerDB
 {
     public class AdviserFormDBContext
 

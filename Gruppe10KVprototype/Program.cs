@@ -1,3 +1,4 @@
+using DataAccess.SaksbehandlerDB;
 using Gruppe10KVprototype.Models;
 
 var builder = WebApplication.CreateBuilder(args);

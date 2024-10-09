@@ -1,5 +1,6 @@
 ﻿using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models.Models.InnmeldingModels;
 using System.Threading.Tasks;
 
 namespace Gruppe10KVprototype.Controllers

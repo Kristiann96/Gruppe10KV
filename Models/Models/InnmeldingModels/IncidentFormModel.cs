@@ -1,4 +1,4 @@
-namespace Gruppe10KVprototype.Models;
+namespace Models.Models.InnmeldingModels;
 
 public class IncidentFormModel
 {
