@@ -1,108 +1,74 @@
-﻿
-body {
-    justify-content: center;
+﻿body {
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
-    min-height: 100%;
-}
-
-body.Index {
-    background-image: url('../Images/FrontPageBackground.png');
+    min-height: 100vh;
+    background-image: url('../Images/FrontPageBackground.png'); /* Original background image */
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-header, footer {
-    position: fixed;
-    width: 100%;
-    left: 0;
-    z-index: 1000;
-    background-color: #ffffff;
+header {
+    background-color: white; /* White background for the header */
+    top: 0;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
 }
 
-header {
-    top: 0;
-    height: 5em;
+.navbar {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Space between logo and nav items */
+    align-items: center; /* Center items vertically */
+    padding: 0 1em; /* Add padding for spacing */
+}
+
+.navbar-brand img {
+    height: 4em; /* Adjust size for the logo */
+}
+
+.navbar-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0; /* Remove margin */
+}
+
+    .navbar-list li {
+        margin-left: 1em; /* Space between nav items */
+    }
+
+    .navbar-list .nav-link {
+        display: flex; /* Flex to vertically center the text */
+        align-items: center; /* Center items vertically */
+    }
+
+.navbar-divider {
+    border-bottom: 1px solid #ccc; /* Thin border to separate navbar and content */
+    margin-top: 0.5em; /* Space above the divider */
+    width: 100%; /* Full width for the divider */
+}
+
+.content-window {
+    border: 1px solid #ccc; /* Border around content */
+    border-radius: 5px; /* Rounded corners */
+    background-color: white; /* Background color for content */
+    padding: 20px; /* Padding inside content */
+    margin: 20px; /* Margin around content */
+}
+
+.centered-content {
+    text-align: center; /* Centered text */
+    margin-top: 20px; /* Space above centered content */
 }
 
 footer {
+    background-color: white; /* White background for the footer */
     bottom: 0;
     height: 5em;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-}
-
-h1 {
-    font-weight: 100;
-}
-
-.navbar-toggler {
-    position: relative;
-    padding: 2em;
-    background-color: green;
-    justify-content: end;
-    align-items: end;
-   
-}
-
-.Button-MeldInn {
-    display: inline-block;
-    padding: 1em 2em;
-    text-align: center;
-    text-decoration: none;
-    color: white;
-    background-color: darkblue;
-    border-radius: 50px;
-    font-size: larger;
-    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.2);
-    border: none;
-}
-
-.Button-MeldInn:hover {
-    background-color: dodgerblue;
-}
-
-.posterPage {
-    display: flex;
-    flex-grow: 1;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-
-.innmeldCard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    height: 20em;
-    width: 25em;
-    background-color: #ffffff;
-    padding: 2em 5em 2em 5em;
-    border-radius: 8px;
-    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.2);
-}
-
-.cardText {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: larger;
-    padding: 0em 0em 1em 0em;
-}
-
-#map {
-    margin-top: 5em;
-    margin-bottom: 2em;
-    z-index: 0;
 }

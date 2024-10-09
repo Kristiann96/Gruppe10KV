@@ -3,24 +3,20 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Gruppe10KVprototype</title>
-    <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Gruppe10KVprototype.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    @await RenderSectionAsync("Styles", required: false)
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" /> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" /> <!-- Bootstrap CSS if used -->
 </head>
-<body>
-    <<header>
+<body class="@ViewData["BodyClass"]">
+    <header>
         <nav class="navbar">
-            <div class="container-fluid">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Logo" />
                 </a>
-                <button class="navbar-toggler" type="button" aria-label="Toggle navigation">Nav</button>
-                
                 <div id="navbar-menu" class="navbartop">
-                    <ul class="navbarlist">
+                    <ul class="navbar-list d-flex justify-content-end">
+                        <!-- Ensure items are right-aligned -->
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
                         </li>
@@ -36,28 +32,29 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="AdviserForm" asp-action="Index">Saksbehandler</a>
                         </li>
-                        <li class="nav-item" align="right">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Form">Logg Inn</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="UserPages" asp-action="Login">Logg Inn</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+        <div class="navbar-divider"></div> <!-- Divider for visual separation -->
     </header>
-    
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Gruppe10KVprototype - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <main role="main" class="flex-grow-1">
+        <div class="content-window">
+            @RenderBody() <!-- Render the body of the page -->
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Your Company. All Rights Reserved.</p>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="~/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS if used -->
+    <script src="~/js/site.js"></script> <!-- Link to your custom JS file -->
 </body>
 </html>
