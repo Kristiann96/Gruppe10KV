@@ -19,10 +19,11 @@
         <a href="@Url.Action("MapView", "Home")" class="btn btn-primary">Meld inn feil</a>
     </div>
 </div>
-<div>
+<div style="background-color: white; display: flex; gap: 3em;" >
     <a href="@Url.Action("LandingPage", controller:"TempSaksbehandler")">Landing Page Saks</a>
     <a href="@Url.Action("SingleCaseView", controller:"TempSaksbehandler")">Single Page Saks</a>
     <a href="@Url.Action("OversiktSakerSaksbehandler", controller:"TempSaksbehandler")">Alle saker</a>
-        <a href="@Url.Action("InnloggingSaksbehandler", controller:"TempSaksbehandler")">Logg inn</a>
+    <a href="@Url.Action("InnloggingSaksbehandler", controller:"TempSaksbehandler")">Logg inn</a>
+    <a href="@Url.Action("SortereSaker", controller:"TempSaksbehandler")">Sortere Saker</a>
 </div>
 </body>
