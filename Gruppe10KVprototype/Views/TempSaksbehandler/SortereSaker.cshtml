@@ -1,0 +1,60 @@
+
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+<main>
+    <div class="search-container">
+        <input type="search" placeholder="SØK" class="search-input">
+        <button type="submit" class="search-button">Search</button>
+    </div>
+
+    <section class="quick-sort">
+        <h2>HURTIG SORTERING</h2>
+        <div class="sort-buttons">
+            <button class="sort-btn">SIST SETT</button>
+            <button class="sort-btn">MINE AVVISTE</button>
+            <button class="sort-btn">MINE GODKJENTE</button>
+            <button class="sort-btn">MINE KOMMUNER</button>
+            <button class="sort-btn">VELG OMRÅDE PÅ KART</button>
+        </div>
+    </section>
+
+    <section class="advanced-search">
+        <h2>AVANSERT</h2>
+        <div class="action-icons">
+            <button class="icon-btn"><span class="icon">✓</span></button>
+            <button class="icon-btn"><span class="icon">↻</span></button>
+            <button class="icon-btn"><span class="icon">🗑</span></button>
+            <button class="icon-btn"><span class="icon">🔖</span></button>
+            <button class="icon-btn"><span class="icon">♥</span></button>
+            <button class="icon-btn"><span class="icon">⊞</span></button>
+            <button class="icon-btn"><span class="icon">🗺</span></button>
+        </div>
+        <table class="search-results">
+            <thead>
+            <tr>
+                <th>SAK ID</th>
+                <th>STATUS</th>
+                <th>SUBJEKT</th>
+                <th>KOMMUNE</th>
+                <th>BRUKER</th>
+                <th>DATO</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Table rows will be populated dynamically -->
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

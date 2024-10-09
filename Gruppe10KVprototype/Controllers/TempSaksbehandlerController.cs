@@ -27,5 +27,9 @@ public class TempSaksbehandlerController : Controller
         return View();
     }
 
+    public IActionResult SortereSaker()
+    {
+        return View();
+    }
 
 }
