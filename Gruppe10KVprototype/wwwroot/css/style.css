@@ -7,6 +7,13 @@ body {
     min-height: 100%;
 }
 
+body.Index {
+    background-image: url('../Images/FrontPageBackground.png');
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 header, footer {
     position: fixed;
     width: 100%;
@@ -31,88 +38,18 @@ footer {
     text-align: center;
 }
 
-body.Index {
-    background-image: url('../Images/FrontPageBackground.png');
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
 h1 {
     font-weight: 100;
 }
 
-/*
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1em;
-    background-color: #fff;
-    width: 100%;
-}
-
-.navbar-brand img {
-    height: 40px;
-}
-
-.navbartop {
-    display: flex;
-    flex-direction: row;
-}
-
-.navbarlist {
-    display: flex;
-    list-style-type: none;
-}
-
-.navbarlist li {
-    margin-left: 20px;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: #000;
-    font-size: 1rem;
-}
-
-#navbar-menu {
-    display: none;
-}
-
 .navbar-toggler {
-    display: none;
-    font-size: 30px;
-    cursor: pointer;
-    background: none;
-    border: none;
+    position: relative;
+    padding: 2em;
+    background-color: green;
+    justify-content: end;
+    align-items: end;
+   
 }
-
-@media (max-width: 768px) {
-    .navbartop {
-        flex-direction: column;
-    }
-}
-
-.navbar-toggler {
-    display: block;
-}
-
-#navbar-menu {
-    display: nonce;
-    flex-direction: column;
-}
-
-.navbarlist {
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-#navbar-menu.open {
-    display: flex;
-}
-
-*/
 
 .Button-MeldInn {
     display: inline-block;

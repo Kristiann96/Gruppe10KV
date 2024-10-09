@@ -1,4 +1,4 @@
-﻿namespace Gruppe10KVprototype.wwwroot.js {
+﻿/* namespace Gruppe10KVprototype.wwwroot.js {
     window.addEventListener('scroll', function () {
         let scrollTop = window.scrollY;
         let scrollBottom = window.scrollY + window.innerHeight;
@@ -37,3 +37,4 @@
     });
 
 }
+*/
