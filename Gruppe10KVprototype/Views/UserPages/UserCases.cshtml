@@ -1,54 +1,29 @@
-﻿<link rel="stylesheet" href="~/css/style.css" />
+﻿@model List<Gruppe10KVprototype.Models.UserCase>
 
 @{
     ViewData["Title"] = "Bruker Saker";
 }
-
 
 <div class="brukerSakerTittel">
     <h1>Mine Saker</h1>
     <p>Her kan du se dine saker</p>
 </div>
 
-<div class="brukerSakerListe">
-    <div class="brukerSak">
-        <h2>Sak 1</h2>
-        <p>Her kan du se informasjon om sak 1</p>
-        <a href="@Url.Action("MapView", "Home")">Se sak</a>
+@if (Model != null && Model.Any())
+{
+    <div class="brukerSakerListe">
+        @foreach (var userCase in Model)
+        {
+            <div class="brukerSak">
+                <h2>Sak @userCase.CaseId</h2>
+                <p>@userCase.Subject</p>
+                <p>Status: @userCase.Status</p>
+                <a href="@userCase.GeoLocation">Se sak</a>
+            </div>
+        }
     </div>
-    <div class="brukerSak">
-        <h2>Sak 2</h2>
-        <p>Her kan du se informasjon om sak 2</p>
-        <a href="@Url.Action("MapView", "Home")">Se sak</a>
-    </div>
-    <div class="brukerSak">
-        <h2>Sak 3</h2>
-        <p>Her kan du se informasjon om sak 3</p>
-        <a href="@Url.Action("MapView", "Home")">Se sak</a>
-    </div>
-    <div class="brukerSak">
-        <h2>Sak 4</h2>
-        <p>Her kan du se informasjon om sak 4</p>
-        <a href="@Url.Action("MapView", "Home")">Se sak</a>
-    </div>
-    <div class="brukerSak">
-        <h2>Sak 5</h2>
-        <p>Her kan du se informasjon om sak 5</p>
-        <a href="@Url.Action("MapView", "Home")">Se sak</a>
-    </div>
-    <div class="brukerSak">
-        <h2>Sak 6</h2>
-        <p>Her kan du se informasjon om sak 6</p>
-        <a href="@Url.Action("MapView", "Home")">Se sak</a>
-    </div>
-    <div class="brukerSak">
-        <h2>Sak 7</h2>
-        <p>Her kan du se informasjon om sak 7</p>
-        <a href="@Url.Action("MapView", "Home")">Se sak</a>
-    </div>
-    <div class="brukerSak">
-        <h2>Sak 8</h2>
-        <p>Her kan du se informasjon om sak 8</p>
-        <a href="@Url.Action("MapView", "Home")">Se sak</a>
-    </div>
-</div>
+}
+else
+{
+    <p>Du har ingen saker ennå.</p>
+}

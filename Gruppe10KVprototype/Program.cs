@@ -1,13 +1,23 @@
 using Gruppe10KVprototype.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Registrer DBContext som en service
+// Register DBContext as a service
 builder.Services.AddScoped<IncidentFormDBContext>();
 builder.Services.AddScoped<AdviserFormDBContext>();
+
+// Adding ApplicationDbContext as a service to allow our application to use CaseService for database operations and retrieving user cases.
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("MariaDbConnection"),
+    new MySqlServerVersion(new Version(11, 5, 2))));
+
+// Register CaseService
+builder.Services.AddScoped<CaseService>();
+
 
 var app = builder.Build();
 
@@ -25,7 +35,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// Definer routing for HomeController og IncidentFormController
+// Define routing for HomeController and IncidentFormController
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
