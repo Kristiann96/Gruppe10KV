@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 // Registrer DBContext som en service
 builder.Services.AddScoped<IncidentFormDBContext>();
@@ -24,6 +25,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+//Map Razor Pages
+app.MapRazorPages();
 
 // Definer routing for HomeController og IncidentFormController
 app.MapControllerRoute(
