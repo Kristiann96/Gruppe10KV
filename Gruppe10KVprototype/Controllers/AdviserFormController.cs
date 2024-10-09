@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DataAccess.SaksbehandlerDB;
-using Models.Models.SaksbehandlerModels;
+using Models.SaksbehandlerModels;
 
 namespace Gruppe10KVprototype.Controllers
 {

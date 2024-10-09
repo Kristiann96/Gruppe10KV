@@ -1,4 +1,4 @@
-﻿namespace Models.Models.SaksbehandlerModels
+﻿namespace Models.SaksbehandlerModels
 {
     public class AdviserFormModel
     {
