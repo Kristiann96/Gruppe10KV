@@ -10,4 +10,9 @@ public class TempSaksbehandlerController : Controller
     {
         return View();
     }
+
+    public IActionResult SingleCaseView()
+    {
+        return View();
+    }
 }
