@@ -10,55 +10,53 @@
     <title>title</title>
 </head>
 <body>
-<div class="topplinje">
-    <div>Navn Navnesen</div>
-    <div>
-        <div>
-            <ul class="topplinjeinfo">
-                <li>Status</li>
-                <li>Sak ID</li>
-            </ul>
+<main class="detail-page">
+    <div class="page-header">
+        <p class="user-name">NAVN NAVNESEN</p>
+        <div class="status-container">
+            <span class="status-label">STATUS</span>
+            <span class="status-indicator"></span>
         </div>
+        <div class="case-id">SAK ID #000000</div>
     </div>
-</div>
-<div class="subjektlinje">
-    <div>Subjekt</div>
-    <div>
-        <ul class="subjektlinjeinfo">
-            <li>Kommune</li>
-            <li>Tag</li>
-        </ul>
+
+    <h1 class="subject">SUBJECT</h1>
+    <div class="metadata">
+        <span class="kommune">KOMMUNE</span>
+        <span class="tag">TAG</span>
     </div>
-</div>
-<div class="forstebokslinje">
-    <div class="beskrivelseboks">
-        <div>Beskrivelse</div>
-        <div class="descboks">Description</div>
-    </div>
-    <div class="kartvisningboks">
-        <div>Kartvisning</div>
-        <div class="mapboks">Map View</div>
-    </div>
-</div>
-<div class="bunnlinje">
-    <div>Opplysninger om innsender</div>
-    <div class="bokslinje">
-        <div class="opplysboks">Henter noe informasjon om innsenderen</div>
-        <div class="buttonboks">
-            <div class="buttonboksEn">
-                <button>SVAR</button>
-                <button>FLAGG</button>
+
+    <div class="content-container">
+        <section class="description">
+            <h2>BESKRIVELSE</h2>
+            <div class="description-content">
+                <p>Lorem ipsum odor amet, consectetuer adipiscing elit. ...</p>
             </div>
-            <div class="buttonboksTo">
-                <button>OPPDATER</button>
-                <button>DELEGER</button>
+        </section>
+
+        <section class="map-view">
+            <h2>KARTVISNING</h2>
+            <div class="map-container">
+                <!-- Map will be inserted here -->
             </div>
-            <div class="buttonboksTre">
-                <button>BEHANDLE</button>
-                <button>AVVIS</button>
-            </div>
+        </section>
+    </div>
+
+    <section class="sender-info">
+        <h2>OPPLYSNINGER OM INNSENDER</h2>
+        <div class="sender-content">
+            <p>Viser: sak 4 av 4, hvor 3 av 4 har blitt godkjent og behandlet</p>
         </div>
-    </div>
-</div>
+    </section>
+
+    <section class="action-buttons">
+        <button class="action-btn">SVAR</button>
+        <button class="action-btn">OPPDATER</button>
+        <button class="action-btn">BEHANDLE</button>
+        <button class="action-btn">FLAGG</button>
+        <button class="action-btn">DELEGER</button>
+        <button class="action-btn">AVVIS</button>
+    </section>
+</main>
 </body>
 </html>
