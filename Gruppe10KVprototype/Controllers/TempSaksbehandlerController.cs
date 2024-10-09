@@ -32,4 +32,10 @@ public class TempSaksbehandlerController : Controller
         return View();
     }
 
+
+    public IActionResult SearchForInnmelder()
+    {
+        return View();
+    }
+
 }

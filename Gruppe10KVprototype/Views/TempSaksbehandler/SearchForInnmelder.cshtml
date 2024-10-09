@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartverket Brukerliste</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+      
+        /*nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }*/
+        .search-bar {
+            background-color: #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .search-input {
+            width: 60%;
+            padding: 10px;
+            border-radius: 20px;
+            border: none;
+        }
+        main {
+            display: flex;
+            flex-grow: 1;
+        }
+        .user-list {
+            width: 30%;
+            background-color: #ccc;
+        }
+        .user-item {
+            padding: 15px;
+            border-bottom: 1px solid #bbb;
+        }
+        .user-info {
+            flex-grow: 1;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+     
+
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="SØK BLANT BRUKERE">
+        </div>
+
+        <main>
+            <div class="user-list">
+                <div class="user-item">NAVN NAVNESEN</div>
+                <div class="user-item">NAVN NAVNESEN</div>
+                <div class="user-item">NAVN NAVNESEN</div>
+                <div class="user-item">NAVN NAVNESEN</div>
+                <div class="user-item">NAVN NAVNESEN</div>
+                <div class="user-item">NAVN NAVNESEN</div>
+                <div class="user-item">NAVN NAVNESEN</div>
+                <div class="user-item">NAVN NAVNESEN</div>
+                <div class="user-item">NAVN NAVNESEN</div>
+                <div class="user-item">NAVN NAVNESEN</div>
+            </div>
+            <div class="user-info">
+                <h2>INFORMASJON OM VALGT BRUKER</h2>
+                <!-- Add more detailed user information here -->
+            </div>
+        </main>
+    </div>
+</body>
+</html>
