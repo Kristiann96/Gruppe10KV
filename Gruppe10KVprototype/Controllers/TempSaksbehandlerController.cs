@@ -21,4 +21,11 @@ public class TempSaksbehandlerController : Controller
     {
         return View();
     }
+
+    public IActionResult InnloggingSaksbehandler()
+    {
+        return View();
+    }
+
+
 }
