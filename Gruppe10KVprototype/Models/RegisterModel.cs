@@ -18,7 +18,7 @@ namespace Gruppe10KVprototype.Models
 
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Passordene samsvarer ikke.")]
-        public string ConfirmPassword { get; set; } // Added ConfirmPassword property for validation
+        public string ConfirmPassword { get; set; }
     }
 }
 

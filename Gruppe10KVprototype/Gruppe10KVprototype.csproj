@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\UserPages\UserCases.cshtml" />
     <Content Remove="Views\UserPages\_Layout.cshtml" />
   </ItemGroup>
 

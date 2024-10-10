@@ -5,14 +5,14 @@ namespace Gruppe10KVprototype.Controllers
 {
     public class RegisterController : Controller
     {
-        // GET: /UserPages/Register
+
         [HttpGet]
         public IActionResult Register()
         {
             return View("~/Views/UserPages/Register.cshtml", new RegisterModel());
         }
 
-        // POST: /UserPages/Register
+
         [HttpPost]
         public IActionResult Register(RegisterModel model)
         {
