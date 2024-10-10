@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*using System.ComponentModel.DataAnnotations;
 
 namespace Gruppe10KVprototype.Models
 {
@@ -18,3 +18,4 @@ namespace Gruppe10KVprototype.Models
         // Add other relevant properties below.. This is currently just a template :)
     }
 }
+*/

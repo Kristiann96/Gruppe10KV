@@ -1,7 +1,8 @@
-﻿@model List<Gruppe10KVprototype.Models.UserCase>
-
+﻿@* @model List<Gruppe10KVprototype.Models.UserCase> *@
+   
 @{
     ViewData["Title"] = "Bruker Saker";
+    Layout = "_Layout";
 }
 
 <div class="brukerSakerTittel">
@@ -9,6 +10,7 @@
     <p>Her kan du se dine saker</p>
 </div>
 
+@*
 @if (Model != null && Model.Any())
 {
     <div class="brukerSakerListe">
@@ -27,3 +29,4 @@ else
 {
     <p>Du har ingen saker ennå.</p>
 }
+*@

@@ -11,15 +11,15 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <<header>
+    <header>
         <nav class="navbar">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Logo" />
                 </a>
-                <button class="navbar-toggler" type="button" aria-label="Toggle navigation">Nav</button>
                 
-                <div id="navbar-menu" class="navbartop">
+                
+                <div id="navbar-menu">
                     <ul class="navbarlist">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
@@ -36,11 +36,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="AdviserForm" asp-action="Index">Saksbehandler</a>
                         </li>
-                        <li class="nav-item" align="right">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Form">Logg Inn</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Form">Logg Inn</a>
                         </li>
-                        <li class="nav-item" align="right">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="UserPages" asp-action="UserCases">Mine Saker</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="UserPages" asp-action="UserCases">Mine Saker</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="LandingPage" asp-action="Index">Landing Page</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="SingleUserCase" asp-action="Index">Oversikt Enkeltsak</a>
                         </li>
                     </ul>
                 </div>

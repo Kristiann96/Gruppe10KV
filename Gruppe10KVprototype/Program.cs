@@ -11,12 +11,12 @@ builder.Services.AddScoped<IncidentFormDBContext>();
 builder.Services.AddScoped<AdviserFormDBContext>();
 
 // Adding ApplicationDbContext as a service to allow our application to use CaseService for database operations and retrieving user cases.
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+/*builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("MariaDbConnection"),
     new MySqlServerVersion(new Version(11, 5, 2))));
 
 // Register CaseService
-builder.Services.AddScoped<CaseService>();
+builder.Services.AddScoped<CaseService>();*/
 
 
 var app = builder.Build();

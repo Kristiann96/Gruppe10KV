@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using Gruppe10KVprototype.Models; // Make sure to include the namespace for UserCaseModel and CaseService
 
 namespace Gruppe10KVprototype.Controllers
@@ -21,3 +21,18 @@ namespace Gruppe10KVprototype.Controllers
         }
     }
 }
+*/
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace Gruppe10KVprototype.Controllers
+{
+    public class UserPagesController : Controller
+    {
+        public IActionResult UserCases()
+        {
+            return View();
+        }
+    }
+}
+
