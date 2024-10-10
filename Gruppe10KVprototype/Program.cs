@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 // Register DBContext as a service
 builder.Services.AddScoped<IncidentFormDBContext>();
@@ -35,11 +36,12 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// Define routing for HomeController and IncidentFormController
+// Definer routing for HomeController og IncidentFormController
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Route for IncidentFormController
 app.MapControllerRoute(
     name: "incidentForm",
     pattern: "form/{action=Form}/{id?}",
