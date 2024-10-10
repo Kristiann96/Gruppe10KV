@@ -1,4 +1,5 @@
-using Gruppe10KVprototype.Models;
+using Models.DbContexts;
+using AdviserFormDBContext = Models.DbContexts.AdviserFormDBContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,6 @@ builder.Services.AddControllersWithViews();
 // Registrer DBContext som en service
 builder.Services.AddScoped<IncidentFormDBContext>();
 builder.Services.AddScoped<AdviserFormDBContext>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

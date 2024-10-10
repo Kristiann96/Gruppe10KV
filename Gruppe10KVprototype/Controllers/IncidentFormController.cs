@@ -1,6 +1,9 @@
 ﻿using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Models;
+using Models.DbContexts;
+using Models.InnmeldingModels;
 
 namespace Gruppe10KVprototype.Controllers
 {

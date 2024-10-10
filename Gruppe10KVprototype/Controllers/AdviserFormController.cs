@@ -1,7 +1,6 @@
-﻿using Gruppe10KVprototype.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using Models.DbContexts;
+using Models.SaksbehandlerModels;
 
 namespace Gruppe10KVprototype.Controllers
 {
