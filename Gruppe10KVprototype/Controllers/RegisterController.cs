@@ -40,7 +40,7 @@ namespace Gruppe10KVprototype.Controllers
             return View("~/Views/UserPages/Register.cshtml", model);
         }
 
-        private bool RegisterUser(RegisterModel model)
+        private static bool RegisterUser(RegisterModel model)
         {
             // Implement your user registration logic here
             // Return true if successful, false otherwise
