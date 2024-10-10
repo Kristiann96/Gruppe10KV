@@ -1,0 +1,50 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Gruppe10KVprototype.Models;
+
+namespace Gruppe10KVprototype.Controllers
+{
+    public class RegisterController : Controller
+    {
+        // GET: /UserPages/Register
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View("~/Views/UserPages/Register.cshtml", new RegisterModel());
+        }
+
+        // POST: /UserPages/Register
+        [HttpPost]
+        public IActionResult Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Example registration logic
+                // Replace this with your actual user registration service
+                // e.g., await _userService.RegisterUserAsync(model);
+
+                // Simulating user registration
+                bool registrationSuccessful = RegisterUser(model);
+
+                if (registrationSuccessful)
+                {
+                    // Redirect to a confirmation page or login page
+                    return RedirectToAction("Login", "UserPages");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Brukernavn eller e-post er allerede i bruk.");
+                }
+            }
+
+            // Return the model to the same view if validation fails
+            return View("~/Views/UserPages/Register.cshtml", model);
+        }
+
+        private bool RegisterUser(RegisterModel model)
+        {
+            // Implement your user registration logic here
+            // Return true if successful, false otherwise
+            return true; // Change as needed
+        }
+    }
+}
