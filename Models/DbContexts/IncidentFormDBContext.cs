@@ -1,32 +1,40 @@
-﻿using MySqlConnector;
+﻿using Microsoft.Extensions.Configuration;
 using Models.InnmeldingModels;
-using Microsoft.Extensions.Configuration;
+using MySqlConnector;
 
-namespace Models.DbContexts;
-
-public class IncidentFormDBContext(IConfiguration configuration)
+namespace Models.DbContexts
 {
-    private readonly string _connectionString = configuration.GetConnectionString("MariaDbConnection")!;
-
-    public async Task SaveIncidentForm(IncidentFormModel form)
+    public class IncidentFormDBContext
     {
-        await using var connection = new MySqlConnection(_connectionString);
-        await connection.OpenAsync();
-        var command = new MySqlCommand(
-            "INSERT INTO incident_form (subject, uttrykning, something, attach_file, description, location_data) VALUES (@subject, @uttrykning, @something, @attach_file, @description, @location_data)",
-            connection);
+        private readonly string _connectionString;
 
-        command.Parameters.AddWithValue("@subject", form.Subject);
-        command.Parameters.AddWithValue("@uttrykning", form.Uttrykning);
-        command.Parameters.AddWithValue("@something", form.Something);
-        command.Parameters.AddWithValue("@attach_file", form.AttachFile);
-        command.Parameters.AddWithValue("@description", form.Description);
-        command.Parameters.AddWithValue("@location_data", form.GeoJson);  // Legger til GeoJSON-data
+        public IncidentFormDBContext(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("MariaDbConnection")!;
+        }
 
-        await command.ExecuteNonQueryAsync();
+        public async Task SaveIncidentForm(IncidentFormModel form)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                var command = new MySqlCommand(
+                    "INSERT INTO incident_form (subject, uttrykning, something, attach_file, description, location_data) VALUES (@subject, @uttrykning, @something, @attach_file, @description, @location_data)",
+                    connection);
+
+                command.Parameters.AddWithValue("@subject", form.Subject);
+                command.Parameters.AddWithValue("@uttrykning", form.Uttrykning);
+                command.Parameters.AddWithValue("@something", form.Something);
+                command.Parameters.AddWithValue("@attach_file", form.AttachFile);
+                command.Parameters.AddWithValue("@description", form.Description);
+                command.Parameters.AddWithValue("@location_data", form.GeoJson);  // Legger til GeoJSON-data
+
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+
     }
-
-
 }
 
 
