@@ -1,11 +1,12 @@
 using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models.SaksbehandlerModels;
 
 namespace Gruppe10KVprototype.Controllers;
 
 public class AreaChangeController : Controller
 {
-    private static List<AreaChange> changes = new List<AreaChange>();
+    private static List<AreaChangeModel> changes = new List<AreaChangeModel>();
     
     //Handle form submission to register a new change
     [HttpGet]
@@ -18,7 +19,7 @@ public class AreaChangeController : Controller
     [HttpPost]
     public IActionResult RegisterAreaChange(string geoJson, string description)
     {
-        var newChange = new AreaChange
+        var newChange = new AreaChangeModel
         {
             Id = Guid.NewGuid().ToString(),
             GeoJson = geoJson,
