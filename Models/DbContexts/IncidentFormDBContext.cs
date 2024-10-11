@@ -1,7 +1,8 @@
-﻿using MySqlConnector;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using Models.InnmeldingModels;
+using MySqlConnector;
 
-namespace Gruppe10KVprototype.Models
+namespace Models.DbContexts
 {
     public class IncidentFormDBContext
     {
