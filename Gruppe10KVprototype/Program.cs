@@ -1,5 +1,6 @@
-using Models.DbContexts;
-using AdviserFormDBContext = Models.DbContexts.AdviserFormDBContext;
+using Microsoft.EntityFrameworkCore;
+using DataAccess;
+using Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,11 @@ builder.Services.AddControllersWithViews();
 
 // Registrer DBContext som en service
 builder.Services.AddScoped<IncidentFormDBContext>();
+builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>();
+
 builder.Services.AddScoped<AdviserFormDBContext>();
+builder.Services.AddScoped<IAdviserFormRepository, AdviserFormRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
