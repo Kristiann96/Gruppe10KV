@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\ERG10KV5.mmd" Link="ERG10KV5.mmd" />
     <None Include="wwwroot\Images\FrontPageBackground.png" />
     <None Include="wwwroot\Images\LogoKartverket.png" />
     <None Include="wwwroot\Images\MapIcon.png" />

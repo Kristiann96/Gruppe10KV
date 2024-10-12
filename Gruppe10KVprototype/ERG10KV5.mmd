@@ -1,0 +1,107 @@
+erDiagram
+    PERSON ||--o{ INNMELDING : "sender"
+    PERSON ||--o{ SAKSBEHANDLER : "kan være"
+    PERSON ||--o{ CHAT : "deltar i"
+    PERSON ||--o{ MELDING : "sender"
+    PERSON ||--o{ VERIFISERING : "utfører"
+    PERSON {
+        int PersonID PK "AUTO_INCREMENT"
+        VARCHAR(50) Fornavn "NOT NULL"
+        VARCHAR(50) Mellomnavn "NULL"
+        VARCHAR(50) Etternavn "NOT NULL"
+        date Fodselsdag "NOT NULL"
+        VARCHAR(15) Telefonnummer "UNIQUE, NOT NULL"
+        VARCHAR(100) Epost "UNIQUE, NOT NULL"
+        VARCHAR(20) BrukerType "NOT NULL"
+    }
+    SAKSBEHANDLER ||--o{ INNMELDING : "behandler"
+    SAKSBEHANDLER {
+        int PersonID FK "NOT NULL"
+        VARCHAR(20) AnsattID "UNIQUE, NOT NULL"
+        VARCHAR(100) JobbEmail "UNIQUE, NOT NULL"
+        VARCHAR(15) JobbTelefon "UNIQUE, NOT NULL"
+    }
+    INNMELDING ||--o| STATUS : "har"
+    INNMELDING ||--o| PRIORITET : "har"
+    INNMELDING ||--|| KOMMUNE : "tilhører"
+    INNMELDING ||--|| KARTTYPE : "relatert til"
+    INNMELDING ||--o{ GEOMETRI : "har"
+    INNMELDING ||--o{ TILBAKEMELDING : "mottar"
+    INNMELDING ||--o| CHAT : "har"
+    INNMELDING ||--o{ VERIFISERING : "mottar"
+    INNMELDING {
+        int InnmeldID PK "AUTO_INCREMENT"
+        int InnmelderID FK "NOT NULL"
+        datetime Innmeldingstidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        int StatusID FK "NOT NULL"
+        int AnsattID FK "NULL"
+        datetime SisteEndring "NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+        VARCHAR(4) KommuneNR FK "NOT NULL"
+        int PrioritetID FK "NOT NULL"
+        VARCHAR(20) KartID FK "NOT NULL"
+    }
+    STATUS {
+        int StatusID PK "AUTO_INCREMENT"
+        VARCHAR(50) Beskrivelse "NOT NULL"
+        boolean ErApen "NOT NULL, DEFAULT TRUE"
+    }
+    PRIORITET {
+        int PrioritetID PK "AUTO_INCREMENT"
+        VARCHAR(50) Beskrivelse "NOT NULL"
+    }
+    GEOMETRI {
+        int GeometriID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        geometry GeometriData "NOT NULL"
+        polygon Omrade "NULL"
+    }
+    KOMMUNE {
+        VARCHAR(4) KommuneNR PK "NOT NULL"
+        VARCHAR(100) Navn "NOT NULL"
+        polygon Grense "NOT NULL"
+    }
+    KARTTYPE ||--|| KART_KILDE : "har"
+    KILDE ||--|| KART_KILDE : "er kilde for"
+    KARTTYPE {
+        VARCHAR(20) KartID PK "NOT NULL"
+        VARCHAR(100) Beskrivelse "NOT NULL"
+    }
+    KILDE {
+        VARCHAR(20) KildeID PK "NOT NULL"
+        VARCHAR(100) Beskrivelse "NOT NULL"
+        VARCHAR(100) Opprinnelse "NOT NULL"
+    }
+    KART_KILDE {
+        VARCHAR(20) KartID FK "NOT NULL"
+        VARCHAR(20) KildeID FK "NOT NULL"
+    }
+    CHAT ||--o{ MELDING : "inneholder"
+    CHAT {
+        int ChatID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        int InnmelderID FK "NOT NULL"
+        int SaksbehandlerID FK "NOT NULL"
+        date StartDato "NOT NULL, DEFAULT CURRENT_DATE"
+    }
+    MELDING {
+        int MeldingID PK "AUTO_INCREMENT"
+        int ChatID FK "NOT NULL"
+        int SenderID FK "NOT NULL"
+        TEXT Innhold "NOT NULL"
+        datetime Tidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
+    TILBAKEMELDING {
+        int TilbakemeldingsID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        int AnsattID FK "NOT NULL"
+        datetime Dato "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        TEXT Innhold "NOT NULL"
+    }
+    VERIFISERING {
+        int VerifiseringID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        int PersonID FK "NOT NULL"
+        boolean ErBekreftet "NOT NULL"
+        VARCHAR(255) Kommentar "NULL"
+        datetime Tidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
