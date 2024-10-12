@@ -1,4 +1,16 @@
+
+%%{init: {'themeCSS': 
+[
+'[id|=entity-PRIORITET] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-STATUS] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-KARTTYPE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-KOMMUNE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-KARTKILDE] .er.entityBox { fill: #9bfa9b; }'
+
+] }}%%
 erDiagram
+
+
     PERSON ||--o{ INNMELDING : "sender"
     PERSON ||--o{ SAKSBEHANDLER : "kan være"
     PERSON ||--o{ CHAT : "deltar i"
@@ -12,7 +24,7 @@ erDiagram
         date Fodselsdag "NOT NULL"
         VARCHAR(15) Telefonnummer "UNIQUE, NOT NULL"
         VARCHAR(100) Epost "UNIQUE, NOT NULL"
-        VARCHAR(20) BrukerType "NOT NULL"
+        ENUMERATION BrukerType "NOT NULL"
     }
     SAKSBEHANDLER ||--o{ INNMELDING : "behandler"
     SAKSBEHANDLER {
@@ -43,7 +55,7 @@ erDiagram
     STATUS {
         int StatusID PK "AUTO_INCREMENT"
         VARCHAR(50) Beskrivelse "NOT NULL"
-        boolean ErApen "NOT NULL, DEFAULT TRUE"
+        boolean Uavklart "NOT NULL, DEFAULT TRUE"
     }
     PRIORITET {
         int PrioritetID PK "AUTO_INCREMENT"
@@ -60,8 +72,8 @@ erDiagram
         VARCHAR(100) Navn "NOT NULL"
         polygon Grense "NOT NULL"
     }
-    KARTTYPE ||--|| KART_KILDE : "har"
-    KILDE ||--|| KART_KILDE : "er kilde for"
+    KARTTYPE ||--|| KARTKILDE : "har"
+    KILDE ||--|| KARTKILDE : "er kilde for"
     KARTTYPE {
         VARCHAR(20) KartID PK "NOT NULL"
         VARCHAR(100) Beskrivelse "NOT NULL"
@@ -71,7 +83,7 @@ erDiagram
         VARCHAR(100) Beskrivelse "NOT NULL"
         VARCHAR(100) Opprinnelse "NOT NULL"
     }
-    KART_KILDE {
+    KARTKILDE {
         VARCHAR(20) KartID FK "NOT NULL"
         VARCHAR(20) KildeID FK "NOT NULL"
     }
