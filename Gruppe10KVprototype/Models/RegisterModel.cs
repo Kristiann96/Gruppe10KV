@@ -16,9 +16,10 @@ namespace Gruppe10KVprototype.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Passordene samsvarer ikke.")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Passordene samsvarer ikke.")]
-        public string ConfirmPassword { get; set; }
+        public string BekreftPassord { get; set; }
     }
 }
 

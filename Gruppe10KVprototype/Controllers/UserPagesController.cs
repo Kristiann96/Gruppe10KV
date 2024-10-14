@@ -31,7 +31,7 @@ namespace Gruppe10KVprototype.Controllers
     {
         public IActionResult UserCases()
         {
-            return View();
+            return View("~/Views/UserPages/UserCase.cshtml");
         }
     }
 }

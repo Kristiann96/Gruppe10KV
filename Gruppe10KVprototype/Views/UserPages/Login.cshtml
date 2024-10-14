@@ -1,22 +1,28 @@
 ﻿@model Gruppe10KVprototype.Models.LoginModel
 
-<h1>Logg Inn</h1>
-<div class="innmeldCard">
-    <form method="post" asp-action="Login">
-        <div class="form-group">
-            <label asp-for="Email"></label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Password"></label>
-            <input asp-for="Password" type="password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-        <button type="submit" class="Button-MeldInn">Logg Inn</button>
-    </form>
-    <div class="register-link">
-        <a asp-controller="Register" asp-action="Register">Ikke registrert? Opprett konto her!</a>
-    </div>
+<body class="Index">
 
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: 'Arial', sans-serif;">
+    <h1 style="font-size: 2.5rem; color: #333; text-transform: uppercase; margin-bottom: 2rem;">Logg Inn</h1>
+    <div class="innmeldCard" style="width: 100%; max-width: 500px; padding: 2rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
+      <div style="width: 100%; max-width: 500px; padding: 2rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; background-color: white;">
+        <form method="post" asp-action="Login" style="display: flex; flex-direction: column;">
+            <div class="form-group" style="margin-bottom: 1.5rem; margin-right: 1.5rem;">
+                <label asp-for="Email" style="display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; width: auto;">E-post</label>
+                <input asp-for="Email" class="form-control" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;" />
+                <span asp-validation-for="Email" class="text-danger" style="color: orangered; display: block; margin-top: 0.25rem;"></span>
+            </div>
+             <div class="form-group" style="margin-bottom: 1.5rem; margin-right: 1.5rem;">
+                <label asp-for="Password" style="display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem; width: auto;">Passord</label>
+                <input asp-for="Password" type="password" class="form-control" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;" />
+                <span asp-validation-for="Password" class="text-danger" style="color: orangered; display: block; margin-top: 0.25rem;"></span>
+            </div>
+            <button type="submit" class="Button-MeldInn btn btn-primary" style="font-size: 1.5rem; padding: 0.75rem; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s;">Logg inn</button>
+        </form>
+        <div class="register-link" style="text-align: center; margin-top: 1.5rem;">
+            <p>Ikke registrert? <a asp-controller="Register" asp-action="Register" style="color: #007bff; font-weight: bold; text-decoration: none; transition: color 0.3s;">Opprett konto her!</a></p>
+        </div>
+    </div>
+  </div>
 </div>
+</body>
