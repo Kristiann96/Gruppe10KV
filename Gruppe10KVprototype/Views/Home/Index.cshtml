@@ -19,8 +19,16 @@
         <div class="innmeldCard">
             <h1>Hei!</h1>
             <div class="cardText">Er du en flittig turgåer og irriterer deg grønn over feil og mangler i turstien din?</div>
-            <a class="Button-MeldInn" href="@Url.Action("MapView", "Home")">Meld inn feil</a>
+            <a href="@Url.Action("MapView", "Home")" class="Button-MeldInn">Meld inn feil</a>
         </div>
+    </div>
+    <div style="background-color: white; display: flex; gap: 3em;">
+        <a href="@Url.Action("LandingPage", controller:"TempSaksbehandler")">Landing Page Saks</a>
+        <a href="@Url.Action("SingleCaseView", controller:"TempSaksbehandler")">Single Page Saks</a>
+        <a href="@Url.Action("OversiktInnmeldingerSaksbehandler", controller:"TempSaksbehandler")">Alle Innmeldinger</a>
+        <a href="@Url.Action("InnloggingSaksbehandler", controller:"TempSaksbehandler")">Logg inn</a>
+        <a href="@Url.Action("SortereInnmeldinger", controller:"TempSaksbehandler")">Sortere Innmeldinger</a>
+        <a href="@Url.Action("SearchForInnmelder", controller:"TempSaksbehandler")">Søke etter innmelder</a>
     </div>
 </body>
 

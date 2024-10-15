@@ -1,4 +1,4 @@
-@model Gruppe10KVprototype.Models.IncidentFormModel
+@model Entities.IncidentForm
 
 @{
     ViewData["Title"] = "Meld inn hendelse";
@@ -62,6 +62,19 @@
 
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        // Populate GeoJSON data from URL parameter if available
+        document.addEventListener('DOMContentLoaded', function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var geoJson = urlParams.get('geoJson');
+            if (geoJson) {
+                document.getElementById('geoJson').value = decodeURIComponent(geoJson);
+            }
+        });
+    </script>
+}
 
 @section Styles {
     <style>

@@ -1,13 +1,10 @@
-﻿using Gruppe10KVprototype.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-@model List<Gruppe10KVprototype.Models.AdviserFormModel>
+﻿@model IEnumerable<Entities.AdviserForm>
 
 @{
-    ViewData["Title"] = "Oversikt over saker";
+    ViewData["Title"] = "Oversikt over Innmeldinger";
 }
 
-<h2>Oversikt over alle saker</h2>
+<h2>Oversikt over alle Innmeldinger</h2>
 
 <table class="table">
     <thead>
@@ -28,7 +25,7 @@ using System.Collections.Generic;
                 <td>@incident.Description</td>
                 <td>@(incident.Uttrykning ? "Ja" : "Nei")</td>
                 <td>
-                    <!-- Link til visning av enkel sak med kart (AdviserSingleFormView) -->
+                    <!-- Link til visning av enkel Innmelding med kart (AdviserSingleFormView) -->
                     <a href="@Url.Action("AdviserSingleFormView", "AdviserForm", new { id = incident.Id })">Vis detaljer</a>
                 </td>
             </tr>

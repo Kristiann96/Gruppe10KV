@@ -1,5 +1,6 @@
-using Gruppe10KVprototype.Models;
 using Microsoft.EntityFrameworkCore;
+using DataAccess;
+using Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,10 @@ builder.Services.AddRazorPages();
 
 // Register DBContext as a service
 builder.Services.AddScoped<IncidentFormDBContext>();
+builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>();
+
 builder.Services.AddScoped<AdviserFormDBContext>();
+builder.Services.AddScoped<IAdviserFormRepository, AdviserFormRepository>();
 
 // Adding ApplicationDbContext as a service to allow our application to use CaseService for database operations and retrieving user cases.
 /*builder.Services.AddDbContext<ApplicationDbContext>(options =>

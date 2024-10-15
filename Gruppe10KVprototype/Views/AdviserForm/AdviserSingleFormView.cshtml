@@ -1,15 +1,21 @@
-﻿@model Gruppe10KVprototype.Models.AdviserFormModel
+﻿@model Entities.AdviserForm
 
 @{
-    ViewData["Title"] = "Sak Detaljer";
+    ViewData["Title"] = "Innmelding Detaljer";
 }
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <h2>@Model.Subject</h2>
 
 <div id="map" style="height: 500px;"></div>
 
+<h3>Beskrivelse</h3>
+<p>@Model.Description</p>
+
+<h3>Uttrykning</h3>
+<p>@(Model.Uttrykning ? "Ja" : "Nei")</p>
+
 @section Scripts {
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
         // Kartvariabelen, standard satt til Trondheim som fallback
@@ -24,11 +30,12 @@
         // Hent GeoJSON-data fra modellen
         var geoJsonData = @Html.Raw(Model.GeoJson);
 
-        // Legg til GeoJSON-data på kartet
-        var geoJsonLayer = L.geoJSON(geoJsonData).addTo(map);
 
-        // Sentrer kartet rundt GeoJSON-dataene (automatisk zoom for å passe til formen)
-        map.fitBounds(geoJsonLayer.getBounds());
+        // Legg til GeoJSON-data på kartet
+                var geoJsonLayer = L.geoJSON(geoJsonData).addTo(map);
+
+         // Sentrer kartet rundt GeoJSON-dataene (automatisk zoom for å passe til formen)
+            map.fitBounds(geoJsonLayer.getBounds());
     </script>
 }
 

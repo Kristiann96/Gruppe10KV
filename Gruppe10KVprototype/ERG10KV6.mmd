@@ -1,0 +1,152 @@
+%%{init: {'themeCSS': 
+[
+'[id|=entity-PRIORITET] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-STATUS] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-KARTTYPE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-KOMMUNE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-INNMELDERTYPE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-SAKSBEHANDLERTYPE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-KARTKILDE] .er.entityBox { fill: #9bfa9b; }',
+'[id|=entity-KOMMUNETILHORIGHET] .er.entityBox { fill: #9bfa9b; }'
+] }}%%
+
+erDiagram
+
+    INNMELDER ||--o{ INNMELDING : "lager"
+    INNMELDER ||--o{ INNMELDERTYPE : "har"
+    INNMELDER {
+        int InnmelderID PK "AUTO_INCREMENT"
+        VARCHAR(50) Fornavn "NOT NULL"
+        VARCHAR(50) Mellomnavn "NULL"
+        VARCHAR(50) Etternavn "NOT NULL"
+        date Fodselsdag "NOT NULL"
+        VARCHAR(15) Telefonnummer "UNIQUE, NOT NULL"
+        VARCHAR(100) Epost "UNIQUE, NOT NULL"
+    }
+
+    SAKSBEHANDLER ||--o{ INNMELDING : "behandler"
+    SAKSBEHANDLER ||--o{ SAKSBEHANDLERTYPE : "har"
+    SAKSBEHANDLER {
+        int SaksbehandlerID PK "AUTO_INCREMENT"
+        VARCHAR(50) Fornavn "NOT NULL"
+        VARCHAR(50) Mellomnavn "NULL"
+        VARCHAR(50) Etternavn "NOT NULL"
+        VARCHAR(100) JobbEmail "UNIQUE, NOT NULL"
+        VARCHAR(15) JobbTelefon "UNIQUE, NOT NULL"
+    }
+
+    INNMELDERTYPE {
+        int InnmelderTypeID PK "AUTO_INCREMENT"
+        int InnmelderID FK "NOT NULL"
+        ENUMERATION Type "NOT NULL"
+    }
+
+    SAKSBEHANDLERTYPE {
+        int SaksbehandlerTypeID PK "AUTO_INCREMENT"
+        int SaksbehandlerID FK "NOT NULL"
+        ENUMERATION Type "NOT NULL" 
+    }
+
+    INNMELDING ||--o| STATUS : "har"
+    INNMELDING ||--o| PRIORITET : "har"
+    INNMELDING ||--o{ KOMMUNETILHORIGHET : "tilhører"
+    INNMELDING ||--|| KARTTYPE : "relatert til"
+    INNMELDING ||--o{ GEOMETRI : "har"
+    INNMELDING ||--o{ TILBAKEMELDING : "mottar"
+    INNMELDING ||--o| CHAT : "har"
+    INNMELDING ||--o{ VERIFISERING : "mottar"
+    INNMELDING {
+        int InnmeldID PK "AUTO_INCREMENT"
+        int InnmelderID FK "NOT NULL"
+        datetime Innmeldingstidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        int StatusID FK "NOT NULL"
+        int SaksbehandlerID FK "NULL"
+        datetime SisteEndring "NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+        VARCHAR(4) KommuneNR FK "NOT NULL"
+        int PrioritetID FK "NOT NULL"
+        VARCHAR(20) KartID FK "NOT NULL"
+    }
+
+    STATUS {
+        int StatusID PK "AUTO_INCREMENT"
+        VARCHAR(50) Beskrivelse "NOT NULL"
+        boolean Uavklart "NOT NULL, DEFAULT TRUE"
+    }
+
+    PRIORITET {
+        int PrioritetID PK "AUTO_INCREMENT"
+        VARCHAR(50) Beskrivelse "NOT NULL"
+    }
+
+    GEOMETRI {
+        int GeometriID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        longtext GeometriData "NOT NULL"
+        polygon Omrade "NULL"
+    }
+
+    KOMMUNE ||--o{ KOMMUNETILHORIGHET : "relatert til" 
+    KOMMUNE {
+        VARCHAR(4) KommuneNR PK "NOT NULL"
+        VARCHAR(100) Navn "NOT NULL"
+        polygon Grense "NOT NULL"
+    }
+
+    KOMMUNETILHORIGHET {
+        int KommunetilhorighetID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        VARCHAR(4) KommuneNR FK "NOT NULL"
+    }
+
+    KARTTYPE ||--|| KARTKILDE : "har"
+    KILDE ||--|| KARTKILDE : "er kilde for"
+    
+    KARTTYPE {
+        VARCHAR(20) KartID PK "NOT NULL"
+        VARCHAR(100) Beskrivelse "NOT NULL"
+    }
+
+    KILDE {
+        VARCHAR(20) KildeID PK "NOT NULL"
+        VARCHAR(100) Beskrivelse "NOT NULL"
+        VARCHAR(100) Opprinnelse "NOT NULL"
+    }
+
+    KARTKILDE {
+        VARCHAR(20) KartID FK "NOT NULL"
+        VARCHAR(20) KildeID FK "NOT NULL"
+    }
+
+    CHAT ||--o{ MELDING : "inneholder"
+    CHAT {
+        int ChatID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        int InnmelderID FK "NOT NULL"
+        int SaksbehandlerID FK "NOT NULL"
+        date StartDato "NOT NULL, DEFAULT CURRENT_DATE"
+    }
+
+    MELDING {
+        int MeldingID PK "AUTO_INCREMENT"
+        int ChatID FK "NOT NULL"
+        int SenderID FK "NOT NULL"
+        TEXT Innhold "NOT NULL"
+        datetime Tidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
+
+    TILBAKEMELDING {
+        int TilbakemeldingsID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        int SaksbehandlerID FK "NOT NULL"
+        datetime Dato "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        TEXT Innhold "NOT NULL"
+    }
+
+    VERIFISERING {
+        int VerifiseringID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        int PersonID FK "NOT NULL"
+        boolean ErBekreftet "NOT NULL"
+        VARCHAR(255) Kommentar "NULL"
+        datetime Tidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+    }
