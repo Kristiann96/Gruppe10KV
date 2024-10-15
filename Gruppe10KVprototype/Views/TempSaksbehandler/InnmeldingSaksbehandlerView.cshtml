@@ -1,4 +1,4 @@
-
+@model Models.SaksbehandlerModels.InnmeldinSaksbehandlerModel
 @{
     Layout = "_Layout";
 }
@@ -55,7 +55,22 @@
             </div>
             <div class="buttonboksTre">
                 <button>BEHANDLE</button>
-                <button>AVVIS</button>
+                <div>
+                    <button>AVVIS</button>
+                </div>
+                <div>
+                    <div class="buttonboksTre">
+                        <button>BEHANDLE</button>
+                        <div>
+                            <button>AVVIS</button>
+                        </div>
+                        <div>
+                            <label asp-for="Status">Status:</label>
+                            <select id="statusDropdown" asp-for="Status" asp-items="ViewBag.Statuser"></select>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
