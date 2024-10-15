@@ -1,4 +1,4 @@
-@model Entities.IncidentForm
+@model Models.IncidentForm
 
 @{
     ViewData["Title"] = "Form Result";
@@ -29,4 +29,8 @@
 
     <h2>BESKRIV AVVIK</h2>
     <p>@Model.Description</p>
+    
+    <div class="button-group">
+        <a asp-controller="FormUpdate" asp-action="FormUpdate" class="primary-button">Send inn melding om feil</a>
+    </div>
 </div>

@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Interfaces;
-using Entities;
+using Models;
 using System.Threading.Tasks;
 
 namespace Gruppe10KVprototype.Controllers
 {
     public class IncidentFormController : Controller
     {
-        private readonly IIncidentFormRepository _repository;
+        private readonly IInnmelderRepository _repository;
 
-        public IncidentFormController(IIncidentFormRepository repository)
+        public IncidentFormController(IInnmelderRepository repository)
         {
             _repository = repository;
         }

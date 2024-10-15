@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MySqlConnector;
-using Dapper;
 using System.Data;
 
 namespace DataAccess
 {
-    public class IncidentFormDBContext
+    public class SaksbehandlerDBConnection
     {
         private readonly string _connectionString;
 
-        public IncidentFormDBContext(IConfiguration configuration)
+        public SaksbehandlerDBConnection(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("MariaDbConnection")!;
         }
@@ -18,5 +17,3 @@ namespace DataAccess
             => new MySqlConnection(_connectionString);
     }
 }
-
-

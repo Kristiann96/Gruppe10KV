@@ -1,14 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MySqlConnector;
+using Dapper;
 using System.Data;
 
 namespace DataAccess
 {
-    public class AdviserFormDBContext
+    public class InnmelderDBConnection
     {
         private readonly string _connectionString;
 
-        public AdviserFormDBContext(IConfiguration configuration)
+        public InnmelderDBConnection(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("MariaDbConnection")!;
         }
@@ -17,3 +18,5 @@ namespace DataAccess
             => new MySqlConnection(_connectionString);
     }
 }
+
+

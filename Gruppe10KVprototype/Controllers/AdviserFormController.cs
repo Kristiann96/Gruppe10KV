@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Interfaces;
-using Entities;
+using Models;
 using System.Threading.Tasks;
 
 namespace Gruppe10KVprototype.Controllers
 {
     public class AdviserFormController : Controller
     {
-        private readonly IAdviserFormRepository _repository;
+        private readonly ISaksbehandlerRepository _repository;
 
-        public AdviserFormController(IAdviserFormRepository repository)
+        public AdviserFormController(ISaksbehandlerRepository repository)
         {
             _repository = repository;
         }

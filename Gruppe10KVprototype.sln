@@ -7,11 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gruppe10KVprototype", "Grup
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{38783C25-A0E4-46AB-B198-D62C62115084}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{47D7800B-E11E-4E11-908E-294AE0C42713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{47D7800B-E11E-4E11-908E-294AE0C42713}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{F2712D11-65E1-4534-BEF7-3A2C30F989D7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{4AC06544-A90B-40E0-ABCE-B3C41FEFB80E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interfaces", "Interfaces\Interfaces.csproj", "{4AC06544-A90B-40E0-ABCE-B3C41FEFB80E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +29,6 @@ Global
 		{47D7800B-E11E-4E11-908E-294AE0C42713}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47D7800B-E11E-4E11-908E-294AE0C42713}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47D7800B-E11E-4E11-908E-294AE0C42713}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F2712D11-65E1-4534-BEF7-3A2C30F989D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2712D11-65E1-4534-BEF7-3A2C30F989D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2712D11-65E1-4534-BEF7-3A2C30F989D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2712D11-65E1-4534-BEF7-3A2C30F989D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4AC06544-A90B-40E0-ABCE-B3C41FEFB80E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4AC06544-A90B-40E0-ABCE-B3C41FEFB80E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AC06544-A90B-40E0-ABCE-B3C41FEFB80E}.Release|Any CPU.ActiveCfg = Release|Any CPU
