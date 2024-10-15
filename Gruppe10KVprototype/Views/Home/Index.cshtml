@@ -12,11 +12,20 @@
     <title>Kartverket index</title>
 </head>
 <body>
-    <div class="posterPage">
-        <div class="innmeldCard">
-            <h1>Hei!</h1>
-            <div class="cardText">Er du en flittig turgåer og irriterer deg grønn over feil og mangler i turstien din?</div>
-            <a href="@Url.Action("MapView", "Home")" class="btn btn-primary">Meld inn feil</a>
-        </div>
+<div class="posterPage">
+    <div class="innmeldCard">
+        <h1>Hei!</h1>
+        <div class="cardText">Er du en flittig turgåer og irriterer deg grønn over feil og mangler i turstien din?</div>
+        <a href="@Url.Action("MapView", "Home")" class="btn btn-primary">Meld inn feil</a>
     </div>
+</div>
+<div style="background-color: white; display: flex; gap: 3em;" >
+    <a href="@Url.Action("LandingPage", controller:"TempSaksbehandler")">Landing Page Saks</a>
+    <a href="@Url.Action("SingleCaseView", controller:"TempSaksbehandler")">Single Page Saks</a>
+    <a href="@Url.Action("OversiktSakerSaksbehandler", controller:"TempSaksbehandler")">Alle saker</a>
+    <a href="@Url.Action("InnloggingSaksbehandler", controller:"TempSaksbehandler")">Logg inn</a>
+    <a href="@Url.Action("SortereSaker", controller:"TempSaksbehandler")">Sortere Saker</a>
+    <a href="@Url.Action("SearchForInnmelder", controller:"TempSaksbehandler")">Søke etter innmelder</a>
+    </div>
+</div>
 </body>

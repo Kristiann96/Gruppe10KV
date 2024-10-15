@@ -1,44 +1,40 @@
-﻿using Gruppe10KVprototype.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Interfaces;
+using Entities;
 using System.Threading.Tasks;
-using Models;
-using Models.DbContexts;
-using Models.InnmeldingModels;
 
 namespace Gruppe10KVprototype.Controllers
 {
     public class IncidentFormController : Controller
     {
-        private readonly IncidentFormDBContext _dbContext;
+        private readonly IIncidentFormRepository _repository;
 
-        public IncidentFormController(IncidentFormDBContext dbContext)
+        public IncidentFormController(IIncidentFormRepository repository)
         {
-            _dbContext = dbContext;
+            _repository = repository;
         }
 
-        // Viser skjemaet
         public IActionResult Form(string geoJson)
         {
-            var model = new IncidentFormModel { GeoJson = geoJson };
-            return View("Form");
+            var model = new IncidentForm { GeoJson = geoJson };
+            return View(model);
         }
 
-        // Tar imot skjemaet og lagrer det i databasen
         [HttpPost]
-        public async Task<IActionResult> SubmitForm(IncidentFormModel model)
+        public async Task<IActionResult> SubmitForm(IncidentForm form)
         {
             if (ModelState.IsValid)
             {
-                await _dbContext.SaveIncidentForm(model);  // Lagrer skjemaet i databasen
-                return View("FormResult", model);          // Viser resultatet
+                await _repository.SaveIncidentFormAsync(form);
+                return View("FormResult", form);
             }
-            return View("Form", model);  // Viser skjemaet igjen hvis validering feiler
+            return View("Form", form);
         }
 
-        // Viser resultatet etter skjemaet er sendt inn
-        public IActionResult FormResult(IncidentFormModel model)
+        public async Task<IActionResult> FormResult(int id)
         {
-            return View(model);
+            var form = await _repository.GetIncidentByIdAsync(id);
+            return View(form);
         }
     }
 }
