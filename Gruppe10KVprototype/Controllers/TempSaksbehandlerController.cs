@@ -17,7 +17,7 @@ public class TempSaksbehandlerController : Controller
     }
 
 
-    public IActionResult OversiktSakerSaksbehandler()
+    public IActionResult OversiktInnmeldingerSaksbehandler()
     {
         return View();
     }
@@ -27,7 +27,7 @@ public class TempSaksbehandlerController : Controller
         return View();
     }
 
-    public IActionResult SortereSaker()
+    public IActionResult SortereInnmeldinger()
     {
         return View();
     }
