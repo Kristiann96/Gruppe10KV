@@ -6,13 +6,23 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
-// Registrer DBContext som en service
+// Register DBContext as a service
 builder.Services.AddScoped<IncidentFormDBContext>();
 builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>();
 
 builder.Services.AddScoped<AdviserFormDBContext>();
 builder.Services.AddScoped<IAdviserFormRepository, AdviserFormRepository>();
+
+// Adding ApplicationDbContext as a service to allow our application to use CaseService for database operations and retrieving user cases.
+/*builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(builder.Configuration.GetConnectionString("MariaDbConnection"),
+    new MySqlServerVersion(new Version(11, 5, 2))));
+
+// Register CaseService
+builder.Services.AddScoped<CaseService>();*/
+
 
 var app = builder.Build();
 
@@ -35,6 +45,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Route for IncidentFormController
 app.MapControllerRoute(
     name: "incidentForm",
     pattern: "form/{action=Form}/{id?}",

@@ -1,56 +1,92 @@
-﻿* {
-    margin: 0;
-    width: auto;
-}
-
+﻿
 body {
-    background-image: url('../Images/FrontPageBackground.png');
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
     justify-content: center;
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
+    margin-top: 7em;
+    margin-bottom: 7em;
 }
 
-.header {
+body.Index {
+    background-image: url('../Images/FrontPageBackground.png');
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+header, footer {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    z-index: 1000;
+    background-color: #ffffff;
+}
+
+header {
+    top: 0;
+    height: 5em;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 0.5em 1em 0.5em 1em;
-    border-bottom: solid black 1px;
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
 }
 
+footer {
+    bottom: 0;
+    height: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+h1 {
+    font-weight: 100;
+}
+
+.navbar {
+    display: flex;
+    align-content: space-around;
+    justify-content: flex-end;
+    padding: 1em;
+}
+
+.navbarlist {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: baseline;
+    align-content: space-around;
+    gap: 2em;
+}
+    
+.Button-MeldInn {
+    display: inline-block;
+    padding: 1em 2em;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    background-color: darkblue;
+    border-radius: 50px;
+    font-size: larger;
+    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
+.Button-MeldInn:hover {
+    background-color: dodgerblue;
+}
 
 .posterPage {
     display: flex;
+    flex-grow: 1;
     justify-content: center;
     align-items: center;
-    /*background-image: url(../Images/FrontPageBackground.png);
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;*/
-    height: 100vh;
+    height: 100%;
     width: 100%;
-    max-width: 100vw;
     box-sizing: border-box;
 }
 
-/*.background {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-size: contain;
-    max-height: 100vh;
-    max-width: 100vw;
-    padding-top: 0;
-    margin-top: 0;
-    
-}*/
 
 .innmeldCard {
     display: flex;
@@ -65,33 +101,17 @@ body {
     box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.2);
 }
 
-h1 {
-    font-weight: 100;
-}
-
-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1em 2em 1em 2em;
-    border-radius: 50px;
-    background-color: #1a833b;
-    border: none;
-    color: #ffffff;
-    font-size: larger;
-    box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.2);
-}
-
 .cardText {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     font-size: larger;
-    padding: 0em 0em 1em 0em;   
+    padding: 0em 0em 1em 0em;
 }
 
-.navbar-collapse collapse d-sm-inline-flex justify-content-between{
-    flex-direction: column;
-    justify-content: end;
+#map {
+    margin-top: 5em;
+    margin-bottom: 2em;
+    z-index: 0;
 }

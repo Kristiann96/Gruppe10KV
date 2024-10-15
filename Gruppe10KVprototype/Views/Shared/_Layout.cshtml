@@ -4,32 +4,31 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Gruppe10KVprototype</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Gruppe10KVprototype.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Logo" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbartop">
-                    <ul class="navbar-nav flex-grow-1">
+                
+                
+                <div id="navbar-menu">
+                    <ul class="navbarlist">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MapView">Kart</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="MapView">Kart</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="AreaChange" asp-action="RegisterAreaChange">Fanging kartdata V2</a>
@@ -37,8 +36,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="AdviserForm" asp-action="Index">Saksbehandler</a>
                         </li>
-                        <li class="nav-item" align="right">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Form">Logg Inn</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Login" asp-action="Login">Logg Inn</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="UserPages" asp-action="UserCases">Mine Saker</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="LandingPage" asp-action="Index">Landing Page</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="SingleUserCase" asp-action="Index">Oversikt Enkeltsak</a>
                         </li>
                     </ul>
                 </div>

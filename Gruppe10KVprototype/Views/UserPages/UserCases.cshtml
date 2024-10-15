@@ -1,0 +1,32 @@
+﻿@* @model List<Gruppe10KVprototype.Models.UserCase> *@
+   
+@{
+    ViewData["Title"] = "Bruker Saker";
+    Layout = "_Layout";
+}
+
+<div class="brukerSakerTittel">
+    <h1>Mine Saker</h1>
+    <p>Her kan du se dine saker</p>
+</div>
+
+@*
+@if (Model != null && Model.Any())
+{
+    <div class="brukerSakerListe">
+        @foreach (var userCase in Model)
+        {
+            <div class="brukerSak">
+                <h2>Sak @userCase.CaseId</h2>
+                <p>@userCase.Subject</p>
+                <p>Status: @userCase.Status</p>
+                <a href="@userCase.GeoLocation">Se sak</a>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Du har ingen saker ennå.</p>
+}
+*@
