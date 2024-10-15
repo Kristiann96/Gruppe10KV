@@ -11,7 +11,7 @@ public class TempSaksbehandlerController : Controller
         return View();
     }
 
-    public IActionResult SingleCaseView()
+    public IActionResult InnmeldingSaksbehandlerView()
     {
         return View();
     }
@@ -33,7 +33,7 @@ public class TempSaksbehandlerController : Controller
     }
 
 
-    public IActionResult SearchForInnmelder()
+    public IActionResult SøkInnmelderSaksbehandler()
     {
         return View();
     }
