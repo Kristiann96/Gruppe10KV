@@ -5,36 +5,36 @@ using System.Threading.Tasks;
 
 namespace Gruppe10KVprototype.Controllers
 {
-    public class IncidentFormController : Controller
+    public class InnmelderSkjemaController : Controller
     {
         private readonly IInnmelderRepository _repository;
 
-        public IncidentFormController(IInnmelderRepository repository)
+        public InnmelderSkjemaController(IInnmelderRepository repository)
         {
             _repository = repository;
         }
 
         public IActionResult Form(string geoJson)
         {
-            var model = new IncidentForm { GeoJson = geoJson };
-            return View(model);
+            var model = new InnmelderSkjemaModel { GeoJson = geoJson };
+            return View("InnmelderSkjemaView", model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SubmitForm(IncidentForm form)
+        public async Task<IActionResult> SubmitForm(InnmelderSkjemaModel form)
         {
             if (ModelState.IsValid)
             {
                 await _repository.SaveIncidentFormAsync(form);
-                return View("FormResult", form);
+                return View("InnmelderSkjemaResultat", form);
             }
-            return View("Form", form);
+            return View("InnmelderSkjemaView", form);
         }
 
         public async Task<IActionResult> FormResult(int id)
         {
             var form = await _repository.GetIncidentByIdAsync(id);
-            return View(form);
+            return View("InnmelderSkjemaResultat",form);
         }
     }
 }

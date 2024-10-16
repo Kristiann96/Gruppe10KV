@@ -9,10 +9,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 // Register DBContext as a service
-builder.Services.AddScoped<InnmelderDBConnection>();
+builder.Services.AddScoped<DapperDBConnection>();
 builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
 
-builder.Services.AddScoped<SaksbehandlerDBConnection>();
+builder.Services.AddScoped<DapperDBConnection>();
 builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
 
 // Adding ApplicationDbContext as a service to allow our application to use CaseService for database operations and retrieving user cases.
@@ -40,15 +40,16 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// Definer routing for HomeController og IncidentFormController
+// Definer routing for HomeController og InnmelderSkjemaController
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Route for IncidentFormController
+// Route for InnmelderSkjemaController
 app.MapControllerRoute(
-    name: "incidentForm",
+    name: "innmelderSkjema",
     pattern: "form/{action=Form}/{id?}",
-    defaults: new { controller = "IncidentForm" });
+    defaults: new { controller = "InnmelderSkjema" });
+
 
 app.Run();

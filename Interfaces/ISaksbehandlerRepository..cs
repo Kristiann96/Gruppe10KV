@@ -6,8 +6,8 @@ namespace Interfaces
 {
     public interface ISaksbehandlerRepository
     {
-        Task<IEnumerable<AdviserForm>> GetAllAdviserFormsAsync();
-        Task<AdviserForm> GetAdviserFormByIdAsync(int id);
+        Task<IEnumerable<SaksbehandlerInnmeldingModel>> GetAllAdviserFormsAsync();
+        Task<SaksbehandlerInnmeldingModel> GetAdviserFormByIdAsync(int id);
        
     }
 }

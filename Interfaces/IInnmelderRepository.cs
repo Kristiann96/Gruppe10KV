@@ -6,8 +6,8 @@ namespace Interfaces
 {
     public interface IInnmelderRepository
     {
-        Task<IEnumerable<IncidentForm>> GetAllIncidentsAsync();
-        Task<IncidentForm> GetIncidentByIdAsync(int id);
-        Task SaveIncidentFormAsync(IncidentForm form);
+        Task<IEnumerable<InnmelderSkjemaModel>> GetAllIncidentsAsync();
+        Task<InnmelderSkjemaModel> GetIncidentByIdAsync(int id);
+        Task SaveIncidentFormAsync(InnmelderSkjemaModel form);
     }
 }

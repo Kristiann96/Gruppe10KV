@@ -2,7 +2,7 @@
 
 namespace Models
 {
-    public class AdviserForm
+    public class SaksbehandlerInnmeldingModel
     {
         public int Id { get; set; }
         public required string Subject { get; set; }

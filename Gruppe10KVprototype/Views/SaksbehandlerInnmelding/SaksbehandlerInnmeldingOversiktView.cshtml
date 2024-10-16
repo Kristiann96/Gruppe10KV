@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Models.AdviserForm>
+﻿@model IEnumerable<Models.SaksbehandlerInnmeldingModel>
 
 @{
     ViewData["Title"] = "Oversikt over Innmeldinger";
@@ -25,8 +25,8 @@
                 <td>@incident.Description</td>
                 <td>@(incident.Uttrykning ? "Ja" : "Nei")</td>
                 <td>
-                    <!-- Link til visning av enkel Innmelding med kart (AdviserSingleFormView) -->
-                    <a href="@Url.Action("AdviserSingleFormView", "AdviserForm", new { id = incident.Id })">Vis detaljer</a>
+                    <!-- Link til visning av enkel Innmelding med kart (SaksbehandlerSingleInnmeldingView) -->
+                    <a href="@Url.Action("SaksbehandlerSingleInnmeldingView", "SaksbehandlerInnmelding", new { id = incident.Id })">Vis detaljer</a>
                 </td>
             </tr>
         }

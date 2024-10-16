@@ -8,27 +8,27 @@ namespace DataAccess
 {
     public class InnmelderRepository : IInnmelderRepository
     {
-        private readonly InnmelderDBConnection _dbConnnection;
+        private readonly DapperDBConnection _dbConnnection;
 
-        public InnmelderRepository(InnmelderDBConnection dbConnnection)
+        public InnmelderRepository(DapperDBConnection dbConnnection)
         {
             _dbConnnection = dbConnnection;
         }
 
-        public async Task<IEnumerable<IncidentForm>> GetAllIncidentsAsync()
+        public async Task<IEnumerable<InnmelderSkjemaModel>> GetAllIncidentsAsync()
         {
             using var connection = _dbConnnection.CreateConnection();
-            return await connection.QueryAsync<IncidentForm>("SELECT * FROM incident_form");
+            return await connection.QueryAsync<InnmelderSkjemaModel>("SELECT * FROM incident_form");
         }
 
-        public async Task<IncidentForm> GetIncidentByIdAsync(int id)
+        public async Task<InnmelderSkjemaModel> GetIncidentByIdAsync(int id)
         {
             using var connection = _dbConnnection.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<IncidentForm>(
+            return await connection.QuerySingleOrDefaultAsync<InnmelderSkjemaModel>(
                 "SELECT * FROM incident_form WHERE id = @Id", new { Id = id });
         }
 
-        public async Task SaveIncidentFormAsync(IncidentForm form)
+        public async Task SaveIncidentFormAsync(InnmelderSkjemaModel form)
         {
             using var connection = _dbConnnection.CreateConnection();
             var sql = @"INSERT INTO incident_form (subject, uttrykning, something, attach_file, description, location_data) 

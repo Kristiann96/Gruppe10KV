@@ -1,6 +1,6 @@
 ﻿namespace Models
 {
-    public class IncidentForm
+    public class InnmelderSkjemaModel
     {
         public int Id { get; set; }
         public string Subject { get; set; }

@@ -7,7 +7,7 @@ namespace Gruppe10KVprototype.Controllers
     {
         public IActionResult FormUpdate()
         {
-            return View("~/Views/IncidentForm/FormUpdate.cshtml");
+            return View("~/Views/InnmelderSkjema/FormUpdate.cshtml");
         }
     }
 }

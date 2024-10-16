@@ -1,4 +1,4 @@
-@model Models.IncidentForm
+@model Models.InnmelderSkjemaModel
 
 @{
     ViewData["Title"] = "Meld inn hendelse";
@@ -12,7 +12,7 @@
 
 <h1 class="form-title">Meld inn hendelse</h1>
 <div class="form-container">
-    <form asp-controller="IncidentForm" asp-action="SubmitForm" method="post" class="form">
+    <form asp-controller="InnmelderSkjema" asp-action="SubmitForm" method="post" class="form">
         <!-- Subject -->
         <div class="form-group">
             <label for="subject">Subjekt</label>

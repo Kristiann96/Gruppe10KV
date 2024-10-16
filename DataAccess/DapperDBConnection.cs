@@ -5,11 +5,11 @@ using System.Data;
 
 namespace DataAccess
 {
-    public class InnmelderDBConnection
+    public class DapperDBConnection
     {
         private readonly string _connectionString;
 
-        public InnmelderDBConnection(IConfiguration configuration)
+        public DapperDBConnection(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("MariaDbConnection")!;
         }

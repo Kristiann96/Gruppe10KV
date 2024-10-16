@@ -8,23 +8,23 @@ namespace DataAccess
 {
     public class SaksbehandlerRepository : ISaksbehandlerRepository
     {
-        private readonly SaksbehandlerDBConnection _dbConnection;
+        private readonly DapperDBConnection _dbConnection;
 
-        public SaksbehandlerRepository(SaksbehandlerDBConnection dbConnection)
+        public SaksbehandlerRepository(DapperDBConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }
 
-        public async Task<IEnumerable<AdviserForm>> GetAllAdviserFormsAsync()
+        public async Task<IEnumerable<SaksbehandlerInnmeldingModel>> GetAllAdviserFormsAsync()
         {
             using var connection = _dbConnection.CreateConnection();
-            return await connection.QueryAsync<AdviserForm>("SELECT * FROM incident_form");
+            return await connection.QueryAsync<SaksbehandlerInnmeldingModel>("SELECT * FROM incident_form");
         }
 
-        public async Task<AdviserForm> GetAdviserFormByIdAsync(int id)
+        public async Task<SaksbehandlerInnmeldingModel> GetAdviserFormByIdAsync(int id)
         {
             using var connection = _dbConnection.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<AdviserForm>(
+            return await connection.QuerySingleOrDefaultAsync<SaksbehandlerInnmeldingModel>(
                 "SELECT id, subject, uttrykning, something, attach_file, description, location_data AS GeoJson FROM incident_form WHERE id = @Id", new { Id = id });
         }
 
