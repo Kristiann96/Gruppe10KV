@@ -14,8 +14,10 @@ namespace DataAccess
             _connectionString = configuration.GetConnectionString("MariaDbConnection")!;
         }
 
-        public IDbConnection CreateConnection()
-            => new MySqlConnection(_connectionString);
+        public MySqlConnection CreateConnection()
+        {
+            return new MySqlConnection(_connectionString);
+        }
     }
 }
 

@@ -3,6 +3,8 @@ using Models;
 using Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
+using MySqlConnector;
 
 namespace DataAccess
 {
@@ -28,12 +30,31 @@ namespace DataAccess
                 "SELECT * FROM incident_form WHERE id = @Id", new { Id = id });
         }
 
-        public async Task SaveIncidentFormAsync(InnmelderSkjemaModel form)
+        // Legger til transaksjon for innsending av skjemaet
+        public async Task<bool> SaveIncidentFormAsync(InnmelderSkjemaModel form)
         {
             using var connection = _dbConnnection.CreateConnection();
-            var sql = @"INSERT INTO incident_form (subject, uttrykning, something, attach_file, description, location_data) 
-                        VALUES (@Subject, @Uttrykning, @Something, @AttachFile, @Description, @GeoJson)";
-            await connection.ExecuteAsync(sql, form);
+            await connection.OpenAsync(); // Åpner forbindelsen eksplisitt
+
+            using var transaction = await connection.BeginTransactionAsync();
+            try
+            {
+                var sql = @"INSERT INTO incident_form (subject, uttrykning, something, attach_file, description, location_data) 
+                            VALUES (@Subject, @Uttrykning, @Something, @AttachFile, @Description, @GeoJson)";
+
+                // Utfør databaseoperasjonen med transaksjon
+                await connection.ExecuteAsync(sql, form, transaction: transaction);
+
+                // Fullfør transaksjonen hvis alt går bra
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                // Rull tilbake transaksjonen hvis det skjer en feil
+                await transaction.RollbackAsync();
+                return false;
+            }
         }
     }
 }
