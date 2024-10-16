@@ -6,15 +6,15 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
 public class InnmelderLoginController : Controller
 {
-    // GET: /UserPages/Login
+    // GET: /InnmelderViews/Login
     [HttpGet]
     public IActionResult Login()
     {
         // Specify the full view path if necessary
-        return View("~/Views/UserPages/Login.cshtml", new InnmeldingLoginModel());
+        return View("~/Views/InnmelderViews/Login.cshtml", new InnmeldingLoginModel());
     }
 
-    // POST: /UserPages/Login
+    // POST: /InnmelderViews/Login
     [HttpPost]
     public IActionResult Login(InnmeldingLoginModel model)
     {
@@ -28,6 +28,6 @@ public class InnmelderLoginController : Controller
         }
 
         // Return the model to the same view if validation fails
-        return View("~/Views/UserPages/Login.cshtml", model);
+        return View("~/Views/InnmelderViews/Login.cshtml", model);
     }
 }

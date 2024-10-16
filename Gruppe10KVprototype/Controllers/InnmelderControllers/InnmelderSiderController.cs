@@ -31,6 +31,6 @@ public class InnmelderSiderController : Controller
 {
     public IActionResult UserCases()
     {
-        return View("~/Views/UserPages/UserCase.cshtml");
+        return View("~/Views/InnmelderViews/UserCase.cshtml");
     }
 }

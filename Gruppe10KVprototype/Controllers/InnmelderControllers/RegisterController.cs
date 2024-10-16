@@ -32,7 +32,7 @@ public class RegisterController : Controller
         }
 
         // Return the model to the same view if validation fails
-        return View("~/Views/UserPages/Register.cshtml", model);
+        return View("~/Views/InnmelderViews/Register.cshtml", model);
     }
 
     private static bool RegisterUser(InnmelderRegisterModel model)
