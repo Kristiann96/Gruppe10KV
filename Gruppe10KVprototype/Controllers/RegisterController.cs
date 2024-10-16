@@ -1,5 +1,6 @@
 ﻿using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models.InnmelderModels;
 
 namespace Gruppe10KVprototype.Controllers;
 
@@ -8,12 +9,12 @@ public class RegisterController : Controller
     [HttpGet]
     public IActionResult Register()
     {
-        return View("~/Views/UserPages/Register.cshtml", new RegisterModel());
+        return View("~/Views/UserPages/Register.cshtml", new InnmelderRegisterModel());
     }
 
 
     [HttpPost]
-    public IActionResult Register(RegisterModel model)
+    public IActionResult Register(InnmelderRegisterModel model)
     {
         if (ModelState.IsValid)
         {
@@ -34,7 +35,7 @@ public class RegisterController : Controller
         return View("~/Views/UserPages/Register.cshtml", model);
     }
 
-    private static bool RegisterUser(RegisterModel model)
+    private static bool RegisterUser(InnmelderRegisterModel model)
     {
         // Implement your user registration logic here
         // Return true if successful, false otherwise

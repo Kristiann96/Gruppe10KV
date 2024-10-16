@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Gruppe10KVprototype.Models;
+namespace Models.InnmelderModels;
 
-public class LoginModel
+public class InnmeldingLoginModel
 {
     [Required(ErrorMessage = "E-post er påkrevd.")]
     [EmailAddress(ErrorMessage = "Ugyldig e-postadresse.")]

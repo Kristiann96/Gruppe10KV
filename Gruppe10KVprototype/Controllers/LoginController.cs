@@ -1,5 +1,6 @@
 ﻿using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models.InnmelderModels;
 
 namespace Gruppe10KVprototype.Controllers;
 
@@ -10,12 +11,12 @@ public class LoginController : Controller
     public IActionResult Login()
     {
         // Specify the full view path if necessary
-        return View("~/Views/UserPages/Login.cshtml", new LoginModel());
+        return View("~/Views/UserPages/Login.cshtml", new InnmeldingLoginModel());
     }
 
     // POST: /UserPages/Login
     [HttpPost]
-    public IActionResult Login(LoginModel model)
+    public IActionResult Login(InnmeldingLoginModel model)
     {
         if (ModelState.IsValid)
         {
