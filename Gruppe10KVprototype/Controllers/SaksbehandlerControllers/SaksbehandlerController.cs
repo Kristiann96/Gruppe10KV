@@ -20,7 +20,7 @@ public class SaksbehandlerController : Controller
             "Ferdig behandlet"
         };
 
-        ViewBag.Statuser = SelectList(statuser);
+        ViewBag.Statuser = new SelectList(statuser);
         
         return View();
     }
