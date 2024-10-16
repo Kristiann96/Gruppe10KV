@@ -1,4 +1,3 @@
-using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gruppe10KVprototype.Controllers;
@@ -11,7 +10,7 @@ public class TempSaksbehandlerController : Controller
         return View();
     }
 
-    public IActionResult SingleCaseView()
+    public IActionResult InnmeldingSaksbehandlerView()
     {
         return View();
     }
@@ -33,9 +32,8 @@ public class TempSaksbehandlerController : Controller
     }
 
 
-    public IActionResult SearchForInnmelder()
+    public IActionResult SøkInnmelderSaksbehandler()
     {
         return View();
     }
-
 }

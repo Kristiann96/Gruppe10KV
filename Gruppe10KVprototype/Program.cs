@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using DataAccess;
 using Interfaces;
 
@@ -8,20 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// Register DBContext as a service
-builder.Services.AddScoped<IncidentFormDBContext>();
-builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>();
+// Register DapperDBConnection as a service
+builder.Services.AddScoped<DapperDBConnection>();
 
-builder.Services.AddScoped<AdviserFormDBContext>();
-builder.Services.AddScoped<IAdviserFormRepository, AdviserFormRepository>();
-
-// Adding ApplicationDbContext as a service to allow our application to use CaseService for database operations and retrieving user cases.
-/*builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("MariaDbConnection"),
-    new MySqlServerVersion(new Version(11, 5, 2))));
-
-// Register CaseService
-builder.Services.AddScoped<CaseService>();*/
+//Registrering av repos og interfaces
+builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
+builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
 
 
 var app = builder.Build();
@@ -40,15 +31,16 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// Definer routing for HomeController og IncidentFormController
+// Definer routing for HomeController og InnmelderSkjemaController
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
-// Route for IncidentFormController
+// Route for InnmelderSkjemaController
 app.MapControllerRoute(
-    name: "incidentForm",
-    pattern: "form/{action=Form}/{id?}",
-    defaults: new { controller = "IncidentForm" });
+    "innmelderSkjema",
+    "form/{action=Form}/{id?}",
+    new { controller = "InnmelderSkjema" });
+
 
 app.Run();

@@ -1,8 +1,8 @@
-namespace Models.InnmeldingModels;
+﻿namespace Models;
 
-public class IncidentFormModel
+public class InnmelderSkjemaModel
 {
-    public int Id { get; set; }  // Ny Id-egenskap
+    public int Id { get; set; }
     public string Subject { get; set; }
     public bool Uttrykning { get; set; }
     public bool Something { get; set; }

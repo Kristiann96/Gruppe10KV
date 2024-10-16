@@ -1,72 +1,72 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Gruppe10KVprototype</title>
     <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Gruppe10KVprototype.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    @await RenderSectionAsync("Styles", required: false)
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/Gruppe10KVprototype.styles.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true"/>
+    @await RenderSectionAsync("Styles", false)
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Logo" />
-                </a>
-                
-                
-                <div id="navbar-menu">
-                    <ul class="navbarlist">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="MapView">Kart</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="AreaChange" asp-action="RegisterAreaChange">Fanging kartdata V2</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="AdviserForm" asp-action="Index">Saksbehandler</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Login" asp-action="Login">Logg Inn</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="UserPages" asp-action="UserCases">Mine Saker</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="LandingPage" asp-action="Index">Landing Page</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="SingleUserCase" asp-action="Index">Oversikt Enkeltsak</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    
+<header>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Logo"/>
+            </a>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Gruppe10KVprototype - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+            <div id="navbar-menu">
+                <ul class="navbarlist">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="MapView">Kart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="AreaChange" asp-action="RegisterAreaChange">Fanging kartdata V2</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="SaksbehandlerInnmelding" asp-action="Index">Saksbehandler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Login" asp-action="Login">Logg Inn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="UserPages" asp-action="UserCases">Mine Saker</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="LandingPage" asp-action="Index">Landing Page</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="SingleUserCase" asp-action="Index">Oversikt Enkeltsak</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </nav>
+</header>
+
+<main role="main" class="pb-3">
+    @RenderBody()
+</main>
+
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2024 - Gruppe10KVprototype - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+</footer>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

@@ -1,7 +1,8 @@
 namespace Models.SaksbehandlerModels;
+
 public class AreaChangeModel
 {
-    public String Id { get; set; }
-    public String GeoJson { get; set; }
-    public String Description { get; set; }
+    public string Id { get; set; }
+    public string GeoJson { get; set; }
+    public string Description { get; set; }
 }

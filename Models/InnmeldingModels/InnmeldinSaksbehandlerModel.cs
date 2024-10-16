@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Models.InnmeldingModels;
 
-namespace Models.InnmeldingModels
+internal class InnmeldinSaksbehandlerModel
 {
-    internal class InnmeldinSaksbehandlerModel
-    {
-        public bool Avvist { get; set; }
-    }
+    public bool Avvist { get; set; }
 }
