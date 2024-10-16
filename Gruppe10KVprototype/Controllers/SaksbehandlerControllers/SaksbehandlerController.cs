@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
 
@@ -12,6 +13,15 @@ public class SaksbehandlerController : Controller
 
     public IActionResult InnmeldingSaksbehandlerView()
     {
+        List<string> statuser = new List<string>()
+        {
+            "Ikke tatt til følge",
+            "Under behandling",
+            "Ferdig behandlet"
+        };
+
+        ViewBag.Statuser = SelectList(statuser);
+        
         return View();
     }
 

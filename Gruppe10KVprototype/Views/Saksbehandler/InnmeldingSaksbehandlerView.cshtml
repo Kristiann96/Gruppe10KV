@@ -55,6 +55,10 @@
             <div class="buttonboksTre">
                 <button>BEHANDLE</button>
                 <button>AVVIS</button>
+                @Html.DropDownList("Status",
+                    ViewBag.Statuser,
+                    "Velg status",
+                    new {@class = "form-control"})
             </div>
         </div>
     </div>
