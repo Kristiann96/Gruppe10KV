@@ -34,12 +34,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
-
+   
     <script>
         // Initialiser kartet
-        var map = L.map('map').setView([62.1995, 6.1286], 13);  
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
+        var map = L.map('map').setView([62.1995, 6.1286], 15);
+        L.tileLayer('https://cache.kartverket.no/v1/wmts/1.0.0/topo/default/webmercator/{z}/{y}/{x}.png', {
+            maxZoom: 18,
+            attribution: '<a href="http://www.kartverket.no/">Kartverket</a>'
         }).addTo(map);
 
         // Legg til søkefunksjonen
