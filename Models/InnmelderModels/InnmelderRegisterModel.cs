@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Gruppe10KVprototype.Models;
+namespace Models.InnmelderModels;
 
-public class RegisterModel
+public class InnmelderRegisterModel
 {
     [Required(ErrorMessage = "Brukernavn er påkrevd.")]
     [StringLength(100)]

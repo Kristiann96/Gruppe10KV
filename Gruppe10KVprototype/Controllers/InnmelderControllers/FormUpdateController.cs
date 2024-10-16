@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Gruppe10KVprototype.Controllers;
+namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
 public class FormUpdateController : Controller
 {

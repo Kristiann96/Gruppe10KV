@@ -1,21 +1,22 @@
 ﻿using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models.InnmelderModels;
 
-namespace Gruppe10KVprototype.Controllers;
+namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
-public class LoginController : Controller
+public class InnmelderLoginController : Controller
 {
-    // GET: /UserPages/Login
+    // GET: /InnmelderViews/Login
     [HttpGet]
     public IActionResult Login()
     {
         // Specify the full view path if necessary
-        return View("~/Views/UserPages/Login.cshtml", new LoginModel());
+        return View("~/Views/InnmelderViews/Login.cshtml", new InnmeldingLoginModel());
     }
 
-    // POST: /UserPages/Login
+    // POST: /InnmelderViews/Login
     [HttpPost]
-    public IActionResult Login(LoginModel model)
+    public IActionResult Login(InnmeldingLoginModel model)
     {
         if (ModelState.IsValid)
         {
@@ -27,6 +28,6 @@ public class LoginController : Controller
         }
 
         // Return the model to the same view if validation fails
-        return View("~/Views/UserPages/Login.cshtml", model);
+        return View("~/Views/InnmelderViews/Login.cshtml", model);
     }
 }

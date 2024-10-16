@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gruppe10KVprototype.Controllers;
+namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
 
-public class TempSaksbehandlerController : Controller
+public class SaksbehandlerController : Controller
 {
     // GET
     public IActionResult LandingPage()

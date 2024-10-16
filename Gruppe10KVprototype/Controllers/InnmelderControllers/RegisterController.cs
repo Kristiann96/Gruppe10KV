@@ -1,19 +1,20 @@
 ﻿using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models.InnmelderModels;
 
-namespace Gruppe10KVprototype.Controllers;
+namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
 public class RegisterController : Controller
 {
     [HttpGet]
     public IActionResult Register()
     {
-        return View("~/Views/UserPages/Register.cshtml", new RegisterModel());
+        return View("~/Views/UserPages/Register.cshtml", new InnmelderRegisterModel());
     }
 
 
     [HttpPost]
-    public IActionResult Register(RegisterModel model)
+    public IActionResult Register(InnmelderRegisterModel model)
     {
         if (ModelState.IsValid)
         {
@@ -26,15 +27,15 @@ public class RegisterController : Controller
 
             if (registrationSuccessful)
                 // Redirect to a confirmation page or login page
-                return RedirectToAction("Login", "UserPages");
+                return RedirectToAction("Login", "InnmelderLogin");
             ModelState.AddModelError("", "Brukernavn eller e-post er allerede i bruk.");
         }
 
         // Return the model to the same view if validation fails
-        return View("~/Views/UserPages/Register.cshtml", model);
+        return View("~/Views/InnmelderViews/Register.cshtml", model);
     }
 
-    private static bool RegisterUser(RegisterModel model)
+    private static bool RegisterUser(InnmelderRegisterModel model)
     {
         // Implement your user registration logic here
         // Return true if successful, false otherwise
