@@ -34,54 +34,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
-
-    <script>
-        // Initialiser kartet
-        var map = L.map('map').setView([62.1995, 6.1286], 13);  
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Legg til søkefunksjonen
-        var geocoder = L.Control.geocoder().addTo(map);
-
-        // Legg til et ikon for å finne brukerens lokasjon
-        L.control.locate({
-            position: 'topleft',  // ikonet legges øverst til venstre
-            flyTo: true,  // sentrer kartet til brukerens posisjon
-            showPopup: true  // vis en popup som bekrefter lokasjonen
-        }).addTo(map);
-
-        // Legg til tegneverktøy (Draw) til kartet
-        var drawnItems = new L.FeatureGroup();
-        map.addLayer(drawnItems);
-
-        var drawControl = new L.Control.Draw({
-            edit: {
-                featureGroup: drawnItems
-            },
-            draw: {
-                polygon: true,
-                polyline: true,
-                rectangle: true,
-                circle: true,
-                marker: true
-            }
-        }).addTo(map);
-
-        // Lagre GeoJSON når brukeren tegner noe
-        var geoJsonData = null;
-        map.on(L.Draw.Event.CREATED, function (event) {
-            var layer = event.layer;
-            drawnItems.addLayer(layer);
-
-            geoJsonData = layer.toGeoJSON();
-            var geojsonString = JSON.stringify(geoJsonData);
-
-            // Lagre GeoJSON-data i skjult felt for sending til skjemaet
-            document.getElementById('geoJsonHidden').value = geojsonString;
-        });
-    </script>
+    <script src="~/js/MapAPI.js"></script>
 
     <!-- Skjult felt for GeoJSON -->
     <form method="get" action="/form/form">
@@ -94,6 +47,6 @@
 <head>
 </head>
 <body>
-<div id="map" style="height: 100vh; width: 100%"></div>
+    <div id="map" style="height: 100vh; width: 100%"></div>
 </body>
 </html>

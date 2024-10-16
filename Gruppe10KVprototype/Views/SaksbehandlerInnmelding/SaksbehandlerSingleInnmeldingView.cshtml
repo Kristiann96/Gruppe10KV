@@ -22,9 +22,9 @@
         var map = L.map('map').setView([63.4305, 10.3951], 13);
 
         // Legg til OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,  // Sett en maks zoom-verdi
-            attribution: '© OpenStreetMap contributors'
+        L.tileLayer('https://cache.kartverket.no/v1/wmts/1.0.0/topo/default/webmercator/{z}/{y}/{x}.png', {
+            maxZoom: 18,
+            attribution: '<a href="http://www.kartverket.no/">Kartverket</a>'
         }).addTo(map);
 
         // Hent GeoJSON-data fra modellen
