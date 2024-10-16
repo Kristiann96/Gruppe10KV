@@ -32,7 +32,7 @@ public class SaksbehandlerController : Controller
     }
 
 
-    public IActionResult SøkInnmelderSaksbehandler()
+    public IActionResult SÃ¸kInnmelderSaksbehandler()
     {
         return View();
     }
