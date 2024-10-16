@@ -1,7 +1,7 @@
 ﻿using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gruppe10KVprototype.Controllers;
+namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
 
 public class SaksbehandlerInnmeldingController : Controller
 {

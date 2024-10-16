@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Models.InnmelderModels;
 
-namespace Gruppe10KVprototype.Controllers;
+namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
-public class LoginController : Controller
+public class InnmelderLoginController : Controller
 {
     // GET: /UserPages/Login
     [HttpGet]

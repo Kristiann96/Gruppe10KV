@@ -1,9 +1,9 @@
-﻿namespace Models.InnmelderModels;
+﻿//namespace Models.InnmelderModels;
 
-public class InnmelderLandingPageModel : Controller
-{
-    public IActionResult LandingPage()
-    {
-        return View();
-    }
-}
+//public class InnmelderLandingPageModel : Controller
+//{
+//    public IActionResult LandingPage()
+//    {
+//        return View();
+//    }
+//}

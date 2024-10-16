@@ -25,9 +25,9 @@ namespace Gruppe10KVprototype.Controllers
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gruppe10KVprototype.Controllers;
+namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
-public class UserPagesController : Controller
+public class InnmelderSiderController : Controller
 {
     public IActionResult UserCases()
     {

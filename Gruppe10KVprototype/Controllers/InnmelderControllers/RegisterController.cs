@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models.InnmelderModels;
 
-namespace Gruppe10KVprototype.Controllers;
+namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
 public class RegisterController : Controller
 {
@@ -27,7 +27,7 @@ public class RegisterController : Controller
 
             if (registrationSuccessful)
                 // Redirect to a confirmation page or login page
-                return RedirectToAction("Login", "UserPages");
+                return RedirectToAction("Login", "InnmelderLogin");
             ModelState.AddModelError("", "Brukernavn eller e-post er allerede i bruk.");
         }
 
