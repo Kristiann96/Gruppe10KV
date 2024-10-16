@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using DataAccess;
 using Interfaces;
 
@@ -14,8 +13,6 @@ builder.Services.AddScoped<DapperDBConnection>();
 //Registrering av repos og interfaces
 builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
 builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
-
-
 
 
 var app = builder.Build();
@@ -36,14 +33,14 @@ app.UseAuthorization();
 
 // Definer routing for HomeController og InnmelderSkjemaController
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
 // Route for InnmelderSkjemaController
 app.MapControllerRoute(
-    name: "innmelderSkjema",
-    pattern: "form/{action=Form}/{id?}",
-    defaults: new { controller = "InnmelderSkjema" });
+    "innmelderSkjema",
+    "form/{action=Form}/{id?}",
+    new { controller = "InnmelderSkjema" });
 
 
 app.Run();

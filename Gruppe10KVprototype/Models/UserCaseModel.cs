@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Gruppe10KVprototype.Models
 {
-    
+
     public class UserCase
     {
         public int CaseId { get; set; }
@@ -12,7 +12,7 @@ namespace Gruppe10KVprototype.Models
         public required string GeoLocation { get; set; }
     }
 
-    
+
     public class CaseService
     {
         private readonly ApplicationDbContext _context;
@@ -74,3 +74,4 @@ namespace Gruppe10KVprototype.Models
     }
 }
     */
+

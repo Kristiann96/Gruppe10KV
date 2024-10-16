@@ -25,14 +25,12 @@ namespace Gruppe10KVprototype.Controllers
 
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gruppe10KVprototype.Controllers
+namespace Gruppe10KVprototype.Controllers;
+
+public class UserPagesController : Controller
 {
-    public class UserPagesController : Controller
+    public IActionResult UserCases()
     {
-        public IActionResult UserCases()
-        {
-            return View("~/Views/UserPages/UserCase.cshtml");
-        }
+        return View("~/Views/UserPages/UserCase.cshtml");
     }
 }
-

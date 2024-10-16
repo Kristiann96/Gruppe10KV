@@ -1,13 +1,9 @@
 ﻿using Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Interfaces
+namespace Interfaces;
+
+public interface ISaksbehandlerRepository
 {
-    public interface ISaksbehandlerRepository
-    {
-        Task<IEnumerable<SaksbehandlerInnmeldingModel>> GetAllAdviserFormsAsync();
-        Task<SaksbehandlerInnmeldingModel> GetAdviserFormByIdAsync(int id);
-       
-    }
+    Task<IEnumerable<SaksbehandlerInnmeldingModel>> GetAllAdviserFormsAsync();
+    Task<SaksbehandlerInnmeldingModel> GetAdviserFormByIdAsync(int id);
 }

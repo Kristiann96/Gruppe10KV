@@ -7,7 +7,7 @@
 
 <!-- Link til ekstern CSS-fil -->
 <head>
-    <link rel="stylesheet" href="~/css/form-styles.css" />
+    <link rel="stylesheet" href="~/css/form-styles.css"/>
 </head>
 
 <h1 class="form-title">Meld inn hendelse</h1>
@@ -16,7 +16,7 @@
         <!-- Subject -->
         <div class="form-group">
             <label for="subject">Subjekt</label>
-            <input type="text" id="subject" name="Subject" asp-for="Subject" required />
+            <input type="text" id="subject" name="Subject" asp-for="Subject" required/>
         </div>
 
         <!-- GeoJSON Data -->
@@ -27,20 +27,20 @@
 
         <!-- Checkbox Options -->
         <div class="checkbox-group">
-            <input type="checkbox" id="uttrykning" name="Uttrykning" value="true" asp-for="Uttrykning" />
-            <input type="hidden" name="Uttrykning" value="false" />
+            <input type="checkbox" id="uttrykning" name="Uttrykning" value="true" asp-for="Uttrykning"/>
+            <input type="hidden" name="Uttrykning" value="false"/>
             <label for="uttrykning">Farlig for utrykningstjenester</label>
         </div>
 
         <div class="checkbox-group">
-            <input type="checkbox" id="something" name="Something" value="true" asp-for="Something" />
-            <input type="hidden" name="Something" value="false" />
+            <input type="checkbox" id="something" name="Something" value="true" asp-for="Something"/>
+            <input type="hidden" name="Something" value="false"/>
             <label for="something">Noe å huke av</label>
         </div>
 
         <div class="checkbox-group">
-            <input type="checkbox" id="attachFile" name="AttachFile" value="true" asp-for="AttachFile" />
-            <input type="hidden" name="AttachFile" value="false" />
+            <input type="checkbox" id="attachFile" name="AttachFile" value="true" asp-for="AttachFile"/>
+            <input type="hidden" name="AttachFile" value="false"/>
             <label for="attachFile">Legg ved fil</label>
             <button type="button" id="uploadButton" class="secondary-button">Last opp</button>
         </div>
@@ -57,7 +57,6 @@
             <button type="button" id="advancedButton" class="secondary-button">Avansert knapp</button>
             <button type="submit" class="primary-button">Se over innmelding</button>
         </div>
-
 
 
     </form>

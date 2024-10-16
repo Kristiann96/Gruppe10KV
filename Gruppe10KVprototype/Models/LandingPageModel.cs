@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Gruppe10KVprototype.Models
+namespace Gruppe10KVprototype.Models;
+
+public class LandingPageModel : Controller
 {
-    public class LandingPageModel : Controller
+    public IActionResult LandingPage()
     {
-        public IActionResult LandingPage()
-        {
-            return View();
-        }
+        return View();
     }
 }

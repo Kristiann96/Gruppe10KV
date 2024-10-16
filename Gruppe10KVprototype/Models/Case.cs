@@ -14,8 +14,9 @@ namespace Gruppe10KVprototype.Models
         public required string Status { get; set; }
 
         public int GeoLocationId { get; set; }
-        
+
         // Add other relevant properties below.. This is currently just a template :)
     }
 }
 */
+

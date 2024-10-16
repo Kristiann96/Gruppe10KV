@@ -1,40 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Interfaces;
+﻿using Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Models;
-using System.Threading.Tasks;
 
-namespace Gruppe10KVprototype.Controllers
+namespace Gruppe10KVprototype.Controllers;
+
+public class InnmelderSkjemaController : Controller
 {
-    public class InnmelderSkjemaController : Controller
+    private readonly IInnmelderRepository _repository;
+
+    public InnmelderSkjemaController(IInnmelderRepository repository)
     {
-        private readonly IInnmelderRepository _repository;
+        _repository = repository;
+    }
 
-        public InnmelderSkjemaController(IInnmelderRepository repository)
+    public IActionResult Form(string geoJson)
+    {
+        var model = new InnmelderSkjemaModel { GeoJson = geoJson };
+        return View("InnmelderSkjemaView", model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SubmitForm(InnmelderSkjemaModel form)
+    {
+        if (ModelState.IsValid)
         {
-            _repository = repository;
+            await _repository.SaveIncidentFormAsync(form);
+            return View("InnmelderSkjemaResultat", form);
         }
 
-        public IActionResult Form(string geoJson)
-        {
-            var model = new InnmelderSkjemaModel { GeoJson = geoJson };
-            return View("InnmelderSkjemaView", model);
-        }
+        return View("InnmelderSkjemaView", form);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> SubmitForm(InnmelderSkjemaModel form)
-        {
-            if (ModelState.IsValid)
-            {
-                await _repository.SaveIncidentFormAsync(form);
-                return View("InnmelderSkjemaResultat", form);
-            }
-            return View("InnmelderSkjemaView", form);
-        }
-
-        public async Task<IActionResult> FormResult(int id)
-        {
-            var form = await _repository.GetIncidentByIdAsync(id);
-            return View("InnmelderSkjemaResultat",form);
-        }
+    public async Task<IActionResult> FormResult(int id)
+    {
+        var form = await _repository.GetIncidentByIdAsync(id);
+        return View("InnmelderSkjemaResultat", form);
     }
 }

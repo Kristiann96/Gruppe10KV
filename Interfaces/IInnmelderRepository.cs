@@ -1,16 +1,13 @@
 ﻿using Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Interfaces
+namespace Interfaces;
+
+public interface IInnmelderRepository
 {
-    public interface IInnmelderRepository
-    {
-        Task<IEnumerable<InnmelderSkjemaModel>> GetAllIncidentsAsync();
-        
-        Task<InnmelderSkjemaModel> GetIncidentByIdAsync(int id);
+    Task<IEnumerable<InnmelderSkjemaModel>> GetAllIncidentsAsync();
 
-        // Returtypen Task<bool> for å indikere om operasjonen var vellykket
-        Task<bool> SaveIncidentFormAsync(InnmelderSkjemaModel form);
-    }
+    Task<InnmelderSkjemaModel> GetIncidentByIdAsync(int id);
+
+    // Returtypen Task<bool> for å indikere om operasjonen var vellykket
+    Task<bool> SaveIncidentFormAsync(InnmelderSkjemaModel form);
 }
