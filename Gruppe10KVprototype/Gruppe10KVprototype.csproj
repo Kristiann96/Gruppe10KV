@@ -9,12 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\InnmelderViews\_Layout.cshtml.cs" />
+    <Compile Remove="Views\Innmelder\_Layout.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\InnmelderViews\UserCases.cshtml" />
-    <Content Remove="Views\InnmelderViews\_Layout.cshtml" />
+    <Content Remove="Views\Innmelder\UserCases.cshtml" />
+    <Content Remove="Views\Innmelder\_Layout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
