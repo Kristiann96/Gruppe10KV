@@ -36,11 +36,18 @@ app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+
 // Route for InnmelderSkjemaController
-app.MapControllerRoute(
+/*app.MapControllerRoute(
     "innmelderSkjema",
     "form/{action=Form}/{id?}",
-    new { controller = "InnmelderSkjema" });
+    new { controller = "InnmelderSkjema" });*/
 
 
 app.Run();

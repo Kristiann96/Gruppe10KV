@@ -1,54 +1,84 @@
 ﻿using Dapper;
 using Interfaces;
 using Models;
+using Models.SaksbehandlerModels;
+using Microsoft.Extensions.Logging;
 
-namespace DataAccess;
-
-public class SaksbehandlerRepository : ISaksbehandlerRepository
+namespace DataAccess
 {
-    private readonly DapperDBConnection _dbConnection;
-
-    public SaksbehandlerRepository(DapperDBConnection dbConnection)
+    public class SaksbehandlerRepository : ISaksbehandlerRepository
     {
-        _dbConnection = dbConnection;
-    }
+        private readonly DapperDBConnection _dbConnection;
+        private readonly ILogger<SaksbehandlerRepository> _logger;
 
-    public async Task<IEnumerable<SaksbehandlerInnmeldingModel>> GetAllAdviserFormsAsync()
-    {
-        using var connection = _dbConnection.CreateConnection();
-        return await connection.QueryAsync<SaksbehandlerInnmeldingModel>("SELECT * FROM incident_form");
-    }
-
-    public async Task<SaksbehandlerInnmeldingModel> GetAdviserFormByIdAsync(int id)
-    {
-        using var connection = _dbConnection.CreateConnection();
-        return await connection.QuerySingleOrDefaultAsync<SaksbehandlerInnmeldingModel>(
-            "SELECT id, subject, uttrykning, something, attach_file, description, location_data AS GeoJson FROM incident_form WHERE id = @Id",
-            new { Id = id });
-    }
-    /* Eksempel på try catch rollback for data integritet ved transaksjon
-    public async Task<bool> SaveXXXXXAsync(SaksbehandlerInnmeldingModel form)
-    {
-        using var connection = _dbConnection.CreateConnection();
-        await connection.OpenAsync();
-
-        using var transaction = await connection.BeginTransactionAsync();
-        try
+        public SaksbehandlerRepository(DapperDBConnection dbConnection, ILogger<SaksbehandlerRepository> logger)
         {
-            var sql = @"INSERT INTO incident_form (subject, uttrykning, something, attach_file, description, location_data)
-                        VALUES (@Subject, @Uttrykning, @Something, @AttachFile, @Description, @GeoJson)";
-
-            // Utfør databaseoperasjonen innenfor transaksjonen
-            await connection.ExecuteAsync(sql, form, transaction: transaction);
-
-            // Fullfør transaksjonen hvis alt går bra
-            await transaction.CommitAsync();
-            return true;
+            _dbConnection = dbConnection;
+            _logger = logger;
         }
-        catch (Exception)
+
+        // Metoder for incident_form tabellen
+        public async Task<IEnumerable<SaksbehandlerInnmeldingModel>> GetAllAdviserFormsAsync()
         {
-            // Rull tilbake transaksjonen hvis det skjer en feil
-            await transaction.RollbackAsync();
-            return false;
-        }*/
+            using var connection = _dbConnection.CreateConnection();
+            return await connection.QueryAsync<SaksbehandlerInnmeldingModel>("SELECT * FROM incident_form");
+        }
+
+        public async Task<SaksbehandlerInnmeldingModel> GetAdviserFormByIdAsync(int id)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            return await connection.QuerySingleOrDefaultAsync<SaksbehandlerInnmeldingModel>(
+                "SELECT id, subject, uttrykning, something, attach_file, description, location_data AS GeoJson FROM incident_form WHERE id = @Id",
+                new { Id = id });
+        }
+
+        // Metoder for INNMELDING tabellen
+        public async Task<IEnumerable<SaksbehandlerINNMELDINGModel>> GetAllInnmeldingerAsync()
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql = "SELECT * FROM INNMELDING";
+            return await connection.QueryAsync<SaksbehandlerINNMELDINGModel>(sql);
+        }
+
+        public async Task<SaksbehandlerINNMELDINGModel> GetInnmeldingByIdAsync(int innmeldID)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql = "SELECT * FROM INNMELDING WHERE InnmeldID = @InnmeldID";
+            return await connection.QuerySingleOrDefaultAsync<SaksbehandlerINNMELDINGModel>(sql, new { InnmeldID = innmeldID });
+        }
+
+        public async Task<StatusEnum> GetStatusByInnmeldIdAsync(int innmeldID)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql = "SELECT StatusID FROM INNMELDING WHERE InnmeldID = @InnmeldID";
+            return await connection.QuerySingleOrDefaultAsync<StatusEnum>(sql, new { InnmeldID = innmeldID });
+        }
+
+        public async Task<bool> UpdateStatusAsync(int innmeldID, StatusEnum status)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            await connection.OpenAsync();
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                var sql = "UPDATE INNMELDING SET StatusID = @StatusID WHERE InnmeldID = @InnmeldID";
+                var result = await connection.ExecuteAsync(sql, new { StatusID = status, InnmeldID = innmeldID }, transaction: transaction);
+
+                await transaction.CommitAsync();
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, $"Feil ved oppdatering av status for InnmeldID: {innmeldID}");
+                return false;
+            }
+        }
+
+        public IEnumerable<StatusEnum> GetAvailableStatuses()
+        {
+            return Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>();
+        }
+    }
 }

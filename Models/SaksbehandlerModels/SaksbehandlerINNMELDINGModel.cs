@@ -1,10 +1,10 @@
 ﻿using System;
-using Interfaces;
+
 
 namespace Models.SaksbehandlerModels
 {
     //representerer hele entiteten INNMELDING i databasen
-    public class Innmelding
+    public class SaksbehandlerINNMELDINGModel
     {
         public int InnmeldID { get; set; }  // Primærnøkkel, auto-increment
 

@@ -1,68 +1,38 @@
-@{
-    //Layout = "_Layout";
-    //ViewData["Title"] = "InnmeldingSaksbehandlerView";
-}
+@model ViewModels.SaksbehandlerSingelInnmeldingViewModel
+using Controllers;
 
 <!DOCTYPE html>
-
 <html>
 <head>
-    <title>title</title>
+    <title>Innmelding Saksbehandler</title>
 </head>
 <body>
-<div class="topplinje">
-    <div>Navn Navnesen</div>
-    <div>
-        <div>
-            <ul class="topplinjeinfo">
-                <li>Status</li>
-                <li>Innmelding ID</li>
-            </ul>
+</div>
+    <form asp-action="GetInnmeldingStatus" method="get">
+        <div class="form-group">
+            <label for="innmeldID">Innmeldings ID</label>
+            <input type="text" asp-for="InnmeldID" class="form-control" /> <!-- Tekstboks for å skrive inn InnmeldID -->
         </div>
-    </div>
+        <button type="submit" class="btn btn-primary">Hent Status</button> <!-- Knapp for å hente status -->
+    </form>
+
 </div>
-<div class="subjektlinje">
-    <div>Subjekt</div>
-    <div>
-        <ul class="subjektlinjeinfo">
-            <li>Kommune</li>
-            <li>Tag</li>
-        </ul>
+
     </div>
-</div>
-<div class="forstebokslinje">
-    <div class="beskrivelseboks">
-        <div>Beskrivelse</div>
-        <div class="descboks">Description</div>
+
+    @if (Model != null)
+    {
+        <form asp-action="EditStatus" method="post">
+            <input type="hidden" asp-for="InnmeldID" /> <!-- Skjult input for å beholde InnmeldID -->
+        
+            <label for="status">Velg status:</label>
+            <select asp-for="CurrentStatus" asp-items="Model.StatusList" class="form-control"></select> <!-- Dropdown for status -->
+
+            <button type="submit" class="btn btn-primary">Oppdater status</button> <!-- Lagre-knapp -->
+        </form>
+    }
+    
     </div>
-    <div class="kartvisningboks">
-        <div>Kartvisning</div>
-        <div class="mapboks">Map View</div>
-    </div>
-</div>
-<div class="bunnlinje">
-    <div>Opplysninger om innsender</div>
-    <div class="bokslinje">
-        <div class="opplysboks">Henter noe informasjon om innsenderen</div>
-        <div class="buttonboks">
-            <div class="buttonboksEn">
-                <button>SVAR</button>
-                <button>FLAGG</button>
-            </div>
-            <div class="buttonboksTo">
-                <button>OPPDATER</button>
-                <button>DELEGER</button>
-            </div>
-            <div class="buttonboksTre">
-                <button>BEHANDLE</button>
-                <button>AVVIS</button>
-                @Html.DropDownList("Status",
-                    ViewBag.Statuser,
-                    "Velg status",
-                    new {@class = "form-control"})
-            </div>
-        </div>
-    </div>
-</div>
+
 </body>
 </html>
