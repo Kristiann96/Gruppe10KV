@@ -7,7 +7,7 @@ namespace ViewModels
     {
         public SaksbehandlerINNMELDINGModel Innmelding { get; set; }
         public List<SelectListItem> StatusList { get; set; }
-
+        
     }
 }
 
