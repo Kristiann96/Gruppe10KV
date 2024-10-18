@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Entities;
 using Models.SaksbehandlerModels;
 
 namespace Interfaces
@@ -6,8 +7,8 @@ namespace Interfaces
     public interface ISaksbehandlerRepository
     {
         // Metoder for incident_form tabellen
-        Task<IEnumerable<SaksbehandlerInnmeldingModel>> GetAllAdviserFormsAsync();
-        Task<SaksbehandlerInnmeldingModel> GetAdviserFormByIdAsync(int id);
+        Task<IEnumerable<SaksbehandlerIncidentFormModel>> GetAllAdviserFormsAsync();
+        Task<SaksbehandlerIncidentFormModel> GetAdviserFormByIdAsync(int id);
 
         // Metoder for INNMELDING tabellen
         Task<IEnumerable<SaksbehandlerINNMELDINGModel>> GetAllInnmeldingerAsync();

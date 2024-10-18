@@ -1,4 +1,5 @@
 using DataAccess;
+using Gruppe10KVprototype.Controllers.InnmelderControllers;
 using Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,10 +45,10 @@ app.UseEndpoints(endpoints =>
 });
 
 // Route for InnmelderSkjemaController
-/*app.MapControllerRoute(
+app.MapControllerRoute(
     "innmelderSkjema",
     "form/{action=Form}/{id?}",
-    new { controller = "InnmelderSkjema" });*/
+    new { controller = "InnmelderSkjema" });
 
 
 app.Run();

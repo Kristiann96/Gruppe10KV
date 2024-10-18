@@ -9,12 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Innmelder\_Layout.cshtml.cs" />
+   
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Innmelder\UserCases.cshtml" />
-    <Content Remove="Views\Innmelder\_Layout.cshtml" />
+   
+  
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\LandingPageAdviser\" />
+   
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 

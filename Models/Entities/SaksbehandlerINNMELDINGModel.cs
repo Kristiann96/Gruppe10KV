@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Models.SaksbehandlerModels
+﻿namespace Models.Entities
 {
     //representerer hele entiteten INNMELDING i databasen
     public class SaksbehandlerINNMELDINGModel

@@ -3,31 +3,30 @@ using Interfaces;
 using Models;
 using Models.SaksbehandlerModels;
 using Microsoft.Extensions.Logging;
+using Models.Entities;
 
-namespace DataAccess
-{
+namespace DataAccess;
+
+
     public class SaksbehandlerRepository : ISaksbehandlerRepository
     {
         private readonly DapperDBConnection _dbConnection;
-        private readonly ILogger<SaksbehandlerRepository> _logger;
 
-        public SaksbehandlerRepository(DapperDBConnection dbConnection, ILogger<SaksbehandlerRepository> logger)
+        public SaksbehandlerRepository(DapperDBConnection dbConnection)
         {
             _dbConnection = dbConnection;
-            _logger = logger;
         }
 
-        // Metoder for incident_form tabellen 
-        public async Task<IEnumerable<SaksbehandlerInnmeldingModel>> GetAllAdviserFormsAsync()
+        public async Task<IEnumerable<SaksbehandlerIncidentFormModel>> GetAllAdviserFormsAsync()
         {
             using var connection = _dbConnection.CreateConnection();
-            return await connection.QueryAsync<SaksbehandlerInnmeldingModel>("SELECT * FROM incident_form");
+            return await connection.QueryAsync<SaksbehandlerIncidentFormModel>("SELECT * FROM incident_form");
         }
 
-        public async Task<SaksbehandlerInnmeldingModel> GetAdviserFormByIdAsync(int id)
+        public async Task<SaksbehandlerIncidentFormModel> GetAdviserFormByIdAsync(int id)
         {
             using var connection = _dbConnection.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<SaksbehandlerInnmeldingModel>(
+            return await connection.QuerySingleOrDefaultAsync<SaksbehandlerIncidentFormModel>(
                 "SELECT id, subject, uttrykning, something, attach_file, description, location_data AS GeoJson FROM incident_form WHERE id = @Id",
                 new { Id = id });
         }
@@ -74,8 +73,8 @@ namespace DataAccess
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                _logger.LogError(ex, $"Feil ved oppdatering av status for InnmeldID: {innmeldID}");
-                return false;
+            Console.WriteLine($"Feil ved oppdatering av status for InnmeldID: {innmeldID}, Exception: {ex.Message}");
+            return false;
             }
         }
 
@@ -110,4 +109,7 @@ namespace DataAccess
             return Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>();
         }
     }
-}
+
+
+
+
