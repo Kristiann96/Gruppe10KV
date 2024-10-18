@@ -2,10 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Innmelding Status</title>
+    <title>Rapport</title>
 </head>
 <body>
-    <h1>Innmelding Status</h1>
+<h1>Lene Olsen</h1>
+<h1>- butchered the skeleton</h1>
+    <h1>nb! databasen har bare 9 oppføringer</h1>
 
     @if (Model != null)
     {
@@ -33,11 +35,15 @@
                         <p>KartID: @Model.Innmelding.KartID</p>
 
                         <div>
-                            <label for="Innmelding_StatusID">Oppdater Status:</label>
-                            <select asp-for="Innmelding.StatusID" asp-items="Model.StatusList"></select>
-                            <input type="hidden" asp-for="UpdateStatus" value="true" />
-                            <button type="submit">Oppdater Status</button>
-                        </div>
+                            <form asp-action="UpdateStatusAsync" method="post">
+                                <input type="hidden" asp-for="Innmelding.InnmeldID" />
+                                <label for="status">Velg status:</label>
+                                <select asp-for="Innmelding.StatusID" asp-items="Model.StatusList" class="form-control"></select>
+                                <button type="submit" class="btn btn-primary">Oppdater status</button>
+                            </form>
+                        
+                        
+                            </div>
                     </div>
                 }
                 else
