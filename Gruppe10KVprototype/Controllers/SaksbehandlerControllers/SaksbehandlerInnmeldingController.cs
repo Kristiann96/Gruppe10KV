@@ -30,9 +30,9 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             return View(form);
         }
 
-     
 
-        // GET: Viser en tom InnmeldingSaksbehandlerView med en ny modell og statusliste
+        //INNMELDIGSTABELLEN
+        // GET: // Initialiserer en tom ViewModel med statusliste
         [HttpGet("InnmeldingSaksbehandlerView")]
         public IActionResult InnmeldingSaksbehandlerView()
         {
@@ -44,7 +44,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             return View(model);  // Viser viewet med tom modell og statusliste
         }
 
-        // POST: Oppdater viewet basert på innsendt data
+        // POST: Fyller ViewModel med data fra databasen basert på InnmeldID
         [HttpPost("InnmeldingSaksbehandlerView")]
         public async Task<IActionResult> InnmeldingSaksbehandlerView(SaksbehandlerSingelInnmeldingViewModel model)
         {
@@ -67,27 +67,21 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             return View(model);  // Returnerer viewet med oppdatert modell
         }
 
-        // POST: Oppdater statusen på en sak i INNMELDING-tabellen
         [HttpPost]
         public async Task<IActionResult> UpdateStatusAsync(SaksbehandlerSingelInnmeldingViewModel model)
         {
-            if (ModelState.IsValid) // Validerer input fra brukeren
+            // Oppdaterer status i databasen og returnerer oppdatert ViewModel
+            if (ModelState.IsValid)
             {
-                var success = await _repository.UpdateStatusAsync(model.Innmelding.InnmeldID, model.Innmelding.StatusID); // Oppdaterer status
-
+                var success = await _repository.UpdateStatusAsync(model.Innmelding.InnmeldID, model.Innmelding.StatusID);
                 if (success)
                 {
-                    // Oppdaterer dropdown med tilgjengelige statuser etter vellykket statusendring
-                    model.StatusList = GetStatusList();
-                    return View("InnmeldingSaksbehandlerView", model); // Oppdater viewet med ny status
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Kunne ikke oppdatere status.");
+                    // Hent oppdatert innmelding
+                    model.Innmelding = await _repository.GetInnmeldingByIdAsync(model.Innmelding.InnmeldID);
                 }
             }
-
-            return View("InnmeldingSaksbehandlerView", model); // Returnerer samme view ved valideringsfeil
+            model.StatusList = GetStatusList();
+            return View("InnmeldingSaksbehandlerView", model);
         }
 
         // Henter tilgjengelige statuser for dropdown
