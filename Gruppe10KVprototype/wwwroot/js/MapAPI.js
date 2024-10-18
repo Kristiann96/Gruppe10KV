@@ -1,99 +1,46 @@
-﻿// Initialize the map
-var map = L.map('map', {
-    center: [65.5, 17.0],
-    zoom: 4,
-    zoomControl: false      // disable default zoom controll
-});
-
-
-// Add a tile layer (OpenStreetMap)
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+﻿// Initialiser kartet
+var map = L.map('map').setView([62.1995, 6.1286], 15);
+L.tileLayer('https://cache.kartverket.no/v1/wmts/1.0.0/topo/default/webmercator/{z}/{y}/{x}.png', {
+    maxZoom: 18,
+    attribution: '<a href="http://www.kartverket.no/">Kartverket</a>'
 }).addTo(map);
 
-// Add Zoom Control
-L.control.zoom({
-    position: 'topright'
+// Legg til søkefunksjonen
+var geocoder = L.Control.geocoder().addTo(map);
+
+// Legg til et ikon for å finne brukerens lokasjon
+L.control.locate({
+    position: 'topleft',  // ikonet legges øverst til venstre
+    flyTo: true,  // sentrer kartet til brukerens posisjon
+    showPopup: true  // vis en popup som bekrefter lokasjonen
 }).addTo(map);
 
-// Scale controll
-L.control.scale().addTo(map);
+// Legg til tegneverktøy (Draw) til kartet
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
 
-// Initialize the FeatureGroup to store editable layers (drawn items)
-var editableItems = new L.FeatureGroup();
-map.addLayer(editableItems);
-
-// Set up the Leaflet Draw control and pass in the FeatureGroup
 var drawControl = new L.Control.Draw({
-    position: 'bottomright',
-    draw: {
-        marker: true,
-        polyline: true,
-        polygon: true,
-        circle: false,  
-        circlemarker: false,
-        rectangle: false
-    },
     edit: {
-        featureGroup: editableItems
+        featureGroup: drawnItems
+    },
+    draw: {
+        polygon: true,
+        polyline: true,
+        rectangle: true,
+        circle: true,
+        marker: true
     }
-    
-});
-map.addControl(drawControl);
+}).addTo(map);
 
-// Event listener for the 'draw:created' event which is fired when the user finishes drawing
+// Lagre GeoJSON når brukeren tegner noe
+var geoJsonData = null;
 map.on(L.Draw.Event.CREATED, function (event) {
     var layer = event.layer;
-    editableItems.addLayer(layer);
-    if (event.layerType === 'marker') {
-        console.log("Point coordinates: ", layer.getLatLng());
-    } else if (event.layerType === 'polyline') {
-        console.log("Line coordinates: ", layer.getLatLngs());
-    } else if (event.layerType === 'polygon') {
-        console.log("Polygon coordinates: ", layer.getLatLngs());
-    }
+    drawnItems.addLayer(layer);
+
+    geoJsonData = layer.toGeoJSON();
+    var geojsonString = JSON.stringify(geoJsonData);
+
+    // Lagre GeoJSON-data i skjult felt for sending til skjemaet
+    document.getElementById('geoJsonHidden').value = geojsonString;
 });
-
-// Add search bar
-L.Control.geocoder({
-    position: 'topleft'
-}).addTo(map);
-
-// Automatic location finder control
-L.Control.Location = L.Control.extend({
-    onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-location');
-        var button = L.DomUtil.create('a', 'leaflet-control-location-button', container);
-        button.innerHTML = '📍'; // You can replace this with an icon
-        button.href = '#';
-        button.title = 'Find my location';
-
-        L.DomEvent.on(button, 'click', function (e) {
-            L.DomEvent.stopPropagation(e);
-            L.DomEvent.preventDefault(e);
-            map.locate({ setView: true, maxZoom: 16 });
-        });
-
-        return container;
-    },
-
-    onRemove: function (map) {
-        // Nothing to do here
-    }
-});
-
-L.control.location = function (opts) {
-    return new L.Control.Location(opts);
-}
-
-// Handle location found event
-map.on('locationfound', function (e) {
-    var radius = e.accuracy / 2;
-    L.marker(e.latlng).addTo(map)
-        .bindPopup("You are within " + radius + " meters from this point").openPopup();
-    L.circle(e.latlng, radius).addTo(map);
-});
-
-L.control.location({
-    position: 'topright'
-}).addTo(map);
