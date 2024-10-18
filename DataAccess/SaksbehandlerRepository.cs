@@ -76,6 +76,29 @@ namespace DataAccess
             }
         }
 
+        public async Task<bool> UpdateInnmeldingAsync(SaksbehandlerINNMELDINGModel innmelding)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql = @"UPDATE INNMELDING 
+                        SET StatusID = @StatusID, 
+                            SaksbehandlerID = @SaksbehandlerID, 
+                            SisteEndring = @SisteEndring, 
+                            PrioritetID = @PrioritetID, 
+ InnmelderID = @InnmelderID
+                        WHERE InnmeldID = @InnmeldID";
+
+            var result = await connection.ExecuteAsync(sql, new
+            {
+                innmelding.StatusID,
+                innmelding.SaksbehandlerID,
+                SisteEndring = DateTime.Now,
+                innmelding.PrioritetID,
+                innmelding.InnmeldID
+            });
+
+            return result > 0;
+        }
+
         public IEnumerable<StatusEnum> GetAvailableStatuses()
         {
             return Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>();

@@ -10,10 +10,7 @@ public class SaksbehandlerController : Controller
         return View();
     }
 
-    public IActionResult InnmeldingSaksbehandlerView()
-    {
-        return View();
-    }
+   
 
 
     public IActionResult OversiktInnmeldingerSaksbehandler()

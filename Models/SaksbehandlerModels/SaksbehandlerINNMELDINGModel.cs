@@ -8,6 +8,8 @@ namespace Models.SaksbehandlerModels
     {
         public int InnmeldID { get; set; }  // Primærnøkkel, auto-increment
 
+        public int InnmelderID { get; set; }  // ID til innmelder, not null
+
         public DateTime Innmeldingstidspunkt { get; set; } = DateTime.Now;  // Default til nåværende tidspunkt
 
         public StatusEnum StatusID { get; set; } = StatusEnum.Ny;  // Default til "Ny"

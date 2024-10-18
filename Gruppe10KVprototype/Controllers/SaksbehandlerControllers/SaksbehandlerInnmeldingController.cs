@@ -29,37 +29,47 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         }
 
         // Bruk av INNMELDING-tabell for å hente status og vise i dropdown
-        [HttpGet]
-        public async Task<IActionResult> GetInnmeldingStatus(int innmeldID)
+
+       
+
+        [HttpGet("InnmeldingSaksbehandlerView")]
+        public IActionResult InnmeldingSaksbehandlerView()
         {
-            var status = await _repository.GetStatusByInnmeldIdAsync(innmeldID);
-            var viewModel = new SaksbehandlerSingelInnmeldingViewModel
+            var model = new SaksbehandlerSingelInnmeldingViewModel
             {
-                InnmeldID = innmeldID,
-                CurrentStatus = status,
-                StatusList = _repository.GetAvailableStatuses().Select(s => new SelectListItem
-                {
-                    Text = s.ToString(),
-                    Value = s.ToString(),
-                    Selected = s == status
-                }).ToList()
+                Innmelding = new SaksbehandlerINNMELDINGModel(),
+                StatusList = GetStatusList()
             };
-            return View("InnmeldingSaksbehandlerView", viewModel); // Viser riktig view
+            return View(model);
         }
 
-        // POST: Oppdaterer status for en innmelding basert på valgt status i dropdown
-        [HttpPost]
-        public async Task<IActionResult> EditStatus(SaksbehandlerSingelInnmeldingViewModel model)
+        [HttpPost("InnmeldingSaksbehandlerView")]
+        public async Task<IActionResult> InnmeldingSaksbehandlerView(SaksbehandlerSingelInnmeldingViewModel model)
         {
-            if (ModelState.IsValid)
+            if (model == null)
             {
-                await _repository.UpdateStatusAsync(model.InnmeldID, model.CurrentStatus);
-                return RedirectToAction("GetInnmeldingStatus",
-                    new { innmeldID = model.InnmeldID }); // Tilbake til samme side etter oppdatering
+                model = new SaksbehandlerSingelInnmeldingViewModel();
             }
+            model.StatusList = GetStatusList();
+            if (model.Innmelding != null && model.Innmelding.InnmeldID > 0)
+            {
+                var innmelding = await _repository.GetInnmeldingByIdAsync(model.Innmelding.InnmeldID);
+                if (innmelding != null)
+                {
+                    model.Innmelding = innmelding;
+                }
+            }
+            return View(model);
+        }
 
-            return
-                View("InnmeldingSaksbehandlerView", model); // Hvis det er en feil, vis viewet igjen med feilmeldinger
+        private List<SelectListItem> GetStatusList()
+        {
+            return _repository.GetAvailableStatuses().Select(s => new SelectListItem
+            {
+                Text = s.ToString(),
+                Value = s.ToString()
+            }).ToList();
         }
     }
+
 }

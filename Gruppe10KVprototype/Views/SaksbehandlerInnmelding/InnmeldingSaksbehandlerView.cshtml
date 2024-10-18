@@ -1,0 +1,55 @@
+﻿@model ViewModels.SaksbehandlerSingelInnmeldingViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Innmelding Status</title>
+</head>
+<body>
+    <h1>Innmelding Status</h1>
+
+    @if (Model != null)
+    {
+        <form asp-action="InnmeldingSaksbehandlerView" method="post">
+            <div>
+                <label for="Innmelding_InnmeldID">Innmeldings ID:</label>
+                <input type="number" asp-for="Innmelding.InnmeldID" required />
+                <button type="submit">Hent Innmelding</button>
+            </div>
+
+            @if (Model.Innmelding != null)
+            {
+                @if (Model.Innmelding.InnmeldID > 0)
+                {
+                    <div>
+                        <h2>Innmelding Detaljer:</h2>
+                        <p>InnmeldID: @Model.Innmelding.InnmeldID</p>
+                        <p>InnmelderID: @Model.Innmelding.InnmelderID</p>
+                        <p>Innmeldingstidspunkt: @Model.Innmelding.Innmeldingstidspunkt</p>
+                        <p>Nåværende Status: @Model.Innmelding.StatusID</p>
+                        <p>SaksbehandlerID: @(Model.Innmelding.SaksbehandlerID ?? 0)</p>
+                        <p>Siste Endring: @Model.Innmelding.SisteEndring</p>
+                        <p>KommuneNR: @Model.Innmelding.KommuneNR</p>
+                        <p>Prioritet: @Model.Innmelding.PrioritetID</p>
+                        <p>KartID: @Model.Innmelding.KartID</p>
+
+                        <div>
+                            <label for="Innmelding_StatusID">Oppdater Status:</label>
+                            <select asp-for="Innmelding.StatusID" asp-items="Model.StatusList"></select>
+                            <input type="hidden" asp-for="UpdateStatus" value="true" />
+                            <button type="submit">Oppdater Status</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p>Ingen innmelding funnet med den angitte ID.</p>
+                }
+            }
+        </form>
+    }
+    else
+    {
+        <p>Modellen er null. Vennligst kontakt systemadministrator.</p>
+    }
+</body>
+</html>
