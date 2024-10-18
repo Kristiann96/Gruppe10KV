@@ -12,39 +12,28 @@
 
 erDiagram
 
-    INNMELDER ||--o{ INNMELDING : "lager"
-    INNMELDER ||--o{ INNMELDERTYPE : "har"
-    INNMELDER {
-        int InnmelderID PK "AUTO_INCREMENT"
+    PERSON {
+        int PersonID PK "AUTO_INCREMENT"
         VARCHAR(50) Fornavn "NOT NULL"
         VARCHAR(50) Mellomnavn "NULL"
         VARCHAR(50) Etternavn "NOT NULL"
-        date Fodselsdag "NOT NULL"
         VARCHAR(15) Telefonnummer "UNIQUE, NOT NULL"
+    }
+    PERSON ||--|O INNMELDER : "er"
+    PERSON ||--|O SAKSBEHANDLER : "er"
+    INNMELDER ||--o{ INNMELDING : "lager"
+    INNMELDER {
+        int PersonID PK, FK "AUTO_INCREMENT"
         VARCHAR(100) Epost "UNIQUE, NOT NULL"
+        ENUMUMERATION InnmelderType "NULL"
     }
 
     SAKSBEHANDLER ||--o{ INNMELDING : "behandler"
-    SAKSBEHANDLER ||--o{ SAKSBEHANDLERTYPE : "har"
     SAKSBEHANDLER {
-        int SaksbehandlerID PK "AUTO_INCREMENT"
-        VARCHAR(50) Fornavn "NOT NULL"
-        VARCHAR(50) Mellomnavn "NULL"
-        VARCHAR(50) Etternavn "NOT NULL"
+        int PersonID PK, FK "AUTO_INCREMENT"
         VARCHAR(100) JobbEmail "UNIQUE, NOT NULL"
         VARCHAR(15) JobbTelefon "UNIQUE, NOT NULL"
-    }
-
-    INNMELDERTYPE {
-        int InnmelderTypeID PK "AUTO_INCREMENT"
-        int InnmelderID FK "NOT NULL"
-        ENUMERATION Type "NOT NULL"
-    }
-
-    SAKSBEHANDLERTYPE {
-        int SaksbehandlerTypeID PK "AUTO_INCREMENT"
-        int SaksbehandlerID FK "NOT NULL"
-        ENUMERATION Type "NOT NULL" 
+        ENUMUMERATION Stilling "NULL"
     }
 
     INNMELDING ||--o| STATUS : "har"
