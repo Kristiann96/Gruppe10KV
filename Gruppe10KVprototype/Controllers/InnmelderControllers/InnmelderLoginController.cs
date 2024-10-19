@@ -7,7 +7,7 @@ public class InnmelderLoginController : Controller
 {
     // GET: 
     [HttpGet]
-    public IActionResult InnmelderLoginView()
+    public IActionResult InnmelderLogin()
     {
         // Specify the full view path if necessary
         return View("InnmelderLoginView", new InnmeldingLoginModel());
