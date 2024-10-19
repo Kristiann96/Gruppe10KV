@@ -1,0 +1,77 @@
+%%{init: {'themeCSS': 
+[
+'[id|=entity-PRIORITET] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-STATUS] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-KARTTYPE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-KOMMUNE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-INNMELDERTYPE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-SAKSBEHANDLERTYPE] .er.entityBox { fill: #fae4aa; }',
+'[id|=entity-KARTKILDE] .er.entityBox { fill: #9bfa9b; }',
+'[id|=entity-KOMMUNETILHORIGHET] .er.entityBox { fill: #9bfa9b; }'
+] }}%%
+
+erDiagram
+
+    PERSON {
+        int PersonID PK "AUTO_INCREMENT"
+        VARCHAR(50) Fornavn "NOT NULL"
+        VARCHAR(50) Mellomnavn "NULL"
+        VARCHAR(50) Etternavn "NOT NULL"
+        VARCHAR(15) Telefonnummer "UNIQUE, NOT NULL"
+    }
+    PERSON ||--|O INNMELDER : "er"
+    PERSON ||--|O SAKSBEHANDLER : "er"
+    INNMELDER ||--o{ INNMELDING : "lager"
+    INNMELDER {
+        int PersonID PK, FK "AUTO_INCREMENT"
+        VARCHAR(100) Epost "UNIQUE, NOT NULL"
+        ENUMUMERATION InnmelderType "NULL"
+    }
+
+    SAKSBEHANDLER ||--o{ INNMELDING : "behandler"
+    SAKSBEHANDLER {
+        int PersonID PK, FK "AUTO_INCREMENT"
+        VARCHAR(100) JobbEmail "UNIQUE, NOT NULL"
+        VARCHAR(15) JobbTelefon "UNIQUE, NOT NULL"
+        ENUMUMERATION Stilling "NULL"
+    }
+
+    INNMELDING ||--o{ KOMMUNETILHORIGHET : "tilhører"
+    INNMELDING ||--o{ GEOMETRI : "har"
+    INNMELDING ||--o{ TILBAKEMELDING : "mottar"
+    INNMELDING {
+        int InnmeldID PK "AUTO_INCREMENT"
+        int InnmelderID FK "NOT NULL"
+        datetime Innmeldingstidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        ENUMERATION Status "NOT NULL"
+        int SaksbehandlerID FK "NULL"
+        datetime SisteEndring "NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+        VARCHAR(4) KommuneNR FK "NULL"
+        ENUMERATION Prioritet "NOT NULL"
+        ENUMERATION KartType "NOT NULL"
+    }
+
+    GEOMETRI {
+        int GeometriID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        longtext GeometriData "NOT NULL"
+        polygon Omrade "NULL"
+    }
+
+    KOMMUNE ||--o{ KOMMUNETILHORIGHET : "relatert til" 
+    KOMMUNE {
+        VARCHAR(4) KommuneNR PK "NOT NULL"
+        VARCHAR(100) Navn "NOT NULL"
+        polygon Grense "NOT NULL"
+    }
+    KOMMUNETILHORIGHET {
+        int KommunetilhorighetID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        VARCHAR(4) KommuneNR FK "NOT NULL"
+    }
+    TILBAKEMELDING {
+        int TilbakemeldingsID PK "AUTO_INCREMENT"
+        int InnmeldID FK "NOT NULL"
+        datetime Dato "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        VARCHAR(MAX) Innhold "NOT NULL"
+    }
