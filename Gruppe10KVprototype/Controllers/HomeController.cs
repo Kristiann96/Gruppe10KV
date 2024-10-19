@@ -1,6 +1,6 @@
 using System.Diagnostics;
-using Gruppe10KVprototype.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models.HomeModels;
 
 namespace Gruppe10KVprototype.Controllers;
 

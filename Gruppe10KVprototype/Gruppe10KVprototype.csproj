@@ -9,12 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\InnmelderViews\_Layout.cshtml.cs" />
+   
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\InnmelderViews\UserCases.cshtml" />
-    <Content Remove="Views\InnmelderViews\_Layout.cshtml" />
+   
+  
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\LandingPageAdviser\" />
+   
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
@@ -41,6 +41,7 @@
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

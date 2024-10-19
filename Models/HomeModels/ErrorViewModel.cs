@@ -1,4 +1,4 @@
-namespace Gruppe10KVprototype.Models;
+namespace Models.HomeModels;
 
 public class ErrorViewModel
 {

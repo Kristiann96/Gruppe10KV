@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Interfaces;
 using Models;
+using Models.Entities;
 
 namespace DataAccess;
 
@@ -13,21 +14,21 @@ public class InnmelderRepository : IInnmelderRepository
         _dbConnnection = dbConnnection;
     }
 
-    public async Task<IEnumerable<InnmelderSkjemaModel>> GetAllIncidentsAsync()
+    public async Task<IEnumerable<InnmelderIncidentFormModel>> GetAllIncidentsAsync()
     {
         using var connection = _dbConnnection.CreateConnection();
-        return await connection.QueryAsync<InnmelderSkjemaModel>("SELECT * FROM incident_form");
+        return await connection.QueryAsync<InnmelderIncidentFormModel>("SELECT * FROM incident_form");
     }
 
-    public async Task<InnmelderSkjemaModel> GetIncidentByIdAsync(int id)
+    public async Task<InnmelderIncidentFormModel> GetIncidentByIdAsync(int id)
     {
         using var connection = _dbConnnection.CreateConnection();
-        return await connection.QuerySingleOrDefaultAsync<InnmelderSkjemaModel>(
+        return await connection.QuerySingleOrDefaultAsync<InnmelderIncidentFormModel>(
             "SELECT * FROM incident_form WHERE id = @Id", new { Id = id });
     }
 
     // Legger til transaksjon for innsending av skjemaet
-    public async Task<bool> SaveIncidentFormAsync(InnmelderSkjemaModel form)
+    public async Task<bool> SaveIncidentFormAsync(InnmelderIncidentFormModel form)
     {
         using var connection = _dbConnnection.CreateConnection();
         await connection.OpenAsync(); // Åpner forbindelsen eksplisitt

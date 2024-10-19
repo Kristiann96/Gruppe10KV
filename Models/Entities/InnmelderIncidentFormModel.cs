@@ -1,6 +1,6 @@
-﻿namespace Models;
+﻿namespace Models.Entities;
 
-public class InnmelderSkjemaModel
+public class InnmelderIncidentFormModel
 {
     public int Id { get; set; }
     public string Subject { get; set; }

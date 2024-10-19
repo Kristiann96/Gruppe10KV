@@ -1,4 +1,5 @@
 using DataAccess;
+using Gruppe10KVprototype.Controllers.InnmelderControllers;
 using Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,13 @@ app.UseAuthorization();
 app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 
 // Route for InnmelderSkjemaController
 app.MapControllerRoute(

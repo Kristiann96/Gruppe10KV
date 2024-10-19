@@ -1,5 +1,4 @@
-﻿using Gruppe10KVprototype.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models.InnmelderModels;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers;

@@ -1,6 +1,7 @@
 ﻿using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Entities;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
@@ -15,12 +16,12 @@ public class InnmelderSkjemaController : Controller
 
     public IActionResult Form(string geoJson)
     {
-        var model = new InnmelderSkjemaModel { GeoJson = geoJson };
+        var model = new InnmelderIncidentFormModel { GeoJson = geoJson };
         return View("InnmelderSkjemaView", model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> SubmitForm(InnmelderSkjemaModel form)
+    public async Task<IActionResult> SubmitForm(InnmelderIncidentFormModel form)
     {
         if (ModelState.IsValid)
         {

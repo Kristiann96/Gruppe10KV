@@ -1,6 +1,6 @@
-﻿namespace Models;
+﻿namespace Models.Entities;
 
-public class SaksbehandlerInnmeldingModel
+public class SaksbehandlerIncidentFormModel
 {
     public int Id { get; set; }
     public required string Subject { get; set; }
