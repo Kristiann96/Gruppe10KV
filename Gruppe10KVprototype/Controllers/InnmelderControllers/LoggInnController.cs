@@ -4,7 +4,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
     public class LoggInnController : Controller
     {
-        public IActionResult Index()
+        public IActionResult LoggInn()
         {
             return View();
         }

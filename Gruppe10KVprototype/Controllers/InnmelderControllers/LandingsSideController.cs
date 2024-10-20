@@ -4,7 +4,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
     public class LandingsSideController : Controller
     {
-        public IActionResult Index()
+        public IActionResult LandingsSide()
         {
             return View();
         }

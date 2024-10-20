@@ -4,7 +4,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
     public class OppdatereInnmeldingController : Controller
     {
-        public IActionResult Index()
+        public IActionResult OppdatereInnmelding()
         {
             return View();
         }

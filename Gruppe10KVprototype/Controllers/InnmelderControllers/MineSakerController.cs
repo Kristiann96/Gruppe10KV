@@ -4,7 +4,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
     public class MineSakerController : Controller
     {
-        public IActionResult Index()
+        public IActionResult MineSaker()
         {
             return View();
         }

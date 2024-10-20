@@ -4,7 +4,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
     public class RegistrerDegController : Controller
     {
-        public IActionResult Index()
+        public IActionResult RegistrerDeg()
         {
             return View();
         }

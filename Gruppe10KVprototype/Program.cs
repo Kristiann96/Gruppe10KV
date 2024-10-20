@@ -1,5 +1,4 @@
 using DataAccess;
-using Gruppe10KVprototype.Controllers.InnmelderControllers;
 using Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
