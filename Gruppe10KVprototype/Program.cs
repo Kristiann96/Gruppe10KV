@@ -5,8 +5,12 @@ using Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+builder.Services.AddControllersWithViews()
+    .AddRazorOptions(options =>
+    {
+        options.ViewLocationFormats.Add("/Views/Innmelder/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Saksbehandler/{1}/{0}.cshtml");
+    });
 
 // Register DapperDBConnection as a service
 builder.Services.AddScoped<DapperDBConnection>();
