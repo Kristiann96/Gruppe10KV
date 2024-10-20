@@ -1,7 +1,9 @@
-﻿@model Models.InnmelderModels.InnmelderRegisterModel
-@{
-    ViewData["Title"] = "Register";
+﻿@{
+
+    Layout = "_Layout";
 }
+
+
 
 <body class="Index">
 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 100vh; font-family: 'Arial', sans-serif; padding: 2rem 0;">
@@ -10,22 +12,22 @@
         <form asp-action="Register" method="post">
             <div style="margin-bottom: 1.5rem; margin-right: 1.5rem;">
                 <label asp-for="Username" style="display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem;">Brukernavn</label>
-                <input asp-for="Username" class="form-control" placeholder="Brukernavn" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"/>
+                <input asp-for="Username" class="form-control" placeholder="Brukernavn" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;" />
                 <span asp-validation-for="Username" class="text-danger" style="color: orangered; display: block; margin-top: 0.25rem;"></span>
             </div>
             <div style="margin-bottom: 1.5rem; margin-right: 1.5rem;">
                 <label asp-for="Email" style="display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem;">E-post</label>
-                <input asp-for="Email" class="form-control" placeholder="E-post" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"/>
+                <input asp-for="Email" class="form-control" placeholder="E-post" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;" />
                 <span asp-validation-for="Email" class="text-danger" style="color: orangered; display: block; margin-top: 0.25rem;"></span>
             </div>
             <div style="margin-bottom: 1.5rem; margin-right: 1.5rem;">
                 <label asp-for="Password" style="display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem;">Passord</label>
-                <input asp-for="Password" class="form-control" placeholder="Passord" type="password" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"/>
+                <input asp-for="Password" class="form-control" placeholder="Passord" type="password" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;" />
                 <span asp-validation-for="Password" class="text-danger" style="color: orangered; display: block; margin-top: 0.25rem;"></span>
             </div>
             <div style="margin-bottom: 2rem; margin-right: 1.5rem;">
                 <label asp-for="BekreftPassord" style="display: block; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem;">Bekreft passord</label>
-                <input asp-for="BekreftPassord" class="form-control" placeholder="Bekreft passord" type="password" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;"/>
+                <input asp-for="BekreftPassord" class="form-control" placeholder="Bekreft passord" type="password" style="width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;" />
                 <span asp-validation-for="BekreftPassord" class="text-danger" style="color: orangered; display: block; margin-top: 0.25rem;"></span>
             </div>
             <div style="text-align: center;">
