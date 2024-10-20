@@ -1,9 +1,8 @@
 ﻿using Dapper;
 using Interfaces;
-using Models;
-using Models.SaksbehandlerModels;
-using Microsoft.Extensions.Logging;
 using Models.Entities;
+
+using Microsoft.Extensions.Logging;
 
 namespace DataAccess;
 

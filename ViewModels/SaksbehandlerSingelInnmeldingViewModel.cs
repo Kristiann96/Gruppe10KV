@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Entities;
-using Models.SaksbehandlerModels;
+
 
 namespace ViewModels
 {
