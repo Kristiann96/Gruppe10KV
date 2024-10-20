@@ -9,11 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-   
-  
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
@@ -23,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+   
+    <Folder Include="Views\BehandleInnmeldingSaksB\" />
+   
+    <Folder Include="Views\OversiktAlleInnmeldingerSaksB\" />
    
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
@@ -35,7 +34,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\DomainLogic\Logic.csproj" />
+    <ProjectReference Include="..\DataAccsess\DataAccess.csproj" />
+    <ProjectReference Include="..\DataAccsess\DataAccsess.csproj" />
+   
     <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />

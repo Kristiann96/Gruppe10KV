@@ -1,4 +1,5 @@
-﻿using Interfaces;
+﻿
+using Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Entities;
@@ -7,37 +8,21 @@ using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
-    public class SaksbehandlerInnmeldingController : Controller
+    public class BehandleInnmeldingSaksBController : Controller
     {
-        private readonly ISaksbehandlerRepository _repository;
+        private readonly IInnmeldingERepository _repository;
 
-        public SaksbehandlerInnmeldingController(ISaksbehandlerRepository repository)
+        public BehandleInnmeldingSaksBController(IInnmeldingERepository repository)
         {
             _repository = repository;
         }
 
-        // Viser en oversikt over alle oppføringer i incident_form tabellen 
-        public async Task<IActionResult> Index()
-        {
-            var forms = await _repository.GetAllAdviserFormsAsync();
-            return View("SaksbehandlerInnmeldingOversiktView", forms);  
-        }
-
-        // Viser en enkelt oppføring av incident_form basert på ID 
-        public async Task<IActionResult> SaksbehandlerSingleInnmeldingView(int id)
-        {
-            var form = await _repository.GetAdviserFormByIdAsync(id);
-            if (form == null) return NotFound();
-            return View(form);
-        }
-
-
         //INNMELDIGSTABELLEN
         // GET: // Initialiserer en tom ViewModel med statusliste
-        [HttpGet("InnmeldingSaksbehandlerView")]
-        public IActionResult InnmeldingSaksbehandlerView()
+        [HttpGet("BehandleInnmeldingSaksB")]
+        public IActionResult BehandleInnmeldingSaksB()
         {
-            var model = new SaksbehandlerSingelInnmeldingViewModel
+            var model = new BehandleInnmeldingSaksBViewModel
             {
                 InnmeldingE = new InnmeldingEModel(), // Initierer ny modell
                 StatusList = GetStatusList() // Henter liste over tilgjengelige statuser
@@ -46,12 +31,12 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         }
 
         // POST: Fyller ViewModel med data fra databasen basert på InnmeldID
-        [HttpPost("InnmeldingSaksbehandlerView")]
-        public async Task<IActionResult> InnmeldingSaksbehandlerView(SaksbehandlerSingelInnmeldingViewModel model)
+        [HttpPost("BehandleInnmeldingSaksB")]
+        public async Task<IActionResult> BehandleInnmeldingSaksB(BehandleInnmeldingSaksBViewModel model)
         {
             if (model == null) // Hvis modellen er null, lag en ny tom modell
             {
-                model = new SaksbehandlerSingelInnmeldingViewModel();
+                model = new BehandleInnmeldingSaksBViewModel();
             }
 
             model.StatusList = GetStatusList(); // Fyll dropdown med statuser
@@ -69,7 +54,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateStatusAsync(SaksbehandlerSingelInnmeldingViewModel model)
+        public async Task<IActionResult> UpdateStatusAsync(BehandleInnmeldingSaksBViewModel model)
         {
             // Oppdaterer status i databasen og returnerer oppdatert ViewModel
             if (ModelState.IsValid)

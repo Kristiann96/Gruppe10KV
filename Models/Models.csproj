@@ -14,8 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="InnmelderModels\" />
-    <Folder Include="SaksbehandlerModels\" />
   </ItemGroup>
 
 </Project>

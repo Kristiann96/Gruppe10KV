@@ -1,8 +1,9 @@
-﻿@model IEnumerable<Models.Entities.SaksbehandlerIncidentFormModel>
-
-@{
-    ViewData["Title"] = "Oversikt over Innmeldinger";
+﻿@{
+    Layout = "_Layout";
 }
+
+@model IEnumerable<Models.Entities.IncidentFormModel>
+
 
 <h2>Oversikt over alle Innmeldinger</h2>
 
@@ -25,8 +26,8 @@
             <td>@incident.Description</td>
             <td>@(incident.Uttrykning ? "Ja" : "Nei")</td>
             <td>
-                <!-- Link til visning av enkel Innmelding med kart (SaksbehandlerSingleInnmeldingView) -->
-                <a href="@Url.Action("SaksbehandlerSingleInnmeldingView", "SaksbehandlerInnmelding", new { id = incident.Id })">Vis detaljer</a>
+                <!-- Link til visning av enkel Innmelding med kart (BehandleInnmeldingSaksB) -->
+                <a href="@Url.Action("KartvisningInnmeldingSaksB", "KartvisningInnmeldingSaksB", new { id = incident.Id })">Vis detaljer</a>
             </td>
         </tr>
     }
