@@ -1,10 +1,9 @@
-﻿<link rel="stylesheet" href="~/css/style.css"/>
+﻿@{
 
-
-@{
-    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
 }
 
+<link rel="stylesheet" href="~/css/style.css" />
 
 <head>
     <meta charset="UTF-8">
@@ -14,7 +13,6 @@
 </head>
 
 <body class="Index">
-
 <div class="posterPage">
     <div class="innmeldCard">
         <h1>Hei!</h1>
@@ -22,13 +20,4 @@
         <a href="@Url.Action("MapView", "Home")" class="Button-MeldInn">Meld inn feil</a>
     </div>
 </div>
-    <div style="background-color: white; display: flex; gap: 3em;">
-        <a href="@Url.Action("LandingPage", "Saksbehandler")">Landing Page Saks</a>
-        <a href="@Url.Action("InnmeldingSaksbehandlerView", "SaksbehandlerInnmelding")">Single Page Saks</a>
-        <a href="@Url.Action("OversiktInnmeldingerSaksbehandler", "Saksbehandler")">Alle Innmeldinger</a>
-        <a href="@Url.Action("InnloggingSaksbehandler", "Saksbehandler")">Logg inn</a>
-        <a href="@Url.Action("SortereInnmeldinger", "Saksbehandler")">Sortere Innmeldinger</a>
-        <a href="@Url.Action("SøkInnmelderSaksbehandler", "Saksbehandler")">Søke etter innmelder</a>
-
-    </div>
 </body>

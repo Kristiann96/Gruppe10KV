@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews()
     {
         options.ViewLocationFormats.Add("/Views/Innmelder/{1}/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Saksbehandler/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Home/{1}/{0}.cshtml");
     });
 
 // Register DapperDBConnection as a service

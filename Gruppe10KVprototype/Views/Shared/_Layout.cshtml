@@ -1,79 +1,81 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> - Gruppe10KVprototype</title>
-    <!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />-->
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/Gruppe10KVprototype.styles.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Gruppe10KVprototype.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", false)
 </head>
 <body>
-<header>
-    <nav class="navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Logo"/>
-            </a>
+    <header>
+        <nav class="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Logo" />
+                </a>
 
-
-            <div id="navbar-menu">
-                <ul class="navbarlist">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="MapView">Kart</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="SaksbehandlerInnmelding" asp-action="Index">Saksbehandler</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="MineSaker" asp-action="MineSaker">MineSaker</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="OppdatereInnmelding" asp-action="OppdatereInnmelding">OppdaterInnmelding</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="LoggInn" asp-action="LoggInn">LoggInn</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="LandingsSide" asp-action="LandingsSide">LandingsSide</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="RegistrerDeg" asp-action="RegistrerDeg">RegistrerDeg</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="KnyttInnmeldigTilPerson" asp-action="KnyttInnmeldigTilPerson">KnyttInnmeldingTilPerson</a>
-                    </li>
-
-                    
-                </ul>
+                <div id="navbar-menu">
+                    <ul class="navbarlist" style="font-size: 0.6rem;">
+                        <!-- Mindre tekststørrelse -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="MapView">Kart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="SaksbehandlerInnmelding" asp-action="Index">Saksbehandler</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="MineSaker" asp-action="MineSaker">Mine Saker</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="OppdatereInnmelding" asp-action="OppdatereInnmelding">Oppdater Innmelding</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="LoggInn" asp-action="LoggInn">Logg Inn</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="LandingsSide" asp-action="LandingsSide">Landings Side</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="RegistrerDeg" asp-action="RegistrerDeg">Registrer Deg</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="KnyttInnmeldigTilPerson" asp-action="KnyttInnmeldigTilPerson">Knytt Innmelding Til Person</a>
+                        </li>
+                        <div >
+                            <a href="@Url.Action("LandingPage", "Saksbehandler")">Landing Page Saks</a>
+                            <a href="@Url.Action("InnmeldingSaksbehandlerView", "SaksbehandlerInnmelding")">Single Page Saks</a>
+                            <a href="@Url.Action("OversiktInnmeldingerSaksbehandler", "Saksbehandler")">Alle Innmeldinger</a>
+                            <a href="@Url.Action("InnloggingSaksbehandler", "Saksbehandler")">Logg inn</a>
+                            <a href="@Url.Action("SortereInnmeldinger", "Saksbehandler")">Sortere Innmeldinger</a>
+                            <a href="@Url.Action("SøkInnmelderSaksbehandler", "Saksbehandler")">Søke etter innmelder</a>
+                        </div>
+                    </ul>
+                </div>
             </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    <!-- Enkel footer uten Bootstrap -->
+    <footer style="border-top: 1px solid #ccc; padding: 1rem; text-align: center; background-color: #f8f9fa;">
+        <div class="container">
+            &copy; 2024 - Gruppe10KVprototype - <a href="@Url.Action("Privacy", "Home")">Privacy</a>
         </div>
-    </nav>
-</header>
+    </footer>
 
-<main role="main" class="pb-3">
-    @RenderBody()
-</main>
-
-
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2024 - Gruppe10KVprototype - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-</footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", false)
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", false)
 </body>
 </html>

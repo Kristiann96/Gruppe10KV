@@ -1,6 +1,5 @@
 ﻿using Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Models.Entities;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
