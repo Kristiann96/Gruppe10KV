@@ -3,24 +3,21 @@
     Layout = "_Layout";
 }
 
-< div class= "brukerSakerTittel" >
-< h1 > Mine Saker </ h1 >
-< p > Her kan du se dine saker</p>
+<div class="brukerSakerTittel">
+    <h1>Mine Saker</h1>
+    <p>Her kan du se dine saker</p>
 </div>
 
-    <div class="brukerSakerListe">
-       
-    {
-        <div class="brukerSak">
-            <h2>Sak .CaseId</h2>
-            <p>.Subject</p>
-            <p>Status:.Status</p>
-            <a href ">Se sak</a>
-            </div>
-    }
+<div class="brukerSakerListe">
+    <!-- Dette er plassen hvor saker vil vises senere -->
+    <div class="brukerSak">
+        <h2>Sak [Sak ID]</h2>
+        <p>[Sak Subject]</p>
+        <p>Status: [Sak Status]</p>
+        <a href="[Sak GeoLocation]">Se sak</a>
     </div>
-}
-else
-{
-    <p>Du har ingen saker ennå.</p>
+</div>
+
+<p>Du har ingen saker ennå.</p>
+
 }

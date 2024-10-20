@@ -39,7 +39,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         {
             var model = new SaksbehandlerSingelInnmeldingViewModel
             {
-                Innmelding = new SaksbehandlerINNMELDINGModel(), // Initierer ny modell
+                InnmeldingE = new InnmeldingEModel(), // Initierer ny modell
                 StatusList = GetStatusList() // Henter liste over tilgjengelige statuser
             };
             return View(model);  // Viser viewet med tom modell og statusliste
@@ -56,12 +56,12 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 
             model.StatusList = GetStatusList(); // Fyll dropdown med statuser
 
-            if (model.Innmelding != null && model.Innmelding.InnmeldID > 0)  // Hvis InnmeldID er gyldig
+            if (model.InnmeldingE != null && model.InnmeldingE.InnmeldID > 0)  // Hvis InnmeldID er gyldig
             {
-                var innmelding = await _repository.GetInnmeldingByIdAsync(model.Innmelding.InnmeldID);  // Henter innmelding basert på ID
+                var innmelding = await _repository.GetInnmeldingByIdAsync(model.InnmeldingE.InnmeldID);  // Henter innmeldingE basert på ID
                 if (innmelding != null)
                 {
-                    model.Innmelding = innmelding;  // Oppdaterer modellen med innmeldingsdata fra databasen
+                    model.InnmeldingE = innmelding;  // Oppdaterer modellen med innmeldingsdata fra databasen
                 }
             }
 
@@ -74,11 +74,11 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             // Oppdaterer status i databasen og returnerer oppdatert ViewModel
             if (ModelState.IsValid)
             {
-                var success = await _repository.UpdateStatusAsync(model.Innmelding.InnmeldID, model.Innmelding.StatusID);
+                var success = await _repository.UpdateStatusAsync(model.InnmeldingE.InnmeldID, model.InnmeldingE.StatusID);
                 if (success)
                 {
                     // Hent oppdatert innmelding
-                    model.Innmelding = await _repository.GetInnmeldingByIdAsync(model.Innmelding.InnmeldID);
+                    model.InnmeldingE = await _repository.GetInnmeldingByIdAsync(model.InnmeldingE.InnmeldID);
                 }
             }
             model.StatusList = GetStatusList();

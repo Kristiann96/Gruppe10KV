@@ -6,7 +6,7 @@ namespace ViewModels
 {
     public class SaksbehandlerSingelInnmeldingViewModel
     {
-        public SaksbehandlerINNMELDINGModel Innmelding { get; set; }
+        public InnmeldingEModel InnmeldingE { get; set; }
         public List<SelectListItem> StatusList { get; set; }
         
     }

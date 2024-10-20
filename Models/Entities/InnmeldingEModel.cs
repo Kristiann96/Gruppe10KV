@@ -1,7 +1,7 @@
 ﻿namespace Models.Entities
 {
     //representerer hele entiteten INNMELDING i databasen
-    public class SaksbehandlerINNMELDINGModel
+    public class InnmeldingEModel
     {
         public int InnmeldID { get; set; }  // Primærnøkkel, auto-increment
 
