@@ -14,31 +14,31 @@
     <form asp-action="InnmeldingSaksbehandlerView" method="post">
         <div>
             <label for="Innmelding_InnmeldID">Innmeldings ID:</label>
-            <input type="number" asp-for="Innmelding.InnmeldID" required />
+            <input type="number" asp-for="InnmeldingE.InnmeldID" required />
             <button type="submit">Hent Innmelding</button>
         </div>
 
-        @if (Model.Innmelding != null)
+        @if (Model.InnmeldingE != null)
         {
-            @if (Model.Innmelding.InnmeldID > 0)
+            @if (Model.InnmeldingE.InnmeldID > 0)
             {
                 <div>
                     <h2>Innmelding Detaljer:</h2>
-                    <p>InnmeldID: @Model.Innmelding.InnmeldID</p>
-                    <p>InnmelderID: @Model.Innmelding.InnmelderID</p>
-                    <p>Innmeldingstidspunkt: @Model.Innmelding.Innmeldingstidspunkt</p>
-                    <p>Nåværende Status: @Model.Innmelding.StatusID</p>
-                    <p>SaksbehandlerID: @(Model.Innmelding.SaksbehandlerID ?? 0)</p>
-                    <p>Siste Endring: @Model.Innmelding.SisteEndring</p>
-                    <p>KommuneNR: @Model.Innmelding.KommuneNR</p>
-                    <p>Prioritet: @Model.Innmelding.PrioritetID</p>
-                    <p>KartID: @Model.Innmelding.KartID</p>
+                    <p>InnmeldID: @Model.InnmeldingE.InnmeldID</p>
+                    <p>InnmelderID: @Model.InnmeldingE.InnmelderID</p>
+                    <p>Innmeldingstidspunkt: @Model.InnmeldingE.Innmeldingstidspunkt</p>
+                    <p>Nåværende Status: @Model.InnmeldingE.StatusID</p>
+                    <p>SaksbehandlerID: @(Model.InnmeldingE.SaksbehandlerID ?? 0)</p>
+                    <p>Siste Endring: @Model.InnmeldingE.SisteEndring</p>
+                    <p>KommuneNR: @Model.InnmeldingE.KommuneNR</p>
+                    <p>Prioritet: @Model.InnmeldingE.PrioritetID</p>
+                    <p>KartID: @Model.InnmeldingE.KartID</p>
 
                     <div>
                         <form asp-action="UpdateStatusAsync" method="post">
-                            <input type="hidden" asp-for="Innmelding.InnmeldID" />
+                            <input type="hidden" asp-for="InnmeldingE.InnmeldID" />
                             <label for="status">Velg status:</label>
-                            <select asp-for="Innmelding.StatusID" asp-items="Model.StatusList" class="form-control"></select>
+                            <select asp-for="InnmeldingE.StatusID" asp-items="Model.StatusList" class="form-control"></select>
                             <button type="submit" class="btn btn-primary">Oppdater status</button>
                         </form>
                         

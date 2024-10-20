@@ -31,18 +31,18 @@ namespace DataAccess;
         }
 
         // Metoder for INNMELDING-tabellen
-        public async Task<IEnumerable<SaksbehandlerINNMELDINGModel>> GetAllInnmeldingerAsync()
+        public async Task<IEnumerable<InnmeldingEModel>> GetAllInnmeldingerAsync()
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = "SELECT * FROM INNMELDING";
-            return await connection.QueryAsync<SaksbehandlerINNMELDINGModel>(sql);
+            return await connection.QueryAsync<InnmeldingEModel>(sql);
         }
 
-        public async Task<SaksbehandlerINNMELDINGModel> GetInnmeldingByIdAsync(int innmeldID)
+        public async Task<InnmeldingEModel> GetInnmeldingByIdAsync(int innmeldID)
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = "SELECT * FROM INNMELDING WHERE InnmeldID = @InnmeldID";
-            return await connection.QuerySingleOrDefaultAsync<SaksbehandlerINNMELDINGModel>(sql,
+            return await connection.QuerySingleOrDefaultAsync<InnmeldingEModel>(sql,
                 new { InnmeldID = innmeldID });
         }
 
@@ -78,7 +78,7 @@ namespace DataAccess;
         }
 
         // Oppdaterer hele innmeldingen (alle felter)
-        public async Task<bool> UpdateInnmeldingAsync(SaksbehandlerINNMELDINGModel innmelding)
+        public async Task<bool> UpdateInnmeldingAsync(InnmeldingEModel innmeldingE)
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"UPDATE INNMELDING 
@@ -91,12 +91,12 @@ namespace DataAccess;
 
             var result = await connection.ExecuteAsync(sql, new
             {
-                innmelding.StatusID,
-                innmelding.SaksbehandlerID,
+                innmeldingE.StatusID,
+                innmeldingE.SaksbehandlerID,
                 SisteEndring = DateTime.Now,
-                innmelding.PrioritetID,
-                innmelding.InnmeldID,
-                innmelding.InnmelderID
+                innmeldingE.PrioritetID,
+                innmeldingE.InnmeldID,
+                innmeldingE.InnmelderID
             });
 
             return result > 0;

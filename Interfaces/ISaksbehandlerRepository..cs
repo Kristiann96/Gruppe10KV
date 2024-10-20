@@ -11,11 +11,11 @@ namespace Interfaces
         Task<SaksbehandlerIncidentFormModel> GetAdviserFormByIdAsync(int id);
 
         // Metoder for INNMELDING tabellen
-        Task<IEnumerable<SaksbehandlerINNMELDINGModel>> GetAllInnmeldingerAsync();
-        Task<SaksbehandlerINNMELDINGModel> GetInnmeldingByIdAsync(int innmeldID);
+        Task<IEnumerable<InnmeldingEModel>> GetAllInnmeldingerAsync();
+        Task<InnmeldingEModel> GetInnmeldingByIdAsync(int innmeldID);
         Task<StatusEnum> GetStatusByInnmeldIdAsync(int innmeldID);
         Task<bool> UpdateStatusAsync(int innmeldID, StatusEnum status);
-        Task<bool> UpdateInnmeldingAsync(SaksbehandlerINNMELDINGModel innmelding);
+        Task<bool> UpdateInnmeldingAsync(InnmeldingEModel innmeldingE);
         IEnumerable<StatusEnum> GetAvailableStatuses();
     }
 }
