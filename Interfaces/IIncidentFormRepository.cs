@@ -1,17 +1,21 @@
 ﻿using Models.Entities;
 
-
-public interface IIncidentFormRepository
-
-
+namespace Interface
 {
-    Task<IEnumerable<IncidentFormModel>> GetAllAdviserFormsAsync();
-    Task<IncidentFormModel> GetAdviserFormByIdAsync(int id);
 
-    Task<IEnumerable<IncidentFormModel>> GetAllIncidentsAsync();
 
-    Task<IncidentFormModel> GetIncidentByIdAsync(int id);
+    public interface IIncidentFormRepository
 
-    // Returtypen Task<bool> for å indikere om operasjonen var vellykket
-    Task<bool> SaveIncidentFormAsync(IncidentFormModel form);
+
+    {
+        Task<IEnumerable<IncidentFormModel>> GetAllAdviserFormsAsync();
+        Task<IncidentFormModel> GetAdviserFormByIdAsync(int id);
+
+        Task<IEnumerable<IncidentFormModel>> GetAllIncidentsAsync();
+
+        Task<IncidentFormModel> GetIncidentByIdAsync(int id);
+
+        // Returtypen Task<bool> for å indikere om operasjonen var vellykket
+        Task<bool> SaveIncidentFormAsync(IncidentFormModel form);
+    }
 }

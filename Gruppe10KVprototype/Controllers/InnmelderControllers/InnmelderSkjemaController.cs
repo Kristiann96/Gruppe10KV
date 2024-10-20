@@ -1,4 +1,4 @@
-﻿using Interfaces;
+﻿using Interface;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 
@@ -15,7 +15,11 @@ public class InnmelderSkjemaController : Controller
 
     public IActionResult Form(string geoJson)
     {
-        var model = new IncidentFormModel { GeoJson = geoJson };
+        var model = new IncidentFormModel
+        {
+            GeoJson = geoJson,
+            Description = ""
+        };
         return View("InnmelderSkjemaView", model);
     }
 

@@ -1,13 +1,14 @@
 ﻿using Dapper;
-using Interfaces;
+using DataAccess;
+using Interface;
 using Models.Entities;
 
-namespace DataAccess;
 
-public class InnmeldingeRepository : IInnmeldingERepository
+public class InnmeldingERepository : IInnmeldingERepository
 {
-    private readonly DapperDBConnection _dbConnection;
+    private readonly DapperDBConnection _dbConnection; 
 
+    
     public InnmeldingERepository(DapperDBConnection dbConnection)
     {
         _dbConnection = dbConnection;
@@ -73,7 +74,7 @@ public class InnmeldingeRepository : IInnmeldingERepository
         {
             innmeldingE.StatusID,
             innmeldingE.SaksbehandlerID,
-            SisteEndring = DateTime.Now,
+            SisteEndring = DateTime.Now, 
             innmeldingE.PrioritetID,
             innmeldingE.InnmeldID,
             innmeldingE.InnmelderID

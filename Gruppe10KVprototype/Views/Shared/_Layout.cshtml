@@ -30,7 +30,7 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="MapView">Kart</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="SaksbehandlerInnmelding" asp-action="Index">Saksbehandler</a>
+                            <a class="nav-link" asp-controller="OversiktAlleInnmeldingerSaksB" asp-action="OversiktAlleInnmeldingerSaksB">Saksbehandler</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="MineSaker" asp-action="MineSaker">Mine Saker</a>
@@ -52,7 +52,7 @@
                         </li>
                         <div >
                             <a href="@Url.Action("LandingPage", "Saksbehandler")">Landing Page Saks</a>
-                            <a href="@Url.Action("InnmeldingSaksbehandlerView", "SaksbehandlerInnmelding")">Single Page Saks</a>
+                            <a href="@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB")">BEHANDLE INNMELDING</a>
                             <a href="@Url.Action("OversiktInnmeldingerSaksbehandler", "Saksbehandler")">Alle Innmeldinger</a>
                             <a href="@Url.Action("InnloggingSaksbehandler", "Saksbehandler")">Logg inn</a>
                             <a href="@Url.Action("SortereInnmeldinger", "Saksbehandler")">Sortere Innmeldinger</a>

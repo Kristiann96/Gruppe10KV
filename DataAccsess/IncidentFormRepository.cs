@@ -1,5 +1,6 @@
 ﻿using Dapper;
-using Interfaces;
+using Interface;
+using Models;
 using Models.Entities;
 
 namespace DataAccess;
@@ -15,21 +16,21 @@ public class IncidentFormRepository : IIncidentFormRepository
 
     public async Task<IEnumerable<IncidentFormModel>> GetAllIncidentsAsync()
     {
-        using var connection = _dbConnnection.CreateConnection();
+        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
         return await connection.QueryAsync<IncidentFormModel>("SELECT * FROM incident_form");
     }
 
     public async Task<IncidentFormModel> GetIncidentByIdAsync(int id)
     {
-        using var connection = _dbConnnection.CreateConnection();
-        return await connection.QuerySingleOrDefaultAsync<InnmelderIncidentFormModel>(
+        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
+        return await connection.QuerySingleOrDefaultAsync<IncidentFormModel>( // Fixed model mismatch
             "SELECT * FROM incident_form WHERE id = @Id", new { Id = id });
     }
 
     // Legger til transaksjon for innsending av skjemaet - innmelder
     public async Task<bool> SaveIncidentFormAsync(IncidentFormModel form)
     {
-        using var connection = _dbConnnection.CreateConnection();
+        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
         await connection.OpenAsync(); // Åpner forbindelsen eksplisitt
 
         using var transaction = await connection.BeginTransactionAsync();
@@ -54,25 +55,19 @@ public class IncidentFormRepository : IIncidentFormRepository
         }
     }
 
+    // Saksbehandler
 
+    public async Task<IEnumerable<IncidentFormModel>> GetAllAdviserFormsAsync()
+    {
+        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
+        return await connection.QueryAsync<IncidentFormModel>("SELECT * FROM incident_form");
+    }
 
-
-    //Saksbehandler
-
-        public async Task<IEnumerable<IncidentFormModel>> GetAllAdviserFormsAsync()
-        {
-            using var connection = _dbConnection.CreateConnection();
-            return await connection.QueryAsync<IncidentFormModel>("SELECT * FROM incident_form");
-        }
-
-        public async Task<IncidentFormModel> GetAdviserFormByIdAsync(int id)
-        {
-            using var connection = _dbConnection.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<IncidentFormModel>(
-                "SELECT id, subject, uttrykning, something, attach_file, description, location_data AS GeoJson FROM incident_form WHERE id = @Id",
-                new { Id = id });
-        }
+    public async Task<IncidentFormModel> GetAdviserFormByIdAsync(int id)
+    {
+        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
+        return await connection.QuerySingleOrDefaultAsync<IncidentFormModel>( // Ensure GeoJson field exists in model
+            "SELECT id, subject, uttrykning, something, attach_file, description, location_data AS GeoJson FROM incident_form WHERE id = @Id",
+            new { Id = id });
     }
 }
-
-

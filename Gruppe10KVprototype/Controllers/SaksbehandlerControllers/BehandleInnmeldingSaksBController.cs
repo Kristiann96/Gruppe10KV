@@ -1,4 +1,5 @@
-﻿using Interfaces;
+﻿
+using Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Entities;
@@ -7,11 +8,11 @@ using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
-    public class BehandleInnmeldingSakBController : Controller
+    public class BehandleInnmeldingSaksBController : Controller
     {
         private readonly IInnmeldingERepository _repository;
 
-        public BehandleInnmeldingSakBControllerController(IInnmeldingERepository repository)
+        public BehandleInnmeldingSaksBController(IInnmeldingERepository repository)
         {
             _repository = repository;
         }
