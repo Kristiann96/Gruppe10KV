@@ -10,10 +10,6 @@
 
   <ItemGroup>
    
-  </ItemGroup>
-
-  <ItemGroup>
-   
   
   </ItemGroup>
 
@@ -39,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\DomainLogic\DomainLogic.csproj" />
     <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
