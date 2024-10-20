@@ -1,0 +1,26 @@
+﻿@{
+
+    Layout = "_Layout";
+}
+
+< div class= "brukerSakerTittel" >
+< h1 > Mine Saker </ h1 >
+< p > Her kan du se dine saker</p>
+</div>
+
+    <div class="brukerSakerListe">
+       
+    {
+        <div class="brukerSak">
+            <h2>Sak .CaseId</h2>
+            <p>.Subject</p>
+            <p>Status:.Status</p>
+            <a href ">Se sak</a>
+            </div>
+    }
+    </div>
+}
+else
+{
+    <p>Du har ingen saker ennå.</p>
+}

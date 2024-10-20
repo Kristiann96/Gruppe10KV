@@ -13,4 +13,9 @@
     <PackageReference Include="System.Threading.Tasks" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InnmelderModels\" />
+    <Folder Include="SaksbehandlerModels\" />
+  </ItemGroup>
+
 </Project>

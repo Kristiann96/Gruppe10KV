@@ -1,6 +1,6 @@
-﻿using Models;
+﻿
 using Models.Entities;
-using Models.SaksbehandlerModels;
+
 
 namespace Interfaces
 {
