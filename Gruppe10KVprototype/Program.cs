@@ -1,5 +1,5 @@
 using DataAccess;
-using Interfaces;
+using Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +16,8 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<DapperDBConnection>();
 
 //Registrering av repos og interfaces
-builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
-builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
+builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>();
+builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>();
 
 
 var app = builder.Build();

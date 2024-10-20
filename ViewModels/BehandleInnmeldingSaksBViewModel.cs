@@ -4,7 +4,7 @@ using Models.Entities;
 
 namespace ViewModels
 {
-    public class SaksbehandlerSingelInnmeldingViewModel
+    public class BehandleInnmeldingSaksBViewModel
     {
         public InnmeldingEModel InnmeldingE { get; set; }
         public List<SelectListItem> StatusList { get; set; }
