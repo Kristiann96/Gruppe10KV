@@ -24,6 +24,10 @@
 
   <ItemGroup>
    
+    <Folder Include="Views\BehandleInnmeldingSaksB\" />
+   
+    <Folder Include="Views\OversiktAlleInnmeldingerSaksB\" />
+   
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 

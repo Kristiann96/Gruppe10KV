@@ -6,21 +6,21 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
 public class InnmelderSkjemaController : Controller
 {
-    private readonly IInnmelderRepository _repository;
+    private readonly IIncidentFormRepository _repository;
 
-    public InnmelderSkjemaController(IInnmelderRepository repository)
+    public InnmelderSkjemaController(IIncidentFormRepository repository)
     {
         _repository = repository;
     }
 
     public IActionResult Form(string geoJson)
     {
-        var model = new InnmelderIncidentFormModel { GeoJson = geoJson };
+        var model = new IncidentFormModel { GeoJson = geoJson };
         return View("InnmelderSkjemaView", model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> SubmitForm(InnmelderIncidentFormModel form)
+    public async Task<IActionResult> SubmitForm(IncidentFormModel form)
     {
         if (ModelState.IsValid)
         {
