@@ -2,13 +2,11 @@
 using Models.Entities;
 
 
-namespace ViewModels
+namespace ViewModels;
+public class BehandleInnmeldingSaksBViewModel
 {
-    public class BehandleInnmeldingSaksBViewModel
-    {
-        public InnmeldingEModel InnmeldingE { get; set; }
-        public List<SelectListItem> StatusList { get; set; }
-        
-    }
+    public InnmeldingEModel InnmeldingE { get; set; }
+    public List<SelectListItem> StatusList { get; set; }
+    
 }
 

@@ -3,7 +3,7 @@ using DataAccess;
 using Interface;
 using Models.Entities;
 
-
+namespace DataAccess;
 public class InnmeldingERepository : IInnmeldingERepository
 {
     private readonly DapperDBConnection _dbConnection; 
@@ -36,7 +36,7 @@ public class InnmeldingERepository : IInnmeldingERepository
         return await connection.QuerySingleOrDefaultAsync<StatusEnum>(sql, new { InnmeldID = innmeldID });
     }
 
-    public async Task<bool> UpdateStatusAsync(int innmeldID, StatusEnum status)
+    public async Task<bool> StoreUpdateStatusAsync(int innmeldID, StatusEnum status)
     {
         using var connection = _dbConnection.CreateConnection();
         await connection.OpenAsync();

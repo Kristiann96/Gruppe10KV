@@ -1,16 +1,15 @@
 ﻿using Models.Entities;
 
-namespace Interface
+namespace Interface;
+
+
+
+public interface IInnmeldingERepository
 {
-
-
-    public interface IInnmeldingERepository
-    {
-        Task<IEnumerable<InnmeldingEModel>> GetAllInnmeldingerAsync();
-        Task<InnmeldingEModel> GetInnmeldingByIdAsync(int innmeldID);
-        Task<StatusEnum> GetStatusByInnmeldIdAsync(int innmeldID);
-        Task<bool> UpdateStatusAsync(int innmeldID, StatusEnum status);
-        Task<bool> UpdateInnmeldingAsync(InnmeldingEModel innmeldingE);
-        IEnumerable<StatusEnum> GetAvailableStatuses();
-    }
+    Task<IEnumerable<InnmeldingEModel>> GetAllInnmeldingerAsync();
+    Task<InnmeldingEModel> GetInnmeldingByIdAsync(int innmeldID);
+    Task<StatusEnum> GetStatusByInnmeldIdAsync(int innmeldID);
+    Task<bool> StoreUpdateStatusAsync(int innmeldID, StatusEnum status);
+    Task<bool> UpdateInnmeldingAsync(InnmeldingEModel innmeldingE);
+    IEnumerable<StatusEnum> GetAvailableStatuses();
 }
