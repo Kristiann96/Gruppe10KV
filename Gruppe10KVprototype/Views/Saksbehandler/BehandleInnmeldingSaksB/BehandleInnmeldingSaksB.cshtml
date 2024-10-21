@@ -34,16 +34,14 @@
                         <p>KommuneNR: @Model.InnmeldingE.KommuneNR</p>
                         <p>Prioritet: @Model.InnmeldingE.PrioritetID</p>
                         <p>KartID: @Model.InnmeldingE.KartID</p>
-
+                        
                         <div>
-                            <form asp-action="UpdateStatusAsync" method="post">
+                            <form asp-action="UpdateStatus" method="post">
                                 <input type="hidden" asp-for="InnmeldingE.InnmeldID" />
                                 <label for="status">Velg status:</label>
                                 <select asp-for="InnmeldingE.StatusID" asp-items="Model.StatusList" class="form-control"></select>
                                 <button type="submit" class="btn btn-primary">Oppdater status</button>
                             </form>
-
-
                         </div>
                     </div>
                 }
@@ -62,12 +60,12 @@
 </html>
 
 
-//
-  //  Layout = "_Layout";
-//}
+
 
 <!--
-
+//
+//  Layout = "_Layout";
+//}
 <!DOCTYPE html>
 
 <html>
