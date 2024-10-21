@@ -22,7 +22,7 @@ erDiagram
     PERSON ||--|O INNMELDER : "er"
     PERSON ||--|O SAKSBEHANDLER : "er"
     INNMELDER ||--o{ INNMELDING : "lager"
-    GJESTINNMELDER ||--|{ INNMELDING : "mottar"
+    GJESTINNMELDER ||--|{ INNMELDING : "lager"
     GJESTINNMELDER {
         int GjestInnmelderID PK "AUTO_INCREMENT"
         int InnmeldingID FK "NOT NULL"
@@ -42,11 +42,11 @@ erDiagram
         VARCHAR(15) JobbTelefon "UNIQUE, NOT NULL"
         ENUMUMERATION Stilling "NULL"
     }
-    INNMELDING ||--o{ GEOMETRI : "har"
+    INNMELDING ||--|{ GEOMETRI : "har"
     INNMELDING ||--o{ TILBAKEMELDING : "mottar"    
     INNMELDING {
         int InnmeldingID PK "AUTO_INCREMENT"
-        int InnmelderID FK "NOT NULL"
+        int InnmelderID FK "NULL"
         datetime Innmeldingstidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         ENUMERATION Status "NOT NULL"
         int SaksbehandlerID FK "NULL"
