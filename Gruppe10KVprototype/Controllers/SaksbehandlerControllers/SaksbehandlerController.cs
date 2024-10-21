@@ -18,10 +18,6 @@ public class SaksbehandlerController : Controller
         return View();
     }
 
-    public IActionResult InnloggingSaksbehandler()
-    {
-        return View();
-    }
 
     public IActionResult SortereInnmeldinger()
     {
