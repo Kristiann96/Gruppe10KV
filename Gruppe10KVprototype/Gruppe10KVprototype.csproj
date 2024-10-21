@@ -32,11 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\DataAccsess\DataAccess.csproj" />
-    <ProjectReference Include="..\DataAccsess\DataAccsess.csproj" />
    
-    <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
+   <ProjectReference Include="..\DataAccsess\DataAccess.csproj" />
+   
+   <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
+   
+   <ProjectReference Include="..\Logic\Logic.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
