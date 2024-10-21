@@ -8,11 +8,11 @@ using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
-    public class OversiktAlleInnmeldingerSaksBController : Controller
+    public class OversiktAlleInnmeldingerSaksBIncidentFormController : Controller
     {
         private readonly IIncidentFormRepository _repository;
 
-        public OversiktAlleInnmeldingerSaksBController(IIncidentFormRepository repository)
+        public OversiktAlleInnmeldingerSaksBIncidentFormController(IIncidentFormRepository repository)
         {
             _repository = repository;
         }
@@ -22,10 +22,10 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         // Viser en oversikt over alle oppføringer i incident_form tabellen
 
 
-        public async Task<IActionResult> OversiktAlleInnmeldingerSaksB()
+        public async Task<IActionResult> OversiktAlleInnmeldingerSaksBIncidentForm()
         {
             var forms = await _repository.GetAllAdviserFormsAsync();
-            return View("OversiktAlleInnmeldingerSaksB", forms);
+            return View("OversiktAlleInnmeldingerSaksBIncidentForm", forms);
         }
     }
 }
