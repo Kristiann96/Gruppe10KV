@@ -13,10 +13,6 @@ public class SaksbehandlerController : Controller
    
 
 
-    public IActionResult OversiktInnmeldingerSaksbehandler()
-    {
-        return View();
-    }
 
 
     public IActionResult SortereInnmeldinger()
@@ -25,8 +21,4 @@ public class SaksbehandlerController : Controller
     }
 
 
-    public IActionResult SøkInnmelderSaksbehandler()
-    {
-        return View();
-    }
 }
