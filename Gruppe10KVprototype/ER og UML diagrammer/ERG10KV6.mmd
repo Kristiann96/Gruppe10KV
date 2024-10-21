@@ -22,6 +22,13 @@ erDiagram
     PERSON ||--|O INNMELDER : "er"
     PERSON ||--|O SAKSBEHANDLER : "er"
     INNMELDER ||--o{ INNMELDING : "lager"
+    GJESTINNMELDER ||--|{ INNMELDING : "mottar"
+    GJESTINNMELDER {
+        int GjestInnmelderID PK "AUTO_INCREMENT"
+        int InnmeldingID FK "NOT NULL"
+        VARCHAR(100) Epost "UNIQUE, NOT NULL"
+    }
+
     INNMELDER {
         int PersonID PK, FK "AUTO_INCREMENT"
         VARCHAR(100) Epost "UNIQUE, NOT NULL"
@@ -35,12 +42,10 @@ erDiagram
         VARCHAR(15) JobbTelefon "UNIQUE, NOT NULL"
         ENUMUMERATION Stilling "NULL"
     }
-
-    INNMELDING ||--o{ KOMMUNETILHORIGHET : "tilhører"
     INNMELDING ||--o{ GEOMETRI : "har"
-    INNMELDING ||--o{ TILBAKEMELDING : "mottar"
+    INNMELDING ||--o{ TILBAKEMELDING : "mottar"    
     INNMELDING {
-        int InnmeldID PK "AUTO_INCREMENT"
+        int InnmeldingID PK "AUTO_INCREMENT"
         int InnmelderID FK "NOT NULL"
         datetime Innmeldingstidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         ENUMERATION Status "NOT NULL"
@@ -49,29 +54,16 @@ erDiagram
         VARCHAR(4) KommuneNR FK "NULL"
         ENUMERATION Prioritet "NOT NULL"
         ENUMERATION KartType "NOT NULL"
-    }
-
+    }    
     GEOMETRI {
         int GeometriID PK "AUTO_INCREMENT"
-        int InnmeldID FK "NOT NULL"
+        int InnmeldingID FK "NOT NULL"
         longtext GeometriData "NOT NULL"
         polygon Omrade "NULL"
     }
-
-    KOMMUNE ||--o{ KOMMUNETILHORIGHET : "relatert til" 
-    KOMMUNE {
-        VARCHAR(4) KommuneNR PK "NOT NULL"
-        VARCHAR(100) Navn "NOT NULL"
-        polygon Grense "NOT NULL"
-    }
-    KOMMUNETILHORIGHET {
-        int KommunetilhorighetID PK "AUTO_INCREMENT"
-        int InnmeldID FK "NOT NULL"
-        VARCHAR(4) KommuneNR FK "NOT NULL"
-    }
     TILBAKEMELDING {
         int TilbakemeldingsID PK "AUTO_INCREMENT"
-        int InnmeldID FK "NOT NULL"
+        int InnmeldingID FK "NOT NULL"
         datetime Dato "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         VARCHAR(MAX) Innhold "NOT NULL"
     }
