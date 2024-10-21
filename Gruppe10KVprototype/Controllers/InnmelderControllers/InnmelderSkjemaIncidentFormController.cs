@@ -4,11 +4,11 @@ using Models.Entities;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
 
-public class InnmelderSkjemaController : Controller
+public class InnmelderSkjemaIncidentFormController : Controller
 {
     private readonly IIncidentFormRepository _repository;
 
-    public InnmelderSkjemaController(IIncidentFormRepository repository)
+    public InnmelderSkjemaIncidentFormController(IIncidentFormRepository repository)
     {
         _repository = repository;
     }
@@ -20,7 +20,7 @@ public class InnmelderSkjemaController : Controller
             GeoJson = geoJson,
             Description = ""
         };
-        return View("InnmelderSkjemaView", model);
+        return View("InnmelderSkjemaIncidentFormView", model);
     }
 
     [HttpPost]
@@ -29,15 +29,15 @@ public class InnmelderSkjemaController : Controller
         if (ModelState.IsValid)
         {
             await _repository.SaveIncidentFormAsync(form);
-            return View("InnmelderSkjemaResultat", form);
+            return View("InnmelderSkjemaIncidentFormResultat", form);
         }
 
-        return View("InnmelderSkjemaView", form);
+        return View("InnmelderSkjemaIncidentFormView", form);
     }
 
     public async Task<IActionResult> FormResult(int id)
     {
         var form = await _repository.GetIncidentByIdAsync(id);
-        return View("InnmelderSkjemaResultat", form);
+        return View("InnmelderSkjemaIncidentFormResultat", form);
     }
 }

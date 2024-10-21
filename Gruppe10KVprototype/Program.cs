@@ -36,7 +36,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// Definer routing for HomeController og InnmelderSkjemaController
+// Definer routing for HomeController og InnmelderSkjemaIncidentFormController
 app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
@@ -48,11 +48,11 @@ app.UseEndpoints(endpoints =>
         pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 
-// Route for InnmelderSkjemaController
+// Route for InnmelderSkjemaIncidentFormController
 app.MapControllerRoute(
     "innmelderSkjema",
     "form/{action=Form}/{id?}",
-    new { controller = "InnmelderSkjema" });
+    new { controller = "InnmelderSkjemaIncidentForm" });
 
 
 app.Run();
