@@ -1,69 +1,59 @@
-%%{init: {'themeCSS': 
-[
-'[id|=entity-PRIORITET] .er.entityBox { fill: #fae4aa; }',
-'[id|=entity-STATUS] .er.entityBox { fill: #fae4aa; }',
-'[id|=entity-KARTTYPE] .er.entityBox { fill: #fae4aa; }',
-'[id|=entity-KOMMUNE] .er.entityBox { fill: #fae4aa; }',
-'[id|=entity-INNMELDERTYPE] .er.entityBox { fill: #fae4aa; }',
-'[id|=entity-SAKSBEHANDLERTYPE] .er.entityBox { fill: #fae4aa; }',
-'[id|=entity-KARTKILDE] .er.entityBox { fill: #9bfa9b; }',
-'[id|=entity-KOMMUNETILHORIGHET] .er.entityBox { fill: #9bfa9b; }'
-] }}%%
-
 erDiagram
 
-    PERSON {
+    person {
         int PersonID PK "AUTO_INCREMENT"
-        VARCHAR(50) Fornavn "NOT NULL"
-        VARCHAR(50) Mellomnavn "NULL"
-        VARCHAR(50) Etternavn "NOT NULL"
-        VARCHAR(15) Telefonnummer "UNIQUE, NOT NULL"
+        VARCHAR(50) navn "NOT NULL"
+        VARCHAR(50) etternavn "NOT NULL"
+        VARCHAR(15) telefonnummer "UNIQUE, NOT NULL"
     }
-    PERSON ||--|O INNMELDER : "er"
-    PERSON ||--|O SAKSBEHANDLER : "er"
-    INNMELDER ||--o{ INNMELDING : "lager"
-    GJESTINNMELDER ||--|{ INNMELDING : "lager"
-    GJESTINNMELDER {
-        int GjestInnmelderID PK "AUTO_INCREMENT"
-        int InnmeldingID FK "NOT NULL"
-        VARCHAR(100) Epost "UNIQUE, NOT NULL"
-    }
-
-    INNMELDER {
-        int PersonID PK, FK "AUTO_INCREMENT"
-        VARCHAR(100) Epost "UNIQUE, NOT NULL"
-        ENUMUMERATION InnmelderType "NULL"
+    person ||--|O innmelder : "er"
+    person ||--|O saksbehandler : "er"
+    innmelder ||--o{ innmelding : "lager"
+    gjesteinnmelder ||--|{ innmelding : "lager"
+    gjesteinnmelder {
+        int gjest_innmelder_id PK "AUTO_INCREMENT"
+        int innmelding_id FK "NOT NULL"
+        VARCHAR(100) epost "UNIQUE, NOT NULL"
     }
 
-    SAKSBEHANDLER ||--o{ INNMELDING : "behandler"
-    SAKSBEHANDLER {
-        int PersonID PK, FK "AUTO_INCREMENT"
-        VARCHAR(100) JobbEmail "UNIQUE, NOT NULL"
-        VARCHAR(15) JobbTelefon "UNIQUE, NOT NULL"
-        ENUMUMERATION Stilling "NULL"
+    innmelder {
+        int person_id PK, FK "NOT NULL"
+        VARCHAR(100) epost "UNIQUE, NOT NULL"
+        ENUMUMERATION innmelder_type "NOT NULL"
     }
-    INNMELDING ||--|{ GEOMETRI : "har"
-    INNMELDING ||--o{ TILBAKEMELDING : "mottar"    
-    INNMELDING {
-        int InnmeldingID PK "AUTO_INCREMENT"
-        int InnmelderID FK "NULL"
-        datetime Innmeldingstidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
-        ENUMERATION Status "NOT NULL"
-        int SaksbehandlerID FK "NULL"
-        datetime SisteEndring "NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
-        VARCHAR(4) KommuneNR FK "NULL"
-        ENUMERATION Prioritet "NOT NULL"
-        ENUMERATION KartType "NOT NULL"
+
+    saksbehandler ||--o{ innmelding : "behandler"
+    saksbehandler {
+        int person_id PK, FK "NOT NULL"
+        VARCHAR(100) jobbepost "UNIQUE, NOT NULL"
+        VARCHAR(15) jobbtelefon "UNIQUE, NOT NULL"
+        ENUMUMERATION stilling "NOT NULL"
+    }
+    innmelding ||--|{ geometri : "har"
+    innmelding ||--o{ tilbakemelding : "mottar"    
+    innmelding {
+        int innmelding_id PK "AUTO_INCREMENT"
+        int innmelder_id FK "NULL"
+        int saksbehandler_id FK "NULL"
+        VARCHAR(100) tittel "NOT NULL"
+        VARCHAR(MAX) beskrivelse "NOT NULL"
+        datetime innmeldingstidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        ENUMERATION status "NOT NULL"
+        datetime siste_endring "NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+        ENUMERATION prioritet "NOT NULL"
+        ENUMERATION kart_type "NOT NULL"
     }    
-    GEOMETRI {
-        int GeometriID PK "AUTO_INCREMENT"
-        int InnmeldingID FK "NOT NULL"
-        longtext GeometriData "NOT NULL"
-        polygon Omrade "NULL"
+    geometri {
+        int geometri_id PK "AUTO_INCREMENT"
+        int innmelding_id FK "NOT NULL"
+        longtext geometri_data "NOT NULL"
+        
     }
-    TILBAKEMELDING {
-        int TilbakemeldingsID PK "AUTO_INCREMENT"
-        int InnmeldingID FK "NOT NULL"
-        datetime Dato "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
-        VARCHAR(MAX) Innhold "NOT NULL"
+    tilbakemelding {
+        int tilbakemeldings_id PK "AUTO_INCREMENT"
+        int innmelding_id FK "NOT NULL"
+        int saksbehandler_id FK "NOT NULL"
+        datetime dato "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
+        VARCHAR(MAX) innhold "NOT NULL"
     }
+    saksbehandler ||--o{ tilbakemelding : "skriver"
