@@ -1,40 +1,40 @@
 erDiagram
 
     person {
-        int PersonID PK "AUTO_INCREMENT"
-        VARCHAR(50) navn "NOT NULL"
+        int PersonID PK "UNIQUE, NOT NULL, AUTO_INCREMENT"
+        VARCHAR(50) fornavn "NOT NULL"
         VARCHAR(50) etternavn "NOT NULL"
         VARCHAR(15) telefonnummer "UNIQUE, NOT NULL"
     }
     person ||--|O innmelder : "er"
     person ||--|O saksbehandler : "er"
     innmelder ||--o{ innmelding : "lager"
-    gjesteinnmelder ||--|{ innmelding : "lager"
-    gjesteinnmelder {
-        int gjest_innmelder_id PK "AUTO_INCREMENT"
-        int innmelding_id FK "NOT NULL"
-        VARCHAR(100) epost "UNIQUE, NOT NULL"
-    }
-
     innmelder {
-        int person_id PK, FK "NOT NULL"
+        int person_id PK, FK "UNIQUE, NOT NULL"
+        int innmelder_id PK "UNIQUE, NOT NULL, AUTO_INCREMENT"
         VARCHAR(100) epost "UNIQUE, NOT NULL"
         ENUMUMERATION innmelder_type "NOT NULL"
     }
-
+    gjesteinnmelder ||--|{ innmelding : "lager"
+    gjesteinnmelder {
+        int gjest_innmelder_id PK "UNIQUE,NOT NULL, AUTO_INCREMENT"
+        VARCHAR(100) epost "UNIQUE, NOT NULL"
+    }
     saksbehandler ||--o{ innmelding : "behandler"
     saksbehandler {
-        int person_id PK, FK "NOT NULL"
+        int person_id PK, FK "UNIQUE, NOT NULL"
+        int saksbehandler_id PK "UNIQUE, NOT NULL, AUTO_INCREMENT"
         VARCHAR(100) jobbepost "UNIQUE, NOT NULL"
         VARCHAR(15) jobbtelefon "UNIQUE, NOT NULL"
         ENUMUMERATION stilling "NOT NULL"
-    }
+    }      
     innmelding ||--|{ geometri : "har"
     innmelding ||--o{ tilbakemelding : "mottar"    
     innmelding {
-        int innmelding_id PK "AUTO_INCREMENT"
+        int innmelding_id PK "UNIQUE,NOT NULL, AUTO_INCREMENT"
         int innmelder_id FK "NULL"
         int saksbehandler_id FK "NULL"
+        int gjest_innmelder_id FK "NULL"
         VARCHAR(100) tittel "NOT NULL"
         VARCHAR(MAX) beskrivelse "NOT NULL"
         datetime innmeldingstidspunkt "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
@@ -44,13 +44,13 @@ erDiagram
         ENUMERATION kart_type "NOT NULL"
     }    
     geometri {
-        int geometri_id PK "AUTO_INCREMENT"
+        int geometri_id PK "UNIQUE, AUTO_INCREMENT"
         int innmelding_id FK "NOT NULL"
         longtext geometri_data "NOT NULL"
         
     }
     tilbakemelding {
-        int tilbakemeldings_id PK "AUTO_INCREMENT"
+        int tilbakemeldings_id PK "UNIQUE,NOT NULL, AUTO_INCREMENT"
         int innmelding_id FK "NOT NULL"
         int saksbehandler_id FK "NOT NULL"
         datetime dato "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
