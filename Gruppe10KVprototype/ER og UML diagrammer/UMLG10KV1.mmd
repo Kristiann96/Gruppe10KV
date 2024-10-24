@@ -1,49 +1,42 @@
 classDiagram
     class Person {
-        -int personID
-        -string fornavn
-        -string etternavn
-        -string telefonnummer
+        -fornavn
+        -etternavn
+        -telefonnummer
     }
 
     class Innmelder {
-        -int innmelderID
-        -string epost
-        -InnmelderType innmelderType
+        -epost
+        -innmelderType
     }
 
     class Saksbehandler {
-        -int saksbehandlerID
-        -string jobbepost
-        -string jobbtelefon
-        -Stilling stilling
+        -jobbepost
+        -jobbtelefon
+        -stilling
     }
 
     class GjesteInnmelder {
-        -int gjestInnmelderID
-        -string epost
+        -epost
     }
 
     class Innmelding {
-        -int innmeldingID
-        -string tittel
-        -string beskrivelse
-        -datetime innmeldingstidspunkt
-        -Status status
-        -datetime sisteEndring
-        -Prioritet prioritet
-        -KartType kartType
+        -tittel
+        -beskrivelse
+        -innmeldingstidspunkt
+        -status
+        -sisteEndring
+        -prioritet
+        -kartType
     }
 
     class Geometri {
-        -int geometriID
-        -string geometriData
+        -geometriData
     }
 
     class Tilbakemelding {
-        -int tilbakemeldingsID
-        -datetime dato
-        -string innhold
+        -dato
+        -innhold
     }
 
     Person <|-- Innmelder
