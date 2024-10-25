@@ -57,17 +57,14 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         public async Task<IActionResult> UpdateStatusAsync(BehandleInnmeldingSaksBViewModel model)
         {
             // Oppdaterer status i databasen og returnerer oppdatert ViewModel
-            if (ModelState.IsValid)
+            var success = await _repository.UpdateStatusAsync(model.InnmeldingE.InnmeldID, model.InnmeldingE.StatusID); 
+            if (success)
             {
-                var success = await _repository.UpdateStatusAsync(model.InnmeldingE.InnmeldID, model.InnmeldingE.StatusID);
-                if (success)
-                {
-                    // Hent oppdatert innmelding
-                    model.InnmeldingE = await _repository.GetInnmeldingByIdAsync(model.InnmeldingE.InnmeldID);
-                }
+                // Hent oppdatert innmelding
+                model.InnmeldingE = await _repository.GetInnmeldingByIdAsync(model.InnmeldingE.InnmeldID);
             }
             model.StatusList = GetStatusList();
-            return View("InnmeldingSaksbehandlerView", model);
+            return View("BehandleInnmeldingSaksB", model);
         }
 
         // Henter tilgjengelige statuser for dropdown
