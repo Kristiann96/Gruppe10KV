@@ -1,6 +1,6 @@
 ﻿namespace Models.Entities
 {
-    //representerer hele entiteten INNMELDING i databasen
+    //representerer hele entiteten INNMELDING i databasen Kartverket - merk forskjell mellom db Kartverket og kartverket - så dette er en dummy modell/entitet i en dummy database
     public class InnmeldingEModel
     {
         public int InnmeldID { get; set; }  // Primærnøkkel, auto-increment
