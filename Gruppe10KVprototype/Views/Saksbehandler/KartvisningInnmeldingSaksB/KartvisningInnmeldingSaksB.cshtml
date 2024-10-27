@@ -1,9 +1,10 @@
 ﻿@model Models.Entities.IncidentFormModel
 
-@{
-    ViewData["Title"] = "Innmelding Detaljer";
-}
+
+<!-- Leaflet stilark -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
 <h2>@Model.Subject</h2>
 
 <div id="map" style="height: 500px;"></div>
@@ -15,26 +16,26 @@
 <p>@(Model.Uttrykning ? "Ja" : "Nei")</p>
 
 @section Scripts {
+    <!-- JavaScript biblioteker -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <!-- Våre konfigurasjonsfiler -->
+    <script src="~/js/maps/config/mapConfig.js"></script>
+    <script src="~/js/maps/utils/mapControls.js"></script>
 
     <script>
-        // Kartvariabelen, standard satt til Trondheim som fallback
-        var map = L.map('map').setView([63.4305, 10.3951], 13);
+        // Initialiser kartet
+        const map = MapConfig.initializeMap('map', [63.4305, 10.3951], 13);
 
-        // Legg til OpenStreetMap tiles
-        L.tileLayer('https://cache.kartverket.no/v1/wmts/1.0.0/topo/default/webmercator/{z}/{y}/{x}.png', {
-            maxZoom: 18,
-            attribution: '<a href="http://www.kartverket.no/">Kartverket</a>'
-        }).addTo(map);
+        // Legg til bare søkefunksjonalitet
+        MapControls.initializeSearch(map);
 
-        // Hent GeoJSON-data fra modellen
-        var geoJsonData = @Html.Raw(Model.GeoJson);
+        // Hent og vis GeoJSON-data
+        const geoJsonData = @Html.Raw(Model.GeoJson);
+        const geoJsonLayer = L.geoJSON(geoJsonData).addTo(map);
 
-
-        // Legg til GeoJSON-data på kartet
-                var geoJsonLayer = L.geoJSON(geoJsonData).addTo(map);
-
-         // Sentrer kartet rundt GeoJSON-dataene (automatisk zoom for å passe til formen)
-            map.fitBounds(geoJsonLayer.getBounds());
+        // Zoom til dataene
+        map.fitBounds(geoJsonLayer.getBounds());
     </script>
 }

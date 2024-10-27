@@ -6,86 +6,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kartvisning - Alle Innmeldinger</title>
-    
+
     <!-- Leaflet hovedbibliotek og stilark -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-    
-    <!-- Leaflet tegne-verktøy stilark -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
-    
-    <!-- Leaflet søkefunksjon stilark -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
-    
-    <!-- Leaflet lokalisering stilark -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
 </head>
 <body>
-    <!-- Kartcontainer - 100% høyde og bredde -->
     <div id="map" style="height: 100vh; width: 100%"></div>
 
     <!-- JavaScript biblioteker -->
-    <!-- Leaflet hovedbibliotek -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    
-    <!-- Leaflet tegne-verktøy -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-    
-    <!-- Leaflet søkefunksjon -->
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    
-    <!-- Leaflet lokalisering -->
     <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
 
+    <!-- Våre konfigurasjonsfiler -->
+    <script src="~/js/maps/config/mapConfig.js"></script>
+    <script src="~/js/maps/config/drawConfig.js"></script>
+    <script src="~/js/maps/services/wmsService.js"></script>
+    <script src="~/js/maps/utils/mapControls.js"></script>
+
     <script>
-        // Initialiser kartet med senterpunkt i Norge
-        var map = L.map('map').setView([63.4305, 10.3951], 6);
+        // Initialiser kartet
+        const map = MapConfig.initializeMap('map');
 
-        // Legg til OpenStreetMap som bakgrunnskart
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+        // Legg til kommunegrenser
+        WMSService.addKommuneGrenser(map);
 
-        // Legg til Kartverket WMS lag for kommunegrenser
-        var kommuneGrenser = L.tileLayer.wms('https://wms.geonorge.no/skwms1/wms.adm_enheter2?', {
-            layers: 'kommuner_gjel',         // Spesifiserer hvilket lag vi vil ha fra WMS-tjenesten
-            format: 'image/png',             // Bildetype
-            transparent: true,               // Gjør bakgrunnen gjennomsiktig
-            version: '1.3.0',                // WMS versjon
-            attribution: '&copy; Kartverket'  // Kreditt til Kartverket
-        }).addTo(map);
+        // Initialiser tegning
+        const drawnItems = DrawConfig.initializeDrawControl(map);
 
-        // Oppsett av tegneverktøy
-        var drawnItems = new L.FeatureGroup();
-        map.addLayer(drawnItems);
+        // Initialiser søk og lokalisering
+        MapControls.initializeControls(map);
 
-        var drawControl = new L.Control.Draw({
-            edit: {
-                featureGroup: drawnItems
-            }
-        });
-        map.addControl(drawControl);
+        // Hent og vis data fra ViewModel
+        const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
 
-        // Legg til søkefunksjonalitet
-        L.Control.geocoder().addTo(map);
-
-        // Legg til lokaliseringskontroll (GPS)
-        L.control.locate().addTo(map);
-
-        // Hent kommunedata fra ViewModel og vis i konsollen for debugging
-        var kommunerData = @Html.Raw(Model.GetKommunerDataAsJson());
-        console.log('Kommuner data:', kommunerData);
-        
-        // Hent geometridata (innmeldinger) fra ViewModel
-        var geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
-        console.log('Geometri data:', geometriData);
-        
         // Legg til geometriobjekter (innmeldinger) på kartet
-        geometriData.forEach(function(data) {
+        geometriData.forEach(function (data) {
             try {
-                var geoJsonFeature = JSON.parse(data.GeometriGeoJson);
-                // Legg til på kartet og sett opp klikkhandling for navigering til detaljer
-                L.geoJSON(geoJsonFeature).addTo(map).on('click', function() {
+                const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
+                L.geoJSON(geoJsonFeature).addTo(map).on('click', function () {
                     window.location.href = '/KartvisningAlleInnmeldingerSaksB/Details/' + data.InnmeldingId;
                 });
             } catch (e) {
