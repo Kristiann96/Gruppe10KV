@@ -8,7 +8,7 @@ namespace Models.Models
 {
     internal class GeometriModel
     {
-        public class GeometriModel
+        public class Geometri
         {
             public int GeometriId { get; set; }
             public int InnmeldingId { get; set; }
