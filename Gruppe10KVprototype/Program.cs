@@ -1,5 +1,6 @@
 using DataAccess;
 using Interface;
+using Logic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,13 +13,15 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/Home/{1}/{0}.cshtml");
     });
 
-// Register DapperDBConnection as a service
+// Register DapperDBConnectionDummy as a service
+builder.Services.AddScoped<DapperDBConnectionDummy>(); //slettes før launch
 builder.Services.AddScoped<DapperDBConnection>();
 
 //Registrering av repos og interfaces
-builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>();
-builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>();
-
+builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>(); //slettes før launch
+builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //slettes før launch
+builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
+builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
 
 var app = builder.Build();
 

@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models.Entities
 {
-    internal class InnmeldingModel
-    {
+    
 
         public class Innmelding
         {
@@ -59,5 +58,5 @@ namespace Models.Entities
             Ortofoto,
             Administrativt
         }
-    }
+    
 }
