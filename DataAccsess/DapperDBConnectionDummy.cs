@@ -3,13 +3,13 @@ using MySqlConnector;
 
 namespace DataAccess;
 
-public class DapperDBConnection
+public class DapperDBConnectionDummy
 {
     private readonly string _connectionString;
 
-    public DapperDBConnection(IConfiguration configuration)
+    public DapperDBConnectionDummy(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("MariaDbConnection_kartverket")!;
+        _connectionString = configuration.GetConnectionString("MariaDbConnection")!;
     }
 
     public MySqlConnection CreateConnection()

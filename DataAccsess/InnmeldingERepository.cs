@@ -6,24 +6,24 @@ using Models.Entities;
 
 public class InnmeldingERepository : IInnmeldingERepository
 {
-    private readonly DapperDBConnection _dbConnection; 
+    private readonly DapperDBConnectionDummy _dbConnectionDummy; 
 
     
-    public InnmeldingERepository(DapperDBConnection dbConnection)
+    public InnmeldingERepository(DapperDBConnectionDummy dbConnectionDummy)
     {
-        _dbConnection = dbConnection;
+        _dbConnectionDummy = dbConnectionDummy;
     }
 
     public async Task<IEnumerable<InnmeldingEModel>> GetAllInnmeldingerAsync()
     {
-        using var connection = _dbConnection.CreateConnection();
+        using var connection = _dbConnectionDummy.CreateConnection();
         var sql = "SELECT * FROM INNMELDING";
         return await connection.QueryAsync<InnmeldingEModel>(sql);
     }
 
     public async Task<InnmeldingEModel> GetInnmeldingByIdAsync(int innmeldID)
     {
-        using var connection = _dbConnection.CreateConnection();
+        using var connection = _dbConnectionDummy.CreateConnection();
         var sql = "SELECT * FROM INNMELDING WHERE InnmeldID = @InnmeldID";
         return await connection.QuerySingleOrDefaultAsync<InnmeldingEModel>(sql,
             new { InnmeldID = innmeldID });
@@ -31,14 +31,14 @@ public class InnmeldingERepository : IInnmeldingERepository
 
     public async Task<StatusEnum> GetStatusByInnmeldIdAsync(int innmeldID)
     {
-        using var connection = _dbConnection.CreateConnection();
+        using var connection = _dbConnectionDummy.CreateConnection();
         var sql = "SELECT StatusID FROM INNMELDING WHERE InnmeldID = @InnmeldID";
         return await connection.QuerySingleOrDefaultAsync<StatusEnum>(sql, new { InnmeldID = innmeldID });
     }
 
     public async Task<bool> UpdateStatusAsync(int innmeldID, StatusEnum status)
     {
-        using var connection = _dbConnection.CreateConnection();
+        using var connection = _dbConnectionDummy.CreateConnection();
         await connection.OpenAsync();
         using var transaction = await connection.BeginTransactionAsync();
 
@@ -61,7 +61,7 @@ public class InnmeldingERepository : IInnmeldingERepository
 
     public async Task<bool> UpdateInnmeldingAsync(InnmeldingEModel innmeldingE)
     {
-        using var connection = _dbConnection.CreateConnection();
+        using var connection = _dbConnectionDummy.CreateConnection();
         var sql = @"UPDATE INNMELDING 
                         SET StatusID = @StatusID, 
                             SaksbehandlerID = @SaksbehandlerID, 

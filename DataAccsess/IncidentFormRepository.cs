@@ -7,22 +7,22 @@ namespace DataAccess;
 
 public class IncidentFormRepository : IIncidentFormRepository
 {
-    private readonly DapperDBConnection _dbConnection;
+    private readonly DapperDBConnectionDummy _dbConnectionDummy;
 
-    public IncidentFormRepository(DapperDBConnection dbConnection)
+    public IncidentFormRepository(DapperDBConnectionDummy dbConnectionDummy)
     {
-        _dbConnection = dbConnection;
+        _dbConnectionDummy = dbConnectionDummy;
     }
 
     public async Task<IEnumerable<IncidentFormModel>> GetAllIncidentsAsync()
     {
-        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
+        using var connection = _dbConnectionDummy.CreateConnection(); // Fixed spelling
         return await connection.QueryAsync<IncidentFormModel>("SELECT * FROM incident_form");
     }
 
     public async Task<IncidentFormModel> GetIncidentByIdAsync(int id)
     {
-        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
+        using var connection = _dbConnectionDummy.CreateConnection(); // Fixed spelling
         return await connection.QuerySingleOrDefaultAsync<IncidentFormModel>( // Fixed model mismatch
             "SELECT * FROM incident_form WHERE id = @Id", new { Id = id });
     }
@@ -30,7 +30,7 @@ public class IncidentFormRepository : IIncidentFormRepository
     // Legger til transaksjon for innsending av skjemaet - innmelder
     public async Task<bool> SaveIncidentFormAsync(IncidentFormModel form)
     {
-        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
+        using var connection = _dbConnectionDummy.CreateConnection(); // Fixed spelling
         await connection.OpenAsync(); // Åpner forbindelsen eksplisitt
 
         using var transaction = await connection.BeginTransactionAsync();
@@ -59,13 +59,13 @@ public class IncidentFormRepository : IIncidentFormRepository
 
     public async Task<IEnumerable<IncidentFormModel>> GetAllAdviserFormsAsync()
     {
-        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
+        using var connection = _dbConnectionDummy.CreateConnection(); // Fixed spelling
         return await connection.QueryAsync<IncidentFormModel>("SELECT * FROM incident_form");
     }
 
     public async Task<IncidentFormModel> GetAdviserFormByIdAsync(int id)
     {
-        using var connection = _dbConnection.CreateConnection(); // Fixed spelling
+        using var connection = _dbConnectionDummy.CreateConnection(); // Fixed spelling
         return await connection.QuerySingleOrDefaultAsync<IncidentFormModel>( // Ensure GeoJson field exists in model
             "SELECT id, subject, uttrykning, something, attach_file, description, location_data AS GeoJson FROM incident_form WHERE id = @Id",
             new { Id = id });

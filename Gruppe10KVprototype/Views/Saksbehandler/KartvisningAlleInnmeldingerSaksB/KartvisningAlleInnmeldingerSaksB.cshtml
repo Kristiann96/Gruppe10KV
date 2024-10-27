@@ -1,0 +1,79 @@
+﻿@model ViewModels.KartvisningAlleInnmeldingerSaksBViewModel
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartvisning - Alle Innmeldinger</title>
+    
+    <!-- Kart- og verktøystiler -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
+</head>
+<body>
+    <div id="map" style="height: 100vh; width: 100%"></div>
+
+    <!-- Kart- og verktøy-skript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+    <script>
+        // Initialiser kartet
+        var map = L.map('map').setView([63.4305, 10.3951], 6); // Sentrum av Norge
+
+        // Legg til OpenStreetMap bakgrunnskart
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Tegneverktøy
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        var drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems
+            }
+        });
+        map.addControl(drawControl);
+
+        // Søkekontroll
+        L.Control.geocoder().addTo(map);
+
+        // Lokalisering
+        L.control.locate().addTo(map);
+
+        // Legg til kommunedata fra Kartverkets API
+      var kommunerData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.KommunerData));
+    kommunerData.forEach(function(kommune) {
+        if (kommune.Geometri) {
+            var geoJsonFeature = JSON.parse(kommune.Geometri);
+            L.geoJSON(geoJsonFeature, {
+                style: {
+                    color: '#3cfafa',
+                    weight: 1000,
+                    opacity: 1,
+                    fillOpacity: 1
+                }
+            }).addTo(map).bindPopup(kommune.Navn);
+            }
+        });
+
+        // Legg til geometriobjektene fra databasen
+        var geometriData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GeometriData));
+        geometriData.forEach(function(data) {
+            var geoJsonFeature = JSON.parse(data.GeometriGeoJson);
+            L.geoJSON(geoJsonFeature).addTo(map).on('click', function() {
+                window.location.href = '/KartvisningAlleInnmeldingerSaksB/Details/' + data.InnmeldingId;
+            });
+        });
+    </script>
+</body>
+</html>
+>

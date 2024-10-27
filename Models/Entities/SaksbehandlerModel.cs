@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Models.Entities
 {
-    internal class SaksbehandlerModel
-    {
+    
+    
         public class Saksbehandler
         {
             // Primærnøkkel
@@ -33,5 +33,5 @@ namespace Models.Entities
             Superbruker
         }
 
-    }
+    
 }
