@@ -1,24 +1,19 @@
 ﻿/*using Dapper;
 using MySqlConnector;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Interface;
 using Models.Entities;
 
 namespace DataAccess
 {
-    public class SaksbehandlerRepository : ISaksbehandlerRepository
+    public class GjesteinnmelderRepository : IGjesteinnmelderRepository
     {
         private readonly DapperDBConnection _dbConnection;
 
-        public SaksbehandlerRepository(DapperDBConnection dbConnection)
+        public GjesteinnmelderRepository(DapperDBConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }
-
+      
     }
-
 }*/

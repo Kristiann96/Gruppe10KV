@@ -23,6 +23,7 @@ builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>(); /
 builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //slettes før launch
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
 builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
+builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
 
 var app = builder.Build();
 

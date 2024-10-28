@@ -4,7 +4,7 @@ namespace Interface
 {
 
 
-    public interface IInnmeldingERepository
+    public interface IInnmeldingERepository //fra dummy tabell - dette skal slettes etterhvert
     {
         Task<IEnumerable<InnmeldingEModel>> GetAllInnmeldingerAsync();
         Task<InnmeldingEModel> GetInnmeldingByIdAsync(int innmeldID);
