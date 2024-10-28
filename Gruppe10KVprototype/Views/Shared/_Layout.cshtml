@@ -3,62 +3,78 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Gruppe10KVprototype</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title> - Gruppe10KVprototype</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Gruppe10KVprototype.styles.css" asp-append-version="true" />
-    @await RenderSectionAsync("Styles", required: false)
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Logo" />
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbartop">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div id="navbar-menu">
+                    <ul class="navbarlist" style="font-size: 0.7rem;">
+                        <!-- Mindre tekststørrelse -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MapView">Kart</a>
+                            <a class="nav-link" asp-controller="OversiktAlleInnmeldingerSaksBIncidentForm" asp-action="OversiktAlleInnmeldingerSaksBIncidentForm">Saksbehandler</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="AreaChange" asp-action="RegisterAreaChange">Fanging kartdata V2</a>
+                            <a class="nav-link" asp-area="" asp-controller="MineInnmeldinger" asp-action="MineInnmeldinger">Mine Saker</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="AdviserForm" asp-action="Index">Saksbehandler</a>
+                            <a class="nav-link" asp-area="" asp-controller="OppdatereInnmelding" asp-action="OppdatereInnmelding">Oppdater Innmelding</a>
                         </li>
-                        <li class="nav-item" align="right">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Form">Logg Inn</a>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="LoggInn" asp-action="LoggInn">Logg Inn</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="LandingsSide" asp-action="LandingsSide">Landings Side</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="RegistrerDeg" asp-action="RegistrerDeg">Registrer Deg</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="KnyttInnmeldigTilPerson" asp-action="KnyttInnmeldigTilPerson">Knytt Innmelding Til Person</a>
+                        </li>
+                        <div >
+                            <a href="@Url.Action("LandingsSideSaksB", "LandingsSideSaksB")">LandingsSide SaksB</a>
+                            <a href="@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB")">BEHANDLE INNMELDING SaksB</a>
+                            <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB")">Alle Innmeldinger SaksB</a>
+                            <a href="@Url.Action("LogginnSaksB", "LogginnSaksB")">Logg inn SaksB</a>
+                            <a href="@Url.Action("SortereInnmeldingerSaksB", "SortereInnmeldingerSaksB")">Sortere Innmeldinger SaksB</a>
+                            <a href="@Url.Action("SøkEtterInnmelderSaksB", "SøkEtterInnmelderSaksB")">Søke etter innmelde SaksBr</a>
+                            <a href="@Url.Action("KartvisningAlleInnmeldingerSaksB", "KartvisningAlleInnmeldingerSaksB")">KartvisningAlleInnmeldingerSaksBr</a>
+                            
+                        </div>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    
 
-    <footer class="border-top footer text-muted">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    <!-- Enkel footer uten Bootstrap -->
+    <footer style="border-top: 1px solid #ccc; padding: 1rem; text-align: center; background-color: #f8f9fa;">
         <div class="container">
-            &copy; 2024 - Gruppe10KVprototype - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - Gruppe10KVprototype - <a href="@Url.Action("Privacy", "Home")">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", false)
 </body>
 </html>

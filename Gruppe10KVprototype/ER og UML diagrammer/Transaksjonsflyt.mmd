@@ -1,0 +1,35 @@
+
+
+
+
+graph TD
+    A[Main Views & Controllers]
+    B[Services]
+    C[Interfaces = irepo/iservice]
+    D[DataAccess Repositories]
+    E[Models]
+    F[ViewModels]
+
+    A -->|Uses| B
+     A -->|Uses| C
+      A -->|Uses| D
+       A -->|Uses| E
+    A -->|Uses| F
+    B -->|Uses| C
+    D -->|Uses| C
+    D -->|Uses| E
+    C -->|Uses| E
+     F -->|Uses| E
+  
+
+    classDef main fill:#f9f,stroke:#333,stroke-width:2px
+    classDef services fill:#b3c6ff,stroke:#333,stroke-width:2px
+    classDef interfaces fill:#ffdb99,stroke:#333,stroke-width:2px
+    classDef dataAccess fill:#b3ffb3,stroke:#333,stroke-width:2px
+    classDef models fill:#ffcccb,stroke:#333,stroke-width:2px
+
+    class A main
+    class B services
+    class C interfaces
+    class D dataAccess
+    class E,F models

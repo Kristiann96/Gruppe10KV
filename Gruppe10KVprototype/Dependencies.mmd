@@ -1,0 +1,30 @@
+graph TD
+   A[Main: Views & Controllers]
+    B[Services]
+    D[DataAccess]
+    E[Interfaces: IRepository & IService]
+    F[Models/Entities]
+    G[ViewModels]
+
+    A -->|Uses| E  
+    B -->|Implements| E 
+    D -->|Implements| E 
+    D -->|Uses| F 
+    B -->|Uses| F 
+    A -->|Uses| G 
+    B -->|Uses| G 
+    E -.->|Defines| D 
+    G -->|Uses| F
+
+    classDef main fill:#f9f,stroke:#333,stroke-width:2px
+    classDef services fill:#b3c6ff,stroke:#333,stroke-width:2px
+    classDef dataAccess fill:#b3ffb3,stroke:#333,stroke-width:2px
+    classDef interfaces fill:#ffdb99,stroke:#333,stroke-width:2px
+    classDef models fill:#ffcccb,stroke:#333,stroke-width:2px
+
+    class A main
+    class B,C services
+    class D dataAccess
+    class E,G interfaces
+    class F models
+

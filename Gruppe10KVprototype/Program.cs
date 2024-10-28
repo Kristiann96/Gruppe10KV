@@ -1,13 +1,29 @@
-using Gruppe10KVprototype.Models;
+using DataAccess;
+using Interface;
+using Logic;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddRazorOptions(options =>
+    {
+        options.ViewLocationFormats.Add("/Views/Innmelder/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Saksbehandler/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Home/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Map/{1}/{0}.cshtml");
+    });
 
-// Registrer DBContext som en service
-builder.Services.AddScoped<IncidentFormDBContext>();
-builder.Services.AddScoped<AdviserFormDBContext>();
+// Register DapperDBConnectionDummy as a service
+builder.Services.AddScoped<DapperDBConnectionDummy>(); //slettes før launch
+builder.Services.AddScoped<DapperDBConnection>();
+
+//Registrering av repos og interfaces
+builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>(); //slettes før launch
+builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //slettes før launch
+builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
+builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
+builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
 
 var app = builder.Build();
 
@@ -25,14 +41,23 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// Definer routing for HomeController og IncidentFormController
+// Definer routing for HomeController og InnmelderSkjemaIncidentFormController
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+
+// Route for InnmelderSkjemaIncidentFormController
 app.MapControllerRoute(
-    name: "incidentForm",
-    pattern: "form/{action=Form}/{id?}",
-    defaults: new { controller = "IncidentForm" });
+    "innmelderSkjema",
+    "form/{action=Form}/{id?}",
+    new { controller = "InnmelderSkjemaIncidentForm" });
+
 
 app.Run();

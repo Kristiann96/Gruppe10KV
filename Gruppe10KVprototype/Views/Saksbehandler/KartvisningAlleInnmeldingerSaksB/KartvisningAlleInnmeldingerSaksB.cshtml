@@ -1,0 +1,60 @@
+﻿@model ViewModels.KartvisningAlleInnmeldingerSaksBViewModel
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartvisning - Alle Innmeldinger</title>
+
+    <!-- Leaflet hovedbibliotek og stilark -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+</head>
+<body>
+    <div id="map" style="height: 100vh; width: 100%"></div>
+
+    <!-- JavaScript biblioteker -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+    <!-- Våre konfigurasjonsfiler -->
+    <script src="~/js/maps/config/mapConfig.js"></script>
+    <script src="~/js/maps/config/drawConfig.js"></script>
+    <script src="~/js/maps/services/wmsService.js"></script>
+    <script src="~/js/maps/utils/mapControls.js"></script>
+
+    <script>
+        // Initialiser kartet
+        const map = MapConfig.initializeMap('map');
+
+        // Legg til kommunegrenser
+        WMSService.addKommuneGrenser(map);
+
+        // Initialiser tegning
+        const drawnItems = DrawConfig.initializeDrawControl(map);
+
+        // Initialiser søk og lokalisering
+        MapControls.initializeControls(map);
+
+        // Hent og vis data fra ViewModel
+        const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
+
+     // Legg til geometriobjekter (innmeldinger) på kartet
+  geometriData.forEach(function (data) {
+      try {
+          const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
+          L.geoJSON(geoJsonFeature).addTo(map).on('click', function () {
+              window.location.href = '/KartvisningEnInnmeldingSaksB/KartvisningEnInnmeldingSaksB/' + data.InnmeldingId;
+          });
+      } catch (e) {
+          console.error('Feil ved parsing av geometri:', e, data);
+      }
+        });
+    </script>
+</body>
+</html>
