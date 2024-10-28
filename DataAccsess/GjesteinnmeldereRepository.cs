@@ -1,4 +1,4 @@
-﻿using Dapper;
+﻿/*using Dapper;
 using MySqlConnector;
 using System.Threading.Tasks;
 using Interface;
@@ -14,13 +14,6 @@ namespace DataAccess
         {
             _dbConnection = dbConnection;
         }
-
-        public async Task<Gjesteinnmelder> GetGjesteinnmelderByIdAsync(int gjestInnmelderId)
-        {
-            using var connection = _dbConnection.CreateConnection();
-            var sql = @"SELECT * FROM gjesteinnmelder
-                        WHERE gjest_innmelder_id = @GjestInnmelderId";
-            return await connection.QuerySingleOrDefaultAsync<Gjesteinnmelder>(sql, new { GjestInnmelderId = gjestInnmelderId });
-        }
+      
     }
-}
+}*/

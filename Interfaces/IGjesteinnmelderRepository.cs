@@ -5,6 +5,6 @@ namespace Interface
 {
     public interface IGjesteinnmelderRepository
     {
-        Task<Gjesteinnmelder> GetGjesteinnmelderByIdAsync(int gjestInnmelderId);
+       
     }
 }
