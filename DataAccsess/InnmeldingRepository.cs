@@ -27,7 +27,7 @@ namespace DataAccess
             return await connection.QuerySingleOrDefaultAsync<Innmelding>(sql, new { InnmeldingId = innmeldingId });
         }
 
-        public async Task<InnmeldingDetaljKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId)
+        public async Task<InnmeldingDetaljerKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"
@@ -44,7 +44,7 @@ namespace DataAccess
         LEFT JOIN gjesteinnmelder g ON im.gjest_innmelder_id = g.gjest_innmelder_id
         WHERE im.innmelding_id = @InnmeldingId";
 
-            return await connection.QuerySingleOrDefaultAsync<InnmeldingDetaljKartvisningSaksBModel>(sql, new { InnmeldingId = innmeldingId });
+            return await connection.QuerySingleOrDefaultAsync<InnmeldingDetaljerKartvisningSaksBModel>(sql, new { InnmeldingId = innmeldingId });
         }
 
 

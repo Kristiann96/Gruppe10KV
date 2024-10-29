@@ -8,7 +8,7 @@ namespace ViewModels
     public class KartvisningEnInnmeldingSaksBViewModel
     {
         // Innmelding detaljer
-        public InnmeldingDetaljKartvisningSaksBModel InnmeldingDetaljer { get; set; }
+        public InnmeldingDetaljerKartvisningSaksBModel InnmeldingDetaljer { get; set; }
 
         // Geometridata
         public Geometri GeometriData { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Models.DTOs
 {
-    public class InnmeldingDetaljKartvisningSaksBModel
+    public class InnmeldingDetaljerKartvisningSaksBModel
     {
         public int InnmeldingId { get; set; }
         public string Tittel { get; set; }
