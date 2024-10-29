@@ -27,12 +27,12 @@ namespace DataAccess
             return await connection.QuerySingleOrDefaultAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingId });
         }
 
-        public async Task<InnmeldingDetaljKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId)
+        public async Task<InnmeldingDetaljerKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"
         SELECT im.innmelding_id AS InnmeldingId, im.tittel AS Tittel, im.beskrivelse AS Beskrivelse,
-               im.siste_endring AS SisteEndring, im.status AS Status, im.prioritet AS Prioritet, im.kart_type AS KartType,
+               im.siste_endring AS SisteEndring, im.status AS Status,im.prioritet AS Prioritet, im.kart_type AS KartType,
                i.innmelder_id AS InnmelderId, i.innmelder_type AS InnmelderType,
                p.fornavn AS Fornavn, p.etternavn AS Etternavn,
                s.saksbehandler_id AS SaksbehandlerId, s.stilling AS SaksbehandlerStilling,
@@ -44,7 +44,7 @@ namespace DataAccess
         LEFT JOIN gjesteinnmelder g ON im.gjest_innmelder_id = g.gjest_innmelder_id
         WHERE im.innmelding_id = @InnmeldingId";
 
-            return await connection.QuerySingleOrDefaultAsync<InnmeldingDetaljKartvisningSaksBModel>(sql, new { InnmeldingId = innmeldingId });
+            return await connection.QuerySingleOrDefaultAsync<InnmeldingDetaljerKartvisningSaksBModel>(sql, new { InnmeldingId = innmeldingId });
         }
 
         public async Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync()

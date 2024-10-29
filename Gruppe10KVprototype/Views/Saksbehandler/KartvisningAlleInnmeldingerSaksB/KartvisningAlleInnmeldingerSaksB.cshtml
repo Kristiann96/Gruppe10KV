@@ -43,13 +43,14 @@
 
         // Hent og vis data fra ViewModel
         const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
-
+        console.log("GeometriData:", geometriData);
      // Legg til geometriobjekter (innmeldinger) på kartet
   geometriData.forEach(function (data) {
+      console.log("Data for innmelding:", data);
       try {
           const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
           L.geoJSON(geoJsonFeature).addTo(map).on('click', function () {
-              window.location.href = '/KartvisningEnInnmeldingSaksB/KartvisningEnInnmeldingSaksB/' + data.InnmeldingId;
+             window.location.href = `/KartvisningEnInnmeldingSaksB/KartvisningEnInnmeldingSaksB?innmeldingId=${data.InnmeldingId}`;
           });
       } catch (e) {
           console.error('Feil ved parsing av geometri:', e, data);

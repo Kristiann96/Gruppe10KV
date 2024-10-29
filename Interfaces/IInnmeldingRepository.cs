@@ -7,7 +7,9 @@ namespace Interface
     public interface IInnmeldingRepository
     {
         Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId);
-        Task<InnmeldingDetaljKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId);
+
+        Task<InnmeldingDetaljerKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId);
         Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync();
+
     }
 }
