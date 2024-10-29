@@ -20,11 +20,11 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
 
-        public async Task<Innmelding> GetInnmeldingByIdAsync(int innmeldingId)
+        public async Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = "SELECT * FROM innmelding WHERE innmelding_id = @InnmeldingId";
-            return await connection.QuerySingleOrDefaultAsync<Innmelding>(sql, new { InnmeldingId = innmeldingId });
+            return await connection.QuerySingleOrDefaultAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingId });
         }
 
         public async Task<InnmeldingDetaljerKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId)

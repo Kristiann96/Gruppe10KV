@@ -8,7 +8,7 @@ namespace Models.Entities
 {
     
 
-        public class Innmelding
+        public class InnmeldingModel
         {
             // Primærnøkkel
             public int InnmeldingId { get; set; }
