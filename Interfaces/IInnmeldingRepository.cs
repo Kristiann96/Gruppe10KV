@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Models.DTOs;
 using Models.Entities;
 
@@ -8,5 +9,8 @@ namespace Interface
     {
         Task<Innmelding> GetInnmeldingByIdAsync(int innmeldingId);
         Task<InnmeldingDetaljKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId);
+
+
+        Task<IEnumerable<Innmelding>> GetInnmeldingAsync();
     }
 }

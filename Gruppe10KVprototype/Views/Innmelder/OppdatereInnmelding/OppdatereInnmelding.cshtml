@@ -12,6 +12,28 @@
     <h1>Subject</h1>
 </div>
 
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <!-- Add other columns as necessary -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Email</td>
+                <!-- Add other columns as necessary -->
+            </tr>
+        }
+    </tbody>
+</table>
+
 <div class="singleCaseSubject">
     <h2>This is supposed to be a box with subject inside.</h2>
 </div>
