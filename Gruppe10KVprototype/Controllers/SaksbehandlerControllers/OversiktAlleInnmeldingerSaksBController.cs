@@ -1,12 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Interface;
+using Microsoft.AspNetCore.Mvc;
+using Models.Entities;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
     public class OversiktAlleInnmeldingerSaksBController : Controller
     {
-        public IActionResult OversiktAlleInnmeldingerSaksB()
+        private readonly IInnmeldingRepository _innmeldingRepository;
+        
+        public OversiktAlleInnmeldingerSaksBController(IInnmeldingRepository innmeldingRepository)
         {
-            return View();
+            _innmeldingRepository = innmeldingRepository;
+        }
+        public async Task<IActionResult> OversiktAlleInnmeldingerSaksB()
+        {
+            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetOversiktInnmeldingerSaksBAsync();
+            
+            return View("OversiktAlleInnmeldingerSaksB", innmeldinger);
         }
     }
 }

@@ -20,11 +20,11 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
 
-        public async Task<Innmelding> GetInnmeldingByIdAsync(int innmeldingId)
+        public async Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = "SELECT * FROM innmelding WHERE innmelding_id = @InnmeldingId";
-            return await connection.QuerySingleOrDefaultAsync<Innmelding>(sql, new { InnmeldingId = innmeldingId });
+            return await connection.QuerySingleOrDefaultAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingId });
         }
 
         public async Task<InnmeldingDetaljKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId)
@@ -47,6 +47,19 @@ namespace DataAccess
             return await connection.QuerySingleOrDefaultAsync<InnmeldingDetaljKartvisningSaksBModel>(sql, new { InnmeldingId = innmeldingId });
         }
 
+        public async Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync()
+        {
+            using var connection = _dbConnection.CreateConnection();
+            
+            var sql = @"SELECT innmelding_id AS InnmeldingId,
+                            innmelder_id AS InnmelderId,
+                            tittel AS Tittel,
+                            status AS Status,
+                            siste_endring AS SisteEndring
+                        FROM innmelding";
+            
+            return await connection.QueryAsync<InnmeldingModel>(sql);
+        }
 
     }
 

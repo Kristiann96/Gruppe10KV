@@ -15,12 +15,12 @@ builder.Services.AddControllersWithViews()
     });
 
 // Register DapperDBConnectionDummy as a service
-builder.Services.AddScoped<DapperDBConnectionDummy>(); //slettes før launch
+builder.Services.AddScoped<DapperDBConnectionDummy>(); //slettes fï¿½r launch
 builder.Services.AddScoped<DapperDBConnection>();
 
 //Registrering av repos og interfaces
-builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>(); //slettes før launch
-builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //slettes før launch
+builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>(); //slettes fÃ¸r launch
+builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //slettes fÃ¸r launch
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
 builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
