@@ -13,9 +13,9 @@ namespace Models.DTOs
         public string Tittel { get; set; }
         public string Beskrivelse { get; set; }
         public DateTime SisteEndring { get; set; }
-        public Status Status { get; set; }
-        public Prioritet Prioritet { get; set; }
-        public KartType KartType { get; set; }
+        public string Status { get; set; }
+        public string Prioritet { get; set; }
+        public string KartType { get; set; }
 
         // Innmelder informasjon
         public int? InnmelderId { get; set; }

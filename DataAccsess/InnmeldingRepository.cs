@@ -32,7 +32,7 @@ namespace DataAccess
             using var connection = _dbConnection.CreateConnection();
             var sql = @"
         SELECT im.innmelding_id AS InnmeldingId, im.tittel AS Tittel, im.beskrivelse AS Beskrivelse,
-               im.siste_endring AS SisteEndring, im.status AS Status, im.prioritet AS Prioritet, im.kart_type AS KartType,
+               im.siste_endring AS SisteEndring, im.status AS Status,im.prioritet AS Prioritet, im.kart_type AS KartType,
                i.innmelder_id AS InnmelderId, i.innmelder_type AS InnmelderType,
                p.fornavn AS Fornavn, p.etternavn AS Etternavn,
                s.saksbehandler_id AS SaksbehandlerId, s.stilling AS SaksbehandlerStilling,

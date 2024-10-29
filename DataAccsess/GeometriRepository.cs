@@ -20,7 +20,7 @@ namespace DataAccess
         public async Task<IEnumerable<Geometri>> GetAllGeometriAsync()
         {
             using var connection = _dbConnection.CreateConnection();
-            var sql = "SELECT geometri_id, innmelding_id, ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri";
+            var sql = "SELECT geometri_id AS GeometriId, innmelding_id AS InnmeldingId, ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri;";
             return await connection.QueryAsync<Geometri>(sql);
         }
 
