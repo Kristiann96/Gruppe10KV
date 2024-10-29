@@ -8,5 +8,7 @@ namespace Interface
     {
         Task<Innmelding> GetInnmeldingByIdAsync(int innmeldingId);
         Task<InnmeldingDetaljerKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId);
+        Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync();
+
     }
 }
