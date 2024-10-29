@@ -55,7 +55,8 @@ namespace DataAccess
                     tittel AS Tittel,
                     status AS Status,
                     beskrivelse AS Beskrivelse
-                FROM innmelding";
+                FROM innmelding
+                WHERE innmelding_id = 13";
             var result = await connection.QueryAsync<InnmeldingModel>(sql);
 
             return result;
