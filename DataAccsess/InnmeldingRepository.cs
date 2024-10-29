@@ -50,17 +50,34 @@ namespace DataAccess
         public async Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync()
         {
             using var connection = _dbConnection.CreateConnection();
-            
+
             var sql = @"SELECT innmelding_id AS InnmeldingId,
                             innmelder_id AS InnmelderId,
                             tittel AS Tittel,
                             status AS Status,
                             siste_endring AS SisteEndring
                         FROM innmelding";
-            
+
             return await connection.QueryAsync<InnmeldingModel>(sql);
         }
+
+        public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingerAvInnmelderIdAsync(int innmelderId)
+        {
+            using var connection = _dbConnection.CreateConnection();
+
+            var sql = @"SELECT innmelding_id AS InnmeldingId,
+                       tittel AS Tittel,
+                       status AS Status,
+                       siste_endring AS SisteEndring,
+                       innmelder_id AS InnmelderId
+                FROM innmelding
+                WHERE innmelder_id = @InnmelderId";
+
+            return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmelderId = innmelderId });
+        }
+
 
     }
 
 }
+
