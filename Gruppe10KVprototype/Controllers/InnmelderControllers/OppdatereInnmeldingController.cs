@@ -18,7 +18,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         public async Task<IActionResult> OppdatereInnmelding()
         {
             // Retrieve data from repository
-            IEnumerable<Innmelding> innmeldinger = await _repository.GetInnmeldingAsync();
+            IEnumerable<InnmeldingModel> innmeldinger = await _repository.GetInnmeldingAsync();
 
             // Pass data to the view
             return View(innmeldinger);
