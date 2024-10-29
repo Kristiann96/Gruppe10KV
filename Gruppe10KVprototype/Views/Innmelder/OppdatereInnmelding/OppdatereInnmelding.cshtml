@@ -16,61 +16,54 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
+            <th>Tittel</th>
+            <th>Beskrivelse</th>
             <!-- Add other columns as necessary -->
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var innmelding in Model)
         {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Name</td>
-                <td>@item.Email</td>
-                <!-- Add other columns as necessary -->
-            </tr>
+            <div class="singleCase">
+                <div class="singleCaseCaseID">
+                    <h3>Case ID: @innmelding.InnmeldingId</h3>
+                </div>
+
+                <div class="singleCaseTitle">
+                    <h3>Case Title: @innmelding.Tittel</h3>
+                </div>
+
+                <div class="singleCaseStatus">
+                    <h3>Status: @innmelding.Status</h3>
+                </div>
+
+                <div class="singleCaseDescription">
+                    <h3>Description:</h3>
+                    <p>@innmelding.Beskrivelse</p>
+                </div>
+
+                <div class="singleCaseArea">
+                    <h3>Kommune:</h3>
+                    <p>Area details go here</p>
+                </div>
+
+                <div class="singleCaseTag">
+                    <h3>Tag:</h3>
+                    <p>Tag details go here</p>
+                </div>
+
+                <div class="singleCaseMap">
+                    <h3>Kartvisning av feil</h3>
+                    <p>Map view details go here</p>
+                </div
+            </div>
         }
     </tbody>
 </table>
 
-<div class="singleCaseSubject">
-    <h2>This is supposed to be a box with subject inside.</h2>
-</div>
-
-<div class="singleCaseDescription">
-    <h2>This is where we will have a description.</h2>
-</div>
-
-<div class="singleCaseStatus">
-    <h3>Status</h3>
-</div>
-
-<div class="singleCaseCaseID">
-    <h3>Case ID #00000</h3>
-</div>
-
-<div class="singleCaseArea">
-    <h2>Kommune</h2>
-</div>
-
-<div class="singleCaseTag">
-    <h2>TAG</h2>
-</div>
-
-<div class="singleCaseMap">
-    <h2>Kartvisning av feil</h2>
-</div>
-
-<div class="singleCaseEdit">
+<!-- Action Buttons -->
+<div class="singleCaseActions">
     <button>Edit</button>
-</div>
-
-<div class="singleCaseUpdate">
     <button>Update</button>
-</div>
-
-<div class="singleCaseDelete">
     <button>Delete</button>
 </div>
-
