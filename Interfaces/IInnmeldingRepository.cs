@@ -6,7 +6,8 @@ namespace Interface
 {
     public interface IInnmeldingRepository
     {
-        Task<Innmelding> GetInnmeldingByIdAsync(int innmeldingId);
+        Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId);
         Task<InnmeldingDetaljKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId);
+        Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync();
     }
 }
