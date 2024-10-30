@@ -38,6 +38,17 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 
             return View(viewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetKommunenummer(int innmeldingId, double lat, double lng)
+        {
+            var kommune = await _kartverketAPILogic.GetKommuneByCoordinatesAsync(lat, lng);
+
+            TempData["Kommunenummer"] = kommune.Kommunenummer;
+            TempData["Kommunenavn"] = kommune.Kommunenavn;
+
+            return RedirectToAction("KartvisningEnInnmeldingSaksB", "KartvisningEnInnmeldingSaksB", new { innmeldingId });
+        }
     }
 }
 

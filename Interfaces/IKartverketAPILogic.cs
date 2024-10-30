@@ -7,6 +7,8 @@ namespace Interface
     public interface IKartverketAPILogic
     {
         Task<List<Kommune>> GetKommunerAsync();
+
+        Task<Kommune> GetKommuneByCoordinatesAsync(double lat, double lng);
     }
 }
 
