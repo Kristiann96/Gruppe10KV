@@ -51,12 +51,11 @@ namespace DataAccess
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"SELECT innmelding_id AS InnmeldingId,
-                    gjest_innmelder_id AS GjestInnmelderId,
                     tittel AS Tittel,
                     status AS Status,
                     beskrivelse AS Beskrivelse
                 FROM innmelding
-                WHERE innmelding_id = 13";
+                WHERE innmelding_id = 8";
             var result = await connection.QueryAsync<InnmeldingModel>(sql);
 
             return result;

@@ -12,54 +12,43 @@
     <h1>Subject</h1>
 </div>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Tittel</th>
-            <th>Beskrivelse</th>
-            <!-- Add other columns as necessary -->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var innmelding in Model)
-        {
-            <div class="singleCase">
-                <div class="singleCaseCaseID">
-                    <h3>Case ID: @innmelding.InnmeldingId</h3>
-                </div>
 
-                <div class="singleCaseTitle">
-                    <h3>Case Title: @innmelding.Tittel</h3>
-                </div>
+@foreach (var innmelding in Model)
+{
+    <div class="singleCase">
+        <div class="singleCaseCaseID">
+            <h3>Sak ID #@innmelding.InnmeldingId</h3>
+        </div>
+        
+        <div class="singleCaseSubject">
+            <h3>Tittel: @innmelding.Tittel</h3>
+        </div>
 
-                <div class="singleCaseStatus">
-                    <h3>Status: @innmelding.Status</h3>
-                </div>
+        <div class="singleCaseStatus">
+            <h3>Status: @innmelding.Status</h3>
+        </div>
 
-                <div class="singleCaseDescription">
-                    <h3>Description:</h3>
-                    <p>@innmelding.Beskrivelse</p>
-                </div>
+        <div class="singleCaseDescription">
+            <h3>Beskrivelse:</h3>
+            <p>@innmelding.Beskrivelse</p>
+        </div>
 
-                <div class="singleCaseArea">
-                    <h3>Kommune:</h3>
-                    <p>Area details go here</p>
-                </div>
+        <div class="singleCaseTag">
+            <h3>Tag:</h3>
+            <p>@innmelding.KartType</p>
+        </div>
 
-                <div class="singleCaseTag">
-                    <h3>Tag:</h3>
-                    <p>Tag details go here</p>
-                </div>
+        <div class="singleCaseArea">
+            <h3>Kommune:</h3>
+            <p>Currently Unavailable</p>
+        </div>
 
-                <div class="singleCaseMap">
-                    <h3>Kartvisning av feil</h3>
-                    <p>Map view details go here</p>
-                </div
-            </div>
-        }
-    </tbody>
-</table>
+        <div class="singleCaseMap">
+            <h3>Kartvisning av feil</h3>
+            <p>Currently Unavailable</p>
+        </div>
+    </div>
+}
 
 <!-- Action Buttons -->
 <div class="singleCaseActions">
