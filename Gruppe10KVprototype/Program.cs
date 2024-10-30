@@ -24,6 +24,8 @@ builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //s
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
 builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
+builder.Services.AddScoped<IInnmeldingEnumLogic, InnmeldingEnumLogic>();
+
 
 var app = builder.Build();
 

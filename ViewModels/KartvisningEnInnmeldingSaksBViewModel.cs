@@ -2,6 +2,7 @@
 using Models.Entities;
 using System;
 using Models.DTOs;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ViewModels
 {
@@ -12,5 +13,8 @@ namespace ViewModels
 
         // Geometridata
         public Geometri GeometriData { get; set; }
+
+        //Enum
+        public SelectList StatusOptions { get; set; }
     }
 }
