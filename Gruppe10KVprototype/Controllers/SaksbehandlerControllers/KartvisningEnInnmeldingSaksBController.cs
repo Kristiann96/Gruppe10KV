@@ -1,5 +1,7 @@
 ﻿using Interface;
+using Logic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
@@ -8,12 +10,15 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
     {
         private readonly IInnmeldingRepository _innmeldingRepository;
         private readonly IGeometriRepository _geometriRepository;
+        private readonly IInnmeldingEnumLogic _innmeldingEnumLogic;
 
         public KartvisningEnInnmeldingSaksBController(IInnmeldingRepository innmeldingRepository,
-            IGeometriRepository geometriRepository)
+            IGeometriRepository geometriRepository,
+            IInnmeldingEnumLogic innmeldingEnumLogic)
         {
             _innmeldingRepository = innmeldingRepository;
             _geometriRepository = geometriRepository;
+            _innmeldingEnumLogic = innmeldingEnumLogic;
         }
 
         [HttpGet]
@@ -21,11 +26,14 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         {
             var innmeldingDetaljer = await _innmeldingRepository.GetInnmeldingDetaljerByIdAsync(innmeldingId);
             var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
+            var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
+
 
             var viewModel = new KartvisningEnInnmeldingSaksBViewModel
             {
                 InnmeldingDetaljer = innmeldingDetaljer,
-                GeometriData = geometriData
+                GeometriData = geometriData,
+                StatusOptions = new SelectList(statusOptions)
             };
 
             return View(viewModel);
