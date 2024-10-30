@@ -47,6 +47,18 @@ namespace DataAccess
             return await connection.QuerySingleOrDefaultAsync<InnmeldingDetaljerKartvisningSaksBModel>(sql, new { InnmeldingId = innmeldingId });
         }
 
+
+        public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync()
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql = @"SELECT innmelding_id AS InnmeldingId,
+                    tittel AS Tittel,
+                    status AS Status,
+                    beskrivelse AS Beskrivelse
+                FROM innmelding
+                WHERE innmelding_id = 8";
+            var result = await connection.QueryAsync<InnmeldingModel>(sql);
+
         public async Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync()
         {
             using var connection = _dbConnection.CreateConnection();
@@ -76,6 +88,8 @@ namespace DataAccess
 
 
 
-    }
 
+            return result;
+        }
+    }
 }
