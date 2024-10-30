@@ -26,7 +26,7 @@ namespace DataAccess
             var sql = "SELECT * FROM innmelding WHERE innmelding_id = @InnmeldingId";
             return await connection.QuerySingleOrDefaultAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingId });
         }
-
+        // KartvisningEnInnmelding
         public async Task<InnmeldingDetaljerKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -60,7 +60,7 @@ namespace DataAccess
             
             return await connection.QueryAsync<InnmeldingModel>(sql);
         }
-
+        //InnmeldingEnumLogic
         public async Task<string> GetStatusEnumValuesAsync()
         {
             using var connection = _dbConnection.CreateConnection();
