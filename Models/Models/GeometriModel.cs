@@ -12,7 +12,7 @@ namespace Models.Models
         {
             public int GeometriId { get; set; }
             public int InnmeldingId { get; set; }
-            public string GeometriGeoJson { get; set; } = null!;  // Representasjon i GeoJSON-format - lagring som GEOMETRY i databasen VIA REPOSITORY
+            public string GeometriGeoJson { get; set; } = null!;  // Representasjon i GeoJSON-format - lagring/henting som GEOMETRY i databasen VIA REPOSITORY
         }
     
 }
