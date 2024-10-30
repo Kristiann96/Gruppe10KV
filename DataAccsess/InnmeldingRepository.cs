@@ -48,6 +48,7 @@ namespace DataAccess
         }
 
 
+        //Daniel's sql innhenting av data til "OppdatereInnmelding"
         public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync()
         {
             using var connection = _dbConnection.CreateConnection();
@@ -59,6 +60,8 @@ namespace DataAccess
                 WHERE innmelding_id = 8";
             var result = await connection.QueryAsync<InnmeldingModel>(sql);
 
+            return result;
+        }
         public async Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync()
         {
             using var connection = _dbConnection.CreateConnection();
@@ -84,12 +87,6 @@ namespace DataAccess
             AND COLUMN_NAME = 'status'";
 
             return await connection.QuerySingleOrDefaultAsync<string>(sql);
-        }
-
-
-
-
-            return result;
         }
     }
 }

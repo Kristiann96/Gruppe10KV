@@ -9,9 +9,7 @@ namespace Interface
     {
         Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId);
 
-        Task<InnmeldingDetaljKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId);
-
-
+        //Daniel's interface for "OppdatereInnmelding"
         Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync();
 
 
