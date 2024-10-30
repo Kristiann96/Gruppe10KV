@@ -16,7 +16,8 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
 
-        // Hent alle geometriobjekter for kartvisning
+        // Hent alle geometriobjekter for kartvisning KartvisningAlleInnmeldingerSaksB
+
         public async Task<IEnumerable<Geometri>> GetAllGeometriAsync()
         {
             using var connection = _dbConnection.CreateConnection();
@@ -24,7 +25,7 @@ namespace DataAccess
             return await connection.QueryAsync<Geometri>(sql);
         }
 
-        // Hent spesifikk geometri basert på innmelding_id
+        // Hent spesifikk geometri basert på innmelding_id  KartvisningEnInnmeldingSaksB
         public async Task<Geometri> GetGeometriByInnmeldingIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
