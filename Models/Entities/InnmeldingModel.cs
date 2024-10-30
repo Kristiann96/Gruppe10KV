@@ -22,10 +22,10 @@ namespace Models.Entities
             public string Tittel { get; set; } = null!;            // NOT NULL
             public string Beskrivelse { get; set; } = null!;       // NOT NULL
             public DateTime Innmeldingstidspunkt { get; set; }     // NOT NULL, default til nåværende timestamp
-            public Status Status { get; set; } = Status.Ny;        // Default 'ny'
+            public string Status { get; set; }         // Default 'ny'
             public DateTime SisteEndring { get; set; }             // NOT NULL, oppdateres automatisk
-            public Prioritet Prioritet { get; set; } = Prioritet.IkkeVurdert;  // Default 'ikke_vurdert'
-            public KartType KartType { get; set; } = KartType.Standard;        // Default 'standard'
+            public string Prioritet { get; set; }   // Default 'ikke_vurdert'
+            public string KartType { get; set; }         // Default 'standard'
         }
 
         // Enums for status, prioritet og kart_type
