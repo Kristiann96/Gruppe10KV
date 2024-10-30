@@ -11,6 +11,9 @@ namespace Models.Models
         public string Kommunenavn { get; set; }
         public string KommunenavnNorsk { get; set; }
         public string Kommunenummer { get; set; }
+
+        public string Fylkesnavn { get; set; }
+        public string Fylkesnummer { get; set; }
     }
 }
 
