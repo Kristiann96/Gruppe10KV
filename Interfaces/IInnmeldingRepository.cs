@@ -9,6 +9,6 @@ namespace Interface
         Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId);
         Task<InnmeldingDetaljKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId);
         Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync();
-        Task<IEnumerable<InnmeldingModel>> GetInnmeldingerAvInnmelderIdAsync(int innmeldingID);
+        Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(int innmeldingID);
     }
 }

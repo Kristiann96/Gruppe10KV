@@ -61,7 +61,7 @@ namespace DataAccess
             return await connection.QueryAsync<InnmeldingModel>(sql);
         }
 
-        public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingerAvInnmelderIdAsync(int innmelderId)
+        public async Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(int innmelderId)
         {
             using var connection = _dbConnection.CreateConnection();
 

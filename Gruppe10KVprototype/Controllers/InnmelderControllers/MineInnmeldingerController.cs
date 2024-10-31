@@ -21,10 +21,7 @@ namespace Gruppe10KVprototype.Controllers
             int innmelderId = 101; // Endre dette til en gyldig ID for testing
 
             // Hent innmeldinger for den aktuelle innmelderen
-            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetInnmeldingerAvInnmelderIdAsync(innmelderId);
-
-            // Send innmelder_id til viewet
-            ViewBag.InnmelderId = innmelderId;
+            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.HentInnmeldingerFraInnmelderIdAsync(innmelderId);
 
             // Returner visningen med innmeldinger
             return View(innmeldinger);

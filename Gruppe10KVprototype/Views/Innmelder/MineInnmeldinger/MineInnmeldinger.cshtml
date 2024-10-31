@@ -8,8 +8,10 @@
     <title>Oversikt over Innmeldinger</title>
 </head>
 <body>
-
-    <h1>Mine innmeldinger (Innmelder ID: @ViewBag.InnmelderId)</h1>
+    @if (Model != null && Model.Any())
+    {
+         <h1>Mine innmeldinger (Innmelder ID: @Model.First().InnmelderId)</h1>
+        }
 
     <table style="width: 100%; text-align: left;">
         <thead>
