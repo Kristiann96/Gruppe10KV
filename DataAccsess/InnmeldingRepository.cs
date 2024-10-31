@@ -62,7 +62,7 @@ namespace DataAccess
 
             return result;
         }
-        public async Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync()
+        public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync()
         {
             using var connection = _dbConnection.CreateConnection();
             
@@ -70,7 +70,8 @@ namespace DataAccess
                             innmelder_id AS InnmelderId,
                             tittel AS Tittel,
                             status AS Status,
-                            siste_endring AS SisteEndring
+                            siste_endring AS SisteEndring,
+                            prioritet AS Prioritet
                         FROM innmelding";
             
             return await connection.QueryAsync<InnmeldingModel>(sql);

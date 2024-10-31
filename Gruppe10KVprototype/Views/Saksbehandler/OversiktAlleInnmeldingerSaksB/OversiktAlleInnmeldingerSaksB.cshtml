@@ -11,7 +11,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OversiktAlleInnmeldingerSaksB</title>
     <style>
-        /* Add your CSS styles here */
+        /* Midlertidig CSS for å bare kvittere rader i tabellen når man hovrer og skal klikke */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        th {
+            cursor: pointer;
+        }
+
+        .dropdown {
+            display: inline-block;
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 8px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        tr {
+            cursor: pointer;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        tr:active {
+            background-color: #dcdcdc;
+        }
     </style>
 </head>
 <body>
@@ -23,18 +78,34 @@
     <table>
         <thead>
         <tr>
-            <th>INNMELDING ID</th>
+            <th>
+                <div class="dropdown">
+                    <span>INNMELDING ID</span>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="sortTable('id', 'asc')">Ascending</a>
+                        <a href="#" onclick="sortTable('id', 'desc')">Descending</a>
+                    </div>
+                </div>
+            </th>
             <th>TITTEL</th>
             <th>INNMELDER ID</th>
             <th>PRIORITET</th>
             <th>STATUS</th>
-            <th>SISTE ENDRING</th>
+            <th>
+                <div class="dropdown">
+                    <span>SISTE ENDRING</span>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="sortTable('date', 'latest')">Latest</a>
+                        <a href="#" onclick="sortTable('date', 'oldest')">Oldest</a>
+                    </div>
+                </div>
+            </th>
         </tr>
         </thead>
-        <tbody>
+        <tbody data-sort-direction="asc">
             @foreach (var innmelding in Model)
             {
-                <tr>
+                <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmelding.InnmeldingId })'">
                     <td>@innmelding.InnmeldingId</td>
                     <td>@innmelding.Tittel</td>
                     <td>@innmelding.InnmelderId</td>
@@ -47,6 +118,6 @@
     </table>
 </main>
 
-
+<script src="/js/OversiktAlleInnmeldingerSaksBSorter.js"></script>
 </body>
 </html>

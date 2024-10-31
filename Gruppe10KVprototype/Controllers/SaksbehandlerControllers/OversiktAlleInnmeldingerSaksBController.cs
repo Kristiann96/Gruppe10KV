@@ -14,7 +14,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         }
         public async Task<IActionResult> OversiktAlleInnmeldingerSaksB()
         {
-            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetOversiktInnmeldingerSaksBAsync();
+            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetOversiktAlleInnmeldingerSaksBAsync();
             
             return View("OversiktAlleInnmeldingerSaksB", innmeldinger);
         }

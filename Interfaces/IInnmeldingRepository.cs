@@ -14,7 +14,7 @@ namespace Interface
 
 
         Task<InnmeldingDetaljerKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId);
-        Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync();
+        Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync();
 
         Task<string> GetStatusEnumValuesAsync();
 
