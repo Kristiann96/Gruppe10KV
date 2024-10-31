@@ -16,7 +16,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         {
             var viewModel = new OppdatereInnmeldingViewModel
             {
-                OppdatereInnmeldinger = _innmeldingRepository.GetInnmeldingAsync()
+                OppdatereInnmeldinger = _innmeldingRepository.GetInnmeldingAsync().Result.ToList()
             };
             return View(viewModel); 
         }
@@ -26,14 +26,20 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             _innmeldingRepository = repository;
             _geometriRepository = geometriRepository;
         }
-        
+
         public async Task<IActionResult> OppdatereInnmelding()
         {
             // Retrieve data from repository
             IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetInnmeldingAsync();
 
+            // Create and populate the view model
+            var viewModel = new OppdatereInnmeldingViewModel
+            {
+                OppdatereInnmeldinger = innmeldinger.ToList()
+            };
+
             // Pass data to the view
-            return View(innmeldinger);
+            return View(viewModel);
         }
     }
 }

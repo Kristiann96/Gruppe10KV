@@ -9,7 +9,7 @@ namespace ViewModels
 {
     public class OppdatereInnmeldingViewModel
     {
-        public List<InnmeldingModel> OppdatereInnmeldinger = new List<InnmeldingModel>();
+        public List<InnmeldingModel> OppdatereInnmeldinger { get; set; }
 
         // Geometridata
         public Geometri GeometriData { get; set; }
