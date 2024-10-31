@@ -46,8 +46,9 @@ namespace DataAccess
 
             return await connection.QuerySingleOrDefaultAsync<InnmeldingDetaljerKartvisningSaksBModel>(sql, new { InnmeldingId = innmeldingId });
         }
-
-
+        
+        
+        
         //Daniel's sql innhenting av data til "OppdatereInnmelding"
         public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync()
         {
