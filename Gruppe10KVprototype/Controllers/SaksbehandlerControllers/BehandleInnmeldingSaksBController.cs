@@ -28,19 +28,19 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         [HttpGet]
         public async Task<IActionResult> BehandleInnmeldingSaksB()
         {
-            int innmeldingId = 8; // Fetch details for InnmeldingID 8
-            var innmeldingDetaljer = await _innmeldingRepository.GetInnmeldingByIdAsync(innmeldingId);
+            int innmeldingId = 10; // Fetch details for InnmeldingID 10
+            var innmeldingModel = await _innmeldingRepository.GetInnmeldingByIdAsync(innmeldingId);
             var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
             var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
 
-            if (innmeldingDetaljer == null)
+            if (innmeldingModel == null)
             {
                 return NotFound("Innmelding details not found.");
             }
 
             var viewModel = new BehandleInnmeldingSaksBViewModel
             {
-                InnmeldingModel = innmeldingDetaljer,
+                InnmeldingModel = innmeldingModel,
                 Geometri = geometri,
                 StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList()
             };
