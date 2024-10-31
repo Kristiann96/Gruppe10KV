@@ -11,17 +11,17 @@
 <body>
     <div class="container">
         <div class="info-panel">
-            @if (Model?.InnmeldingDetaljer != null)
+            @if (Model?.InnmeldingModel != null)
             {
-                <h2>@Model.InnmeldingDetaljer.Tittel</h2>
+                <h2>@Model.InnmeldingModel.Tittel</h2>
                 <div class="status-info">
                     <label for="statusDropdown">Status:</label>
-                    <select id="statusDropdown" class="form-control" asp-for="InnmeldingDetaljer.Status" asp-items="Model.StatusOptions">
+                    <select id="statusDropdown" class="form-control" asp-for="InnmeldingModel.Status" asp-items="Model.StatusOptions">
                         <option value="">Velg status</option>
                     </select>
-                    <p>Prioritet: <span class="badge">@Model.InnmeldingDetaljer.Prioritet</span></p>
-                    <p>Sist endret: @Model.InnmeldingDetaljer.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
-                    <p>KartType: <span class="badge">@Model.InnmeldingDetaljer.KartType</span></p>
+                    <p>Prioritet: <span class="badge">@Model.InnmeldingModel.Prioritet</span></p>
+                    <p>Sist endret: @Model.InnmeldingModel.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
+                    <p>KartType: <span class="badge">@Model.InnmeldingModel.KartType</span></p>
                     @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
                     {
                         <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
@@ -29,19 +29,19 @@
                 </div>
                 <div class="description">
                     <h3>Beskrivelse</h3>
-                    <p>@Model.InnmeldingDetaljer.Beskrivelse</p>
+                    <p>@Model.InnmeldingModel.Beskrivelse</p>
                 </div>
                 <div class="reporter-info">
                     <h3>Innmelder</h3>
-                    @if (Model.InnmeldingDetaljer.InnmelderId.HasValue && !string.IsNullOrEmpty(Model.InnmeldingDetaljer.InnmelderType))
+                    @if (Model.InnmeldingModel.InnmelderId.HasValue && !string.IsNullOrEmpty(Model.InnmeldingModel.InnmelderType))
                     {
-                        <p>Type: @Model.InnmeldingDetaljer.InnmelderType</p>
-                        @if (!string.IsNullOrEmpty(Model.InnmeldingDetaljer.Fornavn) && !string.IsNullOrEmpty(Model.InnmeldingDetaljer.Etternavn))
+                        <p>Type: @Model.InnmeldingModel.InnmelderType</p>
+                        @if (!string.IsNullOrEmpty(Model.InnmeldingModel.Fornavn) && !string.IsNullOrEmpty(Model.InnmeldingModel.Etternavn))
                         {
-                            <p>Navn: @Model.InnmeldingDetaljer.Fornavn @Model.InnmeldingDetaljer.Etternavn</p>
+                            <p>Navn: @Model.InnmeldingModel.Fornavn @Model.InnmeldingModel.Etternavn</p>
                         }
                     }
-                    else if (Model.InnmeldingDetaljer.GjestInnmelderId.HasValue)
+                    else if (Model.InnmeldingModel.GjestInnmelderId.HasValue)
                     {
                         <p>Gjesteinnmelder</p>
                     }
@@ -50,11 +50,11 @@
                         <p>Ingen innmelder informasjon tilgjengelig</p>
                     }
                 </div>
-                @if (Model.InnmeldingDetaljer.SaksbehandlerId.HasValue && !string.IsNullOrEmpty(Model.InnmeldingDetaljer.SaksbehandlerStilling))
+                @if (Model.InnmeldingModel.SaksbehandlerId.HasValue && !string.IsNullOrEmpty(Model.InnmeldingModel.SaksbehandlerStilling))
                 {
                     <div class="handler-info">
                         <h3>Saksbehandler</h3>
-                        <p>Stilling: @Model.InnmeldingDetaljer.SaksbehandlerStilling</p>
+                        <p>Stilling: @Model.InnmeldingModel.SaksbehandlerStilling</p>
                     </div>
                 }
             }

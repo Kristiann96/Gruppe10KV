@@ -25,7 +25,14 @@ namespace Models.Entities
             public string Status { get; set; }         // Default 'ny'
             public DateTime SisteEndring { get; set; }             // NOT NULL, oppdateres automatisk
             public string Prioritet { get; set; }   // Default 'ikke_vurdert'
-            public string KartType { get; set; }         // Default 'standard'
+            public string KartType { get; set; }  
+            
+            public string InnmelderType { get; set; }
+            public string Fornavn { get; set; }
+            public string Etternavn { get; set; }
+            public string SaksbehandlerStilling { get; set; }
+            
+            
         }
 
         // Enums for status, prioritet og kart_type

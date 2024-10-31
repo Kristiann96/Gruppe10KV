@@ -3,7 +3,6 @@ using Logic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ViewModels;
-using Models.DTOs;
 using Models.Models;
 using System.Linq;
 using System.Collections.Generic;
@@ -30,7 +29,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         public async Task<IActionResult> BehandleInnmeldingSaksB()
         {
             int innmeldingId = 8; // Fetch details for InnmeldingID 8
-            var innmeldingDetaljer = await _innmeldingRepository.GetInnmeldingDetaljerByIdAsync(innmeldingId);
+            var innmeldingDetaljer = await _innmeldingRepository.GetInnmeldingByIdAsync(innmeldingId);
             var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
             var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
 
@@ -41,7 +40,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 
             var viewModel = new BehandleInnmeldingSaksBViewModel
             {
-                InnmeldingDetaljer = innmeldingDetaljer,
+                InnmeldingModel = innmeldingDetaljer,
                 Geometri = geometri,
                 StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList()
             };
