@@ -64,7 +64,7 @@ namespace DataAccess
         }
         
         /* Ørjan */
-        public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm)
         {
             using var connection = _dbConnection.CreateConnection();
             
@@ -75,24 +75,34 @@ namespace DataAccess
                             siste_endring AS SisteEndring,
                             prioritet AS Prioritet
                         FROM innmelding
+                        WHERE tittel LIKE @SearchTerm
                         ORDER BY innmelding_id
-                        OFFSET @Offset ROWS
-                        FETCH NEXT @PageSize ROWS ONLY";
+                        LIMIT @PageSize OFFSET @Offset";
 
             var parameters = new
             {
                 Offset = (pageNumber - 1) * pageSize,
-                PageSize = pageSize
+                PageSize = pageSize,
+                SearchTerm = "%" + searchTerm + "%"
             };
             
             return await connection.QueryAsync<InnmeldingModel>(sql, parameters);
         }
         
-        public async Task<int> GetTotalInnmeldingerTellerSaksBAsync()
+        public async Task<int> GetTotalInnmeldingerTellerSaksBAsync(string searchTerm)
         {
             using var connection = _dbConnection.CreateConnection();
-            var sql = "SELECT COUNT(*) FROM innmelding";
-            return await connection.ExecuteScalarAsync<int>(sql);
+            
+            var sql = @"SELECT COUNT(*)
+                        FROM innmelding
+                        WHERE tittel LIKE @SearchTerm";
+            
+            var parameters= new
+            {
+                SearchTerm = "%" + searchTerm + "%"
+            };
+            
+            return await connection.ExecuteScalarAsync<int>(sql, parameters);
         }
         
         /* Ørjan over */

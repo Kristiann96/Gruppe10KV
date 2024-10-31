@@ -13,10 +13,10 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         {
             _innmeldingRepository = innmeldingRepository;
         }
-        public async Task<IActionResult> OversiktAlleInnmeldingerSaksB(int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> OversiktAlleInnmeldingerSaksB(int pageNumber = 1, int pageSize = 10, string searchTerm = "")
         {
-            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetOversiktAlleInnmeldingerSaksBAsync(pageNumber, pageSize);
-            var totalItems = await _innmeldingRepository.GetTotalInnmeldingerTellerSaksBAsync();
+            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetOversiktAlleInnmeldingerSaksBAsync(pageNumber, pageSize, searchTerm);
+            var totalItems = await _innmeldingRepository.GetTotalInnmeldingerTellerSaksBAsync(searchTerm);
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
             
             var viewModel = new OversiktAlleInnmeldingerSaksBViewModel
@@ -24,7 +24,8 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                 Innmeldinger = innmeldinger,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
-                TotalPages = totalPages
+                TotalPages = totalPages,
+                SearchTerm = searchTerm
             };
             
             return View("OversiktAlleInnmeldingerSaksB", viewModel);
