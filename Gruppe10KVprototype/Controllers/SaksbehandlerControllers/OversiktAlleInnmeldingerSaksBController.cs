@@ -1,6 +1,7 @@
 ﻿using Interface;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
+using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
@@ -12,11 +13,21 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         {
             _innmeldingRepository = innmeldingRepository;
         }
-        public async Task<IActionResult> OversiktAlleInnmeldingerSaksB()
+        public async Task<IActionResult> OversiktAlleInnmeldingerSaksB(int pageNumber = 1, int pageSize = 10)
         {
-            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetOversiktAlleInnmeldingerSaksBAsync();
+            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetOversiktAlleInnmeldingerSaksBAsync(pageNumber, pageSize);
+            var totalItems = await _innmeldingRepository.GetTotalInnmeldingerTellerSaksBAsync();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
             
-            return View("OversiktAlleInnmeldingerSaksB", innmeldinger);
+            var viewModel = new OversiktAlleInnmeldingerSaksBViewModel
+            {
+                Innmeldinger = innmeldinger,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages
+            };
+            
+            return View("OversiktAlleInnmeldingerSaksB", viewModel);
         }
     }
 }

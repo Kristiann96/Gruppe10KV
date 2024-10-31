@@ -62,7 +62,9 @@ namespace DataAccess
 
             return result;
         }
-        public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync()
+        
+        /* Ørjan */
+        public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize)
         {
             using var connection = _dbConnection.CreateConnection();
             
@@ -72,10 +74,29 @@ namespace DataAccess
                             status AS Status,
                             siste_endring AS SisteEndring,
                             prioritet AS Prioritet
-                        FROM innmelding";
+                        FROM innmelding
+                        ORDER BY innmelding_id
+                        OFFSET @Offset ROWS
+                        FETCH NEXT @PageSize ROWS ONLY";
+
+            var parameters = new
+            {
+                Offset = (pageNumber - 1) * pageSize,
+                PageSize = pageSize
+            };
             
-            return await connection.QueryAsync<InnmeldingModel>(sql);
+            return await connection.QueryAsync<InnmeldingModel>(sql, parameters);
         }
+        
+        public async Task<int> GetTotalInnmeldingerTellerSaksBAsync()
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql = "SELECT COUNT(*) FROM innmelding";
+            return await connection.ExecuteScalarAsync<int>(sql);
+        }
+        
+        /* Ørjan over */
+        
         //InnmeldingEnumLogic
         public async Task<string> GetStatusEnumValuesAsync()
         {
