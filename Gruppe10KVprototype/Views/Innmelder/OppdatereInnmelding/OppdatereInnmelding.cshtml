@@ -1,7 +1,11 @@
-﻿@{
+﻿@model ViewModels.OppdatereInnmeldingViewModel
+@{
 
     Layout = "_Layout";
 }
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />   
 
 
 <div class="singleCaseUsername">
@@ -13,7 +17,7 @@
 </div>
 
 
-@foreach (var innmelding in Model)
+@foreach (var innmelding in Model.OppdatereInnmeldinger)
 {
     <div class="singleCase">
         <div class="singleCaseCaseID">
