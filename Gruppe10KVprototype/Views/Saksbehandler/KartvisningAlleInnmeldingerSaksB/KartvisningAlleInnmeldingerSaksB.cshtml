@@ -43,17 +43,26 @@
 
         // Hent og vis data fra ViewModel
         const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
+        console.log("GeometriData:", geometriData);
 
-     // Legg til geometriobjekter (innmeldinger) på kartet
-  geometriData.forEach(function (data) {
-      try {
-          const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
-          L.geoJSON(geoJsonFeature).addTo(map).on('click', function () {
-              window.location.href = '/KartvisningEnInnmeldingSaksB/KartvisningEnInnmeldingSaksB/' + data.InnmeldingId;
-          });
-      } catch (e) {
-          console.error('Feil ved parsing av geometri:', e, data);
-      }
+        // Legg til geometriobjekter (innmeldinger) på kartet med klikkfunksjonalitet
+        geometriData.forEach(function (data) {
+            console.log("Data for innmelding:", data);
+            try {
+                const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
+                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
+
+                // Legg til klikkfunksjon for å gå til enkeltvisning av innmeldingen med kommuneinfo
+                geoJsonLayer.on('click', function (event) {
+                    const innmeldingId = data.InnmeldingId;
+                    const coordinates = event.latlng;
+
+                    // Send brukeren til controlleren med koordinater og innmeldingId
+                    window.location.href = `/KartvisningAlleInnmeldingerSaksB/GetKommunenummer?innmeldingId=${innmeldingId}&lat=${coordinates.lat}&lng=${coordinates.lng}`;
+                });
+            } catch (e) {
+                console.error('Feil ved parsing av geometri:', e, data);
+            }
         });
     </script>
 </body>

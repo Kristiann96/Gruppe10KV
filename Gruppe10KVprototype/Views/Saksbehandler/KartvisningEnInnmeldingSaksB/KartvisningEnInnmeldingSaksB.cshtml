@@ -18,9 +18,18 @@
                 <h2>@Model.InnmeldingDetaljer.Tittel</h2>
 
                 <div class="status-info">
-                    <p>Status: <span class="badge">@Model.InnmeldingDetaljer.Status</span></p>
+                    <label for="statusDropdown">Status:</label>
+                    <select id="statusDropdown" class="form-control" asp-for="InnmeldingDetaljer.Status" asp-items="Model.StatusOptions">
+                        <option value="">Velg status</option>
+                    </select>
                     <p>Prioritet: <span class="badge">@Model.InnmeldingDetaljer.Prioritet</span></p>
                     <p>Sist endret: @Model.InnmeldingDetaljer.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
+                    <p>KartType: <span class="badge">@Model.InnmeldingDetaljer.KartType</span></p>
+                    <!-- Visning av kommuneinformasjon med tempdata -->
+                    @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
+                    {
+                        <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
+                    }
                 </div>
 
                 <div class="description">

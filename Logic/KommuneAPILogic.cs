@@ -29,5 +29,31 @@ namespace Logic
 
             return JsonConvert.DeserializeObject<List<Kommune>>(content) ?? new List<Kommune>();
         }
+        public async Task<Kommune> GetKommuneByCoordinatesAsync(double lat, double lng)
+        {
+            try
+            {
+                string formattedUrl = string.Format(
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    "https://ws.geonorge.no/kommuneinfo/v1/punkt?nord={0:F6}&ost={1:F6}&koordsys=4258",
+                    lat,
+                    lng
+                );
+
+                var response = await _httpClient.GetAsync(formattedUrl);
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadAsStringAsync();
+                _logger.LogInformation($"API Response: {content}");
+
+                return JsonConvert.DeserializeObject<Kommune>(content);
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError($"API request failed: {ex.Message}");
+                throw;
+            }
+        }
+
     }
+    
 }
