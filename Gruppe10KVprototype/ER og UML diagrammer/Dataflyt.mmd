@@ -1,0 +1,47 @@
+classDiagram
+    View --> ViewModel : bruker
+    View --> Controller : sender input
+    Controller --> ViewModel : oppdaterer
+    Controller --> Model : bruker
+    Controller --> ILogic : bruker
+    Controller --> IRepository : bruker
+    Logic ..|> ILogic : implementerer
+    Repository ..|> IRepository : implementerer
+    Repository --> Database : lagrer/henter
+    ILogic --> IRepository : sender validert data
+    ILogic --> Model : validerer
+    IRepository --> Model : mapper data
+    
+    class View{
+        +VisData()
+        +TaImotInput()
+    }
+    class ViewModel{
+        +VisningsData
+    }
+    class Controller{
+        +HåndterInput()
+        +HentData()
+    }
+    class Model{
+        +Data
+    }
+    class ILogic{
+        <<interface>>
+        +ValiderData()
+    }
+    class Logic{
+        +ValiderData()
+    }
+    class IRepository{
+        <<interface>>
+        +LagreData()
+        +HentData()
+    }
+    class Repository{
+        +LagreData()
+        +HentData()
+    }
+    class Database{
+        +Data
+    }
