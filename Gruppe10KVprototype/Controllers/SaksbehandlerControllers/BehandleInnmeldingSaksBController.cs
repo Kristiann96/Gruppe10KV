@@ -44,8 +44,8 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         [HttpGet("{id}")]
         public async Task<IActionResult> BehandleInnmeldingSaksB(int id)
         {
-            try
-            {
+            
+            
                 var (innmelding, person, innmelder, saksbehandler) =
                     await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
 
@@ -68,12 +68,8 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                 };
 
                 return View(viewModel);
-            }
-            catch (Exception ex)
-            {
-                // Logger feilen hvis du har logging implementert
-                return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
-            }
+            
+           
         }
     }
 }

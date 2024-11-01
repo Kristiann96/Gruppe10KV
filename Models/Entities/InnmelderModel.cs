@@ -18,7 +18,7 @@ namespace Models.Entities
 
         // E-post og Innmelder-type med angitte egenskaper
         public string Epost { get; set; } = null!;  // NOT NULL og unik
-        public InnmelderType InnmelderType { get; set; } = InnmelderType.Privat;  // Standardverdi 'privat'
+        public string InnmelderType { get; set; }   // Standardverdi 'privat'
 
     }
 
