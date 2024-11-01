@@ -17,70 +17,70 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
     public class BehandleInnmeldingSaksBController : Controller
     {
 
-
-
         private readonly IGeometriRepository _geometriRepository;
         private readonly IInnmeldingEnumLogic _innmeldingEnumLogic;
         private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
- private readonly IInnmeldingRepository _innmeldingRepository;
+        private readonly IInnmeldingRepository _innmeldingRepository;
 
-        public BehandleInnmeldingSaksBController(IInnmeldingRepository innmeldingRepository
+        public BehandleInnmeldingSaksBController(IInnmeldingRepository innmeldingRepository,
+
             IGeometriRepository geometriRepository,
             IInnmeldingEnumLogic innmeldingEnumLogic,
             IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository)
         {
-_innmeldingRepository = innmeldingRepository;
+            _innmeldingRepository = innmeldingRepository;
             _geometriRepository = geometriRepository;
             _innmeldingEnumLogic = innmeldingEnumLogic;
             _dataSammenstillingSaksBRepository = dataSammenstillingSaksBRepository;
 
         }
 
-  /*public IActionResult BehandleInnmeldingSaksB()
-        {
-            return View();
-        }*/
-        
-        public async Task<IActionResult> BehandleInnmeldingSaksB(int id)
-        {
-            var innmelding = await _innmeldingRepository.GetInnmeldingByIdAsync(id);
-            if (innmelding == null)
-            {
-                return NotFound();
-            }
-            return View("BehandleInnmeldingSaksB", innmelding);
-
         [HttpGet]
-        public async Task<IActionResult> BehandleInnmeldingSaksB()
+        public async Task<IActionResult> BehandleInnmeldingSaksB(int? id)
         {
-
-            int innmeldingId = 10;
-            var (innmelding, person, innmelder, saksbehandler) =
-                await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(innmeldingId);
-
-            if (innmelding == null)
-
+            // Sjekk at vi har fått en gyldig id
+            if (!id.HasValue)
             {
-                return NotFound("Innmelding details not found.");
+                return BadRequest("Ingen innmelding ID spesifisert.");
             }
 
-
-            var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
-            var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
-
-            var viewModel = new BehandleInnmeldingSaksBViewModel
+            try
             {
-                InnmeldingModel = innmelding,
-                PersonModel = person,
-                InnmelderModel = innmelder,
-                SaksbehandlerModel = saksbehandler,
+                // Hent sammenstilt data
+                var (innmelding, person, innmelder, saksbehandler) =
+                    await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id.Value);
 
-                Geometri = geometri,
-                StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList()
-            };
+                if (innmelding == null)
+                {
+                    return NotFound($"Fant ikke innmelding med ID: {id}");
+                }
 
-            return View(viewModel);
+                // Hent tilleggsdata
+                var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id.Value);
+                var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
 
+                // Bygg viewmodel
+                var viewModel = new BehandleInnmeldingSaksBViewModel
+                {
+                    InnmeldingModel = innmelding,
+                    PersonModel = person,
+                    InnmelderModel = innmelder,
+                    SaksbehandlerModel = saksbehandler,
+                    Geometri = geometri,
+                    StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList()
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                // Logger feilen hvis du har logging implementert
+                // _logger.LogError(ex, $"Feil ved henting av innmelding {id}");
+
+                // Redirect til en feilside eller tilbake til listen
+                TempData["ErrorMessage"] = "Det oppstod en feil ved lasting av innmeldingen.";
+                return RedirectToAction("Index"); // eller hvor du vil redirecte ved feil
+            }
         }
     }
 }
