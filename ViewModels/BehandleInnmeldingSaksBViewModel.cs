@@ -11,6 +11,7 @@ namespace ViewModels
         public Geometri Geometri { get; set; }
         public List<SelectListItem> StatusOptions { get; set; }
 
+
         public PersonModel PersonModel { get; set; }
 
         public InnmelderModel InnmelderModel { get; set; }
@@ -18,3 +19,4 @@ namespace ViewModels
         public SaksbehandlerModel SaksbehandlerModel { get; set; }
     }
 }
+
