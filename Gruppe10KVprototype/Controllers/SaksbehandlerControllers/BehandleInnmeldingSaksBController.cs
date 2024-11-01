@@ -1,4 +1,4 @@
-﻿using Interface;
+
 using Logic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,8 +7,9 @@ using Models.Models;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+﻿using Interface;
 using Interfaces;
+
 
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
@@ -17,21 +18,37 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
     {
 
 
+
         private readonly IGeometriRepository _geometriRepository;
         private readonly IInnmeldingEnumLogic _innmeldingEnumLogic;
         private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
+ private readonly IInnmeldingRepository _innmeldingRepository;
 
-        public BehandleInnmeldingSaksBController(
+        public BehandleInnmeldingSaksBController(IInnmeldingRepository innmeldingRepository
             IGeometriRepository geometriRepository,
             IInnmeldingEnumLogic innmeldingEnumLogic,
             IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository)
         {
-
+_innmeldingRepository = innmeldingRepository;
             _geometriRepository = geometriRepository;
             _innmeldingEnumLogic = innmeldingEnumLogic;
             _dataSammenstillingSaksBRepository = dataSammenstillingSaksBRepository;
 
         }
+
+  /*public IActionResult BehandleInnmeldingSaksB()
+        {
+            return View();
+        }*/
+        
+        public async Task<IActionResult> BehandleInnmeldingSaksB(int id)
+        {
+            var innmelding = await _innmeldingRepository.GetInnmeldingByIdAsync(id);
+            if (innmelding == null)
+            {
+                return NotFound();
+            }
+            return View("BehandleInnmeldingSaksB", innmelding);
 
         [HttpGet]
         public async Task<IActionResult> BehandleInnmeldingSaksB()
@@ -63,6 +80,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             };
 
             return View(viewModel);
+
         }
     }
 }

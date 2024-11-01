@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Models.Entities.InnmeldingModel>
+﻿@model ViewModels.OversiktAlleInnmeldingerSaksBViewModel
 
 @{
     Layout = "_Layout";
@@ -11,7 +11,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OversiktAlleInnmeldingerSaksB</title>
     <style>
-        /* Add your CSS styles here */
+        /* Midlertidig CSS for å bare kvittere rader i tabellen når man hovrer og skal klikke */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        tr {
+            cursor: pointer; /* Change cursor to pointer on hover */
+        }
+
+        tr:hover {
+            background-color: #f0f0f0; /* Highlight row on hover */
+        }
+
+        tr:active {
+            background-color: #dcdcdc; /* Darker shade when clicked */
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            margin: 0 5px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: white;
+            background-color: #1c833b;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #00509c;
+            color: white;
+        }
+
+        .pagination a.active {
+            font-weight: bold;
+            background-color: #00509c;
+            color: white;
+            border-color: #00509c;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: start;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            width: 300px;
+        }
+
+        .search-bar button {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+            background-color: #1c833b;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: #00509c;
+        }
     </style>
 </head>
 <body>
@@ -19,6 +97,11 @@
 
 <main>
     <h1>Oversikt over alle innmeldinger</h1>
+
+    <form method="get" action="@Url.Action("OversiktAlleInnmeldingerSaksB")" class="search-bar">
+        <input type="text" name="searchTerm" placeholder="Søk i saker" />
+        <button type="submit">Søk</button>
+    </form>
     
     <table>
         <thead>
@@ -32,21 +115,37 @@
         </tr>
         </thead>
         <tbody>
-            @foreach (var innmelding in Model)
-            {
-                <tr>
-                    <td>@innmelding.InnmeldingId</td>
-                    <td>@innmelding.Tittel</td>
-                    <td>@innmelding.InnmelderId</td>
-                    <td>@innmelding.Prioritet</td>
-                    <td>@innmelding.Status</td>
-                    <td>@innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
-                </tr>
-            }
+        @foreach (var innmelding in Model.Innmeldinger)
+        {
+            <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmelding.InnmeldingId })'">
+                <td>@innmelding.InnmeldingId</td>
+                <td>@innmelding.Tittel</td>
+                <td>@innmelding.InnmelderId</td>
+                <td>@innmelding.Prioritet</td>
+                <td>@innmelding.Status</td>
+                <td>@innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
+            </tr>
+        }
         </tbody>
     </table>
-</main>
+    
+    <div class="pagination">
+        @if (Model.PageNumber > 1)
+        {
+            <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize })">Forrige</a>
+        }
+        
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = i, pageSize = Model.PageSize })" class='@(i == Model.PageNumber ? "active" : "")'>@i</a>
+        }
 
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize })">Next</a>
+        }
+    </div>
+</main>
 
 </body>
 </html>

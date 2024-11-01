@@ -78,7 +78,9 @@ namespace DataAccess
 
             return result;
         }
-        public async Task<IEnumerable<InnmeldingModel>> GetOversiktInnmeldingerSaksBAsync()
+        
+        /* Ørjan */
+        public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm)
         {
             using var connection = _dbConnection.CreateConnection();
 
@@ -86,11 +88,43 @@ namespace DataAccess
                             innmelder_id AS InnmelderId,
                             tittel AS Tittel,
                             status AS Status,
-                            siste_endring AS SisteEndring
-                        FROM innmelding";
 
-            return await connection.QueryAsync<InnmeldingModel>(sql);
+                            siste_endring AS SisteEndring,
+                            prioritet AS Prioritet
+                        FROM innmelding
+                        WHERE tittel LIKE @SearchTerm
+                        ORDER BY innmelding_id
+                        LIMIT @PageSize OFFSET @Offset";
+
+            var parameters = new
+            {
+                Offset = (pageNumber - 1) * pageSize,
+                PageSize = pageSize,
+                SearchTerm = "%" + searchTerm + "%"
+            };
+            
+            return await connection.QueryAsync<InnmeldingModel>(sql, parameters);
         }
+        
+        public async Task<int> GetTotalInnmeldingerTellerSaksBAsync(string searchTerm)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            
+            var sql = @"SELECT COUNT(*)
+                        FROM innmelding
+                        WHERE tittel LIKE @SearchTerm";
+            
+            var parameters= new
+            {
+                SearchTerm = "%" + searchTerm + "%"
+            };
+            
+            return await connection.ExecuteScalarAsync<int>(sql, parameters);
+
+        }
+        
+        /* Ørjan over */
+        
         //InnmeldingEnumLogic
         public async Task<string> GetStatusEnumValuesAsync()
         {
