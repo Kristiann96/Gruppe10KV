@@ -118,6 +118,7 @@
         @foreach (var innmelding in Model.Innmeldinger)
         {
             <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmelding.InnmeldingId })'">
+
                 <td>@innmelding.InnmeldingId</td>
                 <td>@innmelding.Tittel</td>
                 <td>@innmelding.InnmelderId</td>
