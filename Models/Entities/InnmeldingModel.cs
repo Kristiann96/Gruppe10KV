@@ -27,7 +27,9 @@ namespace Models.Entities
             public string Status { get; set; }         // Default 'ny'
             public DateTime SisteEndring { get; set; }             // NOT NULL, oppdateres automatisk
             public string Prioritet { get; set; }   // Default 'ikke_vurdert'
+
             public string KartType { get; set; }         // Default 'standard'
+
 
         }
 

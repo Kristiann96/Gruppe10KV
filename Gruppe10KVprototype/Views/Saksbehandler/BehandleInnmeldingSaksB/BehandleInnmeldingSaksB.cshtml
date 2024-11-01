@@ -1,61 +1,85 @@
-﻿
+﻿@model ViewModels.BehandleInnmeldingSaksBViewModel
 <!DOCTYPE html>
-
-<html>
+<html lang="no">
 <head>
-    <title>title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innmelding Detaljer</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 </head>
 <body>
-<div class="topplinje">
-    <div>Navn Navnesen</div>
-    <div>
-        <div>
-            <ul class="topplinjeinfo">
-                <li>Status</li>
-                <li>Innmelding ID</li>
-            </ul>
+    <div class="container">
+        <div class="info-panel">
+            @if (Model?.InnmeldingModel != null)
+            {
+                <h2>@Model.InnmeldingModel.Tittel</h2>
+                <div class="status-info">
+                    <label for="statusDropdown">Status:</label>
+                    <select id="statusDropdown" class="form-control" asp-for="InnmeldingModel.Status" asp-items="Model.StatusOptions">
+                        <option value="">Velg status</option>
+                    </select>
+                    <p>Prioritet: <span class="badge">@Model.InnmeldingModel.Prioritet</span></p>
+                    <p>Sist endret: @Model.InnmeldingModel.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
+                    <p>KartType: <span class="badge">@Model.InnmeldingModel.KartType</span></p>
+                    @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
+                    {
+                        <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
+                    }
+                </div>
+                <div class="description">
+                    <h3>Beskrivelse</h3>
+                    <p>@Model.InnmeldingModel.Beskrivelse</p>
+                </div>
+                <div class="reporter-info">
+                    <h3>Innmelder</h3>
+                    @if (Model.InnmeldingModel.InnmelderId.HasValue && !string.IsNullOrEmpty(Model.InnmeldingModel.InnmelderType))
+                    {
+                        <p>Type: @Model.InnmeldingModel.InnmelderType</p>
+                        @if (!string.IsNullOrEmpty(Model.InnmeldingModel.Fornavn) && !string.IsNullOrEmpty(Model.InnmeldingModel.Etternavn))
+                        {
+                            <p>Navn: @Model.InnmeldingModel.Fornavn @Model.InnmeldingModel.Etternavn</p>
+                        }
+                    }
+                    else if (Model.InnmeldingModel.GjestInnmelderId.HasValue)
+                    {
+                        <p>Gjesteinnmelder</p>
+                    }
+                    else
+                    {
+                        <p>Ingen innmelder informasjon tilgjengelig</p>
+                    }
+                </div>
+                @if (Model.InnmeldingModel.SaksbehandlerId.HasValue && !string.IsNullOrEmpty(Model.InnmeldingModel.SaksbehandlerStilling))
+                {
+                    <div class="handler-info">
+                        <h3>Saksbehandler</h3>
+                        <p>Stilling: @Model.InnmeldingModel.SaksbehandlerStilling</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Ingen innmeldingsdetaljer tilgjengelig</p>
+            }
         </div>
+        <div id="map" style="height: 500px;"></div>
     </div>
-</div>
-<div class="subjektlinje">
-    <div>Subjekt</div>
-    <div>
-        <ul class="subjektlinjeinfo">
-            <li>Kommune</li>
-            <li>Tag</li>
-        </ul>
-    </div>
-</div>
-<div class="forstebokslinje">
-    <div class="beskrivelseboks">
-        <div>Beskrivelse</div>
-        <div class="descboks">Description</div>
-    </div>
-    <div class="kartvisningboks">
-        <div>Kartvisning</div>
-        <div class="mapboks">Map View</div>
-    </div>
-</div>
-<div class="bunnlinje">
-    <div>Opplysninger om innsender</div>
-    <div class="bokslinje">
-        <div class="opplysboks">Henter noe informasjon om innsenderen</div>
-        <div class="buttonboks">
-            <div class="buttonboksEn">
-                <button>SVAR</button>
-                <button>FLAGG</button>
-            </div>
-            <div class="buttonboksTo">
-                <button>OPPDATER</button>
-                <button>DELEGER</button>
-            </div>
-            <div class="buttonboksTre">
-                <button>BEHANDLE</button>
-                <button>AVVIS</button>
-            </div>
-        </div>
-    </div>
-</div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="~/js/maps/config/mapConfig.js"></script>
+    <script src="~/js/maps/utils/mapControls.js"></script>
+    <script>
+        const map = MapConfig.initializeMap('map');
+        MapControls.initializeSearch(map);
+        @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
+        {
+            <text>
+                const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
+                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
+                map.fitBounds(geoJsonLayer.getBounds());
+            </text>
+        }
+    </script>
 </body>
 </html>
-
