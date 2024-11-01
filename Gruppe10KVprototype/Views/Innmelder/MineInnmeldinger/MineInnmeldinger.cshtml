@@ -1,23 +1,64 @@
-﻿@{
+﻿@model IEnumerable<Models.Entities.InnmeldingModel>
 
-    Layout = "_Layout";
-}
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oversikt over Innmeldinger</title>
+</head>
+<body>
+    @if (Model != null && Model.Any())
+    {
+         <h1>Mine innmeldinger (Innmelder ID: @Model.First().InnmelderId)</h1>
+        }
 
-<div class="brukerSakerTittel">
-    <h1>Mine Saker</h1>
-    <p>Her kan du se dine saker</p>
-</div>
+    <table style="width: 100%; text-align: left;">
+        <thead>
+            <tr>
+                <th>Innmelding ID</th>
+                <th>Tittel</th>
+                <th>Status</th>
+                <th>Siste Endring</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var innmelding in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href="@Url.Action("Details", "Innmeldinger", new { id = innmelding.InnmeldingId })" style="display: block; text-decoration: none; color: inherit;">
+                                @innmelding.InnmeldingId
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Details", "Innmeldinger", new { id = innmelding.InnmeldingId })" style="display: block; text-decoration: none; color: inherit;">
+                                @innmelding.Tittel
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Details", "Innmeldinger", new { id = innmelding.InnmeldingId })" style="display: block; text-decoration: none; color: inherit;">
+                                @innmelding.Status
+                            </a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Details", "Innmeldinger", new { id = innmelding.InnmeldingId })" style="display: block; text-decoration: none; color: inherit;">
+                                @innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4">Ingen innmeldinger funnet.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-<div class="brukerSakerListe">
-    <!-- Dette er plassen hvor saker vil vises senere -->
-    <div class="brukerSak">
-        <h2>Sak [Sak ID]</h2>
-        <p>[Sak Subject]</p>
-        <p>Status: [Sak Status]</p>
-        <a href="[Sak GeoLocation]">Se sak</a>
-    </div>
-</div>
-
-<p>Du har ingen saker ennå.</p>
-
-}
+</body>
+</html>
