@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Models.Entities;
 using Interfaces;
 
-
+//brukes for spørringer som sammenstiller flere tabeller
 namespace DataAccess
 {
     public class DataSammenstillingSaksBRepository : IDataSammenstillingSaksBRepository
