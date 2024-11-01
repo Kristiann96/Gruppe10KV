@@ -8,39 +8,56 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using Interfaces;
+
+
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
     public class BehandleInnmeldingSaksBController : Controller
     {
-        private readonly IInnmeldingRepository _innmeldingRepository;
+
+
         private readonly IGeometriRepository _geometriRepository;
         private readonly IInnmeldingEnumLogic _innmeldingEnumLogic;
+        private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
 
-        public BehandleInnmeldingSaksBController(IInnmeldingRepository innmeldingRepository,
+        public BehandleInnmeldingSaksBController(
             IGeometriRepository geometriRepository,
-            IInnmeldingEnumLogic innmeldingEnumLogic)
+            IInnmeldingEnumLogic innmeldingEnumLogic,
+            IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository)
         {
-            _innmeldingRepository = innmeldingRepository;
+
             _geometriRepository = geometriRepository;
             _innmeldingEnumLogic = innmeldingEnumLogic;
+            _dataSammenstillingSaksBRepository = dataSammenstillingSaksBRepository;
+
         }
 
         [HttpGet]
         public async Task<IActionResult> BehandleInnmeldingSaksB()
         {
-            int innmeldingId = 10; // Fetch details for InnmeldingID 10
-            var innmeldingModel = await _innmeldingRepository.GetInnmeldingByIdAsync(innmeldingId);
-            var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
-            var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
 
-            if (innmeldingModel == null)
+            int innmeldingId = 10;
+            var (innmelding, person, innmelder, saksbehandler) =
+                await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(innmeldingId);
+
+            if (innmelding == null)
+
             {
                 return NotFound("Innmelding details not found.");
             }
 
+
+            var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
+            var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
+
             var viewModel = new BehandleInnmeldingSaksBViewModel
             {
-                InnmeldingModel = innmeldingModel,
+                InnmeldingModel = innmelding,
+                PersonModel = person,
+                InnmelderModel = innmelder,
+                SaksbehandlerModel = saksbehandler,
+
                 Geometri = geometri,
                 StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList()
             };

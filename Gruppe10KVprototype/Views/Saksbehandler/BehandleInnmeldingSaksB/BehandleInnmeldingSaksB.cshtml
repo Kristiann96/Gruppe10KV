@@ -1,4 +1,4 @@
-﻿@model ViewModels.BehandleInnmeldingSaksBViewModel
+@model ViewModels.BehandleInnmeldingSaksBViewModel
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -33,13 +33,11 @@
                 </div>
                 <div class="reporter-info">
                     <h3>Innmelder</h3>
-                    @if (Model.InnmeldingModel.InnmelderId.HasValue && !string.IsNullOrEmpty(Model.InnmeldingModel.InnmelderType))
+                    @if (Model.InnmelderModel != null && Model.PersonModel != null)
                     {
-                        <p>Type: @Model.InnmeldingModel.InnmelderType</p>
-                        @if (!string.IsNullOrEmpty(Model.InnmeldingModel.Fornavn) && !string.IsNullOrEmpty(Model.InnmeldingModel.Etternavn))
-                        {
-                            <p>Navn: @Model.InnmeldingModel.Fornavn @Model.InnmeldingModel.Etternavn</p>
-                        }
+                        <p>Type: @Model.InnmelderModel.InnmelderType</p>
+                        <p>Navn: @Model.PersonModel.Fornavn @Model.PersonModel.Etternavn</p>
+                        <p>Telefon: @Model.PersonModel.Telefonnummer</p>
                     }
                     else if (Model.InnmeldingModel.GjestInnmelderId.HasValue)
                     {
@@ -50,11 +48,13 @@
                         <p>Ingen innmelder informasjon tilgjengelig</p>
                     }
                 </div>
-                @if (Model.InnmeldingModel.SaksbehandlerId.HasValue && !string.IsNullOrEmpty(Model.InnmeldingModel.SaksbehandlerStilling))
+                @if (Model.SaksbehandlerModel != null)
                 {
                     <div class="handler-info">
                         <h3>Saksbehandler</h3>
-                        <p>Stilling: @Model.InnmeldingModel.SaksbehandlerStilling</p>
+                        <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
+                        <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
+                        <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
                     </div>
                 }
             }
@@ -75,9 +75,9 @@
         @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
         {
             <text>
-                const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
-                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
-                map.fitBounds(geoJsonLayer.getBounds());
+                    const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
+                    const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
+                    map.fitBounds(geoJsonLayer.getBounds());
             </text>
         }
     </script>

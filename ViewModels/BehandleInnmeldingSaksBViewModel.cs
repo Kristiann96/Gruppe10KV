@@ -10,5 +10,13 @@ namespace ViewModels
         public InnmeldingModel InnmeldingModel { get; set; }
         public Geometri Geometri { get; set; }
         public List<SelectListItem> StatusOptions { get; set; }
+
+
+        public PersonModel PersonModel { get; set; }
+
+        public InnmelderModel InnmelderModel { get; set; }
+
+        public SaksbehandlerModel SaksbehandlerModel { get; set; }
     }
 }
+
