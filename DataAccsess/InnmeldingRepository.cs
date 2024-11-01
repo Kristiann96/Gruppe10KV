@@ -20,7 +20,7 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
 
-        //SaksbheaderInnmelding 
+        //SaksbheaderInnmelding - Martin
         public async Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
