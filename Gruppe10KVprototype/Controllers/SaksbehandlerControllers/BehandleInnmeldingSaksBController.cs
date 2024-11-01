@@ -36,30 +36,27 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BehandleInnmeldingSaksB(int? id)
+        public IActionResult BehandleInnmeldingSaksB()
         {
-            // Sjekk at vi har fått en gyldig id
-            if (!id.HasValue)
-            {
-                return BadRequest("Ingen innmelding ID spesifisert.");
-            }
+            return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
+        }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> BehandleInnmeldingSaksB(int id)
+        {
             try
             {
-                // Hent sammenstilt data
                 var (innmelding, person, innmelder, saksbehandler) =
-                    await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id.Value);
+                    await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
 
                 if (innmelding == null)
                 {
-                    return NotFound($"Fant ikke innmelding med ID: {id}");
+                    return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
                 }
 
-                // Hent tilleggsdata
-                var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id.Value);
+                var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
                 var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
 
-                // Bygg viewmodel
                 var viewModel = new BehandleInnmeldingSaksBViewModel
                 {
                     InnmeldingModel = innmelding,
@@ -75,11 +72,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             catch (Exception ex)
             {
                 // Logger feilen hvis du har logging implementert
-                // _logger.LogError(ex, $"Feil ved henting av innmelding {id}");
-
-                // Redirect til en feilside eller tilbake til listen
-                TempData["ErrorMessage"] = "Det oppstod en feil ved lasting av innmeldingen.";
-                return RedirectToAction("Index"); // eller hvor du vil redirecte ved feil
+                return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
             }
         }
     }

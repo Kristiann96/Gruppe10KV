@@ -147,6 +147,16 @@
         }
     </div>
 </main>
+    <script>
+        function navigateToDetails(id) {
+            if (id) {
+                var url = '@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB")/';
+                window.location.href = url + id;
+            } else {
+                console.error('Ingen innmelding ID spesifisert');
+            }
+        }
+    </script>
 
 </body>
 </html>
