@@ -1,6 +1,184 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model KartfeilSkjemaViewModel
 @{
+    ViewData["Title"] = "Meld inn kartfeil";
 }
-//her kommer refactorert InnmelderIncidentForm view
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        #miniMap {
+            height: 300px;
+            width: 100%;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        input.form-control {
+            height: 45px;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+        }
+
+        .checkbox-group {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        /* Dialog styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 9999; /* Økt z-index for å være over kartet */
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            margin: 10% auto; /* Justert margin-top til 10% */
+            padding: 20px;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .close {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Submit-knapp styling */
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+        }
+    </style>
+}
+
+<div class="form-container">
+    <form asp-action="GaaTilBekreftelse" method="post">
+        @Html.AntiForgeryToken()
+
+        <!-- Mini-kart -->
+        <div id="miniMap"></div>
+
+        <!-- Hidden field for GeoJSON -->
+        <input type="hidden" asp-for="GeometriGeoJson" />
+
+        <!-- Tittel -->
+        <div class="form-group">
+            <label asp-for="Tittel">Tittel</label>
+            <input asp-for="Tittel" class="form-control" />
+            <span asp-validation-for="Tittel" class="text-danger"></span>
+        </div>
+
+        <!-- Beskrivelse -->
+        <div class="form-group">
+            <label asp-for="Beskrivelse">Beskrivelse</label>
+            <textarea asp-for="Beskrivelse" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Beskrivelse" class="text-danger"></span>
+        </div>
+
+        <!-- Checkbox for nødetat-kritisk -->
+        <div class="checkbox-group">
+            <div class="form-check">
+                <input asp-for="ErNodEtatKritisk" class="form-check-input" />
+                <label asp-for="ErNodEtatKritisk" class="form-check-label">
+                    Kartfeilen kan være til hinder for nødetater
+                </label>
+            </div>
+        </div>
+
+        <!-- Checkbox for bilde med dialog -->
+        <div class="checkbox-group">
+            <div class="form-check">
+                <input type="checkbox" id="bildeFunksjonalitet" class="form-check-input" onclick="visBildeDialog()" />
+                <label class="form-check-label">Last opp bilde</label>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Se over innmelding</button>
+    </form>
+</div>
+
+<!-- Dialog for bildefunksjonalitet -->
+<div id="bildeDialog" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="lukkDialog()">&times;</span>
+        <h3>Funksjon under utvikling</h3>
+        <p>
+            Her kan du legge ved bilder, og gi kartverket anledning til å hente bildets innebygde gps lokasjon.
+            Data vil slettes når saken avsluttes
+        </p>
+        <button onclick="lukkDialog()" class="btn btn-secondary">OK</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!-- Vår konfigurasjonsfil for kart -->
+    <script src="~/js/maps/config/mapConfig.js"></script>
+
+    <script>
+        // Initialiser mini-kart med samme konfigurasjon som i KartfeilMarkering
+        const miniMap = MapConfig.initializeMap('miniMap', [62.1995, 6.1286], 15);
+
+        // Vis geometri fra hidden field
+        const geoJson = @Html.Raw(Json.Serialize(Model.GeometriGeoJson));
+        if (geoJson) {
+            const geoJsonLayer = L.geoJSON(JSON.parse(geoJson)).addTo(miniMap);
+            miniMap.fitBounds(geoJsonLayer.getBounds());
+        }
+
+        // Dialog-funksjoner
+        function visBildeDialog() {
+            document.getElementById('bildeDialog').style.display = 'block';
+            document.getElementById('bildeFunksjonalitet').checked = false;
+        }
+
+        function lukkDialog() {
+            document.getElementById('bildeDialog').style.display = 'none';
+        }
+
+        // Lukk dialog hvis man klikker utenfor
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('bildeDialog')) {
+                lukkDialog();
+            }
+        }
+    </script>
+}
