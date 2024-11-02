@@ -13,8 +13,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
+    <ProjectReference Include="..\LogicInterfaces\LogicInterfaces.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

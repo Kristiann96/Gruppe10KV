@@ -20,7 +20,9 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
 
-        //SaksbheaderInnmelding - Martin
+        //HENTNING AV DATA
+
+        //dto -skal ikke brukes - skal refactores bort
         public async Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -38,9 +40,10 @@ namespace DataAccess
         LEFT JOIN gjesteinnmelder g ON im.gjest_innmelder_id = g.gjest_innmelder_id
         WHERE im.innmelding_id = @InnmeldingId";
 
-            return await connection.QuerySingleOrDefaultAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingId });
+            return await connection.QuerySingleOrDefaultAsync<InnmeldingModel>(sql,
+                new { InnmeldingId = innmeldingId });
         }
-        
+
         // KartvisningEnInnmelding
         public async Task<InnmeldingDetaljerKartvisningSaksBModel> GetInnmeldingDetaljerByIdAsync(int innmeldingId)
         {
@@ -59,11 +62,12 @@ namespace DataAccess
         LEFT JOIN gjesteinnmelder g ON im.gjest_innmelder_id = g.gjest_innmelder_id
         WHERE im.innmelding_id = @InnmeldingId";
 
-            return await connection.QuerySingleOrDefaultAsync<InnmeldingDetaljerKartvisningSaksBModel>(sql, new { InnmeldingId = innmeldingId });
+            return await connection.QuerySingleOrDefaultAsync<InnmeldingDetaljerKartvisningSaksBModel>(sql,
+                new { InnmeldingId = innmeldingId });
         }
-        
-        
-        
+
+
+
         //Daniel's sql innhenting av data til "OppdatereInnmelding"
         public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync()
         {
@@ -78,9 +82,10 @@ namespace DataAccess
 
             return result;
         }
-        
+
         /* Ørjan */
-        public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm)
+        public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber,
+            int pageSize, string searchTerm)
         {
             using var connection = _dbConnection.CreateConnection();
 
@@ -102,29 +107,29 @@ namespace DataAccess
                 PageSize = pageSize,
                 SearchTerm = "%" + searchTerm + "%"
             };
-            
+
             return await connection.QueryAsync<InnmeldingModel>(sql, parameters);
         }
-        
+
         public async Task<int> GetTotalInnmeldingerTellerSaksBAsync(string searchTerm)
         {
             using var connection = _dbConnection.CreateConnection();
-            
+
             var sql = @"SELECT COUNT(*)
                         FROM innmelding
                         WHERE tittel LIKE @SearchTerm";
-            
-            var parameters= new
+
+            var parameters = new
             {
                 SearchTerm = "%" + searchTerm + "%"
             };
-            
+
             return await connection.ExecuteScalarAsync<int>(sql, parameters);
 
         }
-        
+
         /* Ørjan over */
-        
+
         //InnmeldingEnumLogic
         public async Task<string> GetStatusEnumValuesAsync()
         {
@@ -135,7 +140,7 @@ namespace DataAccess
             WHERE TABLE_SCHEMA = DATABASE()
             AND TABLE_NAME = 'innmelding'
             AND COLUMN_NAME = 'status'";
-          return await connection.QuerySingleOrDefaultAsync<string>(sql);
+            return await connection.QuerySingleOrDefaultAsync<string>(sql);
         }
 
 
@@ -155,7 +160,42 @@ namespace DataAccess
         }
 
 
+        //LAGRING AV DATA
 
+        public async Task<int> LagreInnmeldingAsync(InnmeldingModel innmelding)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                var sql = @"
+                INSERT INTO innmelding (
+                    gjest_innmelder_id, 
+                    tittel, 
+                    beskrivelse, 
+                    prioritet,
+                    kart_type
+                ) VALUES (
+                    @GjestInnmelderId,
+                    @Tittel,
+                    @Beskrivelse,
+                    @Prioritet,
+                    @KartType
+                );
+                SELECT LAST_INSERT_ID();";
+
+                var id = await connection.QuerySingleAsync<int>(sql, innmelding, transaction);
+                await transaction.CommitAsync();
+                return id;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+
+        }
     }
 }
 

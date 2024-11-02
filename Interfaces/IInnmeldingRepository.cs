@@ -7,6 +7,7 @@ namespace Interface
 {
     public interface IInnmeldingRepository
     {
+        //HENTING AV DATA
         Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId);
 
         //Daniel's interface for "OppdatereInnmelding"
@@ -21,6 +22,10 @@ namespace Interface
 
 
         Task<string> GetStatusEnumValuesAsync();
+
+        //LAGRING AV DATA
+
+        Task<int> LagreInnmeldingAsync(InnmeldingModel innmelding);
 
 
 

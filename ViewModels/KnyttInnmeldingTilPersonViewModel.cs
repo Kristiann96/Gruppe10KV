@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ViewModels
 {
-    Copypublic class KnyttInnmeldingTilPersonViewModel
+    public class KnyttInnmeldingTilPersonViewModel
     {
         [Required(ErrorMessage = "E-post må fylles ut")]
         [EmailAddress(ErrorMessage = "Ugyldig e-postformat")]

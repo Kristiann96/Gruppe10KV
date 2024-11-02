@@ -19,7 +19,7 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<DapperDBConnectionDummy>(); //slettes f�r launch
 builder.Services.AddScoped<DapperDBConnection>();
 
-//Registrering av repos og interfaces
+//Registrering av repos og interfaces, og logic og logicinterfaces
 builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>(); //slettes før launch
 builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //slettes før launch
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
@@ -27,6 +27,7 @@ builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
 builder.Services.AddScoped<IInnmeldingEnumLogic, InnmeldingEnumLogic>();
 builder.Services.AddScoped<IDataSammenstillingSaksBRepository, DataSammenstillingSaksBRepository>();
+builder.Services.AddScoped<IInnmeldingOpprettelseLogic, InnmeldingOpprettelseLogic>();
 
 
 var app = builder.Build();

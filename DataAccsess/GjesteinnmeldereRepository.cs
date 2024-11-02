@@ -42,7 +42,4 @@ namespace DataAccess
         }
     }
 
-    public interface IGjesteinnmelderRepository
-    {
-        Task<int> OpprettGjesteinnmelderAsync(GjesteinnmelderModel gjesteinnmelder);
-    }
+}

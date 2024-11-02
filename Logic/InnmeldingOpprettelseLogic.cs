@@ -6,12 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-
+using LogicInterfaces;
+using Models.Models;
 
 
 public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
 {
-    private const int NORGE_SRID = 4326;  // WGS 84
+    private const int NORGE_SRID = 4326;
     private const double NORGE_MIN_LAT = 57.0;
     private const double NORGE_MAX_LAT = 72.0;
     private const double NORGE_MIN_LON = 4.0;
@@ -33,7 +34,7 @@ public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
 
     public async Task<bool> ValidereOgLagreNyInnmelding(
         InnmeldingModel innmelding,
-        GeometriModel geometri,
+        Geometri geometri,
         string gjesteEpost)
     {
         // Epost validering
@@ -53,26 +54,29 @@ public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
             NORGE_SRID
         );
 
-        // Lagring...
         try
         {
-            // TODO: Implementere transaksjonshåndtering
-            // Lagre gjesteinnmelder først for å få ID
-            var gjesteinnmelder = new GjesteinnmelderModel
-            {
-                Epost = gjesteEpost
-            };
+            // 1. Opprett gjesteinnmelder og få ID
+            var gjesteinnmelder = new GjesteinnmelderModel { Epost = gjesteEpost };
+            var gjesteinnmelderId = await _gjesteinnmelderRepository.OpprettGjesteinnmelderAsync(gjesteinnmelder);
 
-            // Koble gjesteinnmelder til innmelding
-            innmelding.GjestInnmelderId = gjesteinnmelder.GjestInnmelderId;
+            // 2. Koble gjesteinnmelder-ID til innmeldingen
+            innmelding.GjestInnmelderId = gjesteinnmelderId;
 
-            // Lagre i riktig rekkefølge med transaksjoner
+            // 3. Lagre innmeldingen og få den genererte innmelding-ID
+            var innmeldingId = await _innmeldingRepository.LagreInnmeldingAsync(innmelding);
+
+            // 4. Koble innmelding-ID til geometrien og lagre
+            geometri.InnmeldingId = innmeldingId;
+            geometri.GeometriGeoJson = wktMedSrid; // Nå konvertert til WKT med SRID
+            await _geometriRepository.LagreGeometriAsync(geometri);
+
             return true;
         }
         catch (Exception ex)
         {
-            // Håndtere feil, rollback etc.
-            throw;
+            // Her kunne vi logget feilen
+            throw new ForretningsRegelException("Kunne ikke lagre innmeldingen: " + ex.Message);
         }
     }
 
@@ -89,12 +93,22 @@ public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
         }
     }
 
+    private bool ErGyldigGeoJson(string geoJson)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(geoJson);
+            return doc.RootElement.TryGetProperty("type", out _) &&
+                   doc.RootElement.TryGetProperty("coordinates", out _);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     private string KonverterGeoJsonTilWktMedSrid(string geoJson, int srid)
     {
-        // Her må vi implementere konvertering fra GeoJSON til WKT format
-        // og legge til SRID
-        // Returnerer format: "ST_GeomFromText('POLYGON(...)', 4326)"
-
         try
         {
             var geoJsonObj = JsonDocument.Parse(geoJson);
@@ -112,17 +126,39 @@ public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
 
     private string GeoJsonCoordinaterTilWkt(string type, JsonElement coordinates)
     {
-        // Implementere konvertering basert på geometritype
-        switch (type)
+        return type switch
         {
-            case "Point":
-            // Implementer Point konvertering
-            case "LineString":
-            // Implementer LineString konvertering
-            case "Polygon":
-            // Implementer Polygon konvertering
-            default:
-                throw new ForretningsRegelException("Ikke støttet geometritype");
-        }
+            "Point" => KonverterPoint(coordinates),
+            "LineString" => KonverterLineString(coordinates),
+            "Polygon" => KonverterPolygon(coordinates),
+            _ => throw new ForretningsRegelException("Ikke støttet geometritype")
+        };
+    }
+
+    private string KonverterPoint(JsonElement coordinates)
+    {
+        return $"POINT({coordinates[0]} {coordinates[1]})";
+    }
+
+    private string KonverterLineString(JsonElement coordinates)
+    {
+        var points = coordinates.EnumerateArray()
+            .Select(p => $"{p[0]} {p[1]}")
+            .ToArray();
+        return $"LINESTRING({string.Join(", ", points)})";
+    }
+
+    private string KonverterPolygon(JsonElement coordinates)
+    {
+        var rings = coordinates.EnumerateArray()
+            .Select(ring =>
+            {
+                var points = ring.EnumerateArray()
+                    .Select(p => $"{p[0]} {p[1]}")
+                    .ToArray();
+                return $"({string.Join(", ", points)})";
+            })
+            .ToArray();
+        return $"POLYGON({string.Join(", ", rings)})";
     }
 }

@@ -11,6 +11,12 @@ namespace Interface
 
         // Henter spesifikk geometri basert på innmelding_id
         Task<Geometri> GetGeometriByInnmeldingIdAsync(int innmeldingId);
+
+
+
+        //Lagrer et geometriobjekt
+
+        Task<bool> LagreGeometriAsync(Geometri geometri);
     }
 }
 
