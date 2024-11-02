@@ -29,10 +29,8 @@ public class KartfeilSkjemaController : Controller
             return View("KartfeilSkjema", model);
         }
 
-        // Setter prioritet basert på checkbox
         model.Prioritet = model.ErNodEtatKritisk ? "høy" : "ikke_vurdert";
 
-        // Sender videre til bekreftelse
-        return RedirectToAction("KartfeilSkjemaBekreftelse", "KartfeilSkjemaBekreftelse", model);
+        return View("KartfeilSkjemaBekreftelse", model);
     }
 }
