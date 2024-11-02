@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ViewModels;
 
-namespace Gruppe10KVprototype.Controllers.InnmelderControllers
+public class KartfeilSkjemaBekreftelseController : Controller
 {
-    public class KartfeilSkjemaBekreftelseController : Controller
+    public IActionResult KartfeilSkjemaBekreftelse(KartfeilSkjemaViewModel model)
     {
-        public IActionResult Index()
+        if (string.IsNullOrEmpty(model.GeometriGeoJson))
         {
-            return View();
+            return RedirectToAction("KartfeilMarkering", "KartfeilMarkering");
         }
+        return View(model);
     }
 }
-//her kommer refactorert InnmelderSkjemaIncidentFormController - denne er pr idag en kontroller for 2 views

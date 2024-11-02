@@ -1,6 +1,162 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model KartfeilSkjemaViewModel
 @{
+    ViewData["Title"] = "Bekreft innmelding av kartfeil";
 }
-//her kommer refactorert incidentformresultat view
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        .bekreftelses-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .flex-container {
+            display: flex;
+            gap: 30px;
+        }
+
+        .map-section {
+            flex: 1;
+            min-width: 400px;
+        }
+
+        #miniMap {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        .details-section {
+            flex: 1;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .info-group {
+            margin-bottom: 25px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #34495e;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .info-content {
+            color: #2c3e50;
+            line-height: 1.6;
+            background-color: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            background-color: #ff7675;
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .btn-back {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+        }
+
+        .btn-confirm {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+        }
+    </style>
+}
+
+<div class="bekreftelses-container">
+    <form method="get" action="@Url.Action("KnyttInnmeldingTilPerson", "KnyttInnmeldingTilPerson")">
+        @Html.HiddenFor(m => m.GeometriGeoJson)
+        @Html.HiddenFor(m => m.Tittel)
+        @Html.HiddenFor(m => m.Beskrivelse)
+        @Html.HiddenFor(m => m.ErNodEtatKritisk)
+
+        <div class="flex-container">
+            <!-- Venstre side - Kart -->
+            <div class="map-section">
+                <div id="miniMap"></div>
+            </div>
+
+            <!-- Høyre side - Detaljer -->
+            <div class="details-section">
+                <div class="info-group">
+                    <div class="info-label">Tittel</div>
+                    <div class="info-content">@Model.Tittel</div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Beskrivelse</div>
+                    <div class="info-content">@Model.Beskrivelse</div>
+                </div>
+
+                @if (Model.ErNodEtatKritisk)
+                {
+                    <div class="info-group">
+                        <div class="info-label">Prioritet</div>
+                        <div class="priority-badge">
+                            Kan være til hinder for nødetater
+                        </div>
+                    </div>
+                }
+
+                <div class="button-group">
+                    <a href="javascript:history.back()" class="btn btn-back">
+                        Gå tilbake
+                    </a>
+                    <button type="submit" class="btn btn-confirm">
+                        Bekreft
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="~/js/maps/config/mapConfig.js"></script>
+
+    <script>
+        // Initialiser mini-kart
+        const miniMap = MapConfig.initializeMap('miniMap', [62.1995, 6.1286], 15);
+
+        // Vis geometri fra hidden field
+        const geoJson = @Html.Raw(Json.Serialize(Model.GeometriGeoJson));
+        if (geoJson) {
+            const geoJsonLayer = L.geoJSON(JSON.parse(geoJson)).addTo(miniMap);
+            miniMap.fitBounds(geoJsonLayer.getBounds());
+        }
+    </script>
+}

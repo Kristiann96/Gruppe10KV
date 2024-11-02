@@ -89,7 +89,9 @@
 }
 
 <div class="form-container">
-    <form asp-action="GaaTilBekreftelse" method="post">
+    <form asp-controller="KartfeilSkjemaBekreftelse"
+          asp-action="KartfeilSkjemaBekreftelse"
+          method="post">
         @Html.AntiForgeryToken()
 
         <!-- Mini-kart -->
