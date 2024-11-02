@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using LogicInterfaces;
 using Models.Models;
+using Models.Exceptions;
 
 
 public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
@@ -40,13 +41,13 @@ public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
         // Epost validering
         if (!ErGyldigEpost(gjesteEpost))
         {
-            throw new ForretningsRegelException("Ugyldig epost-format");
+            throw new ForretningsRegelExceptionModel("Ugyldig epost-format");
         }
 
         // GeoJSON validering og konvertering
         if (!ErGyldigGeoJson(geometri.GeometriGeoJson))
         {
-            throw new ForretningsRegelException("Ugyldig GeoJSON format");
+            throw new ForretningsRegelExceptionModel("Ugyldig GeoJSON format");
         }
 
         var wktMedSrid = KonverterGeoJsonTilWktMedSrid(
@@ -76,7 +77,7 @@ public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
         catch (Exception ex)
         {
             // Her kunne vi logget feilen
-            throw new ForretningsRegelException("Kunne ikke lagre innmeldingen: " + ex.Message);
+            throw new ForretningsRegelExceptionModel("Kunne ikke lagre innmeldingen: " + ex.Message);
         }
     }
 
@@ -120,7 +121,7 @@ public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
         }
         catch
         {
-            throw new ForretningsRegelException("Kunne ikke konvertere GeoJSON til WKT format");
+            throw new ForretningsRegelExceptionModel("Kunne ikke konvertere GeoJSON til WKT format");
         }
     }
 
@@ -131,7 +132,7 @@ public class InnmeldingOpprettelseLogic : IInnmeldingOpprettelseLogic
             "Point" => KonverterPoint(coordinates),
             "LineString" => KonverterLineString(coordinates),
             "Polygon" => KonverterPolygon(coordinates),
-            _ => throw new ForretningsRegelException("Ikke støttet geometritype")
+            _ => throw new ForretningsRegelExceptionModel("Ikke støttet geometritype")
         };
     }
 

@@ -2,6 +2,7 @@ using DataAccess;
 using Interface;
 using Logic;
 using Interfaces;
+using LogicInterfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

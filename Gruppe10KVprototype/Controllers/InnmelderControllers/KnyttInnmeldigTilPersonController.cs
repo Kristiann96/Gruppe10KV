@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LogicInterfaces;
+using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Models.Models;
 using ViewModels;
@@ -36,7 +37,7 @@ public class KnyttInnmeldingTilPersonController : Controller
                 Status = "ny"
             };
 
-            var geometri = new GeometriModel
+            var geometri = new Geometri
             {
                 GeometriGeoJson = model.GeometriGeoJson
             };
