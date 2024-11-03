@@ -1,20 +1,31 @@
 ﻿using Models.Models;
 using Models.Entities;
-using System;
-using Models.DTOs;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ViewModels
 {
     public class KartvisningEnInnmeldingSaksBViewModel
     {
-        // Innmelding detaljer
-        public InnmeldingDetaljerKartvisningSaksBModel InnmeldingDetaljer { get; set; }
+        // Innmelding med alle nødvendige detaljer
+        public InnmeldingModel Innmelding { get; set; }
 
-        // Geometridata
+        // Person-relatert info (for saksbehandler navn)
+        public PersonModel Person { get; set; }
+
+        // Innmelder info for type
+        public InnmelderModel Innmelder { get; set; }
+
+        // Saksbehandler info
+        public SaksbehandlerModel Saksbehandler { get; set; }
+
+        // Geometridata 
         public Geometri GeometriData { get; set; }
 
-        //Enum
-        public SelectList StatusOptions { get; set; }
+        // Helper properties for å forenkle bruken i view
+        public string SaksbehandlerNavn => Person != null
+            ? $"{Person.Fornavn} {Person.Etternavn}"
+            : "Ikke tildelt";
+
+        public string FormaterSisteEndring => Innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm");
     }
 }
