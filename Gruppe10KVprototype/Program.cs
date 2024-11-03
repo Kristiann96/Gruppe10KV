@@ -28,7 +28,14 @@ builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
 builder.Services.AddScoped<IInnmeldingEnumLogic, InnmeldingEnumLogic>();
 builder.Services.AddScoped<IDataSammenstillingSaksBRepository, DataSammenstillingSaksBRepository>();
+builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository>();
+
+
+//og logic og logicinterfaces
 builder.Services.AddScoped<IInnmeldingOpprettelseLogic, InnmeldingOpprettelseLogic>();
+
+
+
 
 
 var app = builder.Build();

@@ -151,6 +151,7 @@
 
 @section Scripts {
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <!-- Vår konfigurasjonsfil for kart -->
     <script src="~/js/maps/config/mapConfig.js"></script>

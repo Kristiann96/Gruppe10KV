@@ -98,6 +98,7 @@
 
 <div class="bekreftelses-container">
     <form method="get" action="@Url.Action("KnyttInnmeldingTilPerson", "KnyttInnmeldingTilPerson")">
+        @Html.AntiForgeryToken() 
         @Html.HiddenFor(m => m.GeometriGeoJson)
         @Html.HiddenFor(m => m.Tittel)
         @Html.HiddenFor(m => m.Beskrivelse)

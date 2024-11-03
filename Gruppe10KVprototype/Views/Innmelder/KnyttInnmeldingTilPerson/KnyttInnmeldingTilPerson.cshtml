@@ -6,11 +6,11 @@
 
 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 10vh; font-family: 'Arial', sans-serif; padding: 2rem; text-align: center; background-color: #f5f5f5;">
     <div style="max-width: 800px; width: 100%; background-color: white; padding: 3rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <h1 style="color: #333; font-size: 2.2rem; margin-bottom: 1.5rem;">TAKK FOR DITT BIDRAG!</h1>
+        <h1 style="color: #333; font-size: 2.2rem; margin-bottom: 1.5rem;">For å kunne følge opp denne inmeldingen trenger vi din e-post!</h1>
         <h2 style="color: #555; font-size: 1.6rem; margin-bottom: 1.5rem; line-height: 1.4;">Vennligst fyll inn din e-post.</h2>
 
         <form asp-controller="KnyttInnmeldingTilPerson"
-              asp-action="SendInn"
+              asp-action="LagreKnyttInnmeldingTilPerson"
               method="post">
             @Html.AntiForgeryToken()
 
@@ -44,6 +44,16 @@
                     </div>
                 </div>
             </div>
+            <script>
+                document.querySelector('form').addEventListener('submit', function (e) {
+                    // e.preventDefault(); // Uncomment for testing
+                    console.log('Form submitting...');
+                    const formData = new FormData(this);
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ': ' + pair[1]);
+                    }
+                });
+            </script>
         </form>
 
         <h3 style="color: #333; font-size: 1.3rem; margin-bottom: 1.5rem;">ELLER LOGG INN</h3>

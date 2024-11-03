@@ -6,6 +6,7 @@ using Interface;
 using Models.Models;
 using Interfaces;
 
+
 namespace DataAccess
 {
     public class GeometriRepository : IGeometriRepository
@@ -46,16 +47,21 @@ namespace DataAccess
             try
             {
                 var sql = @"
-                INSERT INTO geometri (
-                    innmelding_id, 
-                    geometri_data
-                ) VALUES (
-                    @InnmeldingId,
-                    @GeometriGeoJson
-                )";
-                // Her er GeometriGeoJson allerede konvertert til WKT med SRID i Logic laget - DETTE BURDE GJØRES VIA LOGIC VED HENTING OGSÅ?!
+                    INSERT INTO geometri (
+                        innmelding_id, 
+                        geometri_data
+                    ) VALUES (
+                        @InnmeldingId,
+                        ST_GeomFromGeoJSON(@GeometriGeoJson)
+                    )";
 
-                await connection.ExecuteAsync(sql, geometri, transaction);
+                var parameters = new
+                {
+                    InnmeldingId = geometri.InnmeldingId,
+                    GeometriGeoJson = geometri.GeometriGeoJson
+                };
+
+                await connection.ExecuteAsync(sql, parameters, transaction);
                 await transaction.CommitAsync();
                 return true;
             }

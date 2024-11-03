@@ -14,6 +14,8 @@ public class DapperDBConnection
 
     public MySqlConnection CreateConnection()
     {
-        return new MySqlConnection(_connectionString);
+        var connection = new MySqlConnection(_connectionString);
+        connection.Open();
+        return connection;
     }
 }

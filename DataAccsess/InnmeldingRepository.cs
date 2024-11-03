@@ -174,14 +174,12 @@ namespace DataAccess
                     gjest_innmelder_id, 
                     tittel, 
                     beskrivelse, 
-                    prioritet,
-                    kart_type
+                    prioritet
                 ) VALUES (
                     @GjestInnmelderId,
                     @Tittel,
                     @Beskrivelse,
-                    @Prioritet,
-                    @KartType
+                    @Prioritet   
                 );
                 SELECT LAST_INSERT_ID();";
 
