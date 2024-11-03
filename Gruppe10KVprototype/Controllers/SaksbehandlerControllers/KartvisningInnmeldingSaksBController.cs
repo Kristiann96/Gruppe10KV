@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Entities;
 
 using ViewModels;
-
+//DENNE TILHØRER INCIDENT_FORM -DUMMY TABELL - har glemt å gi den nytt navn
+//denne skal jo snart slettes så legger bare kommentar her i stedet.
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
     public class KartvisningInnmeldingSaksBController : Controller

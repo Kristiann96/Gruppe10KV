@@ -14,18 +14,11 @@ namespace Logic
         private const double NORGE_MIN_LON = 4.0;
         private const double NORGE_MAX_LON = 32.0;
 
-        private readonly IGeometriRepository _geometriRepository;
-        private readonly IGjesteinnmelderRepository _gjesteinnmelderRepository;
-        private readonly IInnmeldingRepository _innmeldingRepository;
+        private readonly ITransaksjonsRepository _transaksjonsRepository;
 
-        public InnmeldingOpprettelseLogic(
-            IGeometriRepository geometriRepository,
-            IGjesteinnmelderRepository gjesteinnmelderRepository,
-            IInnmeldingRepository innmeldingRepository)
+        public InnmeldingOpprettelseLogic(ITransaksjonsRepository transaksjonsRepository)
         {
-            _geometriRepository = geometriRepository;
-            _gjesteinnmelderRepository = gjesteinnmelderRepository;
-            _innmeldingRepository = innmeldingRepository;
+            _transaksjonsRepository = transaksjonsRepository;
         }
 
         public async Task<bool> ValidereOgLagreNyInnmelding(
@@ -50,30 +43,20 @@ namespace Logic
             {
                 throw new ForretningsRegelExceptionModel("Ugyldig GeoJSON format");
             }
-
             try
             {
-                // 1. Opprett gjesteinnmelder og få ID
-                var gjesteinnmelder = new GjesteinnmelderModel { Epost = gjesteEpost };
-                var gjesteinnmelderId = await _gjesteinnmelderRepository.OpprettGjesteinnmelderAsync(gjesteinnmelder);
-
-                // 2. Koble gjesteinnmelder-ID til innmeldingen
-                innmelding.GjestInnmelderId = gjesteinnmelderId;
-
-                // 3. Lagre innmeldingen og få den genererte innmelding-ID
-                var innmeldingId = await _innmeldingRepository.LagreInnmeldingAsync(innmelding);
-
-                // 4. Koble innmelding-ID til geometrien og lagre
-                geometri.InnmeldingId = innmeldingId;
-                await _geometriRepository.LagreGeometriAsync(geometri);
-
-                return true;
+                // Lagre alt i én transaksjon
+                return await _transaksjonsRepository.LagreKomplettInnmeldingAsync(
+                gjesteEpost,
+                innmelding,
+                geometri);
             }
             catch (Exception ex)
             {
                 throw new ForretningsRegelExceptionModel("Kunne ikke lagre innmeldingen: " + ex.Message);
             }
         }
+
 
         private void ValidereGeometriType(JsonElement root)
         {
