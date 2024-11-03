@@ -11,10 +11,10 @@
 
         <form asp-controller="KnyttInnmeldingTilPerson"
               asp-action="LagreKnyttInnmeldingTilPerson"
-              method="post">
+              method="post"
+              id="innmeldingForm">
             @Html.AntiForgeryToken()
 
-            @* Hidden fields *@
             @Html.HiddenFor(m => m.GeometriGeoJson)
             @Html.HiddenFor(m => m.Tittel)
             @Html.HiddenFor(m => m.Beskrivelse)
@@ -24,12 +24,13 @@
                 <div style="margin-bottom: 1rem;">
                     <input asp-for="Epost" type="email"
                            placeholder="Din e-postadresse"
-                           style="padding: 0.75rem; width: 50%; font-size: 1.1rem; border: 1px solid #ccc; border-radius: 4px;">
+                           style="padding: 0.75rem; width: 50%; font-size: 1.1rem; border: 1px solid #ccc; border-radius: 4px;" />
                     <span asp-validation-for="Epost" style="display: block; color: #dc3545; font-size: 0.875rem; margin-top: 0.5rem;"></span>
                 </div>
 
                 <div style="display: flex; justify-content: center; align-items: center;">
                     <button type="submit"
+                            id="submitBtn"
                             style="display: inline-block; padding: 0.75rem 2.5rem; font-size: 1.1rem; background-color: #007bff; color: white; border-radius: 4px; cursor: pointer; text-decoration: none; transition: background-color 0.3s; border: none;">
                         Meld inn
                     </button>
@@ -44,16 +45,6 @@
                     </div>
                 </div>
             </div>
-            <script>
-                document.querySelector('form').addEventListener('submit', function (e) {
-                    // e.preventDefault(); // Uncomment for testing
-                    console.log('Form submitting...');
-                    const formData = new FormData(this);
-                    for (let pair of formData.entries()) {
-                        console.log(pair[0] + ': ' + pair[1]);
-                    }
-                });
-            </script>
         </form>
 
         <h3 style="color: #333; font-size: 1.3rem; margin-bottom: 1.5rem;">ELLER LOGG INN</h3>
@@ -65,11 +56,15 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 
     <script>
+        document.getElementById('innmeldingForm').addEventListener('submit', function (e) {
+            // Deaktiver submit-knappen
+            document.getElementById('submitBtn').disabled = true;
+        });
+
+        // Popup functionality
         const infoButton = document.getElementById("infoButton");
         const popup = document.getElementById("popup");
 
