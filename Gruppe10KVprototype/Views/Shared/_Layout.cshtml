@@ -1,86 +1,180 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="no">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> - Gruppe10KVprototype</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Gruppe10KVprototype.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - Gruppe10KVprototype</title>
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #fff;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .container-fluid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .navbarlist {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #333;
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+            .nav-link:hover {
+                color: #0066cc;
+            }
+
+        /* Dropdown styling */
+        .dev-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dev-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 250px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1000;
+            border-radius: 4px;
+            padding: 0.5rem 0;
+        }
+
+        .dev-dropdown:hover .dev-dropdown-content {
+            display: block;
+        }
+
+        .dev-dropdown-content a {
+            color: #333;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            display: block;
+            font-size: 0.8rem;
+        }
+
+            .dev-dropdown-content a:hover {
+                background-color: #f0f0f0;
+            }
+
+        .dev-button {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        main {
+            flex: 1;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+    </style>
     @await RenderSectionAsync("Styles", false)
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Logo" />
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Kartverket Logo" />
                 </a>
 
                 <div id="navbar-menu">
-                    <ul class="navbarlist" style="font-size: 0.7rem;">
-                        <!-- Mindre tekststørrelse -->
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Hjem</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="OversiktAlleInnmeldingerSaksBIncidentForm" asp-action="OversiktAlleInnmeldingerSaksBIncidentForm">OversiktAlleInnmeldingerSaksBIncidentForm</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="MineInnmeldinger" asp-action="MineInnmeldinger">MineInnmedinger</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="OppdatereInnmelding" asp-action="OppdatereInnmelding">OppdatereInnmelding</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="LoggInn" asp-action="LoggInn">LoggInn</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="LandingsSide" asp-action="LandingsSide">LandingsSide</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="RegistrerDeg" asp-action="RegistrerDeg">RegistrerDeg</a>
-                        
-                        <div >
-                        <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="BidraTilKartForbedring" asp-action="BidraTilKartforbedring">BIDRA</a>
-                        
-                        <div >
-                            <a href="@Url.Action("LandingsSideSaksB", "LandingsSideSaksB")">LandingsSideSaksB</a>
-                            <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB")">OversiktAlleInnmeldingerSaksB</a>
-                            <a href="@Url.Action("LogginnSaksB", "LogginnSaksB")">Logg inn SaksB</a>
-                            <a href="@Url.Action("SortereInnmeldingerSaksB", "SortereInnmeldingerSaksB")">SortereInnmeldingerSaksB</a>
-                            <a href="@Url.Action("SøkEtterInnmelderSaksB", "SøkEtterInnmelderSaksB")">SøkeEtterInnmelderSaksB</a>
-                            <a href="@Url.Action("KartvisningAlleInnmeldingerSaksB", "KartvisningAlleInnmeldingerSaksB")">KartvisningAlleInnmeldingerSaksB</a>
-                            <a href="@Url.Action("DropDownDummySaksB", "DropDownDummySaksB")">DropDownDummySaksB</a>
-                            <a href="@Url.Action("KartfeilMarkering", "KartfeilMarkering")">NyMAPVIEW-RIKTIGTABELL</a>
+                    <ul class="navbarlist">
+                        <li><a class="nav-link" asp-controller="Home" asp-action="Index">Hjem</a></li>
+                        <li><a class="nav-link" asp-controller="MineInnmeldinger" asp-action="MineInnmeldinger">Mine innmeldinger</a></li>
+                        <li><a class="nav-link" asp-controller="BidraTilKartForbedring" asp-action="BidraTilKartforbedring">Bidra</a></li>
+                        <li><a class="nav-link" asp-controller="LoggInn" asp-action="LoggInn">Logg inn</a></li>
 
-                        </div>
+                        <!-- Development dropdown -->
+                        <li class="dev-dropdown">
+                            <button class="dev-button">Utvikling</button>
+                            <div class="dev-dropdown-content">
+                                <div style="padding: 0.5rem; border-bottom: 1px solid #eee;">
+                                    <strong>Saksbehandler</strong>
+                                </div>
+                                <a href="@Url.Action("LandingsSideSaksB", "LandingsSideSaksB")">Landingsside</a>
+                                <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB")">Oversikt alle innmeldinger</a>
+                                <a href="@Url.Action("KartvisningAlleInnmeldingerSaksB", "KartvisningAlleInnmeldingerSaksB")">Kartvisning</a>
+                                <a href="@Url.Action("SortereInnmeldingerSaksB", "SortereInnmeldingerSaksB")">Sortere innmeldinger</a>
+                                <a href="@Url.Action("SøkEtterInnmelderSaksB", "SøkEtterInnmelderSaksB")">Søk etter innmelder</a>
+
+                                <div style="padding: 0.5rem; border-bottom: 1px solid #eee; margin-top: 0.5rem;">
+                                    <strong>Innmelder</strong>
+                                </div>
+                                <a href="@Url.Action("RegistrerDeg", "RegistrerDeg")">Registrer deg</a>
+                                <a href="@Url.Action("KartfeilMarkering", "KartfeilMarkering")">Kartfeil markering</a>
+                                <a href="@Url.Action("OppdatereInnmelding", "OppdatereInnmelding")">Oppdater innmelding</a>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main role="main" class="pb-3">
+    <main role="main">
         @RenderBody()
     </main>
 
-    <!-- Enkel footer uten Bootstrap -->
-    <footer style="border-top: 1px solid #ccc; padding: 1rem; text-align: center; background-color: #f8f9fa;">
-        <div class="container">
-            &copy; 2024 - Gruppe10KVprototype - <a href="@Url.Action("Privacy", "Home")">Privacy</a>
+    <footer>
+        <div class="footer-content">
+            &copy; 2024 - Gruppe10KVprototype - <a href="@Url.Action("Privacy", "Home")">Personvern</a>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", false)
-    </body>
-    </html>
+</body>
+</html>
