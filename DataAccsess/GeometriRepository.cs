@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Interface;
 using Models.Models;
 using Interfaces;
+using Models.Entities;
 
 
 namespace DataAccess
@@ -24,7 +25,8 @@ namespace DataAccess
         public async Task<IEnumerable<Geometri>> GetAllGeometriAsync()
         {
             using var connection = _dbConnection.CreateConnection();
-            var sql = "SELECT geometri_id AS GeometriId, innmelding_id AS InnmeldingId, ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri;";
+            var sql =
+                "SELECT geometri_id AS GeometriId, innmelding_id AS InnmeldingId, ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri;";
             return await connection.QueryAsync<Geometri>(sql);
         }
 
@@ -32,44 +34,48 @@ namespace DataAccess
         public async Task<Geometri> GetGeometriByInnmeldingIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
-            var sql = "SELECT geometri_id, innmelding_id, ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri WHERE innmelding_id = @InnmeldingId";
+            var sql =
+                "SELECT geometri_id, innmelding_id, ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri WHERE innmelding_id = @InnmeldingId";
             return await connection.QuerySingleOrDefaultAsync<Geometri>(sql, new { InnmeldingId = innmeldingId });
         }
 
-
-        //LAGRING AV DATA
-
-        public async Task<bool> LagreGeometriAsync(Geometri geometri)
+        public async Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>>
+            GetAktiveGeometriMedInnmeldingAsync()
         {
             using var connection = _dbConnection.CreateConnection();
-            using var transaction = connection.BeginTransaction();
+            var sql = @"
+                SELECT 
+                    -- Geometri fields
+                    g.geometri_id AS GeometriId, 
+                    g.innmelding_id AS InnmeldingId, 
+                    ST_AsGeoJSON(g.geometri_data) AS GeometriGeoJson,
+                    -- Innmelding fields
+                    i.innmelding_id,
+                    i.tittel AS Tittel,
+                    i.status AS Status
+                FROM geometri g
+                INNER JOIN innmelding i ON g.innmelding_id = i.innmelding_id
+                WHERE i.status NOT IN ('pauset', 'avsluttet', 'ikke_tatt_til_følge')";
 
-            try
-            {
-                var sql = @"
-                    INSERT INTO geometri (
-                        innmelding_id, 
-                        geometri_data
-                    ) VALUES (
-                        @InnmeldingId,
-                        ST_GeomFromGeoJSON(@GeometriGeoJson)
-                    )";
+            var result = await connection.QueryAsync<Geometri, InnmeldingModel, (Geometri, InnmeldingModel)>(
+                sql,
+                (geometri, innmelding) => (geometri, innmelding),
+                splitOn: "innmelding_id"
+            );
 
-                var parameters = new
-                {
-                    InnmeldingId = geometri.InnmeldingId,
-                    GeometriGeoJson = geometri.GeometriGeoJson
-                };
-
-                await connection.ExecuteAsync(sql, parameters, transaction);
-                await transaction.CommitAsync();
-                return true;
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            return result;
         }
     }
+    
 }
+
+    
+
+
+
+
+
+
+
+
+

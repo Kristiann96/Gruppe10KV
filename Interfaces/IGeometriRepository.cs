@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Models.Entities;
 using Models.Models;
 
 namespace Interface
@@ -13,10 +14,8 @@ namespace Interface
         Task<Geometri> GetGeometriByInnmeldingIdAsync(int innmeldingId);
 
 
-
-        //Lagrer et geometriobjekt
-
-        Task<bool> LagreGeometriAsync(Geometri geometri);
+        //  BidraTilKartForbedring gir til InnmedligModel og Geometri
+        Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync();
     }
 }
 
