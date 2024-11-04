@@ -11,22 +11,14 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
 
     <style>
-        #updateRegisteredCaseMapView {
-            height: 300px;
-            width: 100%;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
         .updateRegisteredMapViewErrors {
-            max-width: 800px;
+            max-width: 50em;
             margin: 20px auto;
             padding: 20px;
         }
 
         .updateRegisteredCaseForm {
-            max-width: 800px;
+            max-width: 50em;
             margin: 20px auto;
             padding: 20px;
         }
@@ -61,9 +53,10 @@
     </div>
 }
 
+
 <div class="updateRegisteredMapViewErrors">
     <h3>Kartvisning av feil:</h3>
-    <div id="map" style="height: 100vh; width: 100%"></div>
+    <div id="map" style="height: 50vh; width: 100%"></div>
 </div>
 
 <!-- Action Buttons -->
@@ -90,5 +83,13 @@
     <script>
         // Initialiser kartet
         const updateRegisteredCaseMapView = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
+
+        // Add geometry data to the map
+        const GeometriData = @Html.Raw(Json.Serialize(Model.GeometriData));
+        if (GeometriData) {
+            const geoJsonLayer = L.geoJSON(JSON.parse(GeometriData));
+            geoJsonLayer.addTo(updateRegisteredCaseMapView);
+            updateRegisteredCaseMapView.fitBounds(geoJsonLayer.getBounds());
+        }
     </script>
 }
