@@ -199,7 +199,7 @@ footer {
 
 /* Map styles */
 #map {
-    height: calc(100vh - 10em);
+    height: calc(100vh - 65em);
     width: 100%;
     z-index: 0;
 }
