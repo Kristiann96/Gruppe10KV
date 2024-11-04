@@ -8,26 +8,26 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
+            padding: 65px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
         .navbar {
-            background-color: #fff;
-            padding: 0.5rem 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          
+            padding: 1rem 1rem;
+      
         }
 
         .navbar-brand img {
-            height: 40px;
+            height: px;
         }
 
         .container-fluid {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: left;
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 1rem;
@@ -47,7 +47,7 @@
             text-decoration: none;
             font-size: 0.9rem;
             padding: 0.5rem;
-            transition: color 0.3s ease;
+          
         }
 
             .nav-link:hover {
@@ -130,8 +130,6 @@
                 <div id="navbar-menu">
                     <ul class="navbarlist">
                         <li><a class="nav-link" asp-controller="Home" asp-action="Index">Hjem</a></li>
-                        <li><a class="nav-link" asp-controller="MineInnmeldinger" asp-action="MineInnmeldinger">Mine innmeldinger</a></li>
-                        <li><a class="nav-link" asp-controller="BidraTilKartForbedring" asp-action="BidraTilKartforbedring">Bidra</a></li>
                         <li><a class="nav-link" asp-controller="LoggInn" asp-action="LoggInn">Logg inn</a></li>
 
                         <!-- Development dropdown -->
@@ -146,13 +144,17 @@
                                 <a href="@Url.Action("KartvisningAlleInnmeldingerSaksB", "KartvisningAlleInnmeldingerSaksB")">Kartvisning</a>
                                 <a href="@Url.Action("SortereInnmeldingerSaksB", "SortereInnmeldingerSaksB")">Sortere innmeldinger</a>
                                 <a href="@Url.Action("SøkEtterInnmelderSaksB", "SøkEtterInnmelderSaksB")">Søk etter innmelder</a>
+                                <a href="@Url.Action("LoggInnSaksB", "LogginnSaksB")">LoggInn</a>
 
                                 <div style="padding: 0.5rem; border-bottom: 1px solid #eee; margin-top: 0.5rem;">
                                     <strong>Innmelder</strong>
                                 </div>
                                 <a href="@Url.Action("RegistrerDeg", "RegistrerDeg")">Registrer deg</a>
-                                <a href="@Url.Action("KartfeilMarkering", "KartfeilMarkering")">Kartfeil markering</a>
+                                <a href="@Url.Action("KartfeilMarkering", "KartfeilMarkering")">Meld inn feil NY</a>
                                 <a href="@Url.Action("OppdatereInnmelding", "OppdatereInnmelding")">Oppdater innmelding</a>
+                                <a href="@Url.Action("LandingsSide", "LandingsSide")">Landings Side</a>
+                                <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")">Mine Innmeldinger</a>
+                                <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartForbedring")">Bidra</a>
                             </div>
                         </li>
                     </ul>
