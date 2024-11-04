@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Interface;
 using System.Collections.Generic;
+using LogicInterfaces;
 using Models.Models;
 using Microsoft.Extensions.Logging;
 

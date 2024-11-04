@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 ﻿using Interface;
 using Interfaces;
-
+using LogicInterfaces;
 
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
