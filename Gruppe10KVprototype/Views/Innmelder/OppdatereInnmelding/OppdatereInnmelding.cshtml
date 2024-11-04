@@ -4,22 +4,40 @@
     Layout = "_Layout";
 }
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-<style>
-    #updateRegisteredCaseMapView {
-        height: 300px;
-        width: 100%;
-        margin-bottom: 20px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
 
-    .updateRegisteredCaseForm {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-    }
-</style>
+    <style>
+        #updateRegisteredCaseMapView {
+            height: 300px;
+            width: 100%;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .updateRegisteredMapViewErrors {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .updateRegisteredCaseForm {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .updateRegisteredCaseActionButtons {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+    </style>
+}
 
 @foreach (var innmelding in Model.OppdatereInnmeldinger)
 {
@@ -40,21 +58,37 @@
             <h3>Beskrivelse:</h3>
             <p>@innmelding.Beskrivelse</p>
         </div>
-
-        <h3>Kartvisning av feil</h3>
-        <div id="updateRegisteredCaseMapView"></div>
     </div>
 }
 
+<div class="updateRegisteredMapViewErrors">
+    <h3>Kartvisning av feil:</h3>
+    <div id="map" style="height: 100vh; width: 100%"></div>
+</div>
+
 <!-- Action Buttons -->
-<div class="singleCaseActions">
+<div class="updateRegisteredCaseActionButtons">
     <button>Edit</button>
     <button>Update</button>
     <button>Delete</button>
 </div>
 
-<!-- Konfig av mapview -->
-<script src="~/js/maps/config/mapConfig.js"></script>
-<script src="~/js/maps/config/drawConfig.js"></script>
-<script src="~/js/maps/services/wmsService.js"></script>
-<script src="~/js/maps/utils/mapControls.js"></script>
+
+@section Scripts {
+    <!-- JavaScript biblioteker -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+    <!-- Konfig av MapViews -->
+    <script src="~/js/maps/config/mapConfig.js"></script>
+    <script src="~/js/maps/config/drawConfig.js"></script>
+    <script src="~/js/maps/services/wmsService.js"></script>
+    <script src="~/js/maps/utils/mapControls.js"></script>
+
+    <script>
+        // Initialiser kartet
+        const updateRegisteredCaseMapView = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
+    </script>
+}
