@@ -1,4 +1,4 @@
-﻿/*using Dapper;
+﻿using Dapper;
 using MySqlConnector;
 using System.Threading.Tasks;
 using Interface;
@@ -14,6 +14,32 @@ namespace DataAccess
         {
             _dbConnection = dbConnection;
         }
-      
+
+        public async Task<int> OpprettGjesteinnmelderAsync(GjesteinnmelderModel gjesteinnmelder)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                var sql = @"
+                INSERT INTO gjesteinnmelder (epost) 
+                VALUES (@Epost);
+                SELECT LAST_INSERT_ID();";
+
+                var id = await connection.QuerySingleAsync<int>(sql,
+                    new { Epost = gjesteinnmelder.Epost },
+                    transaction);
+
+                await transaction.CommitAsync();
+                return id;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
     }
-}*/
+
+}

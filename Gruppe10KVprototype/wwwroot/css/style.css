@@ -1,48 +1,49 @@
-﻿
-body {
-    justify-content: center;
+﻿/* Base styles */
+html, body {
+    margin: 0;
+    padding: 0;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
     display: flex;
     flex-direction: column;
-    margin-top: 7em;
-    margin-bottom: 7em;
+    min-height: 100vh;
 }
 
-body.Index {
-    background-image: url('../Images/FrontPageBackground.png');
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+    body.Index {
+        background-image: url('../Images/FrontPageBackground.png');
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 
-header, footer {
-    position: fixed;
-    width: 100%;
-    left: 0;
-    z-index: 1000;
-    background-color: #ffffff;
-}
-
+/* Layout components */
 header {
+    position: fixed;
     top: 0;
+    width: 100%;
     height: 5em;
+    background-color: #ffffff;
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+main[class*="b-"],
+main {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+footer[class*="b-"],
 footer {
-    bottom: 0;
-    height: 5em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-h1 {
-    font-weight: 100;
-}
-
+/* Navigation */
 .navbar {
     display: flex;
     align-content: space-around;
@@ -58,8 +59,12 @@ h1 {
     align-items: baseline;
     align-content: space-around;
     gap: 2em;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
-    
+
+/* Buttons */
 .Button-MeldInn {
     display: inline-block;
     padding: 1em 2em;
@@ -71,12 +76,95 @@ h1 {
     font-size: larger;
     box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.2);
     border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.Button-MeldInn:hover {
-    background-color: dodgerblue;
+    .Button-MeldInn:hover {
+        background-color: dodgerblue;
+    }
+
+/* Form styles */
+.form-container {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.form-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+    .checkbox-group input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    height: 150px;
+    resize: vertical;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+    .button-group button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+.primary-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.secondary-button {
+    background-color: #6c757d;
+    color: white;
+}
+
+.button-group button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Cards */
 .posterPage {
     display: flex;
     flex-grow: 1;
@@ -87,7 +175,6 @@ h1 {
     box-sizing: border-box;
 }
 
-
 .innmeldCard {
     display: flex;
     flex-direction: column;
@@ -96,7 +183,7 @@ h1 {
     height: 20em;
     width: 25em;
     background-color: #ffffff;
-    padding: 2em 5em 2em 5em;
+    padding: 2em 5em;
     border-radius: 8px;
     box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.2);
 }
@@ -107,11 +194,54 @@ h1 {
     align-items: center;
     text-align: center;
     font-size: larger;
-    padding: 0em 0em 1em 0em;
+    padding: 0 0 1em 0;
 }
 
+/* Map styles */
 #map {
-    margin-top: 5em;
-    margin-bottom: 2em;
+    height: calc(100vh - 10em);
+    width: 100%;
     z-index: 0;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    .form-container {
+        margin: 10px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+        .button-group button {
+            width: 100%;
+        }
+
+    .innmeldCard {
+        width: 90%;
+        padding: 2em;
+    }
+
+    .navbarlist {
+        gap: 1em;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    .form-title {
+        font-size: 1.8rem;
+    }
+
+    .form-container {
+        margin: 15px;
+    }
+
+    .innmeldCard {
+        width: 80%;
+    }
 }

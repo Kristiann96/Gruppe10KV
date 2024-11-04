@@ -1,40 +1,48 @@
 ﻿using Interface;
-using Logic;
+using Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
     public class KartvisningEnInnmeldingSaksBController : Controller
     {
-        private readonly IInnmeldingRepository _innmeldingRepository;
         private readonly IGeometriRepository _geometriRepository;
-        private readonly IInnmeldingEnumLogic _innmeldingEnumLogic;
+        private readonly IDataSammenstillingSaksBRepository _dataSammenstillingsRepo;
 
-        public KartvisningEnInnmeldingSaksBController(IInnmeldingRepository innmeldingRepository,
+        public KartvisningEnInnmeldingSaksBController(
             IGeometriRepository geometriRepository,
-            IInnmeldingEnumLogic innmeldingEnumLogic)
+            IDataSammenstillingSaksBRepository dataSammenstillingsRepo)
         {
-            _innmeldingRepository = innmeldingRepository;
             _geometriRepository = geometriRepository;
-            _innmeldingEnumLogic = innmeldingEnumLogic;
+            _dataSammenstillingsRepo = dataSammenstillingsRepo;
         }
 
         [HttpGet]
         public async Task<IActionResult> KartvisningEnInnmeldingSaksB(int innmeldingId)
         {
-            var innmeldingDetaljer = await _innmeldingRepository.GetInnmeldingDetaljerByIdAsync(innmeldingId);
-            var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
-            var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
+            // Hent sammenstilt data
+            var (innmelding, person, innmelder, saksbehandler) =
+                await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(innmeldingId);
 
+            if (innmelding == null)
+            {
+                return NotFound("Innmelding ikke funnet");
+            }
+
+            // Hent geometri data
+            var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
 
             var viewModel = new KartvisningEnInnmeldingSaksBViewModel
             {
-                InnmeldingDetaljer = innmeldingDetaljer,
-                GeometriData = geometriData,
-                StatusOptions = new SelectList(statusOptions)
+                Innmelding = innmelding,
+                Person = person,
+                Innmelder = innmelder,
+                Saksbehandler = saksbehandler,
+                GeometriData = geometriData
             };
+
+            
 
             return View(viewModel);
         }

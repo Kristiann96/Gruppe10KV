@@ -36,6 +36,8 @@
    
    <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
    
+   <ProjectReference Include="..\LogicInterfaces\LogicInterfaces.csproj" />
+   
    <ProjectReference Include="..\Logic\Logic.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />

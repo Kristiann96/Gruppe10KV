@@ -1,0 +1,244 @@
+﻿@model ViewModels.BidraTilKartForbedringViewModel
+@{
+    ViewData["Title"] = "Bidra til kartforbedring";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+
+    <style>
+        #map {
+            height: 85vh;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .persistent-popup .leaflet-popup-content-wrapper {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+        }
+
+        .persistent-popup .leaflet-popup-tip {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .popup-content {
+            min-width: 200px;
+            padding: 10px;
+        }
+
+        .popup-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .popup-button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
+        }
+
+        .bekreft-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .avkreft-button {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .popup-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            opacity: 0.9;
+        }
+
+        .validation-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .rate-limit-message {
+            background-color: #f44336;
+        }
+
+        .validated {
+            stroke: #2196F3;
+            stroke-width: 3;
+            fill-opacity: 0.7;
+        }
+    </style>
+}
+
+<div class="container-fluid p-0">
+    <div id="map"></div>
+    <div id="validationMessage" class="validation-message"></div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+    <script src="~/js/maps/config/mapConfig.js"></script>
+    <script src="~/js/maps/services/wmsService.js"></script>
+    <script src="~/js/maps/utils/mapControls.js"></script>
+
+    <script>
+        // Rate limiting
+        const MAX_VALIDATIONS = 15;
+        let validationCount = 0;
+
+        // Initialiser kartet
+        const map = MapConfig.initializeMap('map');
+
+        // Legg til lag-kontroll med kommunegrenser
+        const baseMaps = {};
+        const overlayMaps = {
+            "Kommunegrenser": WMSService.addKommuneGrenser(map)
+        };
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+        // Initialiser søk og lokalisering
+        MapControls.initializeControls(map);
+
+        // Hent geometridata fra ViewModel
+        const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
+        console.log("GeometriData:", geometriData);
+
+        function showMessage(message, isError = false) {
+            const messageElement = document.getElementById('validationMessage');
+            messageElement.textContent = message;
+            messageElement.style.display = 'block';
+            messageElement.style.backgroundColor = isError ? '#f44336' : '#4CAF50';
+            
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 3000);
+        }
+
+        function handleValidation(geometriId, isValid) {
+            if (validationCount >= MAX_VALIDATIONS) {
+                showMessage('Du har nådd grensen for antall bidrag i denne økten. Kom gjerne tilbake senere for å bidra mer til kartforbedringen!', true);
+                return;
+            }
+
+            validationCount++;
+            showMessage('Takk for bidraget!');
+
+            const layer = validatedLayers.get(geometriId);
+            if (layer) {
+                layer.setStyle({
+                    color: '#2196F3',
+                    weight: 3,
+                    fillOpacity: 0.7
+                });
+            }
+        }
+
+        // Map for å holde styr på lag
+        const validatedLayers = new Map();
+
+        // Legg til geometriobjekter på kartet
+        geometriData.forEach(function (data) {
+            try {
+                const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
+                const layer = L.geoJSON(geoJsonFeature).addTo(map);
+                validatedLayers.set(data.GeometriId, layer);
+
+                let isPopupOpen = false;
+
+                const popup = L.popup({
+                    closeButton: true,
+                    closeOnClick: false,
+                    autoClose: false,
+                    className: 'persistent-popup'
+                });
+
+                const createPopupContent = () => {
+                    const popupContent = document.createElement('div');
+                    popupContent.className = 'popup-content';
+
+                    const title = document.createElement('div');
+                    title.className = 'popup-title';
+                    title.textContent = data.Tittel;
+
+                    const buttons = document.createElement('div');
+                    buttons.className = 'popup-buttons';
+
+                    const bekreftBtn = document.createElement('button');
+                    bekreftBtn.className = 'popup-button bekreft-button';
+                    bekreftBtn.textContent = 'Bekreft';
+                    bekreftBtn.onclick = () => {
+                        handleValidation(data.GeometriId, true);
+                        isPopupOpen = false;
+                        layer.closePopup();
+                    };
+
+                    const avkreftBtn = document.createElement('button');
+                    avkreftBtn.className = 'popup-button avkreft-button';
+                    avkreftBtn.textContent = 'Avkreft';
+                    avkreftBtn.onclick = () => {
+                        handleValidation(data.GeometriId, false);
+                        isPopupOpen = false;
+                        layer.closePopup();
+                    };
+
+                    buttons.appendChild(bekreftBtn);
+                    buttons.appendChild(avkreftBtn);
+
+                    popupContent.appendChild(title);
+                    popupContent.appendChild(buttons);
+
+                    return popupContent;
+                };
+
+                popup.setContent(createPopupContent());
+                layer.bindPopup(popup);
+
+                layer.on('mouseover', function (e) {
+                    if (!isPopupOpen) {
+                        this.openPopup();
+                        isPopupOpen = true;
+                    }
+                });
+
+                popup.on('remove', function() {
+                    isPopupOpen = false;
+                });
+
+                map.on('click', function(e) {
+                    if (isPopupOpen) {
+                        L.DomEvent.stopPropagation(e);
+                    }
+                });
+
+            } catch (e) {
+                console.error('Feil ved parsing av geometri:', e, data);
+            }
+        });
+    </script>
+}
+

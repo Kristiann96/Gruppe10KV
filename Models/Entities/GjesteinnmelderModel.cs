@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models.Entities
 {
-    internal class GjesteinnmelderModel
-    {
-        public class Gjesteinnmelder
+    
+    
+        public class GjesteinnmelderModel
         {
             // Primærnøkkel
             public int GjestInnmelderId { get; set; }
@@ -17,5 +17,5 @@ namespace Models.Entities
             public string Epost { get; set; } = null!;  // NOT NULL og unik
         }
 
-    }
+    
 }
