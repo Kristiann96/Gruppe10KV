@@ -4,53 +4,45 @@
     Layout = "_Layout";
 }
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />   
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+<style>
+    #updateRegisteredCaseMapView {
+        height: 300px;
+        width: 100%;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
 
-
-<div class="singleCaseUsername">
-    <h3>Mike Oxlong</h3>
-</div>
-
-<div class="singleCaseSubjectName">
-    <h1>Subject</h1>
-</div>
-
+    .updateRegisteredCaseForm {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+</style>
 
 @foreach (var innmelding in Model.OppdatereInnmeldinger)
 {
-    <div class="singleCase">
-        <div class="singleCaseCaseID">
+    <div class="updateRegisteredCaseForm">
+        <div class="updateRegisteredCaseID">
             <h3>Sak ID #@innmelding.InnmeldingId</h3>
         </div>
-        
-        <div class="singleCaseSubject">
+
+        <div class="updateRegisteredCaseSubject">
             <h3>Tittel: @innmelding.Tittel</h3>
         </div>
 
-        <div class="singleCaseStatus">
+        <div class="updateRegisteredCaseStatus">
             <h3>Status: @innmelding.Status</h3>
         </div>
 
-        <div class="singleCaseDescription">
+        <div class="updateRegisteredCaseDescription">
             <h3>Beskrivelse:</h3>
             <p>@innmelding.Beskrivelse</p>
         </div>
 
-        <div class="singleCaseTag">
-            <h3>Tag:</h3>
-            <p>@innmelding.KartType</p>
-        </div>
-
-        <div class="singleCaseArea">
-            <h3>Kommune:</h3>
-            <p>Currently Unavailable</p>
-        </div>
-
-        <div class="singleCaseMap">
-            <h3>Kartvisning av feil</h3>
-            <p>Currently Unavailable</p>
-        </div>
+        <h3>Kartvisning av feil</h3>
+        <div id="updateRegisteredCaseMapView"></div>
     </div>
 }
 
@@ -60,3 +52,9 @@
     <button>Update</button>
     <button>Delete</button>
 </div>
+
+<!-- Konfig av mapview -->
+<script src="~/js/maps/config/mapConfig.js"></script>
+<script src="~/js/maps/config/drawConfig.js"></script>
+<script src="~/js/maps/services/wmsService.js"></script>
+<script src="~/js/maps/utils/mapControls.js"></script>
