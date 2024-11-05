@@ -13,6 +13,9 @@ namespace Interface
         Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync();
         Task<InnmeldingModel> GetOppdatereInnmeldingByIdAsync(int innmeldingId);
 
+
+
+
         Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm);
         Task<int> GetTotalInnmeldingerTellerSaksBAsync(string searchTerm);
 

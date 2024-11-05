@@ -81,15 +81,15 @@
     <script src="~/js/maps/utils/mapControls.js"></script>
 
     <script>
-        // Initialiser kartet
-        const updateRegisteredCaseMapView = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
-
-        // Add geometry data to the map
-        const GeometriData = @Html.Raw(Json.Serialize(Model.GeometriData));
-        if (GeometriData) {
-            const geoJsonLayer = L.geoJSON(JSON.parse(GeometriData));
-            geoJsonLayer.addTo(updateRegisteredCaseMapView);
-            updateRegisteredCaseMapView.fitBounds(geoJsonLayer.getBounds());
+        const map = MapConfig.initializeMap('map');
+        MapControls.initializeSearch(map);
+        @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
+        {
+            <text>
+                const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
+                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
+                map.fitBounds(geoJsonLayer.getBounds());
+            </text>
         }
     </script>
 }

@@ -31,7 +31,7 @@ namespace Models.Entities
 
             public string KartType { get; set; }         // Default 'standard'
 
-            public Geometri GeometriData { get; set; } = null!;     // NOT NULL
+            public Geometri Geometri { get; set; } = null!;     // NOT NULL
         }
 
         // Enums for status, prioritet og kart_type

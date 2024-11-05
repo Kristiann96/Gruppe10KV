@@ -44,7 +44,7 @@ namespace DataAccess
                     innmelding_id AS InnmeldingId,
                     tittel AS Tittel,
                     status AS Status,
-                    beskrivelse AS Beskrivelse
+                    beskrivelse AS Beskrivelse,
                 FROM innmelding
                 WHERE innmelding_id = @InnmeldingId";
 
