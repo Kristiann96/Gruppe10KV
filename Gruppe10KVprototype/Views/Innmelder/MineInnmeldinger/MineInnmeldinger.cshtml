@@ -1,64 +1,224 @@
-﻿@model IEnumerable<Models.Entities.InnmeldingModel>
+﻿@model ViewModels.MineInnmeldingerViewModel
+
+@{
+    Layout = "_Layout";
+}
 
 <!DOCTYPE html>
 <html lang="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oversikt over Innmeldinger</title>
-</head>
-<body>
-    @if (Model != null && Model.Any())
-    {
-         <h1>Mine innmeldinger (Innmelder ID: @Model.First().InnmelderId)</h1>
+    <title>Mine Innmeldinger (ID: @Model.Innmeldinger.FirstOrDefault()?.InnmelderId)</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-    <table style="width: 100%; text-align: left;">
-        <thead>
-            <tr>
-                <th>Innmelding ID</th>
-                <th>Tittel</th>
-                <th>Status</th>
-                <th>Siste Endring</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.Any())
-            {
-                foreach (var innmelding in Model)
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            white-space: nowrap;
+            cursor: pointer;
+            position: relative;
+        }
+
+            th .sort-arrow {
+                position: absolute;
+                right: 10px;
+            }
+
+        tr {
+            cursor: pointer;
+        }
+
+            tr:hover {
+                background-color: #f0f0f0;
+            }
+
+            tr:active {
+                background-color: #dcdcdc;
+            }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+            .pagination a {
+                margin: 0 5px;
+                padding: 8px 16px;
+                text-decoration: none;
+                color: white;
+                background-color: #1c833b;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+                .pagination a:hover {
+                    background-color: #00509c;
+                    color: white;
+                }
+
+                .pagination a.active {
+                    font-weight: bold;
+                    background-color: #00509c;
+                    color: white;
+                    border-color: #00509c;
+                }
+
+        .search-bar {
+            display: flex;
+            justify-content: start;
+            margin-bottom: 20px;
+        }
+
+            .search-bar input[type="text"] {
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px 0 0 4px;
+                width: 300px;
+            }
+
+            .search-bar button {
+                padding: 8px 16px;
+                border: 1px solid #ddd;
+                border-left: none;
+                border-radius: 0 4px 4px 0;
+                background-color: #1c833b;
+                color: white;
+                cursor: pointer;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+                .search-bar button:hover {
+                    background-color: #00509c;
+                }
+
+        .priority-circle {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <h1>Mine Innmeldinger (ID: @Model.Innmeldinger.FirstOrDefault()?.InnmelderId)</h1>
+
+        <form method="get" action="@Url.Action("MineInnmeldinger")" class="search-bar">
+            <input type="text" name="searchTerm" placeholder="Søk i saker" />
+            <button type="submit">Søk</button>
+        </form>
+
+        <form method="get" action="@Url.Action("MineInnmeldinger")" id="sortForm">
+            <input type="hidden" name="pageNumber" value="@Model.PageNumber" />
+            <input type="hidden" name="pageSize" value="@Model.PageSize" />
+            <input type="hidden" name="sortColumn" id="sortColumn" value="@Model.CurrentSortColumn"/>
+            <input type="hidden" name="sortOrder" id="sortOrder" value="@Model.CurrentSortOrder"/>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th onclick="sortTable('InnmeldingId')">INNMELDING ID <span class="sort-arrow">@GetSortArrow("InnmeldingId")</span></th>
+                    <th onclick="sortTable('Tittel')">TITTEL <span class="sort-arrow">@GetSortArrow("Tittel")</span></th>
+                    <th onclick="sortTable('Status')">STATUS <span class="sort-arrow">@GetSortArrow("Status")</span></th>
+                    <th onclick="sortTable('Prioritet')">PRIORITET <span class="sort-arrow">@GetSortArrow("Prioritet")</span></th>
+                    <th onclick="sortTable('SisteEndring')">SISTE ENDRING <span class="sort-arrow">@GetSortArrow("SisteEndring")</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var innmelding in Model.Innmeldinger)
                 {
-                    <tr>
+                    <tr onclick="window.location.href='@Url.Action("OppdatereInnmelding", "OppdatereInnmelding", new { id = innmelding.InnmeldingId })'">
+                        <td>@innmelding.InnmeldingId</td>
+                        <td>@innmelding.Tittel</td>
+                        <td>@innmelding.Status</td>
                         <td>
-                            <a href="@Url.Action("Details", "Innmeldinger", new { id = innmelding.InnmeldingId })" style="display: block; text-decoration: none; color: inherit;">
-                                @innmelding.InnmeldingId
-                            </a>
+                            <div class="priority-circle" style="background-color:@GetPriorityColor(innmelding.Prioritet);"></div>
+                            @innmelding.Prioritet
                         </td>
-                        <td>
-                            <a href="@Url.Action("Details", "Innmeldinger", new { id = innmelding.InnmeldingId })" style="display: block; text-decoration: none; color: inherit;">
-                                @innmelding.Tittel
-                            </a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("Details", "Innmeldinger", new { id = innmelding.InnmeldingId })" style="display: block; text-decoration: none; color: inherit;">
-                                @innmelding.Status
-                            </a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("Details", "Innmeldinger", new { id = innmelding.InnmeldingId })" style="display: block; text-decoration: none; color: inherit;">
-                                @innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")
-                            </a>
-                        </td>
+                        <td>@innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
                     </tr>
                 }
-            }
-            else
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            @if (Model.PageNumber > 1)
             {
-                <tr>
-                    <td colspan="4">Ingen innmeldinger funnet.</td>
-                </tr>
+                <a href="@Url.Action("MineInnmeldinger", new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize, sortColumn = Model.CurrentSortColumn, sortOrder = Model.CurrentSortOrder })">Forrige</a>
             }
-        </tbody>
-    </table>
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <a href="@Url.Action("MineInnmeldinger", new { pageNumber = i, pageSize = Model.PageSize, sortColumn = Model.CurrentSortColumn, sortOrder = Model.CurrentSortOrder })" class='@(i == Model.PageNumber ? "active" : "")'>@i</a>
+            }
+
+            @if (Model.PageNumber < Model.TotalPages)
+            {
+                <a href="@Url.Action("MineInnmeldinger", new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize, sortColumn = Model.CurrentSortColumn, sortOrder = Model.CurrentSortOrder })">Neste</a>
+            }
+        </div>
+    </main>
+
+    <script>
+        function sortTable(column) {
+            var currentSortColumn = document.getElementById('sortColumn').value;
+            var currentSortOrder = document.getElementById('sortOrder').value;
+
+            if (currentSortColumn === column) {
+                document.getElementById('sortOrder').value = currentSortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                document.getElementById('sortColumn').value = column;
+                document.getElementById('sortOrder').value = 'asc';
+            }
+
+            document.getElementById('sortForm').submit();
+        }
+    </script>
+
+    @functions {
+        string GetSortArrow(string column)
+        {
+            if (Model.CurrentSortColumn == column)
+            {
+                return Model.CurrentSortOrder == "asc" ? "▲" : "▼";
+            }
+            return " ";
+        }
+
+        string GetPriorityColor(string priority)
+        {
+            var trimmedPriority = priority?.Trim();
+            switch (trimmedPriority)
+            {
+                case "IkkeVurdert":
+                    return "blue";
+                case "Lav":
+                    return "#00FF00"; // Green
+                case "Middels":
+                    return "#FFFF00"; // Yellow
+                case "Høy":
+                    return "#FFA500"; // Orange
+                case "EkstremHaster":
+                    return "#FF0000"; // Red
+                default:
+                    return "#000000"; // Black for unknown values
+            }
+        }
+    }
 
 </body>
 </html>
