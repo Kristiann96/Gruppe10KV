@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,7 @@ namespace Models.Entities
 
             public string KartType { get; set; }         // Default 'standard'
 
-
+            public Geometri GeometriData { get; set; } = null!;     // NOT NULL
         }
 
         // Enums for status, prioritet og kart_type

@@ -13,6 +13,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         private readonly IInnmeldingRepository _innmeldingRepository;
         private readonly IGeometriRepository _geometriRepository;
 
+        [HttpGet]
         public ActionResult Index()
         {
             var viewModel = new OppdatereInnmeldingViewModel
@@ -22,12 +23,14 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             return View(viewModel);
         }
 
+
         public OppdatereInnmeldingController(IInnmeldingRepository repository, IGeometriRepository geometriRepository)
         {
             _innmeldingRepository = repository;
             _geometriRepository = geometriRepository;
         }
 
+        [HttpGet]
         public async Task<IActionResult> OppdatereInnmelding()
         {
             // Retrieve data from repository
@@ -87,7 +90,8 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             return View(viewModel);
         } */
 
-        public IActionResult OppdatereInnmelding(int innmeldingId)
+        [HttpGet]
+        public IActionResult OppdatereInnmeldingDetailsById(int innmeldingId)
         {
             // Get the single innmelding using your repository
             var innmelding = _innmeldingRepository.GetOppdatereInnmeldingByIdAsync(innmeldingId).Result;

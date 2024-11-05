@@ -37,7 +37,7 @@ namespace DataAccess
             return result;
         }
 
-        public async Task<InnmeldingModel> GetInnmeldingByIdAsync(int innmeldingId)
+        public async Task<InnmeldingModel> GetOppdatereInnmeldingByIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"SELECT 
