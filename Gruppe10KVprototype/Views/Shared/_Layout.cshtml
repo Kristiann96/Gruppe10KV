@@ -5,118 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Gruppe10KVprototype</title>
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    <style>
-        body {
-            margin: 0;
-            padding: 65px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .navbar {
-          
-            padding: 1rem 1rem;
-      
-        }
-
-        .navbar-brand img {
-            height: px;
-        }
-
-        .container-fluid {
-            display: flex;
-            justify-content: space-between;
-            align-items: left;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .navbarlist {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: #333;
-            text-decoration: none;
-            font-size: 0.9rem;
-            padding: 0.5rem;
-          
-        }
-
-            .nav-link:hover {
-                color: #0066cc;
-            }
-
-        /* Dropdown styling */
-        .dev-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dev-dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            background-color: #f9f9f9;
-            min-width: 250px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            z-index: 1000;
-            border-radius: 4px;
-            padding: 0.5rem 0;
-        }
-
-        .dev-dropdown:hover .dev-dropdown-content {
-            display: block;
-        }
-
-        .dev-dropdown-content a {
-            color: #333;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            display: block;
-            font-size: 0.8rem;
-        }
-
-            .dev-dropdown-content a:hover {
-                background-color: #f0f0f0;
-            }
-
-        .dev-button {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        main {
-            flex: 1;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        footer {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            text-align: center;
-            border-top: 1px solid #eee;
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-    </style>
     @await RenderSectionAsync("Styles", false)
 </head>
 <body>
@@ -131,12 +19,10 @@
                     <ul class="navbarlist">
                         <li><a class="nav-link" asp-controller="Home" asp-action="Index">Hjem</a></li>
                         <li><a class="nav-link" asp-controller="LoggInn" asp-action="LoggInn">Logg inn</a></li>
-
-                        <!-- Development dropdown -->
                         <li class="dev-dropdown">
                             <button class="dev-button">Utvikling</button>
                             <div class="dev-dropdown-content">
-                                <div style="padding: 0.5rem; border-bottom: 1px solid #eee;">
+                                <div class="dropdown-section">
                                     <strong>Saksbehandler</strong>
                                 </div>
                                 <a href="@Url.Action("LandingsSideSaksB", "LandingsSideSaksB")">Landingsside</a>
@@ -146,7 +32,7 @@
                                 <a href="@Url.Action("SøkEtterInnmelderSaksB", "SøkEtterInnmelderSaksB")">Søk etter innmelder</a>
                                 <a href="@Url.Action("LoggInnSaksB", "LogginnSaksB")">LoggInn</a>
 
-                                <div style="padding: 0.5rem; border-bottom: 1px solid #eee; margin-top: 0.5rem;">
+                                <div class="dropdown-section">
                                     <strong>Innmelder</strong>
                                 </div>
                                 <a href="@Url.Action("RegistrerDeg", "RegistrerDeg")">Registrer deg</a>
@@ -155,14 +41,12 @@
                                 <a href="@Url.Action("LandingsSide", "LandingsSide")">Landings Side</a>
                                 <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")">Mine Innmeldinger</a>
                                 <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartForbedring")">Bidra</a>
-                                
-                                <div style="padding: 0.5rem; border-bottom: 1px solid #eee; margin-top: 0.5rem;">
+
+                                <div class="dropdown-section">
                                     <strong>DummyTabeller</strong>
                                 </div>
                                 <a href="@Url.Action("OversiktAlleInnmeldingerSaksBIncidentForm", "OversiktAlleInnmeldingerSaksBIncidentForm")">Gammel oversikt SaksB</a>
                                 <a href="@Url.Action("DropDownDummySaksB", "DropDownDummySaksB")">Dummy Dropdown SaksB</a>
-                                
-
                             </div>
                         </li>
                     </ul>
