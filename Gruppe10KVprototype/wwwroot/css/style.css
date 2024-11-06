@@ -210,7 +210,8 @@ footer {
     flex-grow: 1;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    /* Fjern height: 100%; siden den ikke tar hensyn til padding */
+    min-height: calc(100vh - 65px); /* Legg til denne for å kompensere for header */
     width: 100%;
     box-sizing: border-box;
 }
