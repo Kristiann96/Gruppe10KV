@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Models.Models;
+﻿using Models.Models;
 
-namespace Interface
+namespace LogicInterfaces
 {
     public interface IKartverketAPILogic
     {

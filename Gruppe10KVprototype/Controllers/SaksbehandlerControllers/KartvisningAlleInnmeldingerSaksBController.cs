@@ -5,7 +5,7 @@ using Models.Models;
 using ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using LogicInterfaces;
 
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers

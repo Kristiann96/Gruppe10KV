@@ -2,19 +2,21 @@
 using Microsoft.AspNetCore.Mvc;
 using ViewModels;
 using System.Threading.Tasks;
-using System.Linq;
-
+using Models.Entities;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
     public class BidraTilKartForbedringController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;
+        private readonly IVurderingRepository _vurderingRepository;
 
         public BidraTilKartForbedringController(
-            IGeometriRepository geometriRepository)
+            IGeometriRepository geometriRepository,
+            IVurderingRepository vurderingRepository)
         {
             _geometriRepository = geometriRepository;
+            _vurderingRepository = vurderingRepository;
         }
 
         [HttpGet]
@@ -30,5 +32,23 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> LagreVurdering([FromBody] VurderingModel vurdering)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _vurderingRepository.LeggTilVurderingAsync(vurdering);
+                return Json(new { success = true, message = "Takk for ditt bidrag!" });
+            }
+            catch
+            {
+                return StatusCode(500, "Det oppstod en feil ved lagring av vurderingen.");
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using LogicInterfaces;
 using Models.Models;
 
 public class KartfeilMarkeringController : Controller
