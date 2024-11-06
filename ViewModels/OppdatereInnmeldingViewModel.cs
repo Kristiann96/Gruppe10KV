@@ -4,6 +4,7 @@ using Models.Models;
 using Models.Entities;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace ViewModels
 {
@@ -12,7 +13,7 @@ namespace ViewModels
         public List<InnmeldingModel> OppdatereInnmeldinger { get; set; }
 
         // Innmeldingdata
-        public InnmeldingModel InnmeldingId { get; set; }
+        public int InnmeldingId { get; set; }
         public string Tittel { get; set; }
         public string Status { get; set; }
         public string Beskrivelse { get; set; }

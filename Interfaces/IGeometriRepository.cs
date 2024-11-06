@@ -13,6 +13,8 @@ namespace Interface
         // Henter spesifikk geometri basert på innmelding_id
         Task<Geometri> GetGeometriByInnmeldingIdAsync(int innmeldingId);
 
+        Task<Geometri> GetGeometriOppdatereInnmelding(int innmeldingId);
+
 
         //  BidraTilKartForbedring gir til InnmedligModel og Geometri
         Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync();
