@@ -39,7 +39,26 @@ namespace DataAccess
             return await connection.QuerySingleOrDefaultAsync<Geometri>(sql, new { InnmeldingId = innmeldingId });
         }
 
-        public async Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync()
+        // Hent geometri med limit for OppdatereInnmelding (Innmelderside)
+        public async Task<Geometri> GetGeometriOppdatereInnmelding(int innmeldingId)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql = @"
+                    SELECT 
+                    geometri_id AS GeometriId, 
+                    innmelding_id AS InnmeldingId, 
+                    ST_AsGeoJSON(geometri_data) AS GeometriGeoJson 
+                FROM geometri 
+                WHERE innmelding_id = @InnmeldingId
+                LIMIT 1";
+
+            var result = await connection.QuerySingleOrDefaultAsync<Geometri>(sql,
+                new { InnmeldingId = innmeldingId });
+
+            return result;
+        }
+
+            public async Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync()
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"

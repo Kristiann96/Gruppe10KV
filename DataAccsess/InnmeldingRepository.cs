@@ -39,23 +39,6 @@ namespace DataAccess
             return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingIdUpdate });
         }
 
-        public async Task<InnmeldingModel> GetOppdatereInnmeldingByIdAsync(int oppInnmeldingId)
-        {
-            using var connection = _dbConnection.CreateConnection();
-            var sql = @"SELECT 
-                    innmelding_id AS InnmeldingId,
-                    tittel AS Tittel,
-                    status AS Status,
-                    beskrivelse AS Beskrivelse,
-                FROM innmelding
-                WHERE innmelding_id = @InnmeldingId";
-
-            return await connection.QuerySingleOrDefaultAsync<InnmeldingModel>(
-                sql,
-                new { InnmeldingId = oppInnmeldingId }
-            );
-        }
-
         /* Ørjan */
         public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber,
             int pageSize, string searchTerm)
