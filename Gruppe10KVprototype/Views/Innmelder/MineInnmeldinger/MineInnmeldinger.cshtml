@@ -146,7 +146,10 @@
                         <td>@innmelding.Tittel</td>
                         <td>@innmelding.Status</td>
                         <td>
-                            <div class="priority-circle" style="background-color:@GetPriorityColor(innmelding.Prioritet);"></div>
+                            @{
+                                var color = GetPriorityColor(innmelding.Prioritet);
+                            }
+                            <div class="priority-circle" style="background-color:@color;"></div>
                             @innmelding.Prioritet
                         </td>
                         <td>@innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
@@ -199,26 +202,50 @@
             return " ";
         }
 
-        string GetPriorityColor(string priority)
-        {
-            var trimmedPriority = priority?.Trim();
-            switch (trimmedPriority)
+      
+         string GetPriorityColor(string prioritet)
             {
-                case "IkkeVurdert":
-                    return "blue";
-                case "Lav":
-                    return "#00FF00"; // Green
-                case "Middels":
-                    return "#FFFF00"; // Yellow
-                case "Høy":
-                    return "#FFA500"; // Orange
-                case "EkstremHaster":
-                    return "#FF0000"; // Red
-                default:
-                    return "#000000"; // Black for unknown values
+                if (string.IsNullOrEmpty(prioritet))
+                {
+                    return "#000000"; // Black for null or empty values
+                }
+
+                var normalizedPriority = prioritet.Trim().ToLower();
+                string color;
+                switch (normalizedPriority)
+                {
+                    case "ikke_vurdert":
+                        color = "#0000FF"; // Blue
+                        break;
+                    case "lav":
+                        color = "#006400"; // Dark Green
+                        break;
+                    case "moderat":
+                        color = "#7FFF00"; // Yellow-Green
+                        break;
+                    case "høy":
+                        color = "#FFFF00"; // Yellow
+                        break;
+                    case "kritisk":
+                        color = "#FF7F00"; // Orange
+                        break;
+                    case "farligforlivhelse":
+                        color = "#FF4500"; // Red-Orange
+                        break;
+                    case "ekstremhaster":
+                        color = "#FF0000"; // Red
+                        break;
+                    default:
+                        color = "#000000"; // Black for unknown values
+                        break;
+                }
+                return color;
             }
         }
-    }
+
+
+
+    
 
 </body>
 </html>
