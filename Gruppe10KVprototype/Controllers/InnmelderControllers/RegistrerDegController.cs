@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
@@ -7,6 +8,14 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         public IActionResult RegistrerDeg()
         {
             return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult RegistrerInnmelder(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View("RegistrerDeg");
         }
     }
 }
