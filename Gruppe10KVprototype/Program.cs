@@ -3,6 +3,9 @@ using Interface;
 using Logic;
 using Interfaces;
 using LogicInterfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using DataAccess.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,13 +19,30 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/Map/{1}/{0}.cshtml");
     });
 
-// Register DapperDBConnectionDummy as a service
-builder.Services.AddScoped<DapperDBConnectionDummy>(); //slettes f�r launch
-builder.Services.AddScoped<DapperDBConnection>();
+// Legg til DbContext for Identity
+builder.Services.AddDbContext<AuthDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("MariaDbConnection_login_server"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MariaDbConnection_login_server"))
+    ));
 
-//Registrering av repos og interfaces, og logic og logicinterfaces
-builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>(); //slettes før launch
-builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //slettes før launch
+// Legg til Identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<AuthDbContext>()
+.AddDefaultTokenProviders();
+
+// Dine eksisterende service registreringer
+builder.Services.AddScoped<DapperDBConnection>();
+builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>();
+builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>();
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
 builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
@@ -30,17 +50,10 @@ builder.Services.AddScoped<IInnmeldingEnumLogic, InnmeldingEnumLogic>();
 builder.Services.AddScoped<IDataSammenstillingSaksBRepository, DataSammenstillingSaksBRepository>();
 builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository>();
 builder.Services.AddScoped<ITransaksjonsRepository, TransaksjonsRepository>();
-
-//og logic og logicinterfaces
 builder.Services.AddScoped<IInnmeldingOpprettelseLogic, InnmeldingOpprettelseLogic>();
-
-
-
-
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -52,25 +65,17 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Legg til Authentication middleware
+app.UseAuthentication();
 app.UseAuthorization();
 
-// Definer routing for HomeController og InnmelderSkjemaIncidentFormController
 app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
-
-// Route for InnmelderSkjemaIncidentFormController
 app.MapControllerRoute(
     "innmelderSkjema",
     "form/{action=Form}/{id?}",
     new { controller = "InnmelderSkjemaIncidentForm" });
-
 
 app.Run();
