@@ -11,7 +11,13 @@ namespace ViewModels
     {
         public List<InnmeldingModel> OppdatereInnmeldinger { get; set; }
 
+        // Innmeldingdata
+        public InnmeldingModel InnmeldingId { get; set; }
+        public string Tittel { get; set; }
+        public string Status { get; set; }
+        public string Beskrivelse { get; set; }
+
         // Geometridata
-        public Geometri GeometriData { get; set; }
+        public Geometri Geometri { get; set; }
     }
 }

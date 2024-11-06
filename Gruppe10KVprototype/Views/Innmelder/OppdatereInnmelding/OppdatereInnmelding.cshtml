@@ -4,59 +4,91 @@
     Layout = "_Layout";
 }
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />   
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
 
+    <style>
+        .updateRegisteredMapViewErrors {
+            max-width: 50em;
+            margin: 20px auto;
+            padding: 20px;
+        }
 
-<div class="singleCaseUsername">
-    <h3>Mike Oxlong</h3>
-</div>
+        .updateRegisteredCaseForm {
+            max-width: 50em;
+            margin: 20px auto;
+            padding: 20px;
+        }
 
-<div class="singleCaseSubjectName">
-    <h1>Subject</h1>
-</div>
-
-
+        .updateRegisteredCaseActionButtons {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+    </style>
+}
+<title>Oppdatere Innmelding (ID: @Model.InnmeldingId)</title>
 @foreach (var innmelding in Model.OppdatereInnmeldinger)
 {
-    <div class="singleCase">
-        <div class="singleCaseCaseID">
+    <div class="updateRegisteredCaseForm">
+        <div class="updateRegisteredCaseID">
             <h3>Sak ID #@innmelding.InnmeldingId</h3>
         </div>
-        
-        <div class="singleCaseSubject">
+
+        <div class="updateRegisteredCaseSubject">
             <h3>Tittel: @innmelding.Tittel</h3>
         </div>
 
-        <div class="singleCaseStatus">
+        <div class="updateRegisteredCaseStatus">
             <h3>Status: @innmelding.Status</h3>
         </div>
 
-        <div class="singleCaseDescription">
+        <div class="updateRegisteredCaseDescription">
             <h3>Beskrivelse:</h3>
             <p>@innmelding.Beskrivelse</p>
-        </div>
-
-        <div class="singleCaseTag">
-            <h3>Tag:</h3>
-            <p>@innmelding.KartType</p>
-        </div>
-
-        <div class="singleCaseArea">
-            <h3>Kommune:</h3>
-            <p>Currently Unavailable</p>
-        </div>
-
-        <div class="singleCaseMap">
-            <h3>Kartvisning av feil</h3>
-            <p>Currently Unavailable</p>
         </div>
     </div>
 }
 
+<div class="updateRegisteredMapViewErrors">
+    <h3>Kartvisning av feil:</h3>
+    <div id="map" style="height: 50vh; width: 100%"></div>
+</div>
+
 <!-- Action Buttons -->
-<div class="singleCaseActions">
+<div class="updateRegisteredCaseActionButtons">
     <button>Edit</button>
     <button>Update</button>
     <button>Delete</button>
 </div>
+
+
+@section Scripts {
+    <!-- JavaScript biblioteker -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+    <!-- Konfig av MapViews -->
+    <script src="~/js/maps/config/mapConfig.js"></script>
+    <script src="~/js/maps/config/drawConfig.js"></script>
+    <script src="~/js/maps/services/wmsService.js"></script>
+    <script src="~/js/maps/utils/mapControls.js"></script>
+
+    <script>
+        const map = MapConfig.initializeMap('map');
+        MapControls.initializeSearch(map);
+        @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
+        {
+            <text>
+                const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
+                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
+                map.fitBounds(geoJsonLayer.getBounds());
+            </text>
+        }
+    </script>
+}

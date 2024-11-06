@@ -10,7 +10,11 @@ namespace Interface
         //HENTING AV DATA
 
         //Daniel's interface for "OppdatereInnmelding"
-        Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync();
+        Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate);
+        Task<InnmeldingModel> GetOppdatereInnmeldingByIdAsync(int oppInnmeldingId);
+
+
+
 
         Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm);
         Task<int> GetTotalInnmeldingerTellerSaksBAsync(string searchTerm);
