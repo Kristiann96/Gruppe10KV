@@ -15,7 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccsess\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj", "{358DB19B-90CE-44F6-80B3-7017B2540D5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicInterfaces", "LogicInterfaces\LogicInterfaces.csproj", "{9AC335AA-C58B-4805-9360-84981DCEF5A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogicInterfaces", "LogicInterfaces\LogicInterfaces.csproj", "{9AC335AA-C58B-4805-9360-84981DCEF5A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthDataAccess", "AuthDataAccess\AuthDataAccess.csproj", "{D4F02755-A21D-4684-BE6B-72D2875B4311}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthInterface", "AuthInterface\AuthInterface.csproj", "{4BD9B133-707A-428F-8D00-020D09CC9D1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,14 @@ Global
 		{9AC335AA-C58B-4805-9360-84981DCEF5A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AC335AA-C58B-4805-9360-84981DCEF5A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AC335AA-C58B-4805-9360-84981DCEF5A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4F02755-A21D-4684-BE6B-72D2875B4311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4F02755-A21D-4684-BE6B-72D2875B4311}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4F02755-A21D-4684-BE6B-72D2875B4311}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4F02755-A21D-4684-BE6B-72D2875B4311}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BD9B133-707A-428F-8D00-020D09CC9D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BD9B133-707A-428F-8D00-020D09CC9D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BD9B133-707A-428F-8D00-020D09CC9D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BD9B133-707A-428F-8D00-020D09CC9D1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
