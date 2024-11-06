@@ -41,6 +41,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 
 // Dine eksisterende service registreringer
 builder.Services.AddScoped<DapperDBConnection>();
+builder.Services.AddScoped<DapperDBConnectionDummy>();
 builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>();
 builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>();
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();

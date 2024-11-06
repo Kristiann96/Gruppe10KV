@@ -5,44 +5,48 @@
     var returnUrl = ViewData["ReturnUrl"] as string;
 }
 
-<body class="Index">
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 100vh; font-family: 'Arial', sans-serif; padding: 2rem 0;">
-        <h1 style="font-size: 2.5rem; color: #333; text-transform: uppercase; margin-bottom: 2rem;">Opprett konto</h1>
-        <div style="width: 100%; max-width: 500px; padding: 2rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; background-color: white;">
-            <form asp-controller="RegistrerDeg" asp-action="RegistrerInnmelder" asp-route-returnurl="@returnUrl" method="post" class="form-horizontal" role="form">
-                <h4>Create a new account.</h4>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Email" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 100vh; font-family: 'Arial', sans-serif; padding: 2rem 0;">
+    <h1 style="font-size: 2.5rem; color: #333; text-transform: uppercase; margin-bottom: 2rem;">Opprett konto</h1>
+    <div style="width: 100%; max-width: 500px; padding: 2rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; background-color: white;">
+        <form asp-controller="RegistrerDeg" asp-action="RegistrerInnmelder" asp-route-returnurl="@returnUrl" method="post" class="form-horizontal" role="form">
+            <h4>Opprett ny bruker</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Password" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="ConfirmPassword" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="ConfirmPassword" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                    </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" class="btn btn-default">Register</button>
-                    </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-primary">Registrer</button>
                 </div>
-                <div style="text-align: center; margin-top: 1.5rem;">
-                    <p>Har du allerede bruker? <a href="#" style="color: #007bff; font-weight: bold; text-decoration: none; transition: color 0.3s;">Logg inn her!</a></p>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <p>Har du allerede bruker? <a asp-controller="LoggInn" asp-action="LoggInn" style="color: #007bff; font-weight: bold; text-decoration: none; transition: color 0.3s;">Logg inn her!</a></p>
+            </div>
+        </form>
     </div>
-</body>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

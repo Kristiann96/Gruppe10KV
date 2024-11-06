@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace ViewModels
 {
-    internal class BrukerregistreringViewModel
+    public class BrukerregistreringViewModel // Fjernet internal
     {
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [Required(ErrorMessage = "E-post er påkrevd")]
+        [EmailAddress(ErrorMessage = "Ugyldig e-postformat")]
+        [Display(Name = "E-post")]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Passord er påkrevd")]
+        [StringLength(100, ErrorMessage = "Passordet må være minst {2} tegn langt.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Passord")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Bekreft passord")]
+        [Compare("Password", ErrorMessage = "Passordene matcher ikke.")]
         public string ConfirmPassword { get; set; }
     }
 }
