@@ -144,11 +144,6 @@
 
     // Form submit handling
     document.querySelector('form').addEventListener('submit', function() {
-        const button = document.getElementById('saveButton');
-        button.textContent = 'Lagrer...';
-        button.disabled = true;
-    });
-
     // Success handling
     @if (TempData["SuccessMessage"] != null)
     {
