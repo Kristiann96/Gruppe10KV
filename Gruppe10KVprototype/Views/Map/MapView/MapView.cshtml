@@ -1,36 +1,32 @@
-﻿
-@section Styles {
+﻿@section Styles {
+    <!-- CSS biblioteker -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
-
-    <style>
-        .custom-button, .kommune-button {
-            background-color: #FF5733;
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-
-            .custom-button:hover, .kommune-button:hover {
-                background-color: #FF6F61;
-            }
-
-        .button-container {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1000;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/map_view.css" />
 }
+
+<div class="map-page-container">
+    <div class="map-card">
+        <div class="map-header">
+            <h1 class="map-title">Kartvisning</h1>
+            <p class="map-description">Marker området hvor du ønsker å melde inn feil eller mangler.</p>
+        </div>
+        <div class="map-content">
+            <div id="map"></div>
+        </div>
+        <div class="map-controls">
+            <form method="get" action="/form/form">
+                <input type="hidden" id="geoJsonHidden" name="geoJson" />
+                <button type="submit" class="map-button map-button-primary">Gå til Skjema</button>
+            </form>
+            <button onclick="toggleKommuneGrenser()" id="kommuneButton" class="map-button map-button-secondary">
+                Vis kommunegrenser
+            </button>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <!-- JavaScript biblioteker -->
@@ -78,15 +74,4 @@
             document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
         });
     </script>
-
-    <!-- Skjult felt for GeoJSON og knapper -->
-    <div class="button-container">
-        <form method="get" action="/form/form">
-            <input type="hidden" id="geoJsonHidden" name="geoJson" />
-            <button type="submit" class="custom-button">Gå til Skjema</button>
-        </form>
-        <button onclick="toggleKommuneGrenser()" id="kommuneButton" class="kommune-button">Vis kommunegrenser</button>
-    </div>
 }
-
-<div id="map" style="height: 100vh; width: 100%"></div>
