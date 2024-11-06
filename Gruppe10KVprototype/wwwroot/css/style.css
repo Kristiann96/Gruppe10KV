@@ -52,6 +52,30 @@ footer {
     padding: 1rem;
 }
 
+/* Container styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 992px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Info panel styles */
+.info-panel {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 /* Navigation */
 .navbar {
     height: 100%;
@@ -204,14 +228,29 @@ footer {
     margin-bottom: 20px;
 }
 
+/* Form elements styling */
+.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 0.25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
 /* Cards */
 .posterPage {
     display: flex;
     flex-grow: 1;
     justify-content: center;
     align-items: center;
-    /* Fjern height: 100%; siden den ikke tar hensyn til padding */
-    min-height: calc(100vh - 65px); /* Legg til denne for å kompensere for header */
+    min-height: 100vh; 
+    height: 100%;
     width: 100%;
     box-sizing: border-box;
 }
@@ -240,13 +279,74 @@ footer {
 
 /* Map styles */
 #map {
-    height: calc(100vh - 65em);
-    width: 100%;
-    z-index: 0;
+    height: 500px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Badge styles */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+/* Button styles */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #0066cc;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #0052a3;
+    }
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+/* Description and info sections */
+.description, .reporter-info, .handler-info {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+h3 {
+    margin: 1rem 0;
+    color: #444;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        grid-template-columns: 1fr;
+    }
+
     .container-fluid {
         flex-direction: column;
         align-items: flex-start;
@@ -273,4 +373,16 @@ footer {
         width: 90%;
         padding: 2em;
     }
+
+    /* Map container */
+    #map {
+        height: 500px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: relative;
+        z-index: 1; /* Ensure map stays below header */
+    }
+
 }
+
