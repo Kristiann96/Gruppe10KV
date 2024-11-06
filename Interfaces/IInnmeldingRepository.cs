@@ -8,7 +8,7 @@ namespace Interface
     public interface IInnmeldingRepository
     {
         //HENTING AV DATA
-        
+
         //Daniel's interface for "OppdatereInnmelding"
         Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync();
 
@@ -17,11 +17,17 @@ namespace Interface
 
         Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(int innmeldingID);
 
+        //enum
         Task<string> GetStatusEnumValuesAsync();
+        Task<string> GetPrioritetEnumValuesAsync();
+        Task<string> GetKartTypeEnumValuesAsync();
 
-        //LAGRING AV DATA
+        //enum fra innmelder - midlertidig bor den også her
 
-        Task<int> LagreInnmeldingAsync(InnmeldingModel innmelding);
+        Task<string> GetInnmelderTypeEnumValuesAsync();
+        Task<bool> OppdatereEnumSaksBAsync(int innmeldingId, InnmeldingModel model);
+
+
 
 
 

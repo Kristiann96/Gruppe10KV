@@ -14,19 +14,41 @@
             @if (Model?.InnmeldingModel != null)
             {
                 <h2>@Model.InnmeldingModel.Tittel</h2>
-                <div class="status-info">
-                    <label for="statusDropdown">Status:</label>
-                    <select id="statusDropdown" class="form-control" asp-for="InnmeldingModel.Status" asp-items="Model.StatusOptions">
-                        <option value="">Velg status</option>
-                    </select>
-                    <p>Prioritet: <span class="badge">@Model.InnmeldingModel.Prioritet</span></p>
-                    <p>Sist endret: @Model.InnmeldingModel.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
-                    <p>KartType: <span class="badge">@Model.InnmeldingModel.KartType</span></p>
-                    @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
-                    {
-                        <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
-                    }
-                </div>
+                    <form asp-action="OppdateringAvInnmeldingSaksB" asp-route-id="@Model.InnmeldingModel.InnmeldingId" method="post">
+                    <div class="status-info">
+                        <div class="form-group mb-3">
+                            <label for="statusDropdown">Status:</label>
+                            <select id="statusDropdown" class="form-control" asp-for="InnmeldingModel.Status" asp-items="Model.StatusOptions">
+                                <option value="">Velg status</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="prioritetDropdown">Prioritet:</label>
+                            <select id="prioritetDropdown" class="form-control" asp-for="InnmeldingModel.Prioritet" asp-items="Model.PrioritetOptions">
+                                <option value="">Velg prioritet</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="kartTypeDropdown">Kart Type:</label>
+                            <select id="kartTypeDropdown" class="form-control" asp-for="InnmeldingModel.KartType" asp-items="Model.KartTypeOptions">
+                                <option value="">Velg kart type</option>
+                            </select>
+                        </div>
+
+                        <p>Sist endret: @Model.InnmeldingModel.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
+                
+                        @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
+                        {
+                            <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
+                        }
+
+                        <div class="form-group mt-4">
+                            <button type="submit" id="saveButton" class="btn btn-primary">Lagre endringer</button>
+                        </div>
+                    </div>
+                </form>
                 <div class="description">
                     <h3>Beskrivelse</h3>
                     <p>@Model.InnmeldingModel.Beskrivelse</p>
@@ -69,7 +91,7 @@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="~/js/maps/config/mapConfig.js"></script>
     <script src="~/js/maps/utils/mapControls.js"></script>
-    <script>
+<script>
         const map = MapConfig.initializeMap('map');
         MapControls.initializeSearch(map);
         @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
@@ -81,5 +103,41 @@
             </text>
         }
     </script>
+!-- Form handling script -->
+<script>
+    // Error handling
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <text>
+            alert('@TempData["ErrorMessage"]');
+        </text>
+    }
+
+    // Form submit handling
+    document.querySelector('form').addEventListener('submit', function() {
+        const button = document.getElementById('saveButton');
+        button.textContent = 'Lagrer...';
+        button.disabled = true;
+    });
+
+    // Success handling
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <text>
+            const button = document.getElementById('saveButton');
+            button.textContent = 'Lagret!';
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-success');
+            
+            // Reset after 5 seconds
+            setTimeout(() => {
+                button.textContent = 'Lagre endringer';
+                button.classList.remove('btn-success');
+                button.classList.add('btn-primary');
+                button.disabled = false;
+            }, 5000);
+        </text>
+    }
+</script>
 </body>
 </html>

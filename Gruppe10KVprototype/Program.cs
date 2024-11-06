@@ -26,7 +26,10 @@ builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //s
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
 builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
-builder.Services.AddScoped<IInnmeldingEnumLogic, InnmeldingEnumLogic>();
+builder.Services.AddScoped<IVurderingRepository, VurderingRepository>();
+builder.Services.AddScoped<IEnumLogic, EnumLogic>();
+
+
 builder.Services.AddScoped<IDataSammenstillingSaksBRepository, DataSammenstillingSaksBRepository>();
 builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository>();
 builder.Services.AddScoped<ITransaksjonsRepository, TransaksjonsRepository>();

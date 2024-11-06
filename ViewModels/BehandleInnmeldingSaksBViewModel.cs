@@ -10,6 +10,8 @@ namespace ViewModels
         public InnmeldingModel InnmeldingModel { get; set; }
         public Geometri Geometri { get; set; }
         public List<SelectListItem> StatusOptions { get; set; }
+        public List<SelectListItem> PrioritetOptions { get; set; }
+        public List<SelectListItem> KartTypeOptions { get; set; }
 
 
         public PersonModel PersonModel { get; set; }

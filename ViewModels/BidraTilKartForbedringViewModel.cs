@@ -8,6 +8,7 @@ namespace ViewModels
     public class BidraTilKartForbedringViewModel
     {
         public IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)> GeometriData { get; set; }
+        public VurderingModel Vurdering { get; set; } = new VurderingModel();
 
         public string GetGeometriDataAsJson()
         {

@@ -39,23 +39,22 @@ namespace DataAccess
             return await connection.QuerySingleOrDefaultAsync<Geometri>(sql, new { InnmeldingId = innmeldingId });
         }
 
-        public async Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>>
-            GetAktiveGeometriMedInnmeldingAsync()
+        public async Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync()
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"
-                SELECT 
-                    -- Geometri fields
-                    g.geometri_id AS GeometriId, 
-                    g.innmelding_id AS InnmeldingId, 
-                    ST_AsGeoJSON(g.geometri_data) AS GeometriGeoJson,
-                    -- Innmelding fields
-                    i.innmelding_id,
-                    i.tittel AS Tittel,
-                    i.status AS Status
-                FROM geometri g
-                INNER JOIN innmelding i ON g.innmelding_id = i.innmelding_id
-                WHERE i.status NOT IN ('pauset', 'avsluttet', 'ikke_tatt_til_følge')";
+        SELECT 
+            -- Geometri fields
+            g.geometri_id AS GeometriId, 
+            g.innmelding_id AS InnmeldingId, 
+            ST_AsGeoJSON(g.geometri_data) AS GeometriGeoJson,
+            -- Innmelding fields
+            i.innmelding_id,
+            i.tittel AS Tittel,
+            i.status AS Status
+        FROM geometri g
+        INNER JOIN innmelding i ON g.innmelding_id = i.innmelding_id
+        WHERE i.status NOT IN ('pauset', 'avsluttet', 'ikke_tatt_til_følge')";
 
             var result = await connection.QueryAsync<Geometri, InnmeldingModel, (Geometri, InnmeldingModel)>(
                 sql,

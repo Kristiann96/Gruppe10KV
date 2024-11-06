@@ -10,66 +10,105 @@ using System.Threading.Tasks;
 ﻿using Interface;
 using Interfaces;
 using LogicInterfaces;
+using Models.Entities;
 
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
     public class BehandleInnmeldingSaksBController : Controller
     {
-
         private readonly IGeometriRepository _geometriRepository;
-        private readonly IInnmeldingEnumLogic _innmeldingEnumLogic;
+        private readonly IEnumLogic _enumLogic;
         private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
-        private readonly IInnmeldingRepository _innmeldingRepository;
+        private readonly IInnmeldingRepository _innmeldingRepository; // Ny: Trenger for oppdatering
 
-        public BehandleInnmeldingSaksBController(IInnmeldingRepository innmeldingRepository,
-
+        public BehandleInnmeldingSaksBController(
             IGeometriRepository geometriRepository,
-            IInnmeldingEnumLogic innmeldingEnumLogic,
-            IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository)
+            IEnumLogic enumLogic,
+            IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository,
+            IInnmeldingRepository innmeldingRepository)
         {
-            _innmeldingRepository = innmeldingRepository;
             _geometriRepository = geometriRepository;
-            _innmeldingEnumLogic = innmeldingEnumLogic;
+            _enumLogic = enumLogic;
             _dataSammenstillingSaksBRepository = dataSammenstillingSaksBRepository;
-
-        }
-
-        [HttpGet]
-        public IActionResult BehandleInnmeldingSaksB()
-        {
-            return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
+            _innmeldingRepository = innmeldingRepository;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> BehandleInnmeldingSaksB(int id)
         {
-            
-            
-                var (innmelding, person, innmelder, saksbehandler) =
-                    await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
+            var (innmelding, person, innmelder, saksbehandler) =
+                await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
 
-                if (innmelding == null)
+            if (innmelding == null)
+            {
+                return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
+            }
+
+            var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
+
+            // Hent alle enum verdier
+            var statusOptions = await _enumLogic.GetFormattedStatusEnumValuesAsync();
+            var prioritetOptions = await _enumLogic.GetFormattedPrioritetEnumValuesAsync();
+            var kartTypeOptions = await _enumLogic.GetFormattedKartTypeEnumValuesAsync();
+
+            var viewModel = new BehandleInnmeldingSaksBViewModel
+            {
+                InnmeldingModel = innmelding,
+                PersonModel = person,
+                InnmelderModel = innmelder,
+                SaksbehandlerModel = saksbehandler,
+                Geometri = geometri,
+                StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList(),
+                PrioritetOptions = prioritetOptions.Select(po => new SelectListItem { Value = po, Text = po }).ToList(),
+                KartTypeOptions = kartTypeOptions.Select(ko => new SelectListItem { Value = ko, Text = ko }).ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> OppdateringAvInnmeldingSaksB(int id, BehandleInnmeldingSaksBViewModel viewModel)
+        {
+            try
+            {
+                var model = viewModel.InnmeldingModel;
+
+                // Konverter verdiene tilbake til database format
+                model.Status = _enumLogic.ConvertToDbFormat(model.Status);
+                model.Prioritet = _enumLogic.ConvertToDbFormat(model.Prioritet);
+                model.KartType = _enumLogic.ConvertToDbFormat(model.KartType);
+
+                // Valider verdiene //burde refactoreres bort fra controller??!
+                var isStatusValid = await _enumLogic.ValidateStatusValueAsync(model.Status);
+                var isPrioritetValid = await _enumLogic.ValidatePrioritetValueAsync(model.Prioritet);
+                var isKartTypeValid = await _enumLogic.ValidateKartTypeValueAsync(model.KartType);
+
+                if (!isStatusValid || !isPrioritetValid || !isKartTypeValid)
                 {
-                    return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
+                    TempData["ErrorMessage"] = "En eller flere verdier er ugyldige";
+                    return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id });
                 }
 
-                var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
-                var statusOptions = await _innmeldingEnumLogic.GetFormattedStatusEnumValuesAsync();
+                var result = await _innmeldingRepository.OppdatereEnumSaksBAsync(id, model);
 
-                var viewModel = new BehandleInnmeldingSaksBViewModel
+                if (result)
                 {
-                    InnmeldingModel = innmelding,
-                    PersonModel = person,
-                    InnmelderModel = innmelder,
-                    SaksbehandlerModel = saksbehandler,
-                    Geometri = geometri,
-                    StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList()
-                };
+                    TempData["SuccessMessage"] = "Lagret"; // Lagt til denne
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Lagring feilet";
+                }
 
-                return View(viewModel);
-            
-           
+                return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id });
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Lagring feilet";
+                return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id });
+            }
         }
     }
+
 }

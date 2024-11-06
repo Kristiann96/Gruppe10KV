@@ -5,17 +5,20 @@
 }
 
 @section Styles {
+    <!-- Basis kart-styling - IKKE ENDRE -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
 
     <style>
+        /* Basis kartoppsett - IKKE ENDRE */
         #map {
             height: 85vh;
             width: 100%;
             margin-bottom: 20px;
         }
 
+        /* Popup styling - Kan justeres */
         .persistent-popup .leaflet-popup-content-wrapper {
             background-color: rgba(255, 255, 255, 0.95);
             box-shadow: 0 3px 14px rgba(0,0,0,0.4);
@@ -36,10 +39,12 @@
             font-size: 14px;
         }
 
+        /* Vurderingsknapper og kommentarfelt */
         .popup-buttons {
             display: flex;
             gap: 10px;
             justify-content: center;
+            margin-bottom: 10px;
         }
 
         .popup-button {
@@ -61,12 +66,35 @@
             color: white;
         }
 
-        .popup-button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            opacity: 0.9;
+        .kommentar-container {
+            display: none;
+            margin-top: 10px;
         }
 
+        .kommentar-textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .send-button {
+            background-color: #2196F3;
+            color: white;
+            width: 100%;
+        }
+
+        .takk-melding {
+            text-align: center;
+            color: #4CAF50;
+            font-weight: bold;
+            padding: 10px;
+        }
+
+        /* Validerings-melding styling */
         .validation-message {
             position: fixed;
             top: 20px;
@@ -80,15 +108,13 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .rate-limit-message {
-            background-color: #f44336;
-        }
+        /* Visuell indikator for geometrier */
+        .geometry-indicator {
+    background-color: #ff7800;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
 
-        .validated {
-            stroke: #2196F3;
-            stroke-width: 3;
-            fill-opacity: 0.7;
-        }
     </style>
 }
 
@@ -98,6 +124,7 @@
 </div>
 
 @section Scripts {
+    <!-- Nødvendige scripts - IKKE ENDRE -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
@@ -107,27 +134,25 @@
     <script src="~/js/maps/utils/mapControls.js"></script>
 
     <script>
-        // Rate limiting
-        const MAX_VALIDATIONS = 15;
-        let validationCount = 0;
-
-        // Initialiser kartet
+        // Kart-initialisering
         const map = MapConfig.initializeMap('map');
-
-        // Legg til lag-kontroll med kommunegrenser
         const baseMaps = {};
         const overlayMaps = {
             "Kommunegrenser": WMSService.addKommuneGrenser(map)
         };
         L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-        // Initialiser søk og lokalisering
         MapControls.initializeControls(map);
 
-        // Hent geometridata fra ViewModel
-        const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
-        console.log("GeometriData:", geometriData);
+        // Globale variabler for tilstandshåndtering
+        let hoverTimer;
+        let popupTimer;
+        const vurdertGeometrier = new Set();
+        let aktivVurdering = false;
 
+        // Hent geometridata
+        const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
+
+        // Hjelpefunksjoner
         function showMessage(message, isError = false) {
             const messageElement = document.getElementById('validationMessage');
             messageElement.textContent = message;
@@ -139,101 +164,245 @@
             }, 3000);
         }
 
-        function handleValidation(geometriId, isValid) {
-            if (validationCount >= MAX_VALIDATIONS) {
-                showMessage('Du har nådd grensen for antall bidrag i denne økten. Kom gjerne tilbake senere for å bidra mer til kartforbedringen!', true);
-                return;
-            }
+        function addVisualIndicator(layer, type) {
+            if (type === 'LineString' || type === 'Polygon') {
+                const bounds = layer.getBounds();
+                const center = bounds.getCenter();
 
-            validationCount++;
-            showMessage('Takk for bidraget!');
+                const marker = L.circleMarker(center, {
+                    radius: 12,           // Større radius
+                    fillColor: '#fc03ec', // rosa fyll
+                    color: '##fcd7fa',     // lyserosa kant
+                    weight: 4,            // Tykkere kant
+                    opacity: 1,
+                    fillOpacity: 0.9      // Mer solid farge
+                }).addTo(map);
 
-            const layer = validatedLayers.get(geometriId);
-            if (layer) {
-                layer.setStyle({
-                    color: '#2196F3',
-                    weight: 3,
-                    fillOpacity: 0.7
-                });
+                return marker;
             }
+            return null;
         }
 
-        // Map for å holde styr på lag
-        const validatedLayers = new Map();
+        function createPopupContent(data) {
+            const container = document.createElement('div');
+            container.className = 'popup-content';
+            
+            // Tittel
+            const title = document.createElement('div');
+            title.className = 'popup-title';
+            title.textContent = data.Tittel;
+            container.appendChild(title);
 
-        // Legg til geometriobjekter på kartet
+            // Hvis allerede vurdert i denne sesjonen
+            if (vurdertGeometrier.has(data.InnmeldingId)) {
+                const takkDiv = document.createElement('div');
+                takkDiv.className = 'takk-melding';
+                takkDiv.textContent = 'Takk for din vurdering!';
+                container.appendChild(takkDiv);
+                return container;
+            }
+
+            // Knapper-container
+            const buttonsDiv = document.createElement('div');
+            buttonsDiv.className = 'popup-buttons';
+
+            // Kommentar-container
+            const kommentarDiv = document.createElement('div');
+            kommentarDiv.className = 'kommentar-container';
+
+            // Bekreft/Avkreft knapper
+            const bekreftBtn = document.createElement('button');
+            bekreftBtn.className = 'popup-button bekreft-button';
+            bekreftBtn.textContent = 'Bekreft';
+
+            const avkreftBtn = document.createElement('button');
+            avkreftBtn.className = 'popup-button avkreft-button';
+            avkreftBtn.textContent = 'Avkreft';
+
+            buttonsDiv.appendChild(bekreftBtn);
+            buttonsDiv.appendChild(avkreftBtn);
+            container.appendChild(buttonsDiv);
+
+            // Kommentar elementer
+            const textarea = document.createElement('textarea');
+            textarea.className = 'kommentar-textarea';
+            textarea.placeholder = 'Skriv en kort kommentar...';
+            
+            const sendBtn = document.createElement('button');
+            sendBtn.className = 'popup-button send-button';
+            sendBtn.textContent = 'Send vurdering';
+
+            kommentarDiv.appendChild(textarea);
+            kommentarDiv.appendChild(sendBtn);
+            container.appendChild(kommentarDiv);
+
+            let valgtType = null;
+
+            // Knappehåndtering
+            bekreftBtn.onclick = () => {
+                valgtType = 'bekreftelse';
+                aktivVurdering = true;
+                buttonsDiv.style.display = 'none';
+                kommentarDiv.style.display = 'block';
+                clearTimeout(popupTimer);
+            };
+
+            avkreftBtn.onclick = () => {
+                valgtType = 'avkreftelse';
+                aktivVurdering = true;
+                buttonsDiv.style.display = 'none';
+                kommentarDiv.style.display = 'block';
+                clearTimeout(popupTimer);
+            };
+
+            // Send-knapp håndtering
+            sendBtn.onclick = async () => {
+                const kommentar = textarea.value.trim();
+                
+                try {
+                    const response = await fetch('/BidraTilKartForbedring/LagreVurdering', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            innmeldingId: data.InnmeldingId,
+                            type: valgtType,
+                            kommentar: kommentar
+                        })
+                    });
+
+                    if (response.ok) {
+                        vurdertGeometrier.add(data.InnmeldingId);
+                        aktivVurdering = false;
+                        kommentarDiv.style.display = 'none';
+                        
+                        const takkDiv = document.createElement('div');
+                        takkDiv.className = 'takk-melding';
+                        takkDiv.textContent = 'Takk for din vurdering!';
+                        container.innerHTML = '';
+                        container.appendChild(title);
+                        container.appendChild(takkDiv);
+                        
+                        showMessage('Takk for ditt bidrag!');
+                    } else {
+                        showMessage('Det oppstod en feil ved lagring av vurderingen.', true);
+                    }
+                } catch (error) {
+                    showMessage('Det oppstod en feil ved sending av vurderingen.', true);
+                }
+            };
+
+            return container;
+        }
+
+   // Legg til geometrier på kartet
         geometriData.forEach(function (data) {
             try {
                 const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
-                const layer = L.geoJSON(geoJsonFeature).addTo(map);
-                validatedLayers.set(data.GeometriId, layer);
-
-                let isPopupOpen = false;
+                const layer = L.geoJSON(geoJsonFeature, {
+                    style: function (feature) {
+                        return {
+                            color: '#05ede9',     // Orange
+                            weight: 8,            // Tykkere linjer
+                            opacity: 0.9,         // Mer solid
+                            fillColor: '#fa05ed', // Orange fyll for polygoner
+                            fillOpacity: 0.4      // Semi-transparent fyll
+                        };
+                    }
+                }).addTo(map);
 
                 const popup = L.popup({
                     closeButton: true,
                     closeOnClick: false,
-                    autoClose: false,
+                    autoClose: false,      // Ikke lukk automatisk
                     className: 'persistent-popup'
                 });
 
-                const createPopupContent = () => {
-                    const popupContent = document.createElement('div');
-                    popupContent.className = 'popup-content';
-
-                    const title = document.createElement('div');
-                    title.className = 'popup-title';
-                    title.textContent = data.Tittel;
-
-                    const buttons = document.createElement('div');
-                    buttons.className = 'popup-buttons';
-
-                    const bekreftBtn = document.createElement('button');
-                    bekreftBtn.className = 'popup-button bekreft-button';
-                    bekreftBtn.textContent = 'Bekreft';
-                    bekreftBtn.onclick = () => {
-                        handleValidation(data.GeometriId, true);
-                        isPopupOpen = false;
-                        layer.closePopup();
-                    };
-
-                    const avkreftBtn = document.createElement('button');
-                    avkreftBtn.className = 'popup-button avkreft-button';
-                    avkreftBtn.textContent = 'Avkreft';
-                    avkreftBtn.onclick = () => {
-                        handleValidation(data.GeometriId, false);
-                        isPopupOpen = false;
-                        layer.closePopup();
-                    };
-
-                    buttons.appendChild(bekreftBtn);
-                    buttons.appendChild(avkreftBtn);
-
-                    popupContent.appendChild(title);
-                    popupContent.appendChild(buttons);
-
-                    return popupContent;
-                };
-
-                popup.setContent(createPopupContent());
+                popup.setContent(createPopupContent(data));
                 layer.bindPopup(popup);
 
+                let hoverTimeout;
+
                 layer.on('mouseover', function (e) {
-                    if (!isPopupOpen) {
-                        this.openPopup();
-                        isPopupOpen = true;
-                    }
+                    if (hoverTimeout) clearTimeout(hoverTimeout);
+
+                    hoverTimeout = setTimeout(() => {
+                        if (!isPopupOpen) {
+                            this.openPopup();
+                            isPopupOpen = true;
+                        }
+                    }, 500);
                 });
 
-                popup.on('remove', function() {
+                layer.on('mouseout', function (e) {
+                    // Avbryt timeout hvis musen forlater området
+                    if (hoverTimeout) clearTimeout(hoverTimeout);
+
+                    const popup = document.querySelector('.leaflet-popup');
+                    if (popup) {
+                        const rect = popup.getBoundingClientRect();
+                        const mouseX = e.originalEvent.clientX;
+                        const mouseY = e.originalEvent.clientY;
+
+                        // Hvis musen er innenfor popup-området, ikke lukk
+                        if (mouseX >= rect.left && mouseX <= rect.right &&
+                            mouseY >= rect.top && mouseY <= rect.bottom) {
+                            return;
+                        }
+                    }
+
+                    // Lukk popup hvis vi ikke er i ferd med å gjøre en vurdering
+                    if (!aktivVurdering) {
+        this.closePopup();
+        isPopupOpen = false;
+    }
+        });
+
+        popup.on('add', function() {
+    const popupElement = document.querySelector('.leaflet-popup');
+    if (popupElement) {
+        popupElement.addEventListener('mouseover', function() {
+            isPopupOpen = true;
+        });
+        
+        popupElement.addEventListener('mouseout', function(e) {
+            // Ikke lukk hvis vi er i en aktiv vurdering
+            if (!aktivVurdering) {
+                const rect = this.getBoundingClientRect();
+                if (e.clientX < rect.left || e.clientX > rect.right ||
+                    e.clientY < rect.top || e.clientY > rect.bottom) {
                     isPopupOpen = false;
-                });
+                    layer.closePopup();
+                }
+            }
+        });
+    }
+        });
 
-                map.on('click', function(e) {
-                    if (isPopupOpen) {
-                        L.DomEvent.stopPropagation(e);
-                    }
-                });
+
+                // Legg til visuell indikator for mindre synlige geometrier
+                const marker = addVisualIndicator(layer, geoJsonFeature.geometry.type);
+                if (marker) {
+                    marker.bindPopup(popup);
+
+                    // Samme hover-oppførsel for markøren
+                    marker.on('mouseover', function (e) {
+                        if (hoverTimeout) clearTimeout(hoverTimeout);
+                        hoverTimeout = setTimeout(() => {
+                            if (!aktivVurdering) {
+                                this.openPopup();
+                            }
+                        }, 500);
+                    });
+
+                    marker.on('mouseout', function (e) {
+                        if (hoverTimeout) clearTimeout(hoverTimeout);
+                        if (!aktivVurdering) {
+                            this.closePopup();
+                        }
+                    });
+                }
 
             } catch (e) {
                 console.error('Feil ved parsing av geometri:', e, data);
@@ -241,4 +410,3 @@
         });
     </script>
 }
-

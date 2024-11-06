@@ -14,13 +14,15 @@ namespace DataAccess
     public class InnmeldingRepository : IInnmeldingRepository
     {
         private readonly DapperDBConnection _dbConnection;
+        private const string ENUM_PREFIX = "enum(";
+        private const string ENUM_SUFFIX = ")";
 
         public InnmeldingRepository(DapperDBConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }
 
-        
+
 
         //Daniel's sql innhenting av data til "OppdatereInnmelding"
         public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync()
@@ -84,8 +86,8 @@ namespace DataAccess
 
         /* Ørjan over */
 
-        //InnmeldingEnumLogic
-        public async Task<string> GetStatusEnumValuesAsync()
+        //InnmeldingEnumLogic for status
+        /*public async Task<string> GetStatusEnumValuesAsync()
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"
@@ -95,7 +97,7 @@ namespace DataAccess
             AND TABLE_NAME = 'innmelding'
             AND COLUMN_NAME = 'status'";
             return await connection.QuerySingleOrDefaultAsync<string>(sql);
-        }
+        }*/
 
 
         public async Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(int innmelderId)
@@ -113,41 +115,80 @@ namespace DataAccess
             return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmelderId = innmelderId });
         }
 
+        //Henting for enummene
 
-        //LAGRING AV DATA
-
-        public async Task<int> LagreInnmeldingAsync(InnmeldingModel innmelding)
+        private async Task<string> GetEnumValuesForColumnAsync(string tableName, string columnName)
         {
             using var connection = _dbConnection.CreateConnection();
-            using var transaction = connection.BeginTransaction();
+            var sql = @"
+            SELECT SUBSTRING(COLUMN_TYPE, 
+                           LENGTH(@EnumPrefix) + 1, 
+                           LENGTH(COLUMN_TYPE) - LENGTH(@EnumPrefix) - LENGTH(@EnumSuffix)) AS EnumValues
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE()
+            AND TABLE_NAME = @TableName
+            AND COLUMN_NAME = @ColumnName";
+
+            var parameters = new
+            {
+                TableName = tableName,
+                ColumnName = columnName,
+                EnumPrefix = ENUM_PREFIX,
+                EnumSuffix = ENUM_SUFFIX
+            };
+
+            return await connection.QuerySingleOrDefaultAsync<string>(sql, parameters);
+        }
+
+        public async Task<string> GetStatusEnumValuesAsync() =>
+            await GetEnumValuesForColumnAsync("innmelding", "status");
+
+        public async Task<string> GetPrioritetEnumValuesAsync() =>
+            await GetEnumValuesForColumnAsync("innmelding", "prioritet");
+
+        public async Task<string> GetKartTypeEnumValuesAsync() =>
+            await GetEnumValuesForColumnAsync("innmelding", "kart_type");
+
+
+        //Todo: Flytt til eget repository (eller slette?)
+        public async Task<string> GetInnmelderTypeEnumValuesAsync() =>
+            await GetEnumValuesForColumnAsync("innmelder", "innmelder_type");
+
+        //Oppdatering av enum
+        public async Task<bool> OppdatereEnumSaksBAsync(int innmeldingId, InnmeldingModel model)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = await connection.BeginTransactionAsync();
 
             try
             {
                 var sql = @"
-                INSERT INTO innmelding (
-                    gjest_innmelder_id, 
-                    tittel, 
-                    beskrivelse, 
-                    prioritet
-                ) VALUES (
-                    @GjestInnmelderId,
-                    @Tittel,
-                    @Beskrivelse,
-                    @Prioritet   
-                );
-                SELECT LAST_INSERT_ID();";
+                UPDATE innmelding 
+                SET status = @Status,
+                    prioritet = @Prioritet,
+                    kart_type = @KartType
+                WHERE innmelding_id = @InnmeldingId";
 
-                var id = await connection.QuerySingleAsync<int>(sql, innmelding, transaction);
+                var parameters = new
+                {
+                    InnmeldingId = innmeldingId,
+                    Status = model.Status,
+                    Prioritet = model.Prioritet,
+                    KartType = model.KartType
+                };
+
+                var rowsAffected = await connection.ExecuteAsync(sql, parameters, transaction);
                 await transaction.CommitAsync();
-                return id;
+
+                return rowsAffected > 0;
             }
-            catch
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
                 throw;
             }
-
         }
+
     }
 }
 
