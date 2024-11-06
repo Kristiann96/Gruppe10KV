@@ -23,21 +23,21 @@ namespace DataAccess
         
 
         //Daniel's sql innhenting av data til "OppdatereInnmelding"
-        public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync()
+        public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate)
         {
             using var connection = _dbConnection.CreateConnection();
-            var sql = @"SELECT innmelding_id AS InnmeldingId,
+            var sql = @"SELECT 
+                    innmelding_id AS InnmeldingId,
                     tittel AS Tittel,
                     status AS Status,
                     beskrivelse AS Beskrivelse
                 FROM innmelding
-                WHERE innmelding_id = 8";
-            var result = await connection.QueryAsync<InnmeldingModel>(sql);
-
-            return result;
+                WHERE innmelding_id = @InnmeldingId";
+            
+            return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingIdUpdate });
         }
 
-        public async Task<InnmeldingModel> GetOppdatereInnmeldingByIdAsync(int innmeldingId)
+        public async Task<InnmeldingModel> GetOppdatereInnmeldingByIdAsync(int oppInnmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"SELECT 
@@ -50,7 +50,7 @@ namespace DataAccess
 
             return await connection.QuerySingleOrDefaultAsync<InnmeldingModel>(
                 sql,
-                new { InnmeldingId = innmeldingId }
+                new { InnmeldingId = oppInnmeldingId }
             );
         }
 

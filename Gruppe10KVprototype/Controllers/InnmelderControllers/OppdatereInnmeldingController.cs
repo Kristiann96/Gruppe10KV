@@ -18,35 +18,35 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
     {
         private readonly IInnmeldingRepository _innmeldingRepository;
         private readonly IGeometriRepository _geometriRepository;
-        //private readonly IInnmeldingRepository _getInnmeldingDetaljerOversiktInnmelding;
+        private readonly IInnmeldingRepository _getInnmeldingDetaljerOversiktInnmelding;
 
         public OppdatereInnmeldingController(IInnmeldingRepository innmeldingRepository, IGeometriRepository geometriRepository)
         {
             _innmeldingRepository = innmeldingRepository;
             _geometriRepository = geometriRepository;
-           // _getInnmeldingDetaljerOversiktInnmelding = innmeldingRepository;
+            _getInnmeldingDetaljerOversiktInnmelding = innmeldingRepository;
         }
         /*
         public Task<InnmeldingModel> GetInnmeldingDetaljerOversiktInnmelding(int innmeldingId)
         {
             throw new NotImplementedException();
-        } */
+        }*/
 
         [HttpGet("index")]
-        public ActionResult Index()
+        public ActionResult Index(int innmeldingIdUpdate)
         {
             var viewModel = new OppdatereInnmeldingViewModel
             {
-                OppdatereInnmeldinger = _innmeldingRepository.GetInnmeldingAsync().Result.ToList()
+                OppdatereInnmeldinger = _innmeldingRepository.GetInnmeldingAsync(innmeldingIdUpdate).Result.ToList()
             };
             return View(viewModel);
         }
         
         [HttpGet("oppdatere")]
-        public async Task<IActionResult> OppdatereInnmelding()
+        public async Task<IActionResult> OppdatereInnmelding(int id)
         {
             // Retrieve data from repository
-            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetInnmeldingAsync();
+            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetInnmeldingAsync(id);
 
             // Create and populate the view model
             var viewModel = new OppdatereInnmeldingViewModel
@@ -57,15 +57,15 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             // Pass data to the view
             return View(viewModel);
         }
-        /*
-        public int hardcode = 10;
-        [HttpGet("{hardcode}")]
-        public async Task<IActionResult> OppdatereInnmelding()
+        
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> OppdatereInnmeldingGeo(int id)
         {
             // Retrieve data from repository
-            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetInnmeldingAsync();
+            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetInnmeldingAsync(id);
             
-            var innmelding = await _getInnmeldingDetaljerOversiktInnmelding.GetOppdatereInnmeldingByIdAsync(hardcode);
+            var innmelding = await _getInnmeldingDetaljerOversiktInnmelding.GetOppdatereInnmeldingByIdAsync(id);
 
             if (innmelding == null)
             {
@@ -73,7 +73,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             }
             
 
-            var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(hardcode);
+            var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
 
             var viewModel = new OppdatereInnmeldingViewModel
             {
@@ -83,6 +83,6 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             };
 
             return View(viewModel);
-        }*/
+        }
     }
 }
