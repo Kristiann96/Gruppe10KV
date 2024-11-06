@@ -49,7 +49,6 @@ namespace DataAccess
                             innmelder_id AS InnmelderId,
                             tittel AS Tittel,
                             status AS Status,
-
                             siste_endring AS SisteEndring,
                             prioritet AS Prioritet
                         FROM innmelding
