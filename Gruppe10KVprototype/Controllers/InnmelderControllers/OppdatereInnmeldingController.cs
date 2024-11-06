@@ -10,6 +10,7 @@ using System.Linq;
 using Logic;
 using Interfaces;
 using DataAccess;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
@@ -61,6 +62,27 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 
             // Pass data to the view
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OppdatereInnmeldingForm(int InnmeldingId, string Tittel, string Beskrivelse)
+        {
+            // Fetch the existing record from the repository
+            var innmelding = (await _innmeldingRepository.GetInnmeldingAsync(InnmeldingId)).FirstOrDefault();
+            if (innmelding == null)
+            {
+                return NotFound();
+            }
+
+            // Update the record with new values
+            innmelding.Tittel = Tittel;
+            innmelding.Beskrivelse = Beskrivelse;
+
+            // Save changes to the repository
+            await _innmeldingRepository.OppdatereInnmeldingFormAsync(innmelding);
+
+            // Redirect back to the update page or another appropriate page
+            return RedirectToAction("OppdatereInnmelding", new { id = InnmeldingId });
         }
     }
 }

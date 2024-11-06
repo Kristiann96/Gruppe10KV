@@ -11,6 +11,7 @@ namespace Interface
 
         //Daniel's interface for "OppdatereInnmelding"
         Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate);
+        Task OppdatereInnmeldingFormAsync(InnmeldingModel innmelding);
         //
 
 
