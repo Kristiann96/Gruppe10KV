@@ -2,15 +2,9 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Entities;
 using Models.Models;
-using System.Threading.Tasks;
 using Interface;
-using System.Collections.Generic;
 using ViewModels;
-using System.Linq;
-using Logic;
-using Interfaces;
-using DataAccess;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
