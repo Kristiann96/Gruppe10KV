@@ -77,7 +77,10 @@ namespace DataAccess
                 LEFT JOIN person p ON i.person_id = p.person_id
                 LEFT JOIN geometri g ON im.innmelding_id = g.innmelding_id
                 LEFT JOIN gjesteinnmelder gi ON im.gjest_innmelder_id = gi.gjest_innmelder_id
-                WHERE im.tittel LIKE @SearchTerm";
+                WHERE im.tittel LIKE @SearchTerm
+                OR CONCAT (p.fornavn, ' ', p.etternavn) LIKE @SearchTerm
+                OR i.epost LIKE @SearchTerm
+                OR gi.epost LIKE @SearchTerm";
 
             var totalItems = await connection.ExecuteScalarAsync<int>(countSql, new { SearchTerm = "%" + searchTerm + "%" });
 
@@ -126,7 +129,10 @@ namespace DataAccess
                 LEFT JOIN geometri g ON im.innmelding_id = g.innmelding_id
                 LEFT JOIN gjesteinnmelder gi ON im.gjest_innmelder_id = gi.gjest_innmelder_id
                 WHERE im.tittel LIKE @SearchTerm
-                ORDER BY im.innmelding_id
+                OR CONCAT (p.fornavn, ' ', p.etternavn) LIKE @SearchTerm
+                OR i.epost LIKE @SearchTerm
+                OR gi.epost LIKE @SearchTerm
+                ORDER BY im.innmelding_id 
                 LIMIT @PageSize OFFSET @Offset";
 
             var parameters = new
