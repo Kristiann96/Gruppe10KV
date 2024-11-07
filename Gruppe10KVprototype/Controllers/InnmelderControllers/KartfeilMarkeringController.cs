@@ -8,11 +8,11 @@ using Models.Models;
 public class KartfeilMarkeringController : Controller
 {
     private readonly IGeometriRepository _geometriRepository;
-    private readonly IKartverketAPILogic _kartverketAPILogic;
+    private readonly IKommuneAPILogic _kartverketAPILogic;
 
     public KartfeilMarkeringController(
         IGeometriRepository geometriRepository,
-        IKartverketAPILogic kartverketAPILogic)
+        IKommuneAPILogic kartverketAPILogic)
     {
         _geometriRepository = geometriRepository;
         _kartverketAPILogic = kartverketAPILogic;

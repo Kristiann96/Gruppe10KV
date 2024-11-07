@@ -27,7 +27,7 @@ builder.Services.AddScoped<DapperDBConnection>();
 builder.Services.AddScoped<IIncidentFormRepository, IncidentFormRepository>(); //slettes før launch
 builder.Services.AddScoped<IInnmeldingERepository, InnmeldingERepository>(); //slettes før launch
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
-builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
+builder.Services.AddHttpClient<IKommuneAPILogic, KommuneAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
 builder.Services.AddScoped<IVurderingRepository, VurderingRepository>();
 builder.Services.AddScoped<IEnumLogic, EnumLogic>();

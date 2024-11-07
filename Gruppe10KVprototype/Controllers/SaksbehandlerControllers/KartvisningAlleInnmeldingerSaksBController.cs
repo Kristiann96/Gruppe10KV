@@ -13,9 +13,9 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
     public class KartvisningAlleInnmeldingerSaksBController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;
-        private readonly IKartverketAPILogic _kartverketAPILogic;
+        private readonly IKommuneAPILogic _kartverketAPILogic;
 
-        public KartvisningAlleInnmeldingerSaksBController(IGeometriRepository geometriRepository, IKartverketAPILogic kartverketAPILogic)
+        public KartvisningAlleInnmeldingerSaksBController(IGeometriRepository geometriRepository, IKommuneAPILogic kartverketAPILogic)
         {
             _geometriRepository = geometriRepository;
             _kartverketAPILogic = kartverketAPILogic;
