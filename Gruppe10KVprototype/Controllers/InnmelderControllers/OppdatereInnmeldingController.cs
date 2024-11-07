@@ -65,24 +65,24 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OppdatereInnmeldingForm(int InnmeldingId, string Tittel, string Beskrivelse)
+        public async Task<IActionResult> OppdatereInnmeldingForm(OppdatereInnmeldingViewModel viewModel)
         {
             // Fetch the existing record from the repository
-            var innmelding = (await _innmeldingRepository.GetInnmeldingAsync(InnmeldingId)).FirstOrDefault();
+            var innmelding = (await _innmeldingRepository.GetInnmeldingAsync(viewModel.InnmeldingId)).FirstOrDefault();
             if (innmelding == null)
             {
                 return NotFound();
             }
 
             // Update the record with new values
-            innmelding.Tittel = Tittel;
-            innmelding.Beskrivelse = Beskrivelse;
+            innmelding.Tittel = viewModel.Tittel;
+            innmelding.Beskrivelse = viewModel.Beskrivelse;
 
             // Save changes to the repository
             await _innmeldingRepository.OppdatereInnmeldingFormAsync(innmelding);
 
             // Redirect back to the update page or another appropriate page
-            return RedirectToAction("OppdatereInnmelding", new { id = InnmeldingId });
+            return RedirectToAction("OppdatereInnmelding", new { id = viewModel.InnmeldingId });
         }
     }
 }
