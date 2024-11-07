@@ -7,9 +7,9 @@ using LogicInterfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
-using AuthenticationService = AuthDataAccess.Services.AuthenticationService;
 using AuthInterface;
 using AuthDataAccess.Extensions;
+using AuthDataAccess.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,14 +39,16 @@ builder.Services.AddScoped<IEnumLogic, EnumLogic>();
 builder.Services.AddScoped<IDataSammenstillingSaksBRepository, DataSammenstillingSaksBRepository>();
 builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository>();
 builder.Services.AddScoped<ITransaksjonsRepository, TransaksjonsRepository>();
+builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
+builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
 
 //og logic og logicinterfaces
 builder.Services.AddScoped<IInnmeldingOpprettelseLogic, InnmeldingOpprettelseLogic>();
 
-//AuthenticationService registrering
-builder.Services.AddScoped<IAuthService, AuthenticationService>();
+//AuthService registrering
+builder.Services.AddScoped<IAuthService, AuthService>();
 
-//HttpContextAccessor for AuthenticationService
+//HttpContextAccessor for AuthService
 builder.Services.AddHttpContextAccessor();
 
 // LoggInn

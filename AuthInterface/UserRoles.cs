@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AuthInterface
@@ -18,7 +15,7 @@ namespace AuthInterface
         Task<bool> DoesEmailExistAsync(string email);
 
         // Registrering
-        Task<(bool success, string[] errors)> RegisterInnmelderAsync(string email, string password);
+        Task<(bool success, string[] errors)> RegisterInnmelderAsync(string email, string password, int personId);
 
         // Innlogging/utlogging
         Task<(bool success, string[] errors)> LoginAsync(string email, string password);
@@ -29,5 +26,8 @@ namespace AuthInterface
 
         // Passord reset
         Task<(bool success, string[] errors)> ResetPasswordAsync(string email, string newPassword);
+
+        // Person ID henting
+        Task<int?> GetPersonId(ClaimsPrincipal user);
     }
 }
