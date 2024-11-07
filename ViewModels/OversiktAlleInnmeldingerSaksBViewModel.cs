@@ -12,4 +12,5 @@ public class OversiktAlleInnmeldingerSaksBViewModel
     public IEnumerable<string> InnmelderNavn { get; set; }
     public IEnumerable<string> InnmelderEpost { get; set; }
     public IEnumerable<string> GjestEpost { get; set; }
+    public IEnumerable<string> KommuneData { get; set; }
 }
