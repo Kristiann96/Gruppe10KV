@@ -9,23 +9,27 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
     public class OversiktAlleInnmeldingerSaksBController : Controller
     {
         private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
-        
-        public OversiktAlleInnmeldingerSaksBController(IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository)
+
+        public OversiktAlleInnmeldingerSaksBController(
+            IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository)
         {
             _dataSammenstillingSaksBRepository = dataSammenstillingSaksBRepository;
         }
-        public async Task<IActionResult> OversiktAlleInnmeldingerSaksB(int pageNumber = 1, int pageSize = 10, string searchTerm = "")
+
+        public async Task<IActionResult> OversiktAlleInnmeldingerSaksB(int pageNumber = 1, int pageSize = 10,
+            string searchTerm = "")
         {
-            var result = await _dataSammenstillingSaksBRepository.GetOversiktAlleInnmeldingerSaksBAsync(pageNumber, pageSize, searchTerm);
+            var result =
+                await _dataSammenstillingSaksBRepository.GetOversiktAlleInnmeldingerSaksBAsync(pageNumber, pageSize,
+                    searchTerm);
             var innmeldinger = result.Data;
             var totalPages = result.TotalPages;
-            
+
             if (innmeldinger == null || !innmeldinger.Any())
             {
-                // Handle the case where the innmeldinger collection is null or empty
                 return View("OversiktAlleInnmeldingerSaksB", new OversiktAlleInnmeldingerSaksBViewModel());
             }
-            
+
             var viewModel = new OversiktAlleInnmeldingerSaksBViewModel
             {
                 Innmeldinger = innmeldinger.Select(i => i.Item1 ?? new InnmeldingModel()),
@@ -37,10 +41,13 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                     string.IsNullOrEmpty(i.Item2?.Fornavn) && string.IsNullOrEmpty(i.Item2?.Etternavn)
                         ? "Gjest"
                         : $"{i.Item2?.Fornavn} {i.Item2?.Etternavn}"),
-                InnmelderEpost = innmeldinger.Select(i => i.Item5?.Epost ?? "MÅ HA EPOST"),
-                GjestEpost = innmeldinger.Select(i => i.Item4?.Epost ?? "MÅ HA EPOST")
+                // Updated email handling
+                InnmelderEpost = innmeldinger.Select(i =>
+                    !string.IsNullOrEmpty(i.Item5?.Epost) ? i.Item5.Epost : "N/A"),
+                GjestEpost = innmeldinger.Select(i =>
+                    !string.IsNullOrEmpty(i.Item4?.Epost) ? i.Item4.Epost : "N/A")
             };
-            
+
             return View("OversiktAlleInnmeldingerSaksB", viewModel);
         }
     }

@@ -122,11 +122,14 @@
             var innmelderNavn = Model.InnmelderNavn.ElementAt(i);
             var innmelderEpost = Model.InnmelderEpost.ElementAtOrDefault(i) ?? "N/A";
             var gjestEpost = Model.GjestEpost.ElementAtOrDefault(i) ?? "N/A";
+            var displayEmail = !string.IsNullOrEmpty(innmelderEpost) && innmelderEpost != "N/A" 
+                ? innmelderEpost 
+                : (!string.IsNullOrEmpty(gjestEpost) && gjestEpost != "N/A" ? gjestEpost : "N/A");
             <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmelding.InnmeldingId })'">
                 <td>@innmelding.InnmeldingId</td>
                 <td>@innmelding.Tittel</td>
                 <td>@innmelderNavn</td>
-                <td>@(!string.IsNullOrEmpty(innmelderEpost) ? innmelderEpost : gjestEpost)</td>
+                <td>@displayEmail</td>
                 <td>@innmelding.Prioritet</td>
                 <td>@innmelding.Status</td>
                 <td>@innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
