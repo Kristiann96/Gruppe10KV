@@ -12,7 +12,7 @@ namespace AuthInterface
         public const string Saksbehandler = "Saksbehandler";
     }
 
-    public interface IAuthenticationService
+    public interface IAuthService
     {
         // Epost-sjekk
         Task<bool> DoesEmailExistAsync(string email);

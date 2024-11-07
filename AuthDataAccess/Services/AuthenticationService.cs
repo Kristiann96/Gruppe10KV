@@ -1,10 +1,12 @@
 ﻿using AuthInterface;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using Pomelo.EntityFrameworkCore.MySql;
 
 namespace AuthDataAccess.Services;
 
-public class AuthenticationService : IAuthenticationService
+public class AuthenticationService : IAuthService
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
@@ -45,7 +47,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (!roleResult.Succeeded)
         {
-            // Hvis rolletildelingen feiler, prøver vi å slette brukeren
+            // Hvis rolletildelingen feiler, prøver vi å slette brukeren(ingen brukere uten rolle skal eksistere)
             await _userManager.DeleteAsync(user);
             return (false, roleResult.Errors.Select(e => e.Description).ToArray());
         }
@@ -79,12 +81,13 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<bool> IsInRoleAsync(string role)
     {
-        var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
+        var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User ?? throw new InvalidOperationException("No user context available"));
         if (user == null)
             return false;
 
         return await _userManager.IsInRoleAsync(user, role);
     }
+
 
     public async Task<(bool success, string[] errors)> ResetPasswordAsync(string email, string newPassword)
     {

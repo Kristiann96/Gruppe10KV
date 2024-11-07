@@ -1,3 +1,4 @@
+using AuthDataAccess.Context;
 using DataAccess;
 using Interface;
 using Logic;
@@ -5,7 +6,11 @@ using Interfaces;
 using LogicInterfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Context;
+using Microsoft.AspNetCore.Authentication;
+using AuthenticationService = AuthDataAccess.Services.AuthenticationService;
+using AuthInterface;
+using AuthDataAccess.Extensions;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,14 +36,18 @@ builder.Services.AddHttpClient<IKartverketAPILogic, KartverketAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
 builder.Services.AddScoped<IVurderingRepository, VurderingRepository>();
 builder.Services.AddScoped<IEnumLogic, EnumLogic>();
-
-
 builder.Services.AddScoped<IDataSammenstillingSaksBRepository, DataSammenstillingSaksBRepository>();
 builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository>();
 builder.Services.AddScoped<ITransaksjonsRepository, TransaksjonsRepository>();
 
 //og logic og logicinterfaces
 builder.Services.AddScoped<IInnmeldingOpprettelseLogic, InnmeldingOpprettelseLogic>();
+
+//AuthenticationService registrering
+builder.Services.AddScoped<IAuthService, AuthenticationService>();
+
+//HttpContextAccessor for AuthenticationService
+builder.Services.AddHttpContextAccessor();
 
 // LoggInn
 // DbContext for Identity
@@ -51,21 +60,28 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 // Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     {
+        // Passordkrav
         options.Password.RequireDigit = true;
         options.Password.RequireLowercase = true;
         options.Password.RequireUppercase = false;
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequiredLength = 6;
+
+        // Epost-innstillinger
         options.User.RequireUniqueEmail = true;
+        options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+
+        // SignIn-innstillinger
+        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
     })
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
-
-
-
-
 var app = builder.Build();
+
+await IdentityDataInitializer.InitializeRoles(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -76,30 +92,20 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
+// Riktig rekkefølge for auth middleware
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAuthentication();
-
-// Definer routing for HomeController og InnmelderSkjemaIncidentFormController
+// Routing
 app.MapControllerRoute(
-    "default",
-    "{controller=Home}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
-
-// Route for InnmelderSkjemaIncidentFormController
 app.MapControllerRoute(
-    "innmelderSkjema",
-    "form/{action=Form}/{id?}",
-    new { controller = "InnmelderSkjemaIncidentForm" });
-
+    name: "innmelderSkjema",
+    pattern: "form/{action=Form}/{id?}",
+    defaults: new { controller = "InnmelderSkjemaIncidentForm" });
 
 app.Run();
