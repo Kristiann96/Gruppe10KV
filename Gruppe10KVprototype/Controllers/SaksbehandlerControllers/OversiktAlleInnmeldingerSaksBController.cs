@@ -3,17 +3,21 @@ using Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using ViewModels;
+using LogicInterfaces;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
     public class OversiktAlleInnmeldingerSaksBController : Controller
     {
         private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
+        private readonly IEnumLogic _enumLogic;
 
         public OversiktAlleInnmeldingerSaksBController(
-            IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository)
+            IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository,
+            IEnumLogic enumLogic)
         {
             _dataSammenstillingSaksBRepository = dataSammenstillingSaksBRepository;
+            _enumLogic = enumLogic;
         }
 
         public async Task<IActionResult> OversiktAlleInnmeldingerSaksB(int pageNumber = 1, int pageSize = 10,
@@ -32,7 +36,13 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 
             var viewModel = new OversiktAlleInnmeldingerSaksBViewModel
             {
-                Innmeldinger = innmeldinger.Select(i => i.Item1 ?? new InnmeldingModel()),
+                Innmeldinger = innmeldinger.Select(i =>
+                {
+                    var innmelding = i.Item1 ?? new InnmeldingModel();
+                    innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
+                    innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
+                    return innmelding;
+                }),
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 TotalPages = totalPages,

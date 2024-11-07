@@ -67,7 +67,7 @@ namespace DataAccess
         
         public async Task<(IEnumerable<(InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)> Data, int TotalPages)> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm)
         {
-            using var connection = _dbConnection.CreateConnection();
+            await using var connection = _dbConnection.CreateConnection();
 
             // Calculate total items for pagination
             var countSql = @"
@@ -111,7 +111,7 @@ namespace DataAccess
 
                     -- Geometri fields
                     g.geometri_id AS GeometriId,
-                    g.innmelding_id,
+                    g.innmelding_id AS InnmeldingId,
                     ST_AsText(g.geometri_data) AS GeometriGeoJson,
 
                     -- Gjesteinnmelder fields
@@ -132,7 +132,9 @@ namespace DataAccess
                 OR CONCAT (p.fornavn, ' ', p.etternavn) LIKE @SearchTerm
                 OR i.epost LIKE @SearchTerm
                 OR gi.epost LIKE @SearchTerm
-                ORDER BY im.innmelding_id 
+                ORDER BY 
+                    FIELD(im.status, 'ny', 'ikke_på_begynt', 'under_behandling', 'pauset', 'avsluttet', 'ikke_tatt_til_følge'),
+                    im.siste_endring DESC
                 LIMIT @PageSize OFFSET @Offset";
 
             var parameters = new
