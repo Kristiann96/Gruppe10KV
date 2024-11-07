@@ -14,5 +14,17 @@ namespace Interface
             string gjesteEpost,
             InnmeldingModel innmelding,
             Geometri geometri);
+
+        Task<(bool success, int personId)> OpprettPersonOgInnmelder(
+            string fornavn,
+            string etternavn,
+            string telefonnummer,
+            string epost);
+
+        Task<bool> SlettPersonOgInnmelder(int personId);
     }
+
+
+
+
 }
