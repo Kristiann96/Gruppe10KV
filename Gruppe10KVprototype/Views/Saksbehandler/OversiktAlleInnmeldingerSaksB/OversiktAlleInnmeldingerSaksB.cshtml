@@ -108,20 +108,28 @@
         <tr>
             <th>INNMELDING ID</th>
             <th>TITTEL</th>
-            <th>INNMELDER ID</th>
+            <th>INNMELDER</th>
+            <th>EPOST</th>
             <th>PRIORITET</th>
             <th>STATUS</th>
             <th>SISTE ENDRING</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var innmelding in Model.Innmeldinger)
+        @for (int i = 0; i < Model.Innmeldinger.Count(); i++)
         {
+            var innmelding = Model.Innmeldinger.ElementAt(i);
+            var innmelderNavn = Model.InnmelderNavn.ElementAt(i);
+            var innmelderEpost = Model.InnmelderEpost.ElementAtOrDefault(i) ?? "N/A";
+            var gjestEpost = Model.GjestEpost.ElementAtOrDefault(i) ?? "N/A";
+            var displayEmail = !string.IsNullOrEmpty(innmelderEpost) && innmelderEpost != "N/A" 
+                ? innmelderEpost 
+                : (!string.IsNullOrEmpty(gjestEpost) && gjestEpost != "N/A" ? gjestEpost : "N/A");
             <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmelding.InnmeldingId })'">
-
                 <td>@innmelding.InnmeldingId</td>
                 <td>@innmelding.Tittel</td>
-                <td>@innmelding.InnmelderId</td>
+                <td>@innmelderNavn</td>
+                <td>@displayEmail</td>
                 <td>@innmelding.Prioritet</td>
                 <td>@innmelding.Status</td>
                 <td>@innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
@@ -147,16 +155,16 @@
         }
     </div>
 </main>
-    <script>
-        function navigateToDetails(id) {
-            if (id) {
-                var url = '@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB")/';
-                window.location.href = url + id;
-            } else {
-                console.error('Ingen innmelding ID spesifisert');
-            }
+<script>
+    function navigateToDetails(id) {
+        if (id) {
+            var url = '@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB")/';
+            window.location.href = url + id;
+        } else {
+            console.error('Ingen innmelding ID spesifisert');
         }
-    </script>
+    }
+</script>
 
 </body>
 </html>
