@@ -1,51 +1,94 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ViewModels;
+using ViewModels.Registrering;
+using Interface;
+using AuthInterface;
+using System.Transactions;
 
-namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
-public class RegistrerDegController : Controller
+namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
-    private readonly UserManager<IdentityUser> _userManager;
-
-    public RegistrerDegController(UserManager<IdentityUser> userManager)
+    public class RegistrerDegController : Controller
     {
-        _userManager = userManager;
-    }
+        private readonly ITransaksjonsRepository _transaksjonsRepository;
+        private readonly IAuthService _authService;
+        private readonly ILogger<RegistrerDegController> _logger;
 
-    public IActionResult RegistrerDeg()
-    {
-        return View();
-    }
-
-    [HttpGet]
-    [AllowAnonymous]
-    public IActionResult RegistrerInnmelder(string returnUrl = null)
-    {
-        ViewData["ReturnUrl"] = returnUrl;
-        return View("RegistrerDeg");
-    }
-
-
-    [HttpPost]
-    [AllowAnonymous]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> RegistrerInnmelder(BrukerregistreringViewModel model, string returnUrl = null)
-    {
-        ViewData["ReturnUrl"] = returnUrl;
-        var user = new IdentityUser { UserName = model.Email, Email = model.Email };
-        var result = await _userManager.CreateAsync(user, model.Password);
-        return RedirectToLocal(returnUrl);
-    }
-    public IActionResult RedirectToLocal(string returnUrl)
-    {
-        if (Url.IsLocalUrl(returnUrl))
+        public RegistrerDegController(
+            ITransaksjonsRepository transaksjonsRepository,
+            IAuthService authService,
+            ILogger<RegistrerDegController> logger)
         {
-            return Redirect(returnUrl);
+            _transaksjonsRepository = transaksjonsRepository;
+            _authService = authService;
+            _logger = logger;
         }
-        else
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult RegistrerDeg()
         {
-            return RedirectToAction(nameof(RegistrerDeg));
+            return View(new KomplettRegistreringViewModel());
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegistrerInnmelder(KomplettRegistreringViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("RegistrerDeg", model);
+            }
+
+            try
+            {
+                // 1. Sjekk om epost allerede er registrert i Identity
+                if (await _authService.DoesEmailExistAsync(model.Email))
+                {
+                    ModelState.AddModelError(string.Empty, "Denne e-postadressen er allerede registrert.");
+                    return View("RegistrerDeg", model);
+                }
+
+                // 2. Opprett person og innmelder i Dapper-databasen
+                var (success, personId) = await _transaksjonsRepository.OpprettPersonOgInnmelder(
+                    model.Fornavn,
+                    model.Etternavn,
+                    model.Telefonnummer,
+                    model.Email);
+
+                if (!success)
+                {
+                    ModelState.AddModelError(string.Empty, "Kunne ikke opprette bruker. Vennligst prøv igjen senere.");
+                    return View("RegistrerDeg", model);
+                }
+
+                // 3. Opprett Identity-bruker
+                var identityResult = await _authService.RegisterInnmelderAsync(
+                    model.Email,
+                    model.Password,
+                    personId);
+
+                if (!identityResult.success)
+                {
+                    // TODO: Her burde vi egentlig rulle tilbake person/innmelder opprettelsen
+                    foreach (var error in identityResult.errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error);
+                    }
+
+                    return View("RegistrerDeg", model);
+                }
+
+                // Alt gikk bra
+                return RedirectToAction("LandingsSide", "LandingsSide");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Feil under registrering av bruker");
+                ModelState.AddModelError(string.Empty,
+                    "Det oppstod en feil under registrering. Vennligst prøv igjen senere.");
+                return View("RegistrerDeg", model);
+            }
         }
     }
 }

@@ -1,52 +1,77 @@
-﻿@using ViewModels
-@model BrukerregistreringViewModel
+﻿@model ViewModels.Registrering.KomplettRegistreringViewModel
 @{
-    Layout = "_Layout";
-    var returnUrl = ViewData["ReturnUrl"] as string;
+    ViewData["Title"] = "Registrer deg";
 }
 
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; max-height: 100vh; font-family: 'Arial', sans-serif; padding: 2rem 0;">
-    <h1 style="font-size: 2.5rem; color: #333; text-transform: uppercase; margin-bottom: 2rem;">Opprett konto</h1>
-    <div style="width: 100%; max-width: 500px; padding: 2rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; background-color: white;">
-        <form asp-controller="RegistrerDeg" asp-action="RegistrerInnmelder" asp-route-returnurl="@returnUrl" method="post" class="form-horizontal" role="form">
-            <h4>Opprett ny bruker</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="RegistrerDeg" asp-action="RegistrerInnmelder" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <div id="personInfo">
+                            <h4 class="mb-3">Personlig informasjon</h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Fornavn" class="form-label"></label>
+                                    <input asp-for="Fornavn" class="form-control" />
+                                    <span asp-validation-for="Fornavn" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Etternavn" class="form-label"></label>
+                                    <input asp-for="Etternavn" class="form-control" />
+                                    <span asp-validation-for="Etternavn" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Telefonnummer" class="form-label"></label>
+                                <input asp-for="Telefonnummer" class="form-control" />
+                                <span asp-validation-for="Telefonnummer" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div id="passordInfo" class="mt-4">
+                            <h4 class="mb-3">Opprett passord</h4>
+                            <div class="mb-3">
+                                <label asp-for="Password" class="form-label"></label>
+                                <input asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="BekreftPassord" class="form-label"></label>
+                                <input asp-for="BekreftPassord" class="form-control" />
+                                <span asp-validation-for="BekreftPassord" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Registrer deg</button>
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Avbryt</a>
+                        </div>
+                    </form>
+
+                    <div class="mt-3 text-center">
+                        <p>Har du allerede en bruker? <a asp-controller="LoggInn" asp-action="LoggInn">Logg inn her</a></p>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="BekreftPassord" class="col-md-2 control-label"></label>
-                <div class="col-md-10">
-                    <input asp-for="BekreftPassord" class="form-control" />
-                    <span asp-validation-for="BekreftPassord" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button type="submit" class="btn btn-primary">Registrer</button>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 1.5rem;">
-                <p>Har du allerede bruker? <a asp-controller="LoggInn" asp-action="LoggInn" style="color: #007bff; font-weight: bold; text-decoration: none; transition: color 0.3s;">Logg inn her!</a></p>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 }

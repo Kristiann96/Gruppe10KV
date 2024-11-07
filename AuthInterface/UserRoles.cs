@@ -28,6 +28,6 @@ namespace AuthInterface
         Task<(bool success, string[] errors)> ResetPasswordAsync(string email, string newPassword);
 
         // Person ID henting
-        Task<int?> GetPersonId(ClaimsPrincipal user);
+        public int? GetPersonId(ClaimsPrincipal user);
     }
 }
