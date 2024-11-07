@@ -126,7 +126,7 @@ namespace DataAccess
                 LEFT JOIN geometri g ON im.innmelding_id = g.innmelding_id
                 LEFT JOIN gjesteinnmelder gi ON im.gjest_innmelder_id = gi.gjest_innmelder_id
                 WHERE im.tittel LIKE @SearchTerm
-                ORDER BY im.innmelding_id
+                ORDER BY im.innmelding_id 
                 LIMIT @PageSize OFFSET @Offset";
 
             var parameters = new
