@@ -99,7 +99,10 @@
     <h1>Oversikt over alle innmeldinger</h1>
 
     <form method="get" action="@Url.Action("OversiktAlleInnmeldingerSaksB")" class="search-bar">
-        <input type="text" name="searchTerm" placeholder="Søk i saker" />
+        <input type="text"
+               name="searchTerm"
+               value="@Model.SearchTerm"
+               placeholder="Søk i saker" />
         <button type="submit">Søk</button>
     </form>
     
