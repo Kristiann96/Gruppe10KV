@@ -31,26 +31,26 @@
     </style>
 }
 <title>Oppdatere Innmelding</title>
-@foreach (var innmelding in Model.OppdatereInnmeldinger)
+@foreach (var OppdatereInnmeldinger in Model.OppdatereInnmeldinger)
 {
     <form asp-action="OppdatereInnmeldingForm" method="post" class="updateRegisteredCaseForm">
         <div class="updateRegisteredCaseID">
-            <h3>Sak ID #@innmelding.InnmeldingId</h3>
-            <input type="hidden" name="InnmeldingId" value="@innmelding.InnmeldingId" />
+            <h3>Sak ID #@OppdatereInnmeldinger.InnmeldingId</h3>
+            <input type="hidden" name="InnmeldingId" value="@OppdatereInnmeldinger.InnmeldingId" />
         </div>
 
         <div class="updateRegisteredCaseStatus">
-            <h3>Status: @innmelding.Status</h3>
+            <h3>Status: @OppdatereInnmeldinger.Status</h3>
         </div>
 
         <div class="updateRegisteredCaseSubject">
             <h3>Tittel:</h3>
-            <input type="text" name="Tittel" value="@innmelding.Tittel" />
+            <input type="text" name="Tittel" value="@OppdatereInnmeldinger.Tittel" />
         </div>
 
         <div class="updateRegisteredCaseDescription">
             <h3>Beskrivelse:</h3>
-            <textarea name="Beskrivelse">@innmelding.Beskrivelse</textarea>
+            <textarea name="Beskrivelse">@OppdatereInnmeldinger.Beskrivelse</textarea>
         </div>
 
         <div class="updateRegisteredCaseActionButtons">
