@@ -2,14 +2,9 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Entities;
 using Models.Models;
-using System.Threading.Tasks;
 using Interface;
-using System.Collections.Generic;
 using ViewModels;
-using System.Linq;
-using Logic;
-using Interfaces;
-using DataAccess;
+
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
@@ -61,6 +56,27 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 
             // Pass data to the view
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> OppdatereInnmeldingForm(OppdatereInnmeldingViewModel viewModel)
+        {
+            // Fetch the existing record from the repository
+            var innmelding = (await _innmeldingRepository.GetInnmeldingAsync(viewModel.InnmeldingId)).FirstOrDefault();
+            if (innmelding == null)
+            {
+                return NotFound();
+            }
+
+            // Update the record with new values
+            innmelding.Tittel = viewModel.Tittel;
+            innmelding.Beskrivelse = viewModel.Beskrivelse;
+
+            // Save changes to the repository
+            await _innmeldingRepository.OppdatereInnmeldingFormAsync(innmelding);
+
+            // Redirect back to the update page or another appropriate page
+            return RedirectToAction("OppdatereInnmelding", new { id = viewModel.InnmeldingId });
         }
     }
 }
