@@ -43,7 +43,10 @@ namespace DataAccess
         public async Task OppdatereInnmeldingFormAsync(InnmeldingModel innmelding)
         {
             using var connection = _dbConnection.CreateConnection();
-            await connection.OpenAsync(); // Explicitly open the connection
+            if (connection.State != System.Data.ConnectionState.Open)
+            {
+                await connection.OpenAsync(); // Explicitly open the connection
+            }
             using var transaction = await connection.BeginTransactionAsync();
 
             try
