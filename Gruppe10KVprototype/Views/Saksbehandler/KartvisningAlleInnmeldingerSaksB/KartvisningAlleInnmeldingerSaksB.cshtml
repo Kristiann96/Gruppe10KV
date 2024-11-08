@@ -47,19 +47,31 @@
 
         // Legg til geometriobjekter (innmeldinger) på kartet med klikkfunksjonalitet
         geometriData.forEach(function (data) {
-            console.log("Data for innmelding:", data);
             try {
                 const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
-                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
 
-                // Legg til klikkfunksjon for å gå til enkeltvisning av innmeldingen med kommuneinfo
-                geoJsonLayer.on('click', function (event) {
-                    const innmeldingId = data.InnmeldingId;
-                    const coordinates = event.latlng;
+                const geoJsonLayer = L.geoJSON(geoJsonFeature, {
+                    onEachFeature: function (feature, layer) {
+                        // Få bounds for laget, uansett geometritype
+                        const bounds = layer.getBounds();
+                        // Bruk senterpunktet for å plassere markøren
+                        const center = bounds.getCenter();
 
-                    // Send brukeren til controlleren med koordinater og innmeldingId
-                    window.location.href = `/KartvisningAlleInnmeldingerSaksB/GetKommunenummer?innmeldingId=${innmeldingId}&lat=${coordinates.lat}&lng=${coordinates.lng}`;
-                });
+                        // Lag click handler funksjon som kan gjenbrukes
+                        const handleClick = function (event) {
+                            const innmeldingId = data.InnmeldingId;
+                            const coordinates = event.latlng;
+                            window.location.href = `/KartvisningAlleInnmeldingerSaksB/GetKommunenummer?innmeldingId=${innmeldingId}&lat=${coordinates.lat}&lng=${coordinates.lng}`;
+                        };
+
+                        // Legg til markør på senterpunktet og knytt til click handler
+                        const marker = L.marker(center).addTo(map);
+                        marker.on('click', handleClick);
+
+                        // Legg til click handler på selve geometri-laget også
+                        layer.on('click', handleClick);
+                    }
+                }).addTo(map);
             } catch (e) {
                 console.error('Feil ved parsing av geometri:', e, data);
             }
