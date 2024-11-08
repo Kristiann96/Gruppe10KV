@@ -120,26 +120,30 @@
         </tr>
         </thead>
         <tbody>
-        @for (int i = 0; i < Model.Innmeldinger.Count(); i++)
+        @for (int i = 0; i < Model.InnmeldingId.Count(); i++)
         {
-            var innmelding = Model.Innmeldinger.ElementAt(i);
+            var innmeldingId = Model.InnmeldingId.ElementAt(i);
+            var tittel = Model.Tittel.ElementAt(i);
             var innmelderNavn = Model.InnmelderNavn.ElementAt(i);
             var innmelderEpost = Model.InnmelderEpost.ElementAtOrDefault(i) ?? "N/A";
             var gjestEpost = Model.GjestEpost.ElementAtOrDefault(i) ?? "N/A";
             var displayEmail = !string.IsNullOrEmpty(innmelderEpost) && innmelderEpost != "N/A"
-                ? innmelderEpost 
-                : (!string.IsNullOrEmpty(gjestEpost) && gjestEpost != "N/A" ? gjestEpost : "N/A");
+            ? innmelderEpost
+            : (!string.IsNullOrEmpty(gjestEpost) && gjestEpost != "N/A" ? gjestEpost : "N/A");
             var kommuneData = Model.KommuneData.ElementAt(i);
-            <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmelding.InnmeldingId })'">
-                <td>@innmelding.InnmeldingId</td>
-                <td>@innmelding.Tittel</td>
+            var status = Model.Status.ElementAt(i);
+            var prioritet = Model.Prioritet.ElementAt(i);
+            var sisteEndring = Model.SisteEndring.ElementAt(i);
+
+            <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmeldingId })'">
+                <td>@innmeldingId</td>
+                <td>@tittel</td>
                 <td>@innmelderNavn</td>
                 <td>@displayEmail</td>
                 <td>@kommuneData</td>
-                <td>@innmelding.Prioritet</td>
-                <td>@innmelding.Status</td>
-                <td>@innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
-                
+                <td>@prioritet</td>
+                <td>@status</td>
+                <td>@sisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
             </tr>
         }
         </tbody>

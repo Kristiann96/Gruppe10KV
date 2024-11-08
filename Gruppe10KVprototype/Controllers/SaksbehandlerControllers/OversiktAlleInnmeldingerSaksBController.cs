@@ -45,13 +45,11 @@ public class OversiktAlleInnmeldingerSaksBController : Controller
 
         var viewModel = new OversiktAlleInnmeldingerSaksBViewModel
         {
-            Innmeldinger = innmeldinger.Select(i =>
-            {
-                var innmelding = i.Item1 ?? new InnmeldingModel();
-                innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
-                innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
-                return innmelding;
-            }),
+            InnmeldingId = innmeldinger.Select(i => i.Item1.InnmeldingId),
+            Tittel = innmeldinger.Select(i => i.Item1.Tittel),
+            Status = innmeldinger.Select(i => _enumLogic.ConvertToDisplayFormat(i.Item1.Status)),
+            Prioritet = innmeldinger.Select(i => _enumLogic.ConvertToDisplayFormat(i.Item1.Prioritet)),
+            SisteEndring = innmeldinger.Select(i => i.Item1.SisteEndring),
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalPages = totalPages,
