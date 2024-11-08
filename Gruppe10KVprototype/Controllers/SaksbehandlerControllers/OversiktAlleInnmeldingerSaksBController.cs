@@ -4,31 +4,30 @@ using LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using ViewModels;
-using DataAccess;
-using Logic;
 
 public class OversiktAlleInnmeldingerSaksBController : Controller
 {
     private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
     private readonly IGeometriRepository _geometriRepository;
     private readonly IKommuneAPILogic _kommuneAPILogic;
+    private readonly IEnumLogic _enumLogic;
 
     public OversiktAlleInnmeldingerSaksBController(
         IDataSammenstillingSaksBRepository dataSammenstillingSaksBRepository,
         IGeometriRepository geometriRepository,
-        IKommuneAPILogic kommuneAPILogic)
+        IKommuneAPILogic kommuneAPILogic,
+        IEnumLogic enumLogic)
     {
         _dataSammenstillingSaksBRepository = dataSammenstillingSaksBRepository;
         _geometriRepository = geometriRepository;
         _kommuneAPILogic = kommuneAPILogic;
+        _enumLogic = enumLogic;
     }
 
-    public async Task<IActionResult> OversiktAlleInnmeldingerSaksB(int pageNumber = 1, int pageSize = 10,
-        string searchTerm = "")
+    public async Task<IActionResult> OversiktAlleInnmeldingerSaksB(int pageNumber = 1, int pageSize = 10, string searchTerm = "")
     {
         var result =
-            await _dataSammenstillingSaksBRepository.GetOversiktAlleInnmeldingerSaksBAsync(pageNumber, pageSize,
-                searchTerm);
+            await _dataSammenstillingSaksBRepository.GetOversiktAlleInnmeldingerSaksBAsync(pageNumber, pageSize, searchTerm);
         var innmeldinger = result.Data;
         var totalPages = result.TotalPages;
 
