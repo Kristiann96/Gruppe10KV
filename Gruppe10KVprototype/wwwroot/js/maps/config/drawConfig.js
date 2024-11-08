@@ -11,6 +11,7 @@ const DrawConfig = {
         },
         edit: {
             featureGroup: null, // Dette settes når vi initialiserer
+            edit: true,
             remove: true
         }
     },
