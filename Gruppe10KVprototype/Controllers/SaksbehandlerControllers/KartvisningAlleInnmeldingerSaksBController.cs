@@ -15,7 +15,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         private readonly IGeometriRepository _geometriRepository;
         private readonly IKommuneAPILogic _kommuneAPILogic;
 
-        public KartvisningAlleInnmeldingerSaksBController(IGeometriRepository geometriRepository, IKommuneAPILogic kartverketAPILogic)
+        public KartvisningAlleInnmeldingerSaksBController(IGeometriRepository geometriRepository, IKommuneAPILogic kommuneAPILogic)
         {
             _geometriRepository = geometriRepository;
             _kommuneAPILogic = kommuneAPILogic;
