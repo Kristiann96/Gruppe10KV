@@ -31,38 +31,37 @@
     </style>
 }
 <title>Oppdatere Innmelding</title>
-@foreach (var innmelding in Model.OppdatereInnmeldinger)
+@foreach (var OppdatereInnmeldinger in Model.OppdatereInnmeldinger)
 {
-    <div class="updateRegisteredCaseForm">
+    <form asp-action="OppdatereInnmeldingForm" method="post" class="updateRegisteredCaseForm">
         <div class="updateRegisteredCaseID">
-            <h3>Sak ID #@innmelding.InnmeldingId</h3>
-        </div>
-
-        <div class="updateRegisteredCaseSubject">
-            <h3>Tittel: @innmelding.Tittel</h3>
+            <h3>Sak ID #@OppdatereInnmeldinger.InnmeldingId</h3>
+            <input type="hidden" name="InnmeldingId" value="@OppdatereInnmeldinger.InnmeldingId" />
         </div>
 
         <div class="updateRegisteredCaseStatus">
-            <h3>Status: @innmelding.Status</h3>
+            <h3>Status: @OppdatereInnmeldinger.Status</h3>
+        </div>
+
+        <div class="updateRegisteredCaseSubject">
+            <h3>Tittel:</h3>
+            <input type="text" name="Tittel" value="@OppdatereInnmeldinger.Tittel" />
         </div>
 
         <div class="updateRegisteredCaseDescription">
             <h3>Beskrivelse:</h3>
-            <p>@innmelding.Beskrivelse</p>
+            <textarea name="Beskrivelse">@OppdatereInnmeldinger.Beskrivelse</textarea>
         </div>
-    </div>
+
+        <div class="updateRegisteredCaseActionButtons">
+            <button type="submit">Update</button>
+        </div>
+    </form>
 }
 
 <div class="updateRegisteredMapViewErrors">
     <h3>Kartvisning av feil:</h3>
     <div id="map" style="height: 50vh; width: 100%"></div>
-</div>
-
-<!-- Action Buttons -->
-<div class="updateRegisteredCaseActionButtons">
-    <button>Edit</button>
-    <button>Update</button>
-    <button>Delete</button>
 </div>
 
 

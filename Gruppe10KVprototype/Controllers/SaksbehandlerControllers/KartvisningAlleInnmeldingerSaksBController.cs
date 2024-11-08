@@ -13,12 +13,12 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
     public class KartvisningAlleInnmeldingerSaksBController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;
-        private readonly IKartverketAPILogic _kartverketAPILogic;
+        private readonly IKommuneAPILogic _kommuneAPILogic;
 
-        public KartvisningAlleInnmeldingerSaksBController(IGeometriRepository geometriRepository, IKartverketAPILogic kartverketAPILogic)
+        public KartvisningAlleInnmeldingerSaksBController(IGeometriRepository geometriRepository, IKommuneAPILogic kommuneAPILogic)
         {
             _geometriRepository = geometriRepository;
-            _kartverketAPILogic = kartverketAPILogic;
+            _kommuneAPILogic = kommuneAPILogic;
         }
 
         // Henter alle geometriobjekter og kommunedata fra Kartverket og sender dem til viewet
@@ -27,7 +27,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         {
             // Hent data fra repository og API
             IEnumerable<Geometri> geometriData = await _geometriRepository.GetAllGeometriAsync();
-            var kommunerData = await _kartverketAPILogic.GetKommunerAsync();
+            var kommunerData = await _kommuneAPILogic.GetKommunerAsync();
 
             // Opprett ViewModel og sett data
             var viewModel = new KartvisningAlleInnmeldingerSaksBViewModel
@@ -42,7 +42,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         [HttpGet]
         public async Task<IActionResult> GetKommunenummer(int innmeldingId, double lat, double lng)
         {
-            var kommune = await _kartverketAPILogic.GetKommuneByCoordinatesAsync(lat, lng);
+            var kommune = await _kommuneAPILogic.GetKommuneByCoordinatesAsync(lat, lng);
 
             TempData["Kommunenummer"] = kommune.Kommunenummer;
             TempData["Kommunenavn"] = kommune.Kommunenavn;

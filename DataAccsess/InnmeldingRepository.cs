@@ -39,6 +39,38 @@ namespace DataAccess
             return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingIdUpdate });
         }
 
+        //Oppdatering av innmelding for "OppdatereInnmelding"
+        public async Task OppdatereInnmeldingFormAsync(InnmeldingModel innmelding)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            if (connection.State != System.Data.ConnectionState.Open)
+            {
+                await connection.OpenAsync(); // Explicitly open the connection
+            }
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                var sql = @"UPDATE innmelding
+                        SET tittel = @Tittel,
+                            beskrivelse = @Beskrivelse
+                        WHERE innmelding_id = @InnmeldingId";
+
+                // Execute the database operation within the transaction
+                await connection.ExecuteAsync(sql, innmelding, transaction);
+
+                // Commit the transaction if everything goes well
+                await transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                // Rollback the transaction if an error occurs
+                await transaction.RollbackAsync();
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         /* Ørjan */
         public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber,
             int pageSize, string searchTerm)
@@ -49,7 +81,6 @@ namespace DataAccess
                             innmelder_id AS InnmelderId,
                             tittel AS Tittel,
                             status AS Status,
-
                             siste_endring AS SisteEndring,
                             prioritet AS Prioritet
                         FROM innmelding

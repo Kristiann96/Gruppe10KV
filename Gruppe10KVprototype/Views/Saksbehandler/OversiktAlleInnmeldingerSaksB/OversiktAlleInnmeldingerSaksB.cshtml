@@ -99,7 +99,10 @@
     <h1>Oversikt over alle innmeldinger</h1>
 
     <form method="get" action="@Url.Action("OversiktAlleInnmeldingerSaksB")" class="search-bar">
-        <input type="text" name="searchTerm" placeholder="Søk i saker" />
+        <input type="text"
+               name="searchTerm"
+               value="@Model.SearchTerm"
+               placeholder="Søk i saker" />
         <button type="submit">Søk</button>
     </form>
     
@@ -108,23 +111,39 @@
         <tr>
             <th>INNMELDING ID</th>
             <th>TITTEL</th>
-            <th>INNMELDER ID</th>
+            <th>INNMELDER</th>
+            <th>EPOST</th>
+            <th>KOMMUNE</th>
             <th>PRIORITET</th>
             <th>STATUS</th>
             <th>SISTE ENDRING</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var innmelding in Model.Innmeldinger)
+        @for (int i = 0; i < Model.InnmeldingId.Count(); i++)
         {
-            <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmelding.InnmeldingId })'">
+            var innmeldingId = Model.InnmeldingId.ElementAt(i);
+            var tittel = Model.Tittel.ElementAt(i);
+            var innmelderNavn = Model.InnmelderNavn.ElementAt(i);
+            var innmelderEpost = Model.InnmelderEpost.ElementAtOrDefault(i) ?? "N/A";
+            var gjestEpost = Model.GjestEpost.ElementAtOrDefault(i) ?? "N/A";
+            var displayEmail = !string.IsNullOrEmpty(innmelderEpost) && innmelderEpost != "N/A"
+            ? innmelderEpost
+            : (!string.IsNullOrEmpty(gjestEpost) && gjestEpost != "N/A" ? gjestEpost : "N/A");
+            var kommuneData = Model.KommuneData.ElementAt(i);
+            var status = Model.Status.ElementAt(i);
+            var prioritet = Model.Prioritet.ElementAt(i);
+            var sisteEndring = Model.SisteEndring.ElementAt(i);
 
-                <td>@innmelding.InnmeldingId</td>
-                <td>@innmelding.Tittel</td>
-                <td>@innmelding.InnmelderId</td>
-                <td>@innmelding.Prioritet</td>
-                <td>@innmelding.Status</td>
-                <td>@innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
+            <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmeldingId })'">
+                <td>@innmeldingId</td>
+                <td>@tittel</td>
+                <td>@innmelderNavn</td>
+                <td>@displayEmail</td>
+                <td>@kommuneData</td>
+                <td>@prioritet</td>
+                <td>@status</td>
+                <td>@sisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
             </tr>
         }
         </tbody>
@@ -147,16 +166,16 @@
         }
     </div>
 </main>
-    <script>
-        function navigateToDetails(id) {
-            if (id) {
-                var url = '@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB")/';
-                window.location.href = url + id;
-            } else {
-                console.error('Ingen innmelding ID spesifisert');
-            }
+<script>
+    function navigateToDetails(id) {
+        if (id) {
+            var url = '@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB")/';
+            window.location.href = url + id;
+        } else {
+            console.error('Ingen innmelding ID spesifisert');
         }
-    </script>
+    }
+</script>
 
 </body>
 </html>

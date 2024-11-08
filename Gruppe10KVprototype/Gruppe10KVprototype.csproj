@@ -41,6 +41,10 @@
 
   <ItemGroup>
    
+   <ProjectReference Include="..\AuthDataAccess\AuthDataAccess.csproj" />
+   
+   <ProjectReference Include="..\AuthInterface\AuthInterface.csproj" />
+   
    <ProjectReference Include="..\DataAccsess\DataAccess.csproj" />
    
    <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
@@ -50,6 +54,12 @@
    <ProjectReference Include="..\Logic\Logic.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\ViewModels\ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
   </ItemGroup>
 
 </Project>
