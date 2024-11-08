@@ -45,7 +45,13 @@ public class OversiktAlleInnmeldingerSaksBController : Controller
 
         var viewModel = new OversiktAlleInnmeldingerSaksBViewModel
         {
-            Innmeldinger = innmeldinger.Select(i => i.Item1 ?? new InnmeldingModel()),
+            Innmeldinger = innmeldinger.Select(i =>
+            {
+                var innmelding = i.Item1 ?? new InnmeldingModel();
+                innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
+                innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
+                return innmelding;
+            }),
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalPages = totalPages,
