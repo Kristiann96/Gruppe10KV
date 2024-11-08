@@ -12,41 +12,41 @@ using Models.Models;
 namespace DataAccess
 {
 
-        public class TransaksjonsRepository : ITransaksjonsRepository
+    public class TransaksjonsRepository : ITransaksjonsRepository
+    {
+        private readonly DapperDBConnection _dbConnection;
+
+        public TransaksjonsRepository(DapperDBConnection dbConnection)
         {
-            private readonly DapperDBConnection _dbConnection;
+            _dbConnection = dbConnection;
+        }
 
-            public TransaksjonsRepository(DapperDBConnection dbConnection)
+        public async Task<bool> LagreKomplettInnmeldingAsync(
+            string gjesteEpost,
+            InnmeldingModel innmelding,
+            Geometri geometri)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
             {
-                _dbConnection = dbConnection;
-            }
-
-            public async Task<bool> LagreKomplettInnmeldingAsync(
-                string gjesteEpost,
-                InnmeldingModel innmelding,
-                Geometri geometri)
-            {
-                using var connection = _dbConnection.CreateConnection();
-                using var transaction = await connection.BeginTransactionAsync();
-
-                try
-                {
-                    // 1. Opprett gjesteinnmelder
-                    var gjesteInnmelderSql = @"
+                // 1. Opprett gjesteinnmelder
+                var gjesteInnmelderSql = @"
                     INSERT INTO gjesteinnmelder (epost) 
                     VALUES (@Epost);
                     SELECT LAST_INSERT_ID();";
 
-                    var gjestInnmelderId = await connection.ExecuteScalarAsync<int>(
-                        gjesteInnmelderSql,
-                        new { Epost = gjesteEpost },
-                        transaction);
+                var gjestInnmelderId = await connection.ExecuteScalarAsync<int>(
+                    gjesteInnmelderSql,
+                    new { Epost = gjesteEpost },
+                    transaction);
 
-                    // 2. Opprett innmelding
-                    innmelding.GjestInnmelderId = gjestInnmelderId;
-                   
+                // 2. Opprett innmelding
+                innmelding.GjestInnmelderId = gjestInnmelderId;
 
-                    var innmeldingSql = @"
+
+                var innmeldingSql = @"
                     INSERT INTO innmelding (
                         gjest_innmelder_id, 
                         tittel, 
@@ -62,14 +62,14 @@ namespace DataAccess
                     );
                     SELECT LAST_INSERT_ID();";
 
-                    var innmeldingId = await connection.ExecuteScalarAsync<int>(
-                        innmeldingSql,
-                        innmelding,
-                        transaction);
+                var innmeldingId = await connection.ExecuteScalarAsync<int>(
+                    innmeldingSql,
+                    innmelding,
+                    transaction);
 
-                    // 3. Lagre geometri
-                    geometri.InnmeldingId = innmeldingId;
-                    var geometriSql = @"
+                // 3. Lagre geometri
+                geometri.InnmeldingId = innmeldingId;
+                var geometriSql = @"
                     INSERT INTO geometri (
                         innmelding_id,
                         geometri_data
@@ -78,23 +78,95 @@ namespace DataAccess
                         ST_GeomFromGeoJSON(@GeometriGeoJson)
                     );";
 
-                    await connection.ExecuteAsync(
-                        geometriSql,
-                        geometri,
-                        transaction);
+                await connection.ExecuteAsync(
+                    geometriSql,
+                    geometri,
+                    transaction);
 
-                    await transaction.CommitAsync();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    throw new ForretningsRegelExceptionModel(
-                        "Kunne ikke lagre innmeldingen: " + ex.Message,
-                        ex);
-                }
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new ForretningsRegelExceptionModel(
+                    "Kunne ikke lagre innmeldingen: " + ex.Message,
+                    ex);
             }
         }
-    
 
+        public async Task<(bool success, int personId)> OpprettPersonOgInnmelder(
+            string fornavn,
+            string etternavn,
+            string telefonnummer,
+            string epost)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            try
+            {
+                // 1. Opprett Person
+                const string personSql = @"
+                INSERT INTO person (fornavn, etternavn, telefonnummer)
+                VALUES (@Fornavn, @Etternavn, @Telefonnummer);
+                SELECT LAST_INSERT_ID();";
+
+                var personId = await connection.QuerySingleAsync<int>(personSql,
+                    new { Fornavn = fornavn, Etternavn = etternavn, Telefonnummer = telefonnummer });
+
+                // 2. Opprett Innmelder
+                const string innmelderSql = @"
+                INSERT INTO innmelder (person_id, innmelder_id, epost)
+                VALUES (@PersonId, @InnmelderId, @Epost);";
+
+                // Hent neste innmelder_id fra sekvens
+                var innmelderId = await connection.QuerySingleAsync<int>(
+                    "SELECT NEXTVAL(innmelder_id_seq)");
+
+                await connection.ExecuteAsync(innmelderSql,
+                    new { PersonId = personId, InnmelderId = innmelderId, Epost = epost });
+
+                return (true, personId);
+            }
+            catch (Exception)
+            {
+                return (false, 0);
+
+            }
+
+
+        }
+
+
+        public async Task<bool> SlettPersonOgInnmelder(int personId)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                // Slett innmelder først (pga. fremmednøkkel)
+                await connection.ExecuteAsync(
+                    "DELETE FROM innmelder WHERE person_id = @PersonId",
+                    new { PersonId = personId },
+                    transaction);
+
+                // Så slett person
+                await connection.ExecuteAsync(
+                    "DELETE FROM person WHERE person_id = @PersonId",
+                    new { PersonId = personId },
+                    transaction);
+
+                transaction.Commit();
+                return true;
+            }
+            catch
+            {
+                transaction.Rollback();
+                return false;
+            }
+        }
+    }
 }
+
+
+

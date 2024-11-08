@@ -1,0 +1,6 @@
+﻿services:
+  gruppe10kvprototype:
+    image: gruppe10kvprototype
+    build:
+      context: .
+      dockerfile: Gruppe10KVprototype/Dockerfile

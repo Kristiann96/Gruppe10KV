@@ -25,18 +25,50 @@ namespace DataAccess
 
 
         //Daniel's sql innhenting av data til "OppdatereInnmelding"
-        public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync()
+        public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate)
         {
             using var connection = _dbConnection.CreateConnection();
-            var sql = @"SELECT innmelding_id AS InnmeldingId,
+            var sql = @"SELECT 
+                    innmelding_id AS InnmeldingId,
                     tittel AS Tittel,
                     status AS Status,
                     beskrivelse AS Beskrivelse
                 FROM innmelding
-                WHERE innmelding_id = 8";
-            var result = await connection.QueryAsync<InnmeldingModel>(sql);
+                WHERE innmelding_id = @InnmeldingId";
+            
+            return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingIdUpdate });
+        }
 
-            return result;
+        //Oppdatering av innmelding for "OppdatereInnmelding"
+        public async Task OppdatereInnmeldingFormAsync(InnmeldingModel innmelding)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            if (connection.State != System.Data.ConnectionState.Open)
+            {
+                await connection.OpenAsync(); // Explicitly open the connection
+            }
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                var sql = @"UPDATE innmelding
+                        SET tittel = @Tittel,
+                            beskrivelse = @Beskrivelse
+                        WHERE innmelding_id = @InnmeldingId";
+
+                // Execute the database operation within the transaction
+                await connection.ExecuteAsync(sql, innmelding, transaction);
+
+                // Commit the transaction if everything goes well
+                await transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                // Rollback the transaction if an error occurs
+                await transaction.RollbackAsync();
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         /* Ørjan */
@@ -49,7 +81,6 @@ namespace DataAccess
                             innmelder_id AS InnmelderId,
                             tittel AS Tittel,
                             status AS Status,
-
                             siste_endring AS SisteEndring,
                             prioritet AS Prioritet
                         FROM innmelding
@@ -108,6 +139,7 @@ namespace DataAccess
                        tittel AS Tittel,
                        status AS Status,
                        siste_endring AS SisteEndring,
+                       prioritet AS Prioritet,
                        innmelder_id AS InnmelderId
                 FROM innmelding
                 WHERE innmelder_id = @InnmelderId";
