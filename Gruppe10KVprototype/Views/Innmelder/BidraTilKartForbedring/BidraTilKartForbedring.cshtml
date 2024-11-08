@@ -135,11 +135,13 @@
 
     <script>
         // Kart-initialisering
-       const map = MapConfig.initializeMap('map');
-const baseMaps = {};
-const overlayMaps = WMSService.createAllLayers();
-L.control.layers(baseMaps, overlayMaps).addTo(map);
-MapControls.initializeControls(map);
+        const map = MapConfig.initializeMap('map');
+        const baseMaps = {};
+        const overlayMaps = {
+            "Kommunegrenser": WMSService.addKommuneGrenser(map)
+        };
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+        MapControls.initializeControls(map);
 
         // Globale variabler for tilstandshåndtering
         let hoverTimer;

@@ -55,7 +55,7 @@
         }
     },
 
-    // Metoder som legger til lag med en gang
+    // Metoder som legger til lag med en gang : TODO fikse enumenne på db for å reflektere kart_type
     addKommuneGrenser: function (map) {
         const kommuneGrenser = L.tileLayer.wms(this.kommuneConfig.url, this.kommuneConfig.options);
         map.addLayer(kommuneGrenser);
