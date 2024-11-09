@@ -11,7 +11,9 @@
     <header>
         <nav class="navbar">
             <div class="container-fluid">
-                <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Kartverket Logo" />
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <img src="@Url.Content("~/Images/LogoKartverket.png")" alt="Kartverket Logo" />
+                </a>
 
                 <div id="navbar-menu">
                     <ul class="navbarlist">
@@ -27,14 +29,12 @@
                                 <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB")">Oversikt alle innmeldinger</a>
                                 <a href="@Url.Action("KartvisningAlleInnmeldingerSaksB", "KartvisningAlleInnmeldingerSaksB")">Kartvisning</a>
                                 <a href="@Url.Action("SortereInnmeldingerSaksB", "SortereInnmeldingerSaksB")">Sortere innmeldinger</a>
-                                <a href="@Url.Action("SøkEtterInnmelderSaksB", "SøkEtterInnmelderSaksB")">Søk etter innmelder</a>
                                 <a href="@Url.Action("LoggInnSaksB", "LogginnSaksB")">LoggInn</a>
 
                                 <div class="dropdown-section">
                                     <strong>Innmelder</strong>
                                 </div>
                                 <a href="@Url.Action("RegistrerDeg", "RegistrerDeg")">Registrer deg</a>
-                                <a href="@Url.Action("KartfeilMarkering", "KartfeilMarkering")">Meld inn feil NY</a>
                                 <a href="@Url.Action("OppdatereInnmelding", "OppdatereInnmelding")">Oppdater innmelding</a>
                                 <a href="@Url.Action("LandingsSide", "LandingsSide")">Landings Side</a>
                                 <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")">Mine Innmeldinger</a>
@@ -42,7 +42,6 @@
                                 <a href="@Url.Action("SporKartfeil", "SporKartfeil")">GPS feilmarkering</a>
                                 <div class="dropdown-section">
                                 </div>
-                            </div>
                         </li>
                     </ul>
                 </div>
