@@ -231,8 +231,8 @@ footer {
     text-align: center;
     text-decoration: none;
     color: white;
-    background-color: darkblue;
-    border-radius: var(--border-radius-lg);
+    background-color: var(--color-primary-dark);
+    border-radius: 8px;
     font-size: larger;
     box-shadow: var(--shadow-lg);
     border: none;
