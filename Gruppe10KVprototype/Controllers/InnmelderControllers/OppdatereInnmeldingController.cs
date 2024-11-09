@@ -113,7 +113,12 @@ namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
 
                 if (oppdatertGeometri != null)
                 {
-                    return Ok(new { message = "Geometri ble oppdatert" });
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Geometri ble oppdatert",
+                        redirectUrl = Url.Action("OppdatereInnmelding", new { id = viewModel.InnmeldingId })
+                    });
                 }
                 else
                 {
