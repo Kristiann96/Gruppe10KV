@@ -75,22 +75,29 @@
     color: white;
 }
 
-    .map-button-primary:hover {
-        background-color: #0052a3;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+.map-button-primary:hover:not(:disabled) {
+    background-color: #0052a3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.map-button-primary:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
 
 .map-button-secondary {
     background-color: #28a745;
     color: white;
 }
 
-    .map-button-secondary:hover {
-        background-color: #218838;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+.map-button-secondary:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
 /* Responsive Design */
 @media (max-width: 1200px) {
@@ -130,4 +137,6 @@
     .map-title {
         font-size: 1.5rem;
     }
+}
+</style>
 }
