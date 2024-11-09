@@ -4,32 +4,32 @@ using System.Threading.Tasks;
 using Models.Entities;
 using Interface;
 
-namespace DataAccess
+namespace DataAccess;
+
+public class SaksbehandlerRepository : ISaksbehandlerRepository
 {
-    public class SaksbehandlerRepository : ISaksbehandlerRepository
+    private readonly DapperDBConnection _dbConnection;
+
+    public SaksbehandlerRepository(DapperDBConnection dbConnection)
     {
-        private readonly DapperDBConnection _dbConnection;
+        _dbConnection = dbConnection;
+    }
 
-        public SaksbehandlerRepository(DapperDBConnection dbConnection)
-        {
-            _dbConnection = dbConnection;
-        }
-
-        public async Task<bool> ErGyldigSaksbehandlerEpost(string epost)
-        {
-            const string sql = @"
+    public async Task<bool> ErGyldigSaksbehandlerEpost(string epost)
+    {
+        const string sql = @"
             SELECT COUNT(1) 
             FROM saksbehandler s
             WHERE s.jobbepost = @Epost";
 
-            using var connection = _dbConnection.CreateConnection();
-            var count = await connection.QuerySingleOrDefaultAsync<int>(sql, new { Epost = epost });
-            return count > 0;
-        }
+        using var connection = _dbConnection.CreateConnection();
+        var count = await connection.QuerySingleOrDefaultAsync<int>(sql, new { Epost = epost });
+        return count > 0;
+    }
 
-        public async Task<SaksbehandlerModel?> HentSaksbehandlerMedEpost(string epost)
-        {
-            const string sql = @"
+    public async Task<SaksbehandlerModel?> HentSaksbehandlerMedEpost(string epost)
+    {
+        const string sql = @"
             SELECT s.saksbehandler_id as SaksbehandlerId,
                    s.person_id as PersonId,
                    s.jobbepost as Jobbepost,
@@ -38,13 +38,13 @@ namespace DataAccess
             FROM saksbehandler s
             WHERE s.jobbepost = @Epost";
 
-            using var connection = _dbConnection.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<SaksbehandlerModel>(sql, new { Epost = epost });
-        }
+        using var connection = _dbConnection.CreateConnection();
+        return await connection.QuerySingleOrDefaultAsync<SaksbehandlerModel>(sql, new { Epost = epost });
+    }
 
-        public async Task<SaksbehandlerModel?> HentSaksbehandler(int personId)
-        {
-            const string sql = @"
+    public async Task<SaksbehandlerModel?> HentSaksbehandler(int personId)
+    {
+        const string sql = @"
             SELECT s.saksbehandler_id as SaksbehandlerId,
                    s.person_id as PersonId,
                    s.jobbepost as Jobbepost,
@@ -53,8 +53,19 @@ namespace DataAccess
             FROM saksbehandler s
             WHERE s.person_id = @PersonId";
 
-            using var connection = _dbConnection.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<SaksbehandlerModel>(sql, new { PersonId = personId });
-        }
+        using var connection = _dbConnection.CreateConnection();
+        return await connection.QuerySingleOrDefaultAsync<SaksbehandlerModel>(sql, new { PersonId = personId });
+    }
+
+    public async Task<IEnumerable<SaksbehandlerNavnModel>> HentAlleSaksbehandlereNavnId()
+    {
+        using var connection = _dbConnection.CreateConnection();
+        var sql = @"
+            SELECT s.saksbehandler_id as Id,
+                   s.navn as Navn,                   
+            FROM saksbehandler s";
+       
+        return await connection.QueryAsync<SaksbehandlerNavnModel>(sql);
+
     }
 }
