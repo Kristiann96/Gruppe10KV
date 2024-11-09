@@ -79,7 +79,8 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             return RedirectToAction("OppdatereInnmelding", new { id = viewModel.InnmeldingId });
         }
 
-        [HttpPost]
+        //Oppdatere geometri data fra bruker på "OppdatereInnmelding"
+        [HttpPost("oppdaterGeo")]
         public async Task<IActionResult> OppdatereInnmeldingGeometri(int innmeldingId, string geometriGeoJson)
         {
             // Validate the input data
@@ -119,8 +120,6 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             }
             catch (Exception ex)
             {
-                // Log the exception (consider using a logging framework)
-                Console.WriteLine(ex);
                 return StatusCode(500, "An internal server error occurred.");
             }
         }

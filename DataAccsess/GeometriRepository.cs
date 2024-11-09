@@ -58,7 +58,7 @@ namespace DataAccess
             return result;
         }
 
-        //Oppdatering av geometri data på "OppdatereInnmelding" siden
+        //Oppdatering av geometri data fra bruker på "OppdatereInnmelding"
         public async Task<Geometri> OppdatereInnmeldingGeometriAsync(int innmeldingId, string geometriGeoJson)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -68,7 +68,7 @@ namespace DataAccess
             {
                 var sql = @"
                         UPDATE geometri 
-                        SET ST_AsGeoJSON(geometri_data) = @GeometriGeoJson
+                        SET ST_AsGeoJSON(geometri_data) = @geometriGeoJson
                         WHERE innmelding_id = @InnmeldingId";
 
                 var parameters = new
