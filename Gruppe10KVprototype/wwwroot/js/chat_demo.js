@@ -2,29 +2,25 @@
     constructor() {
         console.log('ChatHandler constructor called');
 
-        // Your OpenAI API key - WARNING: Don't expose this in production!
-        this.apiKey = 'your-api-key-here';
-
-        this.messages = [{
-            role: "system",
-            content: "Du er en hjelpsom kundeservice-representant for Kartverket som svarer på spørsmål om kartfeil. Svar på norsk og vær hjelpsom og profesjonell."
-        }];
+        this.context = {
+            issue: "Jeg vil rapportere en feil i merkingen av turstien til Preikestolen på kartet deres.",
+            details: "Den nye alternative ruten som ble etablert i fjor sommer er ikke tegnet inn, og den gamle ruten som nå er stengt vises fortsatt som hovedrute.",
+            location: "Preikestolen i Rogaland",
+            date: "3. november 2023",
+            importance: "Dette er en av Norges mest besøkte turistattraksjoner, og det er viktig at turister og turgåere har korrekt informasjon om hvilken rute de skal følge."
+        };
 
         this.chatMessages = document.getElementById('chatMessages');
         this.messageInput = document.getElementById('messageInput');
         this.chatForm = document.getElementById('chatForm');
         this.isTyping = false;
 
-        // Debug logging
-        console.log('Looking for elements:', {
-            chatMessages: !!this.chatMessages,
-            messageInput: !!this.messageInput,
-            chatForm: !!this.chatForm,
-        });
-
         this.handleSubmit = this.handleSubmit.bind(this);
         if (this.chatForm) {
             this.chatForm.addEventListener('submit', this.handleSubmit);
+            console.log('Submit handler attached');
+        } else {
+            console.error('Chat form not found');
         }
     }
 
@@ -34,53 +30,67 @@
 
         if (!messageText) return;
 
-        // Display user message
         this.addMessage(messageText, 'outgoing');
         this.messageInput.value = '';
 
-        // Add to messages array
-        this.messages.push({
-            role: "user",
-            content: messageText
-        });
-
         this.showTypingIndicator();
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-        try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${this.apiKey}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    model: 'gpt-3.5-turbo',
-                    messages: this.messages,
-                    temperature: 0.7
-                })
-            });
+        const response = this.getMockResponse(messageText);
+        this.removeTypingIndicator();
+        this.addMessage(response, 'incoming');
+    }
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+    getMockResponse(message) {
+        const lowerMessage = message.toLowerCase();
 
-            const data = await response.json();
-            const assistantMessage = data.choices[0].message.content;
-
-            // Add assistant's response to conversation history
-            this.messages.push({
-                role: "assistant",
-                content: assistantMessage
-            });
-
-            this.removeTypingIndicator();
-            this.addMessage(assistantMessage, 'incoming');
-
-        } catch (error) {
-            console.error('Error:', error);
-            this.removeTypingIndicator();
-            this.addMessage('Beklager, jeg kunne ikke behandle meldingen din. Vennligst prøv igjen.', 'incoming');
+        // Greeting patterns
+        if (lowerMessage.includes('hei') || lowerMessage.includes('hallo')) {
+            return `Hei! ${this.context.issue}`;
         }
+
+        // Location questions
+        if (lowerMessage.includes('hvor')) {
+            return `Dette gjelder ${this.context.location}. Den nye alternative ruten ble laget for å håndtere den økte turisttrafikken og gi en bedre og sikrere turopplevelse, men dette reflekteres ikke i kartet deres.`;
+        }
+
+        // Time/date questions
+        if (lowerMessage.includes('når')) {
+            return `Jeg oppdaget dette ${this.context.date} da jeg skulle planlegge en tur. Den nye ruten ble åpnet i fjor sommer, men kartet viser fortsatt bare den gamle ruten som nå er stengt.`;
+        }
+
+        // What/explanation questions
+        if (lowerMessage.includes('hva') || lowerMessage.includes('forklar') || lowerMessage.includes('problem')) {
+            return `${this.context.issue} ${this.context.details} Dette kan være forvirrende og potensielt farlig for besøkende som stoler på kartinformasjonen.`;
+        }
+
+        // Status/update questions
+        if (lowerMessage.includes('status') || lowerMessage.includes('oppdater')) {
+            return `Den gamle ruten er nå stengt på grunn av sikkerhetshensyn og slitasje, mens den nye alternative ruten er godt merket i terrenget. Kartet bør oppdateres for å reflektere disse endringene så snart som mulig.`;
+        }
+
+        // Details about the trail
+        if (lowerMessage.includes('sti') || lowerMessage.includes('rute') || lowerMessage.includes('vei')) {
+            return `Den nye ruten er bedre tilrettelagt med tydeligere merking, flere hvileplasser og bedre sikring på utsatte partier. Den gamle ruten som vises i kartet er nå stengt på grunn av erosjon og sikkerhetshensyn.`;
+        }
+
+        // Safety concerns
+        if (lowerMessage.includes('sikkerhet') || lowerMessage.includes('farlig') || lowerMessage.includes('risiko')) {
+            return `Det er viktig at kartet oppdateres fordi feil informasjon kan føre til at folk følger den gamle, stengte ruten. Dette kan være farlig, spesielt i dårlig vær eller for uerfarne turgåere.`;
+        }
+
+        // Thanks
+        if (lowerMessage.includes('takk')) {
+            return 'Bare hyggelig! Det er viktig at populære turområder som Preikestolen har oppdatert og presis kartinformasjon for alles sikkerhet.';
+        }
+
+        // Questions about importance
+        if (lowerMessage.includes('hvorfor') || lowerMessage.includes('viktig')) {
+            return this.context.importance + ' Feil kartinformasjon kan føre til misforståelser og potensielt farlige situasjoner.';
+        }
+
+        // Default response
+        return `${this.context.issue} Dette er en mye brukt tursti, og det er viktig at kartene er oppdaterte og nøyaktige for sikkerheten til alle besøkende.`;
     }
 
     addMessage(text, type) {
@@ -97,7 +107,6 @@
     }
 
     formatMessage(text) {
-        // Convert URLs to clickable links
         return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
     }
 
@@ -137,13 +146,4 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded, initializing chat');
     const chat = new ChatHandler();
-
-    // Add visibility check
-    const chatContainer = document.querySelector('.chat-container');
-    if (chatContainer) {
-        console.log('Chat container found');
-        console.log('Chat container style:', window.getComputedStyle(chatContainer));
-    } else {
-        console.error('Chat container not found in DOM');
-    }
 });
