@@ -78,5 +78,51 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             // Redirect back to the update page or another appropriate page
             return RedirectToAction("OppdatereInnmelding", new { id = viewModel.InnmeldingId });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> OppdatereInnmeldingGeometri(int innmeldingId, string geometriGeoJson)
+        {
+            // Validate the input data
+            if (innmeldingId <= 0 || string.IsNullOrEmpty(geometriGeoJson))
+            {
+                // Handle invalid input
+                return BadRequest("Invalid input data.");
+            }
+
+            // Parse the GeoJSON to ensure it's valid
+            try
+            {
+                var geoJsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(geometriGeoJson);
+                if (geoJsonObject == null)
+                {
+                    return BadRequest("Invalid GeoJSON data.");
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest("Invalid GeoJSON format.");
+            }
+
+            try
+            {
+                // Update the database with the new geometry data
+                var oppdatertGeometri = await _geometriRepository.OppdatereInnmeldingGeometriAsync(innmeldingId, geometriGeoJson);
+                if (oppdatertGeometri != null)
+                {
+                    // Provide feedback to the user
+                    return Ok("Geometry updated successfully.");
+                }
+                else
+                {
+                    return StatusCode(500, "An error occurred while updating the geometry.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (consider using a logging framework)
+                Console.WriteLine(ex);
+                return StatusCode(500, "An internal server error occurred.");
+            }
+        }
     }
 }

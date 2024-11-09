@@ -33,6 +33,7 @@
 <title>Oppdatere Innmelding</title>
 @foreach (var OppdatereInnmeldinger in Model.OppdatereInnmeldinger)
 {
+    <!-- Form for oppdatering av Tittel og Beskrivelse -->
     <form asp-action="OppdatereInnmeldingForm" method="post" class="updateRegisteredCaseForm">
         <div class="updateRegisteredCaseID">
             <h3>Sak ID #@OppdatereInnmeldinger.InnmeldingId</h3>
@@ -54,7 +55,7 @@
         </div>
 
         <div class="updateRegisteredCaseActionButtons">
-            <button type="submit">Update</button>
+            <button type="submit">Oppdater beskrivelse av sak</button>
         </div>
     </form>
 }
@@ -64,6 +65,14 @@
     <div id="map" style="height: 50vh; width: 100%"></div>
 </div>
 
+<!-- Form for oppdatering av geometri -->
+<form asp-action="OppdatereGeometri" method="post" class="updateRegisteredCaseForm">
+    <input type="hidden" name="InnmeldingId" value="@Model.OppdatereInnmeldinger.FirstOrDefault()?.InnmeldingId" />
+    <input type="hidden" id="geoJsonHiddenOppdatereInnmelding" name="GeometriGeoJson" value="@Model.Geometri?.GeometriGeoJson" />
+    <div class="updateRegisteredCaseActionButtons">
+        <button type="submit">Oppdater feil i kart</button>
+    </div>
+</form>
 
 @section Scripts {
     <!-- JavaScript biblioteker -->
@@ -80,14 +89,43 @@
 
     <script>
         const map = MapConfig.initializeMap('map');
+        // Initialize draw control
+        const drawnItems = DrawConfig.initializeDrawControl(map);
+
         MapControls.initializeSearch(map);
         @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
         {
             <text>
                 const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
-                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
+                const geoJsonLayer = L.geoJSON(geoJsonFeature, {
+                    onEachFeature: function (feature, layer) {
+                    drawnItems.addLayer(layer);
+                    }
+                }).addTo(map);
                 map.fitBounds(geoJsonLayer.getBounds());
             </text>
         }
+
+        // Handle draw:edited event to update hidden input field
+        map.on(L.Draw.Event.EDITED, function (event) {
+            const layers = event.layers;
+            layers.eachLayer(function (layer) {
+                const geoJsonData = layer.toGeoJSON();
+                document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
+            });
+        });
+
+        // Handle draw:created event to update hidden input field
+        map.on(L.Draw.Event.CREATED, function (event) {
+            const layer = event.layer;
+            drawnItems.addLayer(layer);
+            const geoJsonData = layer.toGeoJSON();
+            document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
+        });
+
+        // Handle draw:deleted event to clear hidden input field
+        map.on(L.Draw.Event.DELETED, function (event) {
+            document.getElementById('geoJsonHidden').value = '';
+        });
     </script>
 }

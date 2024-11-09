@@ -58,7 +58,46 @@ namespace DataAccess
             return result;
         }
 
-            public async Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync()
+        //Oppdatering av geometri data på "OppdatereInnmelding" siden
+        public async Task<Geometri> OppdatereInnmeldingGeometriAsync(int innmeldingId, string geometriGeoJson)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                var sql = @"
+                        UPDATE geometri 
+                        SET ST_AsGeoJSON(geometri_data) = @GeometriGeoJson
+                        WHERE innmelding_id = @InnmeldingId";
+
+                var parameters = new
+                {
+                    InnmeldingId = innmeldingId,
+                    GeometriGeoJson = geometriGeoJson
+                };
+
+                var rowsAffected = await connection.ExecuteAsync(sql, parameters, transaction);
+                await transaction.CommitAsync();
+
+                if (rowsAffected > 0)
+                {
+                    return await GetGeometriByInnmeldingIdAsync(innmeldingId);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+
+        public async Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync()
         {
             using var connection = _dbConnection.CreateConnection();
             var sql = @"

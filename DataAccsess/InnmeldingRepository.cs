@@ -24,7 +24,7 @@ namespace DataAccess
 
 
 
-        //Daniel's sql innhenting av data til "OppdatereInnmelding"
+        //Innhenting av data til "OppdatereInnmelding"
         public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate)
         {
             using var connection = _dbConnection.CreateConnection();
