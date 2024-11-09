@@ -10,175 +10,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OversiktAlleInnmeldingerSaksB</title>
-    <style>
-        /* Midlertidig CSS for å bare kvittere rader i tabellen når man hovrer og skal klikke */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-
-        tr {
-            cursor: pointer; /* Change cursor to pointer on hover */
-        }
-
-        tr:hover {
-            background-color: #f0f0f0; /* Highlight row on hover */
-        }
-
-        tr:active {
-            background-color: #dcdcdc; /* Darker shade when clicked */
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .pagination a {
-            margin: 0 5px;
-            padding: 8px 16px;
-            text-decoration: none;
-            color: white;
-            background-color: #1c833b;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .pagination a:hover {
-            background-color: #00509c;
-            color: white;
-        }
-
-        .pagination a.active {
-            font-weight: bold;
-            background-color: #00509c;
-            color: white;
-            border-color: #00509c;
-        }
-
-        .search-bar {
-            display: flex;
-            justify-content: start;
-            margin-bottom: 20px;
-        }
-
-        .search-bar input[type="text"] {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px 0 0 4px;
-            width: 300px;
-        }
-
-        .search-bar button {
-            padding: 8px 16px;
-            border: 1px solid #ddd;
-            border-left: none;
-            border-radius: 0 4px 4px 0;
-            background-color: #1c833b;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .search-bar button:hover {
-            background-color: #00509c;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/OversiktAlleInnmeldingerSaksB.css" />
+   
 </head>
 <body>
 
 
 <main>
-    <h1>Oversikt over alle innmeldinger</h1>
+    <div class="content">
+        <h1>Oversikt over alle innmeldinger</h1>
 
-    <form method="get" action="@Url.Action("OversiktAlleInnmeldingerSaksB")" class="search-bar">
-        <input type="text"
-               name="searchTerm"
-               value="@Model.SearchTerm"
-               placeholder="Søk etter saker, navn eller epost" />
-        <button type="submit">Søk</button>
-    </form>
+        <form method="get" action="@Url.Action("OversiktAlleInnmeldingerSaksB")" class="search-bar">
+            <input type="text"
+                   name="searchTerm"
+                   value="@Model.SearchTerm"
+                   placeholder="Søk etter saker, navn eller epost"/>
+            <button type="submit">Søk</button>
+        </form>
 
-    @if (!Model.InnmeldingId?.Any() ?? true)
-    {
-    <div>
-        @if (string.IsNullOrEmpty(Model.SearchTerm))
+        @if (!Model.InnmeldingId?.Any() ?? true)
         {
-        <p>Ingen innmeldinger funnet</p>
+            <div>
+                @if (string.IsNullOrEmpty(Model.SearchTerm))
+                {
+                    <p>Ingen innmeldinger funnet</p>
+                }
+                else
+                {
+                    <p>Ingen resultater funnet for søket "@Model.SearchTerm"</p>
+                }
+                <a href="@Url.Action("OversiktAlleInnmeldingerSaksB")">Tilbake til alle innmeldinger</a>
+            </div>
         }
-        else
-        {
-        <p>Ingen resultater funnet for søket "@Model.SearchTerm"</p>
-        }
-        <a href="@Url.Action("OversiktAlleInnmeldingerSaksB")">Tilbake til alle innmeldinger</a>
-    </div>
-    }
-    
-    <table>
-        <thead>
-        <tr>
-            <th>INNMELDING ID</th>
-            <th>TITTEL</th>
-            <th>INNMELDER</th>
-            <th>EPOST</th>
-            <th>KOMMUNE</th>
-            <th>PRIORITET</th>
-            <th>STATUS</th>
-            <th>SISTE ENDRING</th>
-        </tr>
-        </thead>
-        <tbody>
-        @for (int i = 0; i < Model.InnmeldingId.Count(); i++)
-        {
-            var innmeldingId = Model.InnmeldingId.ElementAt(i);
-            var tittel = Model.Tittel.ElementAt(i);
-            var innmelderNavn = Model.InnmelderNavn.ElementAt(i);
-            var innmelderEpost = Model.InnmelderEpost.ElementAtOrDefault(i) ?? "N/A";
-            var gjestEpost = Model.GjestEpost.ElementAtOrDefault(i) ?? "N/A";
-            var displayEmail = !string.IsNullOrEmpty(innmelderEpost) && innmelderEpost != "N/A"
-            ? innmelderEpost
-            : (!string.IsNullOrEmpty(gjestEpost) && gjestEpost != "N/A" ? gjestEpost : "N/A");
-            var kommuneData = Model.KommuneData.ElementAt(i);
-            var status = Model.Status.ElementAt(i);
-            var prioritet = Model.Prioritet.ElementAt(i);
-            var sisteEndring = Model.SisteEndring.ElementAt(i);
 
-            <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmeldingId })'">
-                <td>@innmeldingId</td>
-                <td>@tittel</td>
-                <td>@innmelderNavn</td>
-                <td>@displayEmail</td>
-                <td>@kommuneData</td>
-                <td>@prioritet</td>
-                <td>@status</td>
-                <td>@sisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
+        <table>
+            <thead>
+            <tr>
+                <th>INNMELDING ID</th>
+                <th>TITTEL</th>
+                <th>INNMELDER</th>
+                <th>EPOST</th>
+                <th>KOMMUNE</th>
+                <th>PRIORITET</th>
+                <th>STATUS</th>
+                <th>SISTE ENDRING</th>
             </tr>
-        }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @for (int i = 0; i < Model.InnmeldingId.Count(); i++)
+            {
+                var innmeldingId = Model.InnmeldingId.ElementAt(i);
+                var tittel = Model.Tittel.ElementAt(i);
+                var innmelderNavn = Model.InnmelderNavn.ElementAt(i);
+                var innmelderEpost = Model.InnmelderEpost.ElementAtOrDefault(i) ?? "N/A";
+                var gjestEpost = Model.GjestEpost.ElementAtOrDefault(i) ?? "N/A";
+                var displayEmail = !string.IsNullOrEmpty(innmelderEpost) && innmelderEpost != "N/A"
+                    ? innmelderEpost
+                    : (!string.IsNullOrEmpty(gjestEpost) && gjestEpost != "N/A" ? gjestEpost : "N/A");
+                var kommuneData = Model.KommuneData.ElementAt(i);
+                var status = Model.Status.ElementAt(i);
+                var prioritet = Model.Prioritet.ElementAt(i);
+                var sisteEndring = Model.SisteEndring.ElementAt(i);
 
-    <div class="pagination">
-        @if (Model.PageNumber > 1)
-        {
-        <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize, searchTerm = Model.SearchTerm })">Forrige</a>
-        }
+                <tr onclick="window.location.href='@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmeldingId })'">
+                    <td>@innmeldingId</td>
+                    <td>@tittel</td>
+                    <td>@innmelderNavn</td>
+                    <td>@displayEmail</td>
+                    <td>@kommuneData</td>
+                    <td>@prioritet</td>
+                    <td>@status</td>
+                    <td>@sisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
 
-        @for (int i = 1; i <= Model.TotalPages; i++)
-        {
-        <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = i, pageSize = Model.PageSize, searchTerm = Model.SearchTerm })" class='@(i == Model.PageNumber ? "active" : "")'>@i</a>
-        }
+        <div class="pagination">
+            @if (Model.PageNumber > 1)
+            {
+                <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize, searchTerm = Model.SearchTerm })">Forrige</a>
+            }
 
-        @if (Model.PageNumber < Model.TotalPages)
-        {
-        <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize, searchTerm = Model.SearchTerm })">Next</a>
-        }
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = i, pageSize = Model.PageSize, searchTerm = Model.SearchTerm })" class='@(i == Model.PageNumber ? "active" : "")'>@i</a>
+            }
+
+            @if (Model.PageNumber < Model.TotalPages)
+            {
+                <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize, searchTerm = Model.SearchTerm })">Next</a>
+            }
+        </div>
     </div>
 </main>
 <script>
