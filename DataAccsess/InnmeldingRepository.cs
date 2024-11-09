@@ -139,7 +139,6 @@ namespace DataAccess
                        tittel AS Tittel,
                        status AS Status,
                        siste_endring AS SisteEndring,
-                       prioritet AS Prioritet,
                        innmelder_id AS InnmelderId
                 FROM innmelding
                 WHERE innmelder_id = @InnmelderId";
