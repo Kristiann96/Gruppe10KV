@@ -21,6 +21,21 @@ namespace Logic
             _transaksjonsRepository = transaksjonsRepository;
         }
 
+        // Ny metode for bare validering
+        public async Task BareValidereGeometriData(Geometri geometri)
+        {
+            try
+            {
+                using var doc = JsonDocument.Parse(geometri.GeometriGeoJson);
+                ValidereGeometriType(doc.RootElement);
+                ValidereKoordinater(doc.RootElement);
+            }
+            catch (JsonException)
+            {
+                throw new ForretningsRegelExceptionModel("Ugyldig GeoJSON format");
+            }
+        }
+
         public async Task<bool> ValidereOgLagreNyInnmelding(
             InnmeldingModel innmelding,
             Geometri geometri,

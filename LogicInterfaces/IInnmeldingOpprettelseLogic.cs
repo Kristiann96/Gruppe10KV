@@ -11,5 +11,6 @@ namespace LogicInterfaces
     public interface IInnmeldingOpprettelseLogic
     {
         Task<bool> ValidereOgLagreNyInnmelding(InnmeldingModel innmelding, Geometri geometri, string gjesteEpost);
+        Task BareValidereGeometriData(Geometri geometri);
     }
 }

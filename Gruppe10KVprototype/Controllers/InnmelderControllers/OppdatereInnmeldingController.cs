@@ -5,6 +5,8 @@ using Models.Models;
 using Interface;
 using ViewModels;
 using LogicInterfaces;
+using Models.Exceptions;
+using System.Text.Json;
 
 
 namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
@@ -94,7 +96,40 @@ namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
                 return BadRequest("Invalid input data.");
             }
 
-            // Parse the GeoJSON to ensure it's valid
+            try
+            {
+                var geometri = new Geometri
+                {
+                    GeometriGeoJson = viewModel.GeometriGeoJson
+                };
+
+                // Validate only
+                await _innmeldingOpprettelseLogic.BareValidereGeometriData(geometri);
+
+                // If validation passes, update the database
+                var oppdatertGeometri = await _geometriRepository.OppdatereInnmeldingGeometriAsync(
+                    viewModel.InnmeldingId,
+                    viewModel.GeometriGeoJson);
+
+                if (oppdatertGeometri != null)
+                {
+                    return Ok(new { message = "Geometri ble oppdatert" });
+                }
+                else
+                {
+                    return StatusCode(500, "Kunne ikke oppdatere geometrien.");
+                }
+            }
+            catch (ForretningsRegelExceptionModel ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "En intern feil oppstod: " + ex.Message);
+            }
+
+            /* // Parse the GeoJSON to ensure it's valid
             try
             {
                 var geoJsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(viewModel.GeometriGeoJson);
@@ -125,7 +160,7 @@ namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
             catch (Exception ex)
             {
                 return StatusCode(500, "An internal server error occurred.");
-            }
+            }*/
         }
     }
 }
