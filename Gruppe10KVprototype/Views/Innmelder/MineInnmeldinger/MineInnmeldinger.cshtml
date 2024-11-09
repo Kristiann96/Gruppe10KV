@@ -134,7 +134,6 @@
                     <th onclick="sortTable('InnmeldingId')">INNMELDING ID <span class="sort-arrow">@GetSortArrow("InnmeldingId")</span></th>
                     <th onclick="sortTable('Tittel')">TITTEL <span class="sort-arrow">@GetSortArrow("Tittel")</span></th>
                     <th onclick="sortTable('Status')">STATUS <span class="sort-arrow">@GetSortArrow("Status")</span></th>
-                    <th onclick="sortTable('Prioritet')">PRIORITET <span class="sort-arrow">@GetSortArrow("Prioritet")</span></th>
                     <th onclick="sortTable('SisteEndring')">SISTE ENDRING <span class="sort-arrow">@GetSortArrow("SisteEndring")</span></th>
                 </tr>
             </thead>
@@ -144,13 +143,12 @@
                     <tr onclick="window.location.href='@Url.Action("OppdatereInnmelding", "OppdatereInnmelding", new { id = innmelding.InnmeldingId })'">
                         <td>@innmelding.InnmeldingId</td>
                         <td>@innmelding.Tittel</td>
-                        <td>@innmelding.Status</td>
                         <td>
                             @{
-                                var color = GetPriorityColor(innmelding.Prioritet);
+                                var color = GetStatusColor(innmelding.Status);
                             }
                             <div class="priority-circle" style="background-color:@color;"></div>
-                            @innmelding.Prioritet
+                            @innmelding.Status
                         </td>
                         <td>@innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</td>
                     </tr>
@@ -202,46 +200,43 @@
             return " ";
         }
 
-      
-         string GetPriorityColor(string prioritet)
+        string GetStatusColor(string status)
             {
-                if (string.IsNullOrEmpty(prioritet))
+                if (string.IsNullOrEmpty(status))
                 {
-                    return "#000000"; // Black for null or empty values
+                    return "#000000"; // Svart for null eller tomme verdier
                 }
 
-                var normalizedPriority = prioritet.Trim().ToLower();
+                var normalizedStatus = status.Trim().ToLower();
                 string color;
-                switch (normalizedPriority)
+                switch (normalizedStatus)
                 {
-                    case "ikke_vurdert":
-                        color = "#0000FF"; // Blue
+                    case "ny":
+                        color = "#3CB043"; // Grønn
                         break;
-                    case "lav":
-                        color = "#006400"; // Dark Green
+                    case "ikke_påbegynt":
+                        color = "#808080"; // Grå
                         break;
-                    case "moderat":
-                        color = "#7FFF00"; // Yellow-Green
+                    case "under_behandling":
+                        color = "#0047AB"; // Blå
                         break;
-                    case "høy":
-                        color = "#FFFF00"; // Yellow
+                    case "pauset":
+                        color = "#FFA500"; // Oransje
                         break;
-                    case "kritisk":
-                        color = "#FF7F00"; // Orange
+                    case "avsluttet":
+                        color = "#006400"; // Mørk grønn
                         break;
-                    case "farligforlivhelse":
-                        color = "#FF4500"; // Red-Orange
-                        break;
-                    case "ekstremhaster":
-                        color = "#FF0000"; // Red
+                    case "ikke_tatt_til_følge":
+                        color = "#FF0000"; // Rød
                         break;
                     default:
-                        color = "#000000"; // Black for unknown values
+                        color = "#000000"; // Svart for ukjente verdier
                         break;
                 }
                 return color;
             }
         }
+
 
 
 
