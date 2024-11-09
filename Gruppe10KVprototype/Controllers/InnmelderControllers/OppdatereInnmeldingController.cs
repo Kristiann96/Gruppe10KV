@@ -4,22 +4,26 @@ using Models.Entities;
 using Models.Models;
 using Interface;
 using ViewModels;
+using LogicInterfaces;
 
 
-namespace Gruppe10KVprototype.Controllers.InnmelderControllers
+namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
 {
     [Route("OppdatereInnmelding/[controller]")]
     public class OppdatereInnmeldingController : Controller
     {
-        private readonly IInnmeldingRepository _innmeldingRepository;
         private readonly IGeometriRepository _geometriRepository;
-        private readonly IInnmeldingRepository _getOppdatereInnmeldingByIdAsync;
+        private readonly IInnmeldingRepository _innmeldingRepository;
+        private readonly IInnmeldingOpprettelseLogic _innmeldingOpprettelseLogic;
 
-        public OppdatereInnmeldingController(IInnmeldingRepository innmeldingRepository, IGeometriRepository geometriRepository)
+        public OppdatereInnmeldingController(
+            IInnmeldingRepository innmeldingRepository, 
+            IGeometriRepository geometriRepository, 
+            IInnmeldingOpprettelseLogic innmeldingOpprettelseLogic)
         {
             _innmeldingRepository = innmeldingRepository;
             _geometriRepository = geometriRepository;
-            _getOppdatereInnmeldingByIdAsync = innmeldingRepository;
+            _innmeldingOpprettelseLogic = innmeldingOpprettelseLogic;
         }
 
         [HttpGet("index")]
@@ -81,10 +85,10 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 
         //Oppdatere geometri data fra bruker på "OppdatereInnmelding"
         [HttpPost("oppdaterGeo")]
-        public async Task<IActionResult> OppdatereInnmeldingGeometri(int innmeldingId, string geometriGeoJson)
+        public async Task<IActionResult> OppdatereInnmeldingGeometri(OppdatereInnmeldingViewModel viewModel)
         {
             // Validate the input data
-            if (innmeldingId <= 0 || string.IsNullOrEmpty(geometriGeoJson))
+            if (viewModel.InnmeldingId <= 0 || string.IsNullOrEmpty(viewModel.GeometriGeoJson))
             {
                 // Handle invalid input
                 return BadRequest("Invalid input data.");
@@ -93,7 +97,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             // Parse the GeoJSON to ensure it's valid
             try
             {
-                var geoJsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(geometriGeoJson);
+                var geoJsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(viewModel.GeometriGeoJson);
                 if (geoJsonObject == null)
                 {
                     return BadRequest("Invalid GeoJSON data.");
@@ -107,7 +111,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             try
             {
                 // Update the database with the new geometry data
-                var oppdatertGeometri = await _geometriRepository.OppdatereInnmeldingGeometriAsync(innmeldingId, geometriGeoJson);
+                var oppdatertGeometri = await _geometriRepository.OppdatereInnmeldingGeometriAsync(viewModel.InnmeldingId, viewModel.GeometriGeoJson);
                 if (oppdatertGeometri != null)
                 {
                     // Provide feedback to the user
