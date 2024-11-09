@@ -68,7 +68,7 @@ namespace DataAccess
             {
                 var sql = @"
                         UPDATE geometri 
-                        SET ST_AsGeoJSON(geometri_data) = @geometriGeoJson
+                        SET geometri_data = ST_GeomFromGeoJSON(@GeometriGeoJson)
                         WHERE innmelding_id = @InnmeldingId";
 
                 var parameters = new
