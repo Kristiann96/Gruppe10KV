@@ -71,33 +71,40 @@
                         <p>Ingen innmelder informasjon tilgjengelig</p>
                     }
                 </div>
-                @if (Model.SaksbehandlerModel != null)
+
                 {
                     <div class="handler-info">
                         <h3>Saksbehandler</h3>
                         <form asp-action="LagreSaksbehandler" method="post">
-                            <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId" />
+                            <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId"/>
                             <div class="form-group mb-3">
                                 <label for="saksbehandlerDropdown">Velg saksbehandler:</label>
-                                <select id="saksbehandlerDropdown" 
-                                        name="saksbehandlerId" 
-                                        class="form-control" 
+                                <select id="saksbehandlerDropdown"
+                                        name="saksbehandlerId"
+                                        class="form-control"
                                         asp-items="Model.SaksbehandlerOptions">
                                     <option value="">Velg saksbehandler</option>
                                 </select>
                             </div>
-            
+
                             <button type="submit" class="btn btn-primary mb-3">Lagre saksbehandler</button>
                         </form>
-                        <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
-                        <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
-                        <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                        @if (Model.SaksbehandlerModel != null)
+                        {
+                            <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
+                            <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
+                            <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                        }
+                        else
+                        {
+                            <p>Ingen Saksbehandler Angit</p>
+                        }
                     </div>
                 }
             }
             else
             {
-                <p>Ingen innmeldingsdetaljer tilgjengelig</p>
+                <p>Ingen innmelding funnet</p>
             }
         </div>
         <div id="map" style="height: 500px;"></div>
