@@ -49,6 +49,7 @@ public class BehandleInnmeldingSaksBController : Controller
         }
 
         var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
+        var saksbehandlere = await _saksbehandlerRepository.HentAlleSaksbehandlereNavnId();
 
         // Hent alle enum verdier
         var statusOptions = await _enumLogic.GetFormattedStatusEnumValuesAsync();
@@ -64,7 +65,9 @@ public class BehandleInnmeldingSaksBController : Controller
             Geometri = geometri,
             StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList(),
             PrioritetOptions = prioritetOptions.Select(po => new SelectListItem { Value = po, Text = po }).ToList(),
-            KartTypeOptions = kartTypeOptions.Select(ko => new SelectListItem { Value = ko, Text = ko }).ToList()
+            KartTypeOptions = kartTypeOptions.Select(ko => new SelectListItem { Value = ko, Text = ko }).ToList(),
+            SaksbehandlerOptions = saksbehandlere.Select(s => new SelectListItem{Value = s.Id.ToString(), Text = s.Navn, Selected = saksbehandler?.SaksbehandlerId == s.Id}).ToList(),
+            ValgtSaksbehandlerId = saksbehandler?.SaksbehandlerId
         };
 
         return View(viewModel);
@@ -115,12 +118,29 @@ public class BehandleInnmeldingSaksBController : Controller
     }
 
 
-    public async Task<IActionResult> AngiSaksbahandler(string saksbehandlerId)
+    [HttpPost]
+    public async Task<IActionResult> LagreSaksbehandler(int innmeldingId, int? saksbehandlerId)
+    {
+        try
         {
-            var (Navn, Id) = await _saksbehandlerRepository.HentAlleSaksbehandlereNavnId();
-            Navn = Navn.Select(so => new SelectListItem { Value = Id, Text = so }).ToList(),
+            var result = await _innmeldingRepository.OppdaterSaksbehandler(innmeldingId, saksbehandlerId);
 
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Saksbehandler er oppdatert";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Kunne ikke finne innmeldingen";
+            }
         }
-    
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = "Kunne ikke oppdatere saksbehandler";
+        }
+
+        return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id = innmeldingId });
+    }
+
 }
 

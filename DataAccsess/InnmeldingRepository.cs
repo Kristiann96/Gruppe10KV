@@ -219,6 +219,36 @@ namespace DataAccess
                 throw;
             }
         }
+        public async Task<bool> OppdaterSaksbehandler(int innmeldingId, int? saksbehandlerId)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                var sql = @"
+            UPDATE innmelding 
+            SET saksbehandler_id = @SaksbehandlerId,
+                siste_endring = CURRENT_TIMESTAMP
+            WHERE innmelding_id = @InnmeldingId";
+
+                var parameters = new
+                {
+                    InnmeldingId = innmeldingId,
+                    SaksbehandlerId = saksbehandlerId
+                };
+
+                var rowsAffected = await connection.ExecuteAsync(sql, parameters, transaction);
+                await transaction.CommitAsync();
+
+                return rowsAffected > 0;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
 
     }
 }

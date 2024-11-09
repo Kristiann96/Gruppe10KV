@@ -30,6 +30,7 @@ namespace Interface
 
         Task<string> GetInnmelderTypeEnumValuesAsync();
         Task<bool> OppdatereEnumSaksBAsync(int innmeldingId, InnmeldingModel model);
+        Task<bool> OppdaterSaksbehandler(int innmeldingId, int? saksbehandlerId);
 
 
 

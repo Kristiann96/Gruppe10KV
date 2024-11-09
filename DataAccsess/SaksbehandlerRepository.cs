@@ -61,11 +61,12 @@ public class SaksbehandlerRepository : ISaksbehandlerRepository
     {
         using var connection = _dbConnection.CreateConnection();
         var sql = @"
-            SELECT s.saksbehandler_id as Id,
-                   s.navn as Navn,                   
-            FROM saksbehandler s";
-       
-        return await connection.QueryAsync<SaksbehandlerNavnModel>(sql);
+        SELECT 
+            s.saksbehandler_id as Id,
+            CONCAT(p.fornavn, ' ', p.etternavn) as Navn
+        FROM saksbehandler s
+        JOIN person p ON s.person_id = p.person_id";
 
+        return await connection.QueryAsync<SaksbehandlerNavnModel>(sql);
     }
 }

@@ -19,6 +19,8 @@ namespace ViewModels
         public InnmelderModel InnmelderModel { get; set; }
 
         public SaksbehandlerModel SaksbehandlerModel { get; set; }
+        public IEnumerable<SelectListItem> SaksbehandlerOptions { get; set; }
+        public int? ValgtSaksbehandlerId { get; set; }
     }
 }
 
