@@ -102,9 +102,24 @@
         <input type="text"
                name="searchTerm"
                value="@Model.SearchTerm"
-               placeholder="Søk i saker" />
+               placeholder="Søk etter saker, navn eller epost" />
         <button type="submit">Søk</button>
     </form>
+
+    @if (!Model.InnmeldingId?.Any() ?? true)
+    {
+    <div>
+        @if (string.IsNullOrEmpty(Model.SearchTerm))
+        {
+        <p>Ingen innmeldinger funnet</p>
+        }
+        else
+        {
+        <p>Ingen resultater funnet for søket "@Model.SearchTerm"</p>
+        }
+        <a href="@Url.Action("OversiktAlleInnmeldingerSaksB")">Tilbake til alle innmeldinger</a>
+    </div>
+    }
     
     <table>
         <thead>
@@ -148,21 +163,21 @@
         }
         </tbody>
     </table>
-    
+
     <div class="pagination">
         @if (Model.PageNumber > 1)
         {
-            <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize })">Forrige</a>
+        <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize, searchTerm = Model.SearchTerm })">Forrige</a>
         }
-        
+
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
-            <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = i, pageSize = Model.PageSize })" class='@(i == Model.PageNumber ? "active" : "")'>@i</a>
+        <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = i, pageSize = Model.PageSize, searchTerm = Model.SearchTerm })" class='@(i == Model.PageNumber ? "active" : "")'>@i</a>
         }
 
         @if (Model.PageNumber < Model.TotalPages)
         {
-            <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize })">Next</a>
+        <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize, searchTerm = Model.SearchTerm })">Next</a>
         }
     </div>
 </main>

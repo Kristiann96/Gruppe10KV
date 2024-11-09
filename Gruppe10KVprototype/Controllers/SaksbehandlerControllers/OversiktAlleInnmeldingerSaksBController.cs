@@ -33,7 +33,10 @@ public class OversiktAlleInnmeldingerSaksBController : Controller
 
         if (innmeldinger == null || !innmeldinger.Any())
         {
-            return View("OversiktAlleInnmeldingerSaksB", new OversiktAlleInnmeldingerSaksBViewModel());
+            return View("OversiktAlleInnmeldingerSaksB", new OversiktAlleInnmeldingerSaksBViewModel 
+            { 
+                SearchTerm = searchTerm  
+            });
         }
 
         var kommuneData = new List<string>();
@@ -53,7 +56,7 @@ public class OversiktAlleInnmeldingerSaksBController : Controller
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalPages = totalPages,
-            SearchTerm = searchTerm,
+            SearchTerm = searchTerm ?? "",
             InnmelderNavn = innmeldinger.Select(i =>
                 string.IsNullOrEmpty(i.Item2?.Fornavn) && string.IsNullOrEmpty(i.Item2?.Etternavn)
                     ? "Gjest"
