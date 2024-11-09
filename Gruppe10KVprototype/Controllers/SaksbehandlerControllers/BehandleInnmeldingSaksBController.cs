@@ -51,10 +51,12 @@ public class BehandleInnmeldingSaksBController : Controller
         var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
         var saksbehandlere = await _saksbehandlerRepository.HentAlleSaksbehandlereNavnId();
 
+
         // Hent alle enum verdier
         var statusOptions = await _enumLogic.GetFormattedStatusEnumValuesAsync();
         var prioritetOptions = await _enumLogic.GetFormattedPrioritetEnumValuesAsync();
         var kartTypeOptions = await _enumLogic.GetFormattedKartTypeEnumValuesAsync();
+        var inmmelderOptions = await _enumLogic.GetFormattedInnmelderTypeEnumValuesAsync();
 
         var viewModel = new BehandleInnmeldingSaksBViewModel
         {
@@ -66,8 +68,11 @@ public class BehandleInnmeldingSaksBController : Controller
             StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList(),
             PrioritetOptions = prioritetOptions.Select(po => new SelectListItem { Value = po, Text = po }).ToList(),
             KartTypeOptions = kartTypeOptions.Select(ko => new SelectListItem { Value = ko, Text = ko }).ToList(),
-            SaksbehandlerOptions = saksbehandlere.Select(s => new SelectListItem{Value = s.Id.ToString(), Text = s.Navn, Selected = saksbehandler?.SaksbehandlerId == s.Id}).ToList(),
-            ValgtSaksbehandlerId = saksbehandler?.SaksbehandlerId
+            SaksbehandlerOptions = saksbehandlere.Select(s => new SelectListItem
+                { Value = s.Id.ToString(), Text = s.Navn, Selected = saksbehandler?.SaksbehandlerId == s.Id }).ToList(),
+            ValgtSaksbehandlerId = saksbehandler?.SaksbehandlerId,
+            InnmelderTypeOptions = inmmelderOptions.Select(i => new SelectListItem
+                { Value = i, Text = i, Selected = innmelder?.InnmelderType == i }).ToList(),
         };
 
         return View(viewModel);
@@ -142,5 +147,43 @@ public class BehandleInnmeldingSaksBController : Controller
         return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id = innmeldingId });
     }
 
+    [HttpPost]
+    public async Task<IActionResult> OppdaterInnmelderType(string innmelderType, int innmelderId, int innmeldingId)
+    {
+        try
+        {
+            // Konverter til database format
+            var dbInnmelderType = _enumLogic.ConvertToDbFormat(innmelderType);
+
+            // Valider
+            var isValid = await _enumLogic.ValidateInnmelderTypeValueAsync(dbInnmelderType);
+            if (!isValid)
+            {
+                TempData["ErrorMessage"] = "Ugyldig innmelder type";
+                return await BehandleInnmeldingSaksB(innmeldingId);
+            }
+
+            // Oppdater
+            var model = new InnmeldingModel { InnmelderType = dbInnmelderType };
+            var result = await _innmeldingRepository.OppdaterInnmelderType(innmelderId, model);
+
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Innmeldertype er oppdatert";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Kunne ikke finne innmelderen";
+            }
+
+            // Returner til samme view med oppdatert data
+            return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id = innmeldingId });
+        }
+        catch (Exception)
+        {
+            TempData["ErrorMessage"] = "Kunne ikke oppdatere innmeldertype";
+            return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id = innmeldingId });
+        }
+    }
 }
 
