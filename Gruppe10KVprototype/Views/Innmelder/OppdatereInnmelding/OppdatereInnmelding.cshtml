@@ -14,6 +14,32 @@
         body {
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 2em;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 2em;
+            max-width: 95%;
+            margin: 0 auto;
+            height: calc(100vh - 40px);
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 400px;
+            max-width: 50%;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+            margin-top: 5em;
         }
 
         .updateRegisteredCaseID {
@@ -33,26 +59,27 @@
         }
 
         .updateRegisteredMapViewErrors {
-            max-width: 50em;
-            margin: 2em auto;
+            flex: 1;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             overflow: hidden;
+            margin: 0;
+            max-width: none;
         }
 
         .updateRegisteredCaseForm {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             max-width: 50em;
-            margin: 2em auto;
         }
 
         .updateRegisteredCaseSubject {
-            margin-top: 2em;
             margin-bottom: 2em;
         }
 
         .kartvisningFeilTitel {
-            text-align: left;
-            margin-top: 2em;
+            margin: 0 0 1em 0;
         }
 
         .updateRegisteredContainer {
@@ -61,6 +88,7 @@
         }
 
         .oppdaterInnmeldingTittel {
+            margin-top: 0.5em;
             margin-bottom: 1em;
         }
 
@@ -74,24 +102,36 @@
             border: 1px solid #ccc;
             border-radius: 10px;
             resize: none;
+            box-sizing: border-box;
         }
 
         .updateRegisteredCaseSubject input[type="text"] {
             font-weight: bold;
-
         }
 
         .updateRegisteredCaseDescription textarea {
-            height: 20em;
-            margin-top: 1em;
+            flex-grow: 1;
+            margin: 0;
+        }
+
+        #map {
+            height: 100% !important;
+            width: 100% !important;
+            min-height: 20em;
+        }
+
+        .map-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 50vh;
+            margin-bottom: 2em;
         }
 
         #redirectToLandingsSideButton {
             background-color: #00509c;
             color: white;
             border: none;
-            margin-top: 1em;
-            margin-bottom: 5em;
             padding: 1em 2em;
             font-size: 16px;
             font-weight: bold;
@@ -111,6 +151,12 @@
             transform: scale(0.95);
         }
 
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1em 0;
+        }
+
         .clicked {
             background-color: #1a833b !important;
         }
@@ -122,50 +168,49 @@
     </style>
 }
 <title>Oppdatere Innmelding</title>
-@foreach (var OppdatereInnmeldinger in Model.OppdatereInnmeldinger)
-{
-    <!-- Form for oppdatering av Tittel og Beskrivelse -->
-    <form asp-action="OppdatereInnmeldingForm" method="post" class="updateRegisteredCaseForm">
-        <div class="updateRegisteredCaseID">
-            <h3>Sak ID #@OppdatereInnmeldinger.InnmeldingId</h3>
-            <div class="updateRegisteredCaseStatus">
-                <h3>Status: @OppdatereInnmeldinger.Status</h3>
+<div class="main-container">
+    <div class="left-panel">
+        @foreach (var OppdatereInnmeldinger in Model.OppdatereInnmeldinger)
+        {
+            <form asp-action="OppdatereInnmeldingForm" method="post" class="updateRegisteredCaseForm">
+                <div class="updateRegisteredCaseID">
+                    <h3>Sak ID #@OppdatereInnmeldinger.InnmeldingId</h3>
+                    <div class="updateRegisteredCaseStatus">
+                        <h3>Status: @OppdatereInnmeldinger.Status</h3>
+                    </div>
+                    <input type="hidden" name="InnmeldingId" value="@OppdatereInnmeldinger.InnmeldingId" />
+                </div>
+
+                <div class="updateRegisteredCaseSubject">
+                    <h3 class="oppdaterInnmeldingTittel">Tittel:</h3>
+                    <input type="text" name="Tittel" value="@OppdatereInnmeldinger.Tittel" />
+                </div>
+
+                <div class="updateRegisteredCaseDescription">
+                    <h3>Beskrivelse:</h3>
+                    <textarea name="Beskrivelse">@OppdatereInnmeldinger.Beskrivelse</textarea>
+                </div>
+            </form>
+        }
+    </div>
+
+    <div class="right-panel">
+        <div class="map-container">
+            <h3 class="kartvisningFeilTitel">Kartvisning av feil:</h3>
+            <div class="updateRegisteredMapViewErrors">
+                <div id="map"></div>
             </div>
-            <input type="hidden" name="InnmeldingId" value="@OppdatereInnmeldinger.InnmeldingId" />
         </div>
 
-        <div class="updateRegisteredCaseSubject">
-            <h3 class="oppdaterInnmeldingTittel">Tittel:</h3>
-            <input type="text" name="Tittel" value="@OppdatereInnmeldinger.Tittel" />
-        </div>
-
-        <div class="updateRegisteredCaseDescription">
-            <h3>Beskrivelse:</h3>
-            <textarea name="Beskrivelse">@OppdatereInnmeldinger.Beskrivelse</textarea>
-        </div>
-
-        <div class="updateRegisteredCaseActionButtons">
-            <!--<button type="submit">Oppdater beskrivelse av sak</button>-->
-            <!--<button type="button" id="redirectToLandingsSideButton">Oppdater beskrivelse</button>-->
-        </div>
-    </form>
-}
-<div class="updateRegisteredContainer">
-    <h3 class="kartvisningFeilTitel">Kartvisning av feil:</h3>
-    <div class="updateRegisteredMapViewErrors">
-        <div id="map" style="height: 50vh; width: 100%"></div>
+        <form asp-action="OppdatereInnmeldingGeometri" method="post">
+            <input type="hidden" name="InnmeldingId" value="@Model.OppdatereInnmeldinger.FirstOrDefault()?.InnmeldingId" />
+            <input type="hidden" id="geoJsonHiddenOppdatereInnmelding" name="GeometriGeoJson" value="@Model.Geometri?.GeometriGeoJson" />
+            <div class="updateRegisteredCaseActionButtons">
+                <button type="button" id="redirectToLandingsSideButton">Oppdater innmelding</button>
+            </div>
+        </form>
     </div>
 </div>
-
-<!-- Form for oppdatering av geometri -->
-<form asp-action="OppdatereInnmeldingGeometri" method="post" class="updateRegisteredCaseForm">
-    <input type="hidden" name="InnmeldingId" value="@Model.OppdatereInnmeldinger.FirstOrDefault()?.InnmeldingId" />
-    <input type="hidden" id="geoJsonHiddenOppdatereInnmelding" name="GeometriGeoJson" value="@Model.Geometri?.GeometriGeoJson" />
-    <div class="updateRegisteredCaseActionButtons">
-        <!--<button type="submit">Oppdater feil i kart</button>-->
-        <button type="button" id="redirectToLandingsSideButton">Oppdater innmelding</button>
-    </div>
-</form>
 
 @section Scripts {
     <!-- JavaScript biblioteker -->
