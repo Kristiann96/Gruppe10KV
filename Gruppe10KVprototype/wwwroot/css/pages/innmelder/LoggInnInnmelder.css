@@ -19,11 +19,14 @@
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     padding: 2.5rem 3rem;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start; /* Holder innholdet venstrejustert inni kortet */
+    margin: 0 20px;
 }
+
 
 /* Login Title */
 .login-card__title {
