@@ -1,83 +1,217 @@
 ﻿@model ViewModels.Registrering.KomplettRegistreringViewModel
-
 @{
-    Layout = "_Layout";
     ViewData["Title"] = "Registrer deg";
 }
 
-<link rel="stylesheet" href="~/css/pages/innmelder/RegistrerDegInnmelder.css" />
+<div class="register-container">
+    <div class="register-card">
+        <h2 class="title">REGISTRER DEG</h2>
 
-<div class="registrering-page">
-    <div class="registrering-card">
-        <h1 class="registrering-card__title">Registrer deg</h1>
+        <form asp-controller="RegistrerDeg" asp-action="RegistrerInnmelder" method="post">
+            <div asp-validation-summary="All" class="validation-summary"></div>
 
-        <form method="post" asp-controller="Innmelder" asp-action="RegistrerDeg" style="width: 100%;">
-
-            <!-- Fornavn og Etternavn på samme linje -->
-            <div class="fornavn-etternavn-container">
-                <div class="registrering-form-group" style="flex: 1;">
-                    <label class="registrering-label" for="firstName">Fornavn</label>
-                    <input id="firstName"
-                           type="text"
-                           class="registrering-input"
-                           placeholder="Ditt fornavn"
-                           required />
-                    <span class="registrering-error"></span>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Fornavn">Fornavn</label>
+                    <input asp-for="Fornavn" />
+                    <span asp-validation-for="Fornavn" class="validation-message"></span>
                 </div>
 
-                <div class="registrering-form-group" style="flex: 1;">
-                    <label class="registrering-label" for="lastName">Etternavn</label>
-                    <input id="lastName"
-                           type="text"
-                           class="registrering-input"
-                           placeholder="Ditt etternavn"
-                           required />
-                    <span class="registrering-error"></span>
+                <div class="form-group">
+                    <label asp-for="Etternavn">Etternavn</label>
+                    <input asp-for="Etternavn" />
+                    <span asp-validation-for="Etternavn" class="validation-message"></span>
                 </div>
             </div>
 
-            <div class="registrering-form-group">
-                <label class="registrering-label" for="email">E-post</label>
-                <input id="email"
-                       type="email"
-                       class="registrering-input"
-                       placeholder="Din e-postadresse"
-                       required />
-                <span class="registrering-error"></span>
+            <div class="form-group">
+                <label asp-for="Telefonnummer">Telefonnummer</label>
+                <input asp-for="Telefonnummer" />
+                <span asp-validation-for="Telefonnummer" class="validation-message"></span>
             </div>
 
-            <div class="registrering-form-group">
-                <label class="registrering-label" for="password">Passord</label>
-                <input id="password"
-                       type="password"
-                       class="registrering-input"
-                       placeholder="Velg et passord"
-                       required />
-                <span class="registrering-error"></span>
+            <div class="form-group">
+                <label asp-for="Email">E-post</label>
+                <input asp-for="Email" />
+                <span asp-validation-for="Email" class="validation-message"></span>
             </div>
 
-            <div class="registrering-form-group">
-                <label class="registrering-label" for="confirmPassword">Bekreft passord</label>
-                <input id="confirmPassword"
-                       type="password"
-                       class="registrering-input"
-                       placeholder="Bekreft passord"
-                       required />
-                <span class="registrering-error"></span>
+            <div class="form-group">
+                <label asp-for="Password">Passord</label>
+                <input asp-for="Password" />
+                <span asp-validation-for="Password" class="validation-message"></span>
             </div>
 
-            <button type="submit" class="registrering-button">
-                Registrer deg
-            </button>
+            <div class="form-group">
+                <label asp-for="BekreftPassord">Bekreft passord</label>
+                <input asp-for="BekreftPassord" />
+                <span asp-validation-for="BekreftPassord" class="validation-message"></span>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="button primary">Registrer deg</button>
+                <a asp-controller="LandingsSide" asp-action="LandingsSide" class="button secondary">Avbryt</a>
+            </div>
         </form>
 
-        <div class="back-to-login">
-            <p class="back-to-login-text">
-                Har du allerede en konto?
-                <a href="@Url.Action("LoggInn", "LoggInn")" class="register-link">Logg inn her.</a>
-            </p>
+        <div class="login-link">
+            <p>Har du allerede en bruker? <a asp-controller="LoggInn" asp-action="LoggInn">Logg inn her</a></p>
         </div>
-
-
     </div>
 </div>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background-image: url('/images/your-background.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .register-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 20px;
+    }
+
+    .register-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+        input:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 2px rgba(0,102,204,0.2);
+        }
+
+    .button-group {
+        display: grid;
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+
+    .primary {
+        background-color: #0066cc;
+        color: white;
+    }
+
+        .primary:hover {
+            background-color: #0052a3;
+        }
+
+    .secondary {
+        background-color: #f5f5f5;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+
+        .secondary:hover {
+            background-color: #e5e5e5;
+        }
+
+    .login-link {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+        .login-link a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+            .login-link a:hover {
+                text-decoration: underline;
+            }
+
+    .validation-message {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 4px;
+        display: block;
+    }
+
+    .validation-summary {
+        color: #dc3545;
+        margin-bottom: 20px;
+    }
+
+    .button.primary:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+</style>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function (e) {
+        // Finn submit-knappen
+        const submitButton = this.querySelector('button[type="submit"]');
+
+        // Deaktiver knappen
+        submitButton.disabled = true;
+        submitButton.style.backgroundColor = '#cccccc';
+
+        // Endre teksten for å vise at noe skjer
+        submitButton.textContent = 'Registrerer...';
+    });
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
