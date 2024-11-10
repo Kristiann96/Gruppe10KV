@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\css\pages\saksbehandler\LoggInnSaksbehandler.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
    
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
    

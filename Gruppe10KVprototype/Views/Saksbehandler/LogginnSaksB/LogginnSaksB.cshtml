@@ -73,35 +73,40 @@
 </html> 
 *@
 
- @{
-        Layout = "_Layout";
-    }
-    
- 
- <body style="background-color: #f0f0f0;">
-        <div class="posterPage">
-            <div class="innmeldCard">
-                <h2 class="form-title">Velkommen tilbake!</h2>
-            <form method="post" asp-controller="OversiktAlleInnmeldingerSaksB" asp-action="OversiktAlleInnmeldingerSaksB">
-                    <div class="form-group">
-                        <label for="email">E-post</label>
-                        <input type="email" id="email" class="form-control" required />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Passord</label>
-                        <input type="password" id="password" class="form-control" required />
-                        <span class="text-danger"></span>
-                    </div>
-                    <div style="text-align: center;">
-                        <button type="submit" class="Button-MeldInn">Logg inn</button>
-                    </div>
-                </form>
-                <div class="forgot-password" style="text-align: center; margin-top: 1rem;">
-                    <a href="#" class="nav-link" style="text-decoration: none;">Glemt passord?</a>
-                </div>
+@{
+    Layout = "_Layout";
+}
+<head>
+    <link rel="stylesheet" href="~/css/pages/saksbehandler/LoggInnSaksB.css" />
+</head>
+<div class="login-page">
+    <div class="login-card">
+        <h2 class="login-card__title">Velkommen tilbake!</h2>
+
+        <form method="post" asp-controller="LogginnSaksB" asp-action="LogginnSaksB" style="width: 100%;">
+            <div class="login-form-group">
+                <label class="login-label" for="email">E-post</label>
+                <input id="email" type="email" class="login-input" placeholder="Din e-postadresse" required />
+                <span class="login-error">@ViewData["EmailError"]</span>
             </div>
+
+            <div class="login-form-group">
+                <label class="login-label" for="password">Passord</label>
+                <input id="password" type="password" class="login-input" placeholder="Ditt passord" required />
+                <span class="login-error">@ViewData["PasswordError"]</span>
+            </div>
+
+            <button type="submit" class="login-button">Logg inn</button>
+        </form>
+
+        <div class="forgot-password">
+            <a href="#" class="forgot-password-link">Glemt passord?</a>
         </div>
-    </body>
+    </div>
+</div>
+
+
+
+
 
 

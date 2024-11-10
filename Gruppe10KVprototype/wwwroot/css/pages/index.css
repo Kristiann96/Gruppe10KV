@@ -1,0 +1,80 @@
+﻿/* Generelle stilsettings for index-siden */
+.page {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('/Images/FrontPageBackground.png');
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Container for hele index-siden */
+.posterPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Bruker full høyde på skjermen */
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Card Container */
+.innmeldCard {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px; /* Maksimal bredde på kortet */
+    height: 350px; /* Fast høyde på kortet */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Plasserer innholdet med passende avstand */
+    text-align: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+    /* Heading (H1) */
+    .innmeldCard h1 {
+        font-size: 2rem;
+        color: #2d3c4d;
+        margin-bottom: 1rem;
+    }
+
+/* Text Description */
+.cardText {
+    font-size: 1.125rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.5; /* Gir litt luft mellom linjene */
+    word-wrap: break-word; /* Sørger for at teksten brytes riktig hvis den blir for lang */
+    flex-grow: 1; /* Sørger for at teksten får plass før knappen */
+}
+
+/* Button */
+.Button-MeldInn {
+    padding: 1rem 2rem; /* Økt padding for større knapp */
+    background-color: #0066cc;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.125rem; /* Økt skriftstørrelse for knappen */
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    margin-top: auto; /* Sørger for at knappen plasseres nederst i kortet */
+}
+
+    .Button-MeldInn:hover {
+        background-color: #0052a3;
+    }
+
+    .Button-MeldInn:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
