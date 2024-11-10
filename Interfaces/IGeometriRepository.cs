@@ -16,6 +16,9 @@ namespace Interface
         Task<Geometri> GetGeometriOppdatereInnmelding(int innmeldingId);
 
 
+        //Task<Geometri> OppdatereInnmeldingGeometriAsync(int innmeldingId, string geometriGeoJson);
+
+
         //  BidraTilKartForbedring gir til InnmedligModel og Geometri
         Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync();
     }

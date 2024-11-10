@@ -4,22 +4,28 @@ using Models.Entities;
 using Models.Models;
 using Interface;
 using ViewModels;
+using LogicInterfaces;
+using Models.Exceptions;
+using System.Text.Json;
 
 
-namespace Gruppe10KVprototype.Controllers.InnmelderControllers
+namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
 {
     [Route("OppdatereInnmelding/[controller]")]
     public class OppdatereInnmeldingController : Controller
     {
-        private readonly IInnmeldingRepository _innmeldingRepository;
         private readonly IGeometriRepository _geometriRepository;
-        private readonly IInnmeldingRepository _getOppdatereInnmeldingByIdAsync;
+        private readonly IInnmeldingRepository _innmeldingRepository;
+        private readonly IInnmeldingOpprettelseLogic _innmeldingOpprettelseLogic;
 
-        public OppdatereInnmeldingController(IInnmeldingRepository innmeldingRepository, IGeometriRepository geometriRepository)
+        public OppdatereInnmeldingController(
+            IInnmeldingRepository innmeldingRepository, 
+            IGeometriRepository geometriRepository, 
+            IInnmeldingOpprettelseLogic innmeldingOpprettelseLogic)
         {
             _innmeldingRepository = innmeldingRepository;
             _geometriRepository = geometriRepository;
-            _getOppdatereInnmeldingByIdAsync = innmeldingRepository;
+            _innmeldingOpprettelseLogic = innmeldingOpprettelseLogic;
         }
 
         [HttpGet("index")]
@@ -76,7 +82,90 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             await _innmeldingRepository.OppdatereInnmeldingFormAsync(innmelding);
 
             // Redirect back to the update page or another appropriate page
-            return RedirectToAction("OppdatereInnmelding", new { id = viewModel.InnmeldingId });
+            return RedirectToAction("MineInnmeldinger", "MineInnmeldinger");
+        }
+
+        //Oppdatere geometri data fra bruker på "OppdatereInnmelding"
+        /*[HttpPost("oppdaterGeo")]
+        public async Task<IActionResult> OppdatereInnmeldingGeometri(OppdatereInnmeldingViewModel viewModel)
+        {
+            // Validate the input data
+            if (viewModel.InnmeldingId <= 0 || string.IsNullOrEmpty(viewModel.GeometriGeoJson))
+            {
+                // Handle invalid input
+                return BadRequest("Invalid input data.");
+            }
+
+            try
+            {
+                var geometri = new Geometri
+                {
+                    GeometriGeoJson = viewModel.GeometriGeoJson
+                };
+
+                // Validate only
+                await _innmeldingOpprettelseLogic.BareValidereGeometriData(geometri);
+
+                // If validation passes, update the database
+                var oppdatertGeometri = await _geometriRepository.OppdatereInnmeldingGeometriAsync(
+                    viewModel.InnmeldingId,
+                    viewModel.GeometriGeoJson);
+
+                if (oppdatertGeometri != null)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Geometri ble oppdatert",
+                        redirectUrl = Url.Action("MineOppdateringer")
+                    });
+                }
+                else
+                {
+                    return StatusCode(500, "Kunne ikke oppdatere geometrien.");
+                }
+            }
+            catch (ForretningsRegelExceptionModel ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "En intern feil oppstod: " + ex.Message);
+            }*/
+
+            /* // Parse the GeoJSON to ensure it's valid
+            try
+            {
+                var geoJsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(viewModel.GeometriGeoJson);
+                if (geoJsonObject == null)
+                {
+                    return BadRequest("Invalid GeoJSON data.");
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest("Invalid GeoJSON format.");
+            }
+
+            try
+            {
+                // Update the database with the new geometry data
+                var oppdatertGeometri = await _geometriRepository.OppdatereInnmeldingGeometriAsync(viewModel.InnmeldingId, viewModel.GeometriGeoJson);
+                if (oppdatertGeometri != null)
+                {
+                    // Provide feedback to the user
+                    return Ok("Geometry updated successfully.");
+                }
+                else
+                {
+                    return StatusCode(500, "An error occurred while updating the geometry.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error occurred.");
+            }*/
         }
     }
-}
+

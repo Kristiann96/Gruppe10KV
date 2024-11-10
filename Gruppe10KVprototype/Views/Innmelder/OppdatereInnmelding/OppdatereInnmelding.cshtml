@@ -11,59 +11,206 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
 
     <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 2em;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 2em;
+            max-width: 95%;
+            margin: 0 auto;
+            height: calc(100vh - 40px);
+        }
+
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 400px;
+            max-width: 50%;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+            margin-top: 5em;
+        }
+
+        .updateRegisteredCaseID {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1a833b;
+            color: white;
+            padding: 1em;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1em;
+        }
+
+        .updateRegisteredCaseStatus {
+            color: white;
+        }
+
         .updateRegisteredMapViewErrors {
-            max-width: 50em;
-            margin: 20px auto;
-            padding: 20px;
+            flex: 1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0;
+            max-width: none;
         }
 
         .updateRegisteredCaseForm {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             max-width: 50em;
-            margin: 20px auto;
-            padding: 20px;
+        }
+
+        .updateRegisteredCaseSubject {
+            margin-bottom: 2em;
+        }
+
+        .kartvisningFeilTitel {
+            margin: 0 0 1em 0;
+        }
+
+        .updateRegisteredContainer {
+            max-width: 50em;
+            margin: 2em auto;
+        }
+
+        .oppdaterInnmeldingTittel {
+            margin-top: 0.5em;
+            margin-bottom: 1em;
+        }
+
+        .updateRegisteredCaseSubject input[type="text"],
+        .updateRegisteredCaseDescription textarea {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            width: 100%;
+            padding: 1.5em;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        .updateRegisteredCaseSubject input[type="text"] {
+            font-weight: bold;
+        }
+
+        .updateRegisteredCaseDescription textarea {
+            flex-grow: 1;
+            margin: 0;
+        }
+
+        #map {
+            height: 100% !important;
+            width: 100% !important;
+            min-height: 20em;
+        }
+
+        .map-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 50vh;
+            margin-bottom: 2em;
+        }
+
+        #redirectToLandingsSideButton {
+            background-color: #00509c;
+            color: white;
+            border: none;
+            padding: 1em 2em;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        #redirectToLandingsSideButton:hover {
+            background-color: #003f7f;
+            transform: scale(1.05);
+        }
+
+        #redirectToLandingsSideButton:active {
+            background-color: #002f5f;
+            transform: scale(0.95);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1em 0;
+        }
+
+        .clicked {
+            background-color: #1a833b !important;
         }
 
         .updateRegisteredCaseActionButtons {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
+            text-align: right;
         }
+
     </style>
 }
 <title>Oppdatere Innmelding</title>
-@foreach (var OppdatereInnmeldinger in Model.OppdatereInnmeldinger)
-{
-    <form asp-action="OppdatereInnmeldingForm" method="post" class="updateRegisteredCaseForm">
-        <div class="updateRegisteredCaseID">
-            <h3>Sak ID #@OppdatereInnmeldinger.InnmeldingId</h3>
-            <input type="hidden" name="InnmeldingId" value="@OppdatereInnmeldinger.InnmeldingId" />
+<div class="main-container">
+    <div class="left-panel">
+        @foreach (var OppdatereInnmeldinger in Model.OppdatereInnmeldinger)
+        {
+            <form asp-action="OppdatereInnmeldingForm" method="post" class="updateRegisteredCaseForm">
+                <div class="updateRegisteredCaseID">
+                    <h3>Sak ID #@OppdatereInnmeldinger.InnmeldingId</h3>
+                    <div class="updateRegisteredCaseStatus">
+                        <h3>Status: @OppdatereInnmeldinger.Status</h3>
+                    </div>
+                    <input type="hidden" name="InnmeldingId" value="@OppdatereInnmeldinger.InnmeldingId" />
+                </div>
+
+                <div class="updateRegisteredCaseSubject">
+                    <h3 class="oppdaterInnmeldingTittel">Tittel:</h3>
+                    <input type="text" name="Tittel" value="@OppdatereInnmeldinger.Tittel" />
+                </div>
+
+                <div class="updateRegisteredCaseDescription">
+                    <h3>Beskrivelse:</h3>
+                    <textarea name="Beskrivelse">@OppdatereInnmeldinger.Beskrivelse</textarea>
+                </div>
+            </form>
+        }
+    </div>
+
+    <div class="right-panel">
+        <div class="map-container">
+            <h3 class="kartvisningFeilTitel">Kartvisning av feil:</h3>
+            <div class="updateRegisteredMapViewErrors">
+                <div id="map"></div>
+            </div>
         </div>
 
-        <div class="updateRegisteredCaseStatus">
-            <h3>Status: @OppdatereInnmeldinger.Status</h3>
-        </div>
-
-        <div class="updateRegisteredCaseSubject">
-            <h3>Tittel:</h3>
-            <input type="text" name="Tittel" value="@OppdatereInnmeldinger.Tittel" />
-        </div>
-
-        <div class="updateRegisteredCaseDescription">
-            <h3>Beskrivelse:</h3>
-            <textarea name="Beskrivelse">@OppdatereInnmeldinger.Beskrivelse</textarea>
-        </div>
-
-        <div class="updateRegisteredCaseActionButtons">
-            <button type="submit">Update</button>
-        </div>
-    </form>
-}
-
-<div class="updateRegisteredMapViewErrors">
-    <h3>Kartvisning av feil:</h3>
-    <div id="map" style="height: 50vh; width: 100%"></div>
+        <form asp-action="OppdatereInnmeldingGeometri" method="post">
+            <input type="hidden" name="InnmeldingId" value="@Model.OppdatereInnmeldinger.FirstOrDefault()?.InnmeldingId" />
+            <input type="hidden" id="geoJsonHiddenOppdatereInnmelding" name="GeometriGeoJson" value="@Model.Geometri?.GeometriGeoJson" />
+            <div class="updateRegisteredCaseActionButtons">
+                <button type="button" id="redirectToLandingsSideButton">Oppdater innmelding</button>
+            </div>
+        </form>
+    </div>
 </div>
-
 
 @section Scripts {
     <!-- JavaScript biblioteker -->
@@ -80,14 +227,54 @@
 
     <script>
         const map = MapConfig.initializeMap('map');
+        // Initialize draw control
+        const drawnItems = DrawConfig.initializeDrawControl(map);
+
         MapControls.initializeSearch(map);
         @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
         {
             <text>
                 const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
-                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
+                const geoJsonLayer = L.geoJSON(geoJsonFeature, {
+                    onEachFeature: function (feature, layer) {
+                    drawnItems.addLayer(layer);
+                    }
+                }).addTo(map);
                 map.fitBounds(geoJsonLayer.getBounds());
             </text>
         }
+
+        // Handle draw:edited event to update hidden input field
+        map.on(L.Draw.Event.EDITED, function (event) {
+            const layers = event.layers;
+            layers.eachLayer(function (layer) {
+                const geoJsonData = layer.toGeoJSON();
+                document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
+            });
+        });
+
+        // Handle draw:created event to update hidden input field
+        map.on(L.Draw.Event.CREATED, function (event) {
+            const layer = event.layer;
+            drawnItems.addLayer(layer);
+            const geoJsonData = layer.toGeoJSON();
+            document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
+        });
+
+        // Handle draw:deleted event to clear hidden input field
+        map.on(L.Draw.Event.DELETED, function (event) {
+            document.getElementById('geoJsonHidden').value = '';
+        });
+
+        // Handle button click and redirect
+        document.getElementById('redirectToLandingsSideButton').addEventListener('click', function () {
+            this.classList.add('clicked');
+            
+            // Delay to show the color change
+            setTimeout(() => {
+                alert('Takk for din oppdaterte innmelding!');
+                window.location.href = '@Url.Action("LandingsSide", "LandingsSide")';
+            }, 500);
+        });
     </script>
 }

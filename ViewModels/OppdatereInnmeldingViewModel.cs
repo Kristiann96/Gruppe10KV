@@ -20,5 +20,6 @@ namespace ViewModels
 
         // Geometridata
         public Geometri Geometri { get; set; }
+        public string GeometriGeoJson { get; set; }
     }
 }
