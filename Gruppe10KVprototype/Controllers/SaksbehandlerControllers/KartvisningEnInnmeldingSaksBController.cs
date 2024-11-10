@@ -1,6 +1,8 @@
 ﻿using Interface;
 using Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Models.Entities;
+using Models.Models;
 using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
@@ -19,30 +21,50 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> KartvisningEnInnmeldingSaksB(int innmeldingId)
+        public async Task<IActionResult> KartvisningEnInnmeldingSaksB(int? innmeldingId, string innmeldingIds)
         {
-            // Hent sammenstilt data
-            var (innmelding, person, innmelder, saksbehandler) =
-                await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(innmeldingId);
+            // Liste som skal holde alle innmeldinger med detaljer
+            var alleSaker = new List<(InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel, Geometri)>();
 
-            if (innmelding == null)
+            if (innmeldingId.HasValue)
             {
-                return NotFound("Innmelding ikke funnet");
+                // Håndter enkelt innmelding som før
+                var (innmelding, person, innmelder, saksbehandler) =
+                    await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(innmeldingId.Value);
+                var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId.Value);
+
+                if (innmelding != null)
+                {
+                    alleSaker.Add((innmelding, person, innmelder, saksbehandler, geometriData));
+                }
+            }
+            else if (!string.IsNullOrEmpty(innmeldingIds))
+            {
+                // Håndter flere innmeldinger
+                var idListe = innmeldingIds.Split(',').Select(int.Parse);
+
+                foreach (var id in idListe)
+                {
+                    var (innmelding, person, innmelder, saksbehandler) =
+                        await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(id);
+                    var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
+
+                    if (innmelding != null)
+                    {
+                        alleSaker.Add((innmelding, person, innmelder, saksbehandler, geometriData));
+                    }
+                }
             }
 
-            // Hent geometri data
-            var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
+            if (!alleSaker.Any())
+            {
+                return NotFound("Ingen innmeldinger funnet");
+            }
 
             var viewModel = new KartvisningEnInnmeldingSaksBViewModel
             {
-                Innmelding = innmelding,
-                Person = person,
-                Innmelder = innmelder,
-                Saksbehandler = saksbehandler,
-                GeometriData = geometriData
+                AlleInnmeldinger = alleSaker
             };
-
-            
 
             return View(viewModel);
         }

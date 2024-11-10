@@ -6,26 +6,23 @@ namespace ViewModels
 {
     public class KartvisningEnInnmeldingSaksBViewModel
     {
-        // Innmelding med alle nødvendige detaljer
-        public InnmeldingModel Innmelding { get; set; }
+        // For bakoverkompatibilitet og enkel tilgang til første innmelding
+        public InnmeldingModel Innmelding => AlleInnmeldinger?.FirstOrDefault().Item1;
+        public PersonModel Person => AlleInnmeldinger?.FirstOrDefault().Item2;
+        public InnmelderModel Innmelder => AlleInnmeldinger?.FirstOrDefault().Item3;
+        public SaksbehandlerModel Saksbehandler => AlleInnmeldinger?.FirstOrDefault().Item4;
+        public Geometri GeometriData => AlleInnmeldinger?.FirstOrDefault().Item5;
 
-        // Person-relatert info (for saksbehandler navn)
-        public PersonModel Person { get; set; }
+        // Ny property for alle innmeldinger
+        public List<(InnmeldingModel Innmelding, PersonModel Person, InnmelderModel Innmelder,
+            SaksbehandlerModel Saksbehandler, Geometri Geometri)> AlleInnmeldinger
+        { get; set; }
 
-        // Innmelder info for type
-        public InnmelderModel Innmelder { get; set; }
-
-        // Saksbehandler info
-        public SaksbehandlerModel Saksbehandler { get; set; }
-
-        // Geometridata 
-        public Geometri GeometriData { get; set; }
-
-        // Helper properties for å forenkle bruken i view
+        // Helper properties
         public string SaksbehandlerNavn => Person != null
             ? $"{Person.Fornavn} {Person.Etternavn}"
             : "Ikke tildelt";
 
-        public string FormaterSisteEndring => Innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm");
+        public string FormaterSisteEndring => Innmelding?.SisteEndring.ToString("dd.MM.yyyy HH:mm");
     }
 }

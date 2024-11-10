@@ -4,24 +4,116 @@
 }
 
 
-<div class="brukerSakerTittel">
-    <h1>Velkommen til din hjemmeside</h1>
-    <p>Her kan du se dine valg</p>
-</div>
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigasjonskort</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            .container
 
-<div class="innboks">
-    <h2>Innboks</h2>
-    <p>Her kan du se oppdateringer på dine saker.</p>
-</div>
+        {
+            background-image: url('@Url.Content("~/images/Not_Vennesla.png")');
+            background-size: cover;
+            background-position: center;
+        }
 
-<div class="hjemmesideRettIKartet">
-    <h2>Rette i kartet</h2>
-    <p>Meld inn feil i kartet.</p>
-    <a href=" @Url.Action("MapView", "Home")">Meld inn feil</a>
-</div>
+        .container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+           
+        }
 
-<div class="noeAnnet">
-    <h2>Noe Annet</h2>
-    <p>Her er noe annet.</p>
-    <a href="https://www.youtube.com/watch?v=xm3YgoEiEDc" target="_blank">Surprise</a>
-</div>
+        .card-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        .cards {
+            display: grid;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #cbd5e0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card i {
+            font-size: 2.5rem;
+                color: #1a833b;
+            margin-bottom: 1rem;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin: 0 0 1rem 0;
+            color: #2d3748;
+        }
+
+        .card p {
+            font-size: 0.875rem;
+            color: #4a5568;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card-container">
+            <div class="cards">
+                <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartforbedring")" class="card">
+                    <i class="fa-regular fa-handshake"></i>
+                    <h2>Bidra til Kartkvalitet</h2>
+                    <p>Hjelp oss med å forbedre kartkvaliteten ved å bekrefte eller avkrefte saker rapportert av andre.</p>
+                </a>
+
+                <a href="@Url.Action("SporKartfeil", "SporKartfeil")" class="card">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <h2>Rapporter fra din Posisjon</h2>
+                    <p>Bruk din nåværende posisjon til å enkelt markere og rapportere kartfeil. Perfekt for feiloppdagelse mens du er på farten.</p>
+                </a>
+
+                <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")" class="card">
+                    <i class="fa-regular fa-folder-open"></i>
+                    <h2>Mine Saker</h2>
+                    <p>Oversikt over dine innmeldte saker. Følg med på status, oppdater dine innmeldinger, og se historikk over tidligere meldinger.</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
