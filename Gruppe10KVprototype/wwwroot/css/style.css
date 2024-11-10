@@ -35,6 +35,11 @@ body {
     flex-direction: column;
     min-height: 100vh;
     padding-top: 65px;
+    background-color: #f0f0f0;
+}
+
+.homeFrontPage {
+    background-image: url('../images/frontpagebackground.png');
 }
 
 .Index {
@@ -46,7 +51,7 @@ body {
 }
 
 /* Layout Components */
-header {
+    header {
     position: fixed;
     top: 0;
     width: 100%;
