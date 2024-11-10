@@ -10,7 +10,51 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
     <link rel="stylesheet" href="~/css/pages/kart/map_view.css"/>
 }
+<style>
+    .info-panel {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        max-width: 450px;
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+    }
 
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 20px;
+        color: #999;
+    }
+
+        .close-button:hover {
+            color: #333;
+        }
+
+    .hide-forever {
+        margin-top: 20px;
+        background: none;
+        border: none;
+        color: #666;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .hide-forever:hover {
+            color: #333;
+        }
+</style>
 
 <div class="map-page-container">
     <div class="map-card">
@@ -21,6 +65,11 @@
 
         <div class="map-content">
             <div id="map"></div>
+        </div>
+        <div id="infoPanel" class="info-panel">
+            <button class="close-button">&times;</button>
+            <p>Her kan du enten velge flere saker ved å tegne et utsnitt med verktøyet, eller klikke direkte på en enkeltsak for å se oppsummering</p>
+            <button class="hide-forever">Ikke vis dette igjen</button>
         </div>
 
         <div class="map-controls">
@@ -51,6 +100,27 @@
         <script src="~/js/maps/utils/mapControls.js"></script>
 
         <script>
+            function closePanel() {
+                const infoPanel = document.getElementById('infoPanel');
+                if (infoPanel) {
+                    infoPanel.style.display = 'none';
+                }
+                        }
+
+            // Add event listeners when DOM is loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                const closeButton = document.querySelector('.close-button');
+                const hideForeverButton = document.querySelector('.hide-forever');
+    
+                if (closeButton) {
+                    closeButton.addEventListener('click', closePanel);
+                }
+    
+                if (hideForeverButton) {
+                    hideForeverButton.addEventListener('click', closePanel);
+                }
+            });
+
             // Initialiser kartet
             const map = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
 
