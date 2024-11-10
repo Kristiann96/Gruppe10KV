@@ -1,0 +1,215 @@
+﻿
+/* Basis kartoppsett - IKKE ENDRE */
+#map {
+    height: 83vh;
+    width: 100%;
+    margin-top: 1em;
+}
+
+/* Popup styling - Kan justeres */
+.persistent-popup .leaflet-popup-content-wrapper {
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+}
+
+.persistent-popup .leaflet-popup-tip {
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.popup-content {
+    min-width: 200px;
+    padding: 10px;
+}
+
+.popup-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* Vurderingsknapper og kommentarfelt */
+.popup-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.popup-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 13px;
+}
+
+.bekreft-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.avkreft-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.kommentar-container {
+    display: none;
+    margin-top: 10px;
+}
+
+.kommentar-textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 60px;
+}
+
+.send-button {
+    background-color: #2196F3;
+    color: white;
+    width: 100%;
+}
+
+.takk-melding {
+    text-align: center;
+    color: #4CAF50;
+    font-weight: bold;
+    padding: 10px;
+}
+
+/* Validerings-melding styling */
+.validation-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Visuell indikator for geometrier */
+.geometry-indicator {
+    background-color: #ff7800;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+
+/* Styling for the popup */
+.info-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    max-width: 450px;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+    .info-panel p {
+        margin: 0;
+        line-height: 1.6;
+        color: #333;
+        font-size: 16px;
+    }
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #999;
+    transition: color 0.3s;
+}
+
+    .close-button:hover {
+        color: #333;
+    }
+
+.hide-forever {
+    margin-top: 20px;
+    background: none;
+    border: none;
+    color: #666;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+    .hide-forever:hover {
+        color: #333;
+    }
+
+/* Styling for the popup */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.modal-text {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    color: #666;
+}
+
+.modal-button {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+    .modal-button:hover {
+        background: #1976D2;
+    }
+
+.hide {
+    display: none !important;
+}

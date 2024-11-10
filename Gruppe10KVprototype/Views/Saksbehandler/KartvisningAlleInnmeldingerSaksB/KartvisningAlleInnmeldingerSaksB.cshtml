@@ -12,17 +12,24 @@
 <link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartvisningAlleInnmeldingerSaksB.css" />
 
 <!-- Kartcontainer med kontroller -->
-<div class="map-container">
+<div class="container-fluid p-0">
+    <div id="welcomeModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Velkommen til oversikt over alle innmeldinger</h2>
+            <p class="modal-text">
+                Her kan du enten velge flere saker ved å tegne et utsnitt med verktøyet, 
+                eller klikke direkte på en enkeltsak for å se oppsummering.
+            </p>
+            <button id="acceptBtn" class="modal-button">OK, jeg forstår</button>
+        </div>
+    </div>
     <div id="map"></div>
+    <div id="validationMessage" class="validation-message"></div>
+
     <div class="utsnitt-controls">
         <button id="visUtsnittBtn" class="utsnitt-button" disabled>Vis utsnitt</button>
         <button id="clearUtsnittBtn" class="utsnitt-button clear" disabled>Fjern utsnitt</button>
     </div>
-</div>
-<div id="infoPanel" class="info-panel">
-    <button class="close-button" onclick="closePanel()">&times;</button>
-    <p>Her kan du enten velge flere saker ved å tegne et utsnitt med verktøyet, eller klikke direkte på en enkeltsak for å se oppsummering</p>
-    <button class="hide-forever" onclick="closePanel()">Ikke vis dette igjen</button>
 </div>
 <!-- JavaScript biblioteker -->
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -38,6 +45,17 @@
 
 
 <script>
+    // Disable map interaction when modal is shown
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('map').style.pointerEvents = 'none';
+    });
+
+    // Enable map interaction when modal is closed
+    document.getElementById('acceptBtn').addEventListener('click', function() {
+    document.getElementById('welcomeModal').classList.add('hide');
+    document.getElementById('map').style.pointerEvents = 'auto';
+    });
+
     // Initialiserer kart
     console.log('Initialiserer kart');
     const map = MapConfig.initializeMap('map');

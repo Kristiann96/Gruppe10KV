@@ -9,116 +9,21 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
-
-    <style>
-        /* Basis kartoppsett - IKKE ENDRE */
-        #map {
-            height: 85vh;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        /* Popup styling - Kan justeres */
-        .persistent-popup .leaflet-popup-content-wrapper {
-            background-color: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 3px 14px rgba(0,0,0,0.4);
-        }
-
-        .persistent-popup .leaflet-popup-tip {
-            background-color: rgba(255, 255, 255, 0.95);
-        }
-
-        .popup-content {
-            min-width: 200px;
-            padding: 10px;
-        }
-
-        .popup-title {
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-
-        /* Vurderingsknapper og kommentarfelt */
-        .popup-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-
-        .popup-button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 13px;
-        }
-
-        .bekreft-button {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .avkreft-button {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .kommentar-container {
-            display: none;
-            margin-top: 10px;
-        }
-
-        .kommentar-textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        .send-button {
-            background-color: #2196F3;
-            color: white;
-            width: 100%;
-        }
-
-        .takk-melding {
-            text-align: center;
-            color: #4CAF50;
-            font-weight: bold;
-            padding: 10px;
-        }
-
-        /* Validerings-melding styling */
-        .validation-message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px;
-            border-radius: 4px;
-            background-color: #4CAF50;
-            color: white;
-            display: none;
-            z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        /* Visuell indikator for geometrier */
-        .geometry-indicator {
-    background-color: #ff7800;
-    border: 2px solid #ffffff;
-    box-shadow: 0 0 4px rgba(0,0,0,0.5);
-}
-
-    </style>
+    <link rel="stylesheet" href="~/css/pages/TemporaryCSS/BidraTilKartForbedring.css" />
 }
 
 <div class="container-fluid p-0">
+    <div id="welcomeModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Velkommen til kartforbedringsverktøyet</h2>
+            <p class="modal-text">
+                Her kan du hjelpe oss med å forbedre kartet ved å bekrefte eller avkrefte
+                eksisterende kartdata. Hold over markørene på kartet for å se mer informasjon
+                og gi din vurdering.
+            </p>
+            <button id="acceptBtn" class="modal-button">OK, jeg forstår</button>
+        </div>
+    </div>
     <div id="map"></div>
     <div id="validationMessage" class="validation-message"></div>
 </div>
@@ -134,6 +39,18 @@
     <script src="~/js/maps/utils/mapControls.js"></script>
 
     <script>
+        // Disable map interaction when modal is shown
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('map').style.pointerEvents = 'none';
+        });
+
+        // Enable map interaction when modal is closed
+        document.getElementById('acceptBtn').addEventListener('click', function () {
+            document.getElementById('welcomeModal').classList.add('hide');
+            document.getElementById('map').style.pointerEvents = 'auto';
+        });
+
+
         // Kart-initialisering
         const map = MapConfig.initializeMap('map');
         const baseMaps = {};
