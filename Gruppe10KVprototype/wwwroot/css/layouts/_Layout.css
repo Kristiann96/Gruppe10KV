@@ -1,1 +1,129 @@
-/* Layout */
+/* Main layout structure */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: 65px;
+}
+
+/* Header styles */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 5em;
+    background-color: var(--color-background);
+    z-index: 2000;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Main content area */
+main {
+    flex: 1;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Footer styles */
+footer {
+    background-color: var(--color-background-light);
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+}
+
+.footer-content {
+    max-width: var(--max-width-wide);
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Navigation */
+.navbar {
+    height: 100%;
+    padding: 0 1rem;
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: var(--max-width-wide);
+    margin: 0 auto;
+    height: 100%;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+    .navbar-brand img {
+        height: 40px;
+    }
+
+#navbar-menu {
+    margin-left: auto;
+}
+
+.navbarlist {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    list-style: none;
+}
+
+.nav-link {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+    .nav-link:hover {
+        color: var(--color-primary);
+    }
+
+/* Container Layout */
+.container {
+    max-width: var(--max-width-container);
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+/* Responsive Design */
+@media (min-width: 992px) {
+    .container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        grid-template-columns: 1fr;
+    }
+
+    .container-fluid {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+
+    .navbar-brand {
+        margin-bottom: 1rem;
+    }
+
+    .navbarlist {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
