@@ -21,6 +21,7 @@
                         <li><a class="nav-link" asp-controller="LoggInn" asp-action="LoggInn">Logg inn</a></li>
                         <li class="dev-dropdown">
                             <button class="dev-button">Utvikling</button>
+
                             <div class="dev-dropdown-content">
                                 <div class="dropdown-section">
                                     <strong>Saksbehandler</strong>
@@ -47,6 +48,18 @@
                                 
 
 
+
+                                    <div class="dropdown-section">
+                                        <strong>Innmelder</strong>
+                                    </div>
+                                    <a href="@Url.Action("RegistrerDeg", "RegistrerDeg")">Registrer deg</a>
+                                    <a href="@Url.Action("OppdatereInnmelding", "OppdatereInnmelding")">Oppdater innmelding</a>
+                                    <a href="@Url.Action("LandingsSide", "LandingsSide")">Landings Side</a>
+                                    <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")">Mine Innmeldinger</a>
+                                    <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartForbedring")">Bidra</a>
+                                    <a href="@Url.Action("SporKartfeil", "SporKartfeil")">GPS feilmarkering</a>
+                                    <div class="dropdown-section">
+                                </div>   
                             </div>
                         </li>
                     </ul>

@@ -44,6 +44,15 @@
     border: 1px solid #e9ecef;
 }
 
+/* Mini Map for Form */
+#miniMap {
+    height: 400px;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+    margin-bottom: 1.5rem;
+}
+
 /* Button Container */
 .map-controls {
     display: flex;
@@ -75,22 +84,129 @@
     color: white;
 }
 
-    .map-button-primary:hover {
-        background-color: #0052a3;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+.map-button-primary:hover:not(:disabled) {
+    background-color: #0052a3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.map-button-primary:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
 
 .map-button-secondary {
     background-color: #28a745;
     color: white;
 }
 
-    .map-button-secondary:hover {
-        background-color: #218838;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+.map-button-secondary:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.25);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Checkbox Styles */
+.checkbox-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.form-check-input {
+    margin-right: 0.75rem;
+    width: 18px;
+    height: 18px;
+}
+
+.form-check-label {
+    color: #333;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 2rem;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.close {
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close:hover {
+    color: #333;
+}
+
+/* Validation */
+.text-danger {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
 
 /* Responsive Design */
 @media (max-width: 1200px) {
@@ -118,6 +234,10 @@
         height: 400px;
     }
 
+    #miniMap {
+        height: 300px;
+    }
+
     .map-controls {
         flex-direction: column;
         padding: 1rem;
@@ -129,5 +249,10 @@
 
     .map-title {
         font-size: 1.5rem;
+    }
+
+    .modal-content {
+        margin: 10% 1rem;
+        padding: 1.5rem;
     }
 }
