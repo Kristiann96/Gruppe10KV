@@ -11,16 +11,18 @@ public class KartvisningEnInnmeldingSaksBController : Controller
 {
     private readonly IGeometriRepository _geometriRepository;
     private readonly IDataSammenstillingSaksBRepository _dataSammenstillingsRepo;
-    private readonly IEnumLogic _enumLogic;  // Legg til denne
+    private readonly IEnumLogic _enumLogic;
+    private readonly IVurderingRepository _vurderingRepository;
 
     public KartvisningEnInnmeldingSaksBController(
         IGeometriRepository geometriRepository,
         IDataSammenstillingSaksBRepository dataSammenstillingsRepo,
-        IEnumLogic enumLogic)  // Legg til denne
+        IEnumLogic enumLogic, IVurderingRepository vurderingRepository)
     {
         _geometriRepository = geometriRepository;
         _dataSammenstillingsRepo = dataSammenstillingsRepo;
         _enumLogic = enumLogic;
+        _vurderingRepository = vurderingRepository;
     }
 
     [HttpGet]
@@ -51,7 +53,6 @@ public class KartvisningEnInnmeldingSaksBController : Controller
         else if (!string.IsNullOrEmpty(innmeldingIds))
         {
             var idListe = innmeldingIds.Split(',').Select(int.Parse);
-
             foreach (var id in idListe)
             {
                 var (innmelding, person, innmelder, saksbehandler) =
@@ -79,9 +80,19 @@ public class KartvisningEnInnmeldingSaksBController : Controller
             return NotFound("Ingen innmeldinger funnet");
         }
 
+        // Hent vurderingsdata for første innmelding
+        var førsteInnmelding = alleSaker.First().Item1;
+        var (antallBekreftelser, antallAvkreftelser) =
+            await _vurderingRepository.HentAntallVurderingerAsync(førsteInnmelding.InnmeldingId);
+        var kommentarer =
+            await _vurderingRepository.HentKommentarerForInnmeldingAsync(førsteInnmelding.InnmeldingId);
+
         var viewModel = new KartvisningEnInnmeldingSaksBViewModel
         {
-            AlleInnmeldinger = alleSaker
+            AlleInnmeldinger = alleSaker,
+            AntallBekreftelser = antallBekreftelser,
+            AntallAvkreftelser = antallAvkreftelser,
+            Kommentarer = kommentarer
         };
 
         return View(viewModel);

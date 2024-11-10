@@ -18,6 +18,10 @@ namespace ViewModels
             SaksbehandlerModel Saksbehandler, Geometri Geometri)> AlleInnmeldinger
         { get; set; }
 
+        public int AntallBekreftelser { get; set; }
+        public int AntallAvkreftelser { get; set; }
+        public IEnumerable<string> Kommentarer { get; set; }
+
         // Helper properties
         public string SaksbehandlerNavn => Person != null
             ? $"{Person.Fornavn} {Person.Etternavn}"
