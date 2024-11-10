@@ -1,31 +1,38 @@
 ﻿@{
     Layout = "_Layout";
 }
-<body class="Index">
-    <div class="posterPage">
-        <div class="innmeldCard">
-            <h1>LOGG INN</h1>
-            <form method="post" asp-controller="LandingsSide" asp-action="LandingsSide">
-                <div class="form-group">
-                    <label>E-post</label>
-                    <input type="email" class="form-control" required />
-                    <span class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label>Passord</label>
-                    <input type="password" class="form-control" required />
-                    <span class="text-danger"></span>
-                </div>
-                <div style="text-align: center;">
-                    <button type="submit" class="Button-MeldInn">Logg inn</button>
-                </div>
-            </form>
-            <div class="forgot-password" style="text-align: center; margin-top: 1rem;">
-                <a href="#" style="color: #555; text-decoration: none;">Glemt passord?</a>
+
+<div class="login-page">
+    <div class="login-card">
+        <h1 class="login-card__title">Logg inn</h1>
+
+        <form method="post" asp-controller="LandingsSide" asp-action="LandingsSide" style="width: 100%;">
+            <div class="login-form-group">
+                <label class="login-label" for="email">E-post</label>
+                <input id="email" type="email" class="login-input" placeholder="Din e-postadresse" required />
+                <span class="login-error"></span>
             </div>
-            <div class="register-link" style="margin-top: 2.5rem;">
-                <p>Ikke registrert? <a asp-controller="RegistrerDeg" asp-action="RegistrerDeg">Opprett konto her!</a></p>
+
+            <div class="login-form-group">
+                <label class="login-label" for="password">Passord</label>
+                <input id="password" type="password" class="login-input" placeholder="Ditt passord" required />
+                <span class="login-error"></span>
             </div>
+
+            <button type="submit" class="login-button">Logg inn</button>
+        </form>
+
+        <div class="forgot-password">
+            <a href="#" class="forgot-password-link">Glemt passord?</a>
+        </div>
+
+        <div class="register-section">
+            <p class="register-text">
+                Ikke registrert?
+                <a asp-controller="RegistrerDeg" asp-action="RegistrerDeg" class="register-link">
+                    Opprett konto her!
+                </a>
+            </p>
         </div>
     </div>
-</body>
+</div>

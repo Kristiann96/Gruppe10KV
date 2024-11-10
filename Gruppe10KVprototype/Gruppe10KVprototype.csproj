@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\css\NewFolder1\**" />
+    <Compile Remove="wwwroot\css\NewFolder2\**" />
+    <Content Remove="wwwroot\css\NewFolder1\**" />
+    <Content Remove="wwwroot\css\NewFolder2\**" />
+    <EmbeddedResource Remove="wwwroot\css\NewFolder1\**" />
+    <EmbeddedResource Remove="wwwroot\css\NewFolder2\**" />
+    <None Remove="wwwroot\css\NewFolder1\**" />
+    <None Remove="wwwroot\css\NewFolder2\**" />
+  </ItemGroup>
+
+  <ItemGroup>
    
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
    
