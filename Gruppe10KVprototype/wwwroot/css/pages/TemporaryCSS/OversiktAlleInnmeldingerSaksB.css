@@ -1,0 +1,111 @@
+﻿.content {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tittelOversiktAlleInnmeldinger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    text-align: left;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #1c833b;
+    color: white;
+    font-weight: bold;
+}
+
+tr {
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+tr:hover {
+    background-color: #f0f0f0; /* Highlight row on hover */
+}
+
+tr:active {
+    background-color: #dcdcdc; /* Darker shade when clicked */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: white;
+    background-color: #1c833b;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #00509c;
+    color: white;
+}
+
+.pagination a.active {
+    font-weight: bold;
+    background-color: #00509c;
+    color: white;
+    border-color: #00509c;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-bar input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    width: 300px;
+    font-size: 1rem;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    background-color: #00509c;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 1rem;
+}
+
+.search-bar button:hover {
+    background-color: #1c833b;
+}

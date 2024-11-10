@@ -4,122 +4,29 @@
     Layout = "_Layout";
 }
 
+@section styles {
+        <link rel="stylesheet" href="~/css/pages/TemporaryCSS/MineInnmeldinger.css" />
+}
+
 <!DOCTYPE html>
 <html lang="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mine Innmeldinger (ID: @Model.Innmeldinger.FirstOrDefault()?.InnmelderId)</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            white-space: nowrap;
-            cursor: pointer;
-            position: relative;
-        }
-
-            th .sort-arrow {
-                position: absolute;
-                right: 10px;
-            }
-
-        tr {
-            cursor: pointer;
-        }
-
-            tr:hover {
-                background-color: #f0f0f0;
-            }
-
-            tr:active {
-                background-color: #dcdcdc;
-            }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-            .pagination a {
-                margin: 0 5px;
-                padding: 8px 16px;
-                text-decoration: none;
-                color: white;
-                background-color: #1c833b;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                transition: background-color 0.3s, color 0.3s;
-            }
-
-                .pagination a:hover {
-                    background-color: #00509c;
-                    color: white;
-                }
-
-                .pagination a.active {
-                    font-weight: bold;
-                    background-color: #00509c;
-                    color: white;
-                    border-color: #00509c;
-                }
-
-        .search-bar {
-            display: flex;
-            justify-content: start;
-            margin-bottom: 20px;
-        }
-
-            .search-bar input[type="text"] {
-                padding: 8px;
-                border: 1px solid #ddd;
-                border-radius: 4px 0 0 4px;
-                width: 300px;
-            }
-
-            .search-bar button {
-                padding: 8px 16px;
-                border: 1px solid #ddd;
-                border-left: none;
-                border-radius: 0 4px 4px 0;
-                background-color: #1c833b;
-                color: white;
-                cursor: pointer;
-                transition: background-color 0.3s, color 0.3s;
-            }
-
-                .search-bar button:hover {
-                    background-color: #00509c;
-                }
-
-        .priority-circle {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-    </style>
+    
 </head>
 <body>
 
     <main>
-        <h1>Mine Innmeldinger (ID: @Model.Innmeldinger.FirstOrDefault()?.InnmelderId)</h1>
+        <div class="tittelOversiktMineInnmeldinger">
+            <h1>Mine Innmeldinger (ID: @Model.Innmeldinger.FirstOrDefault()?.InnmelderId)</h1>
 
-        <form method="get" action="@Url.Action("MineInnmeldinger")" class="search-bar">
-            <input type="text" name="searchTerm" placeholder="Søk i saker" />
-            <button type="submit">Søk</button>
-        </form>
+            <form method="get" action="@Url.Action("MineInnmeldinger")" class="search-bar">
+                <input type="text" name="searchTerm" placeholder="Søk i saker" />
+                <button type="submit">Søk</button>
+            </form>
+        </div>
 
         <form method="get" action="@Url.Action("MineInnmeldinger")" id="sortForm">
             <input type="hidden" name="pageNumber" value="@Model.PageNumber" />

@@ -1,0 +1,136 @@
+﻿body {
+    background-color: #f0f4f8;
+    margin-top: 6em;
+    padding: 0;
+    height: 100%;
+}
+
+html {
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.innmelding-card {
+    display: flex;
+    flex-direction: row; /* Change to row to place items side by side */
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 0.3em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-left: 4px solid #1a833b;
+    width: 100%;
+}
+
+.innmelding-info {
+    flex: 1;
+    padding: 20px;
+    min-width: 300px;
+}
+
+.innmelding-map-container {
+    flex: 1;
+    padding: 20px;
+    min-width: 380px;
+}
+
+.innmelding-map {
+    height: 100%;
+    min-height: 300px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+.badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    display: inline-block;
+    margin: 2px;
+}
+
+.status-info {
+    margin: 15px 0;
+}
+
+.reporter-info, .handler-info {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2em;
+}
+
+h3 {
+    color: #666;
+    font-size: 1em;
+    margin: 10px 0 5px 0;
+}
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.vis-detaljer {
+    text-decoration: none;
+    color: #1a833b;
+    font-size: 0.9em;
+}
+
+.vurderinger-info {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.vis-kommentarer {
+    color: #1a833b;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.popup-content {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    margin: 10% auto;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.close-popup {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+}

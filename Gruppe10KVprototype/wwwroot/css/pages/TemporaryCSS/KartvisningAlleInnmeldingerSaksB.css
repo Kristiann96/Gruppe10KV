@@ -1,0 +1,118 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.map-container {
+    position: relative;
+    height: calc(100vh - 10.2em);
+    width: 100%;
+    margin-top: 5em;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+.utsnitt-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.utsnitt-button {
+    background-color: #1a833b;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+    .utsnitt-button:hover {
+        background-color: #05a833;
+        transform: scale(1.05);
+    }
+
+    .utsnitt-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    .utsnitt-button.clear {
+        background-color: #f44336;
+    }
+
+        .utsnitt-button.clear:hover {
+            background-color: #da190b;
+            transform: scale(1.05);
+        }
+
+/* Styling for the popup */
+.info-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    max-width: 450px;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+    .info-panel p {
+        margin: 0;
+        line-height: 1.6;
+        color: #333;
+        font-size: 16px;
+    }
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #999;
+    transition: color 0.3s;
+}
+
+    .close-button:hover {
+        color: #333;
+    }
+
+.hide-forever {
+    margin-top: 20px;
+    background: none;
+    border: none;
+    color: #666;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+    .hide-forever:hover {
+        color: #333;
+    }
