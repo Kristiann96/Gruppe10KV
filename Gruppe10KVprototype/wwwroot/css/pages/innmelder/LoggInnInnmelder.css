@@ -1,0 +1,155 @@
+﻿/* Login Page Container */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    background-image: url('/Images/FrontPageBackground.png');
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px; /* Ensartet font-størrelse */
+}
+
+/* Login Card */
+.login-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 2.5rem 3rem;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Login Title */
+.login-card__title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2d3c4d;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Form Group */
+.login-form-group {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+/* Labels */
+.login-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #2d3c4d;
+    margin-bottom: 0.5rem;
+}
+
+/* Input Fields */
+.login-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #2d3c4d;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .login-input:focus {
+        outline: none;
+        border-color: #0066cc;
+        box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+    }
+
+/* Error Messages */
+.login-error {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 0.25rem;
+}
+
+/* Login Button */
+.login-button {
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+    text-align: center;
+}
+
+    .login-button:hover {
+        background-color: #0052a3;
+    }
+
+    .login-button:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+/* Forgot Password Link */
+.forgot-password {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.forgot-password-link {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+    .forgot-password-link:hover {
+        color: #0066cc;
+        text-decoration: underline;
+    }
+
+/* Register Section */
+.register-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+    text-align: center;
+    width: 100%;
+}
+
+.register-text {
+    color: #666;
+    font-size: 14px;
+}
+
+.register-link {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+    .register-link:hover {
+        color: #0052a3;
+        text-decoration: underline;
+    }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-card {
+        width: 90%;
+        padding: 2rem;
+        margin: 1rem;
+    }
+}

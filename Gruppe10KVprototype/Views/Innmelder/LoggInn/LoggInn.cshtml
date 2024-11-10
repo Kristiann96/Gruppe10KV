@@ -5,26 +5,34 @@
 <div class="login-page">
     <div class="login-card">
         <h1 class="login-card__title">Logg inn</h1>
-        <form method="post" asp-controller="LandingsSide" asp-action="LandingsSide" class="login-card__form">
-            <div class="login-card__form-group">
-                <label class="login-card__label">E-post</label>
-                <input type="email" class="login-card__input" required />
-                <span class="text-danger"></span>
+
+        <form method="post" asp-controller="LandingsSide" asp-action="LandingsSide" style="width: 100%;">
+            <div class="login-form-group">
+                <label class="login-label" for="email">E-post</label>
+                <input id="email" type="email" class="login-input" placeholder="Din e-postadresse" required />
+                <span class="login-error"></span>
             </div>
-            <div class="login-card__form-group">
-                <label class="login-card__label">Passord</label>
-                <input type="password" class="login-card__input" required />
-                <span class="text-danger"></span>
+
+            <div class="login-form-group">
+                <label class="login-label" for="password">Passord</label>
+                <input id="password" type="password" class="login-input" placeholder="Ditt passord" required />
+                <span class="login-error"></span>
             </div>
-            <div class="login-card__button-container">
-                <button type="submit" class="login-card__button">Logg inn</button>
-            </div>
+
+            <button type="submit" class="login-button">Logg inn</button>
         </form>
-        <div class="login-card__forgot-password">
-            <a href="#" class="login-card__forgot-password-link">Glemt passord?</a>
+
+        <div class="forgot-password">
+            <a href="#" class="forgot-password-link">Glemt passord?</a>
         </div>
-        <div class="login-card__register">
-            <p>Ikke registrert? <a asp-controller="RegistrerDeg" asp-action="RegistrerDeg" class="login-card__register-link">Opprett konto her!</a></p>
+
+        <div class="register-section">
+            <p class="register-text">
+                Ikke registrert?
+                <a asp-controller="RegistrerDeg" asp-action="RegistrerDeg" class="register-link">
+                    Opprett konto her!
+                </a>
+            </p>
         </div>
     </div>
 </div>

@@ -1,5 +1,11 @@
+/* Base styles */
 @import "base/_variables.css";
 @import "base/_global.css";
+
+/* Layout styles */
+@import "layouts/_Layout.css";
+
+/* Shared components */
 @import "components/_shared.css";
 
-@import "layouts/_Layout.css";
+/* Add other page-specific imports as needed */

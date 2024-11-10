@@ -10,13 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="wwwroot\css\NewFolder1\**" />
-    <Compile Remove="wwwroot\css\NewFolder\**" />
+    <Compile Remove="wwwroot\css\NewFolder2\**" />
     <Content Remove="wwwroot\css\NewFolder1\**" />
-    <Content Remove="wwwroot\css\NewFolder\**" />
+    <Content Remove="wwwroot\css\NewFolder2\**" />
     <EmbeddedResource Remove="wwwroot\css\NewFolder1\**" />
-    <EmbeddedResource Remove="wwwroot\css\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\css\NewFolder2\**" />
     <None Remove="wwwroot\css\NewFolder1\**" />
-    <None Remove="wwwroot\css\NewFolder\**" />
+    <None Remove="wwwroot\css\NewFolder2\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,10 +73,6 @@
     <Content Update="wwwroot\Images\So_Not_Vennesla.png">
       <CopyToOutputDirectory>Copy</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\css\NewFolder2\" />
   </ItemGroup>
 
 </Project>
