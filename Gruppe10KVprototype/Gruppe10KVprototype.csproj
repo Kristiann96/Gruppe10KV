@@ -59,6 +59,9 @@
     <Content Update="wwwroot\Images\Not_Vennesla.png">
       <CopyToOutputDirectory>Copy</CopyToOutputDirectory>
     </Content>
+    <Content Update="wwwroot\Images\So_Not_Vennesla.png">
+      <CopyToOutputDirectory>Copy</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
