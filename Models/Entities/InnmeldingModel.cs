@@ -32,7 +32,9 @@ namespace Models.Entities
             public string KartType { get; set; }         // Default 'standard'
 
             public Geometri Geometri { get; set; } = null!;     // NOT NULL
-        }
+            public string InnmelderType { get; set; }
+
+    }
 
         // Enums for status, prioritet og kart_type
         public enum Status
