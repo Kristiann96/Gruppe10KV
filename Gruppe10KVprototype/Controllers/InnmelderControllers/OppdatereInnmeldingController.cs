@@ -82,11 +82,11 @@ namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
             await _innmeldingRepository.OppdatereInnmeldingFormAsync(innmelding);
 
             // Redirect back to the update page or another appropriate page
-            return RedirectToAction("OppdatereInnmelding", new { id = viewModel.InnmeldingId });
+            return RedirectToAction("MineInnmeldinger", "MineInnmeldinger");
         }
 
         //Oppdatere geometri data fra bruker på "OppdatereInnmelding"
-        [HttpPost("oppdaterGeo")]
+        /*[HttpPost("oppdaterGeo")]
         public async Task<IActionResult> OppdatereInnmeldingGeometri(OppdatereInnmeldingViewModel viewModel)
         {
             // Validate the input data
@@ -117,7 +117,7 @@ namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
                     {
                         success = true,
                         message = "Geometri ble oppdatert",
-                        redirectUrl = Url.Action("OppdatereInnmelding", new { id = viewModel.InnmeldingId })
+                        redirectUrl = Url.Action("MineOppdateringer")
                     });
                 }
                 else
@@ -132,7 +132,7 @@ namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
             catch (Exception ex)
             {
                 return StatusCode(500, "En intern feil oppstod: " + ex.Message);
-            }
+            }*/
 
             /* // Parse the GeoJSON to ensure it's valid
             try
@@ -168,4 +168,4 @@ namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
             }*/
         }
     }
-}
+

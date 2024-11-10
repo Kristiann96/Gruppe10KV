@@ -59,7 +59,7 @@ namespace DataAccess
         }
 
         //Oppdatering av geometri data fra bruker på "OppdatereInnmelding"
-        public async Task<Geometri> OppdatereInnmeldingGeometriAsync(int innmeldingId, string geometriGeoJson)
+        /*public async Task<Geometri> OppdatereInnmeldingGeometriAsync(int innmeldingId, string geometriGeoJson)
         {
             using var connection = _dbConnection.CreateConnection();
             using var transaction = await connection.BeginTransactionAsync();
@@ -94,7 +94,7 @@ namespace DataAccess
                 await transaction.RollbackAsync();
                 throw;
             }
-        }
+        }*/
 
 
         public async Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync()
