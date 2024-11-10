@@ -1,37 +1,113 @@
 @{
+
     Layout = "_Layout";
 }
 
-<!DOCTYPE html>
 
-<html>
+<!DOCTYPE html>
+<html lang="no">
 <head>
-    <title>title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigasjonskort</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            .container
+
+        {
+            background-image: url('@Url.Content("~/images/Not_Vennesla.png")');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .card-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        .cards {
+            display: grid;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #cbd5e0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card i {
+            font-size: 2.5rem;
+                color: #1a833b;
+            margin-bottom: 1rem;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            margin: 0 0 1rem 0;
+            color: #2d3748;
+        }
+
+        .card p {
+            font-size: 0.875rem;
+            color: #4a5568;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+
+        }
+    </style>
 </head>
 <body>
-<div>
-    <div class="items">
-        <div class="card">
-            <img link=""/>
-            <div class="card-info">Finn bruker</div>
-        </div>
-        <div class="card">
-            <img link=""/>
-            <div class="card-info">Innboks</div>
-        </div>
-        <div class="card">
-            <img link=""/>
-            <div class="card-info">Behandle</div>
-        </div>
-        <div class="card">
-            <img link=""/>
-            <div class="card-info">Kartvisning</div>
-        </div>
-        <div class="card">
-            <img link=""/>
-            <div class="card-info">Noe her</div>
+    <div class="container">
+        <div class="card-container">
+            <div class="cards">
+                <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB")" class="card">
+                    <i class="fa-solid fa-database"></i>
+                    <h2>Saksoversikt</h2>
+                    <p>Se oversikt over alle innmeldte saker.Vurder og oppdater prioritet og status.Se innmelder type og deleger saker.</p>
+                </a>
+
+                <a href="@Url.Action("KartvisningAlleInnmeldingerSaksB", "KartvisningAlleInnmeldingerSaksB")" class="card">
+                    <i class="fa-solid fa-magnifying-glass-location"></i>
+                    <h2> Kart over Innmeldinger</h2>
+                    <p>Utforsk kartet og se alle innmeldte saker. Klikk på en sak eller velg et område for å få rask tilgang til sakens detaljer og vurderinger.</p>
+                </a>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
