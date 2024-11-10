@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="~/css/pages/diverse/chat_demo.css" />
+    <link rel="stylesheet" href="~/css/pages/TemporaryCSS/BehandleInnmeldingSaksB.css" />
+
 </head>
 <body>
     <div class="container">
@@ -104,9 +106,11 @@
                     </form>
                     @if (Model.SaksbehandlerModel != null)
                     {
-                        <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
-                        <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
-                        <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                        <div class="saksbehandlerInformasjon">
+                            <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
+                            <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
+                            <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                        </div>
                     }
                     else
                     {
