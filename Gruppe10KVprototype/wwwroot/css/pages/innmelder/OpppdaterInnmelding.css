@@ -1,0 +1,155 @@
+﻿body {
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin-top: 5em;
+    padding: 2em;
+}
+
+.main-container {
+    display: flex;
+    gap: 2em;
+    max-width: 95%;
+    margin: 0 auto;
+    height: calc(100vh - 40px);
+}
+
+.left-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    max-width: 50%;
+}
+
+.right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    margin-top: 7em;
+}
+
+.updateRegisteredCaseID {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a833b;
+    padding: 0.5em;
+    padding-right: 1em;
+    padding-left: 1em;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2em;
+}
+
+.updateRegisteredCaseID h3 {
+    color: white;
+}
+
+.updateRegisteredCaseStatus h3 {
+    color: white !important;
+}
+
+.updateRegisteredMapViewErrors {
+    flex: 1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0;
+    max-width: none;
+}
+
+.updateRegisteredCaseForm {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 50em;
+}
+
+.updateRegisteredCaseSubject {
+    margin-bottom: 2em;
+}
+
+.kartvisningFeilTitel {
+    margin: 0 0 1em 0;
+}
+
+.updateRegisteredContainer {
+    max-width: 50em;
+    margin: 2em auto;
+}
+
+.oppdaterInnmeldingTittel {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+
+.updateRegisteredCaseSubject input[type="text"],
+.updateRegisteredCaseDescription textarea {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    width: 100%;
+    padding: 1.5em;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.updateRegisteredCaseDescription textarea {
+    flex-grow: 1;
+    margin: 0;
+    height: 100%;
+}
+
+#map {
+    height: 100% !important;
+    width: 100% !important;
+    min-height: 20em;
+}
+
+.map-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: 50vh;
+    margin-bottom: 2em;
+}
+
+#redirectToLandingsSideButton {
+    background-color: #00509c;
+    color: white;
+    border: none;
+    padding: 1em 2em;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+#redirectToLandingsSideButton:hover {
+    background-color: #003f7f;
+    transform: scale(1.05);
+}
+
+#redirectToLandingsSideButton:active {
+    background-color: #002f5f;
+    transform: scale(0.95);
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em 0;
+}
+
+.clicked {
+    background-color: #1a833b !important;
+}
+
+.updateRegisteredCaseActionButtons {
+    text-align: right;
+}
