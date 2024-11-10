@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Models.Models;
 using ViewModels;
-using LogicInterfaces;
+
 
 public class KartvisningEnInnmeldingSaksBController : Controller
 {
