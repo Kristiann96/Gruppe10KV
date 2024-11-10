@@ -1,4 +1,6 @@
-﻿@{
+﻿@*
+
+@{
     Layout = "_Layout";
 }
 
@@ -68,4 +70,37 @@
 </main>
 
 </body>
-</html>
+</html> 
+*@
+
+ @{
+        Layout = "_Layout";
+    }
+    <
+    <body style="background-color: #f0f0f0;">
+        <div class="posterPage">
+            <div class="innmeldCard">
+                <h2 class="form-title">Velkommen tilbake!</h2>
+            <form method="post" asp-controller="OversiktAlleInnmeldingerSaksB" asp-action="OversiktAlleInnmeldingerSaksB">
+                    <div class="form-group">
+                        <label for="email">E-post</label>
+                        <input type="email" id="email" class="form-control" required />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Passord</label>
+                        <input type="password" id="password" class="form-control" required />
+                        <span class="text-danger"></span>
+                    </div>
+                    <div style="text-align: center;">
+                        <button type="submit" class="Button-MeldInn">Logg inn</button>
+                    </div>
+                </form>
+                <div class="forgot-password" style="text-align: center; margin-top: 1rem;">
+                    <a href="#" class="nav-link" style="text-decoration: none;">Glemt passord?</a>
+                </div>
+            </div>
+        </div>
+    </body>
+
+

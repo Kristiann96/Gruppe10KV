@@ -1,0 +1,402 @@
+﻿
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+    <!-- Her inkluderes CSS fra forrige artifact -->
+}
+
+<!-- Intro Modal -->
+<div id="introModal" class="modal" style="display: flex;">
+    <div class="modal-content">
+        <h2 class="modal-title">Velkommen til Sporingsverktøyet</h2>
+        <div class="modal-text">
+            <p>Med dette verktøyet kan du:</p>
+            <ul style="text-align: left; margin: 15px 0;">
+                <li>Starte GPS-sporing av din rute</li>
+                <li>Se ruten bli tegnet mens du beveger deg</li>
+                <li>Avslutte sporingen når du er ferdig</li>
+                <li>Sende inn ruten som en kartfeil</li>
+            </ul>
+            <p>Trykk på "Start sporing" når du er klar til å begynne.</p>
+        </div>
+        <button class="modal-button modal-button-primary" onclick="startApp()">Forstått</button>
+    </div>
+</div>
+
+<!-- Confirmation Modal for stopping tracking -->
+<div id="stopConfirmModal" class="modal">
+    <div class="modal-content">
+        <h2 class="modal-title">Avslutt sporing?</h2>
+        <p class="modal-text">Er du sikker på at du vil avslutte sporingen? Dette kan ikke angres.</p>
+        <div class="modal-buttons">
+            <button class="modal-button modal-button-cancel" onclick="hideStopConfirmModal()">Avbryt</button>
+            <button class="modal-button modal-button-secondary" onclick="confirmStopTracking()">Avslutt sporing</button>
+        </div>
+    </div>
+</div>
+
+<!-- Reset Confirmation Modal -->
+<div id="resetConfirmModal" class="modal">
+    <div class="modal-content">
+        <h2 class="modal-title">Start på nytt?</h2>
+        <p class="modal-text">Er du sikker på at du vil starte på nytt? All sporet data vil gå tapt.</p>
+        <div class="modal-buttons">
+            <button class="modal-button modal-button-cancel" onclick="hideResetConfirmModal()">Avbryt</button>
+            <button class="modal-button modal-button-secondary" onclick="confirmResetTracking()">Start på nytt</button>
+        </div>
+    </div>
+</div>
+
+<!-- Main content -->
+<div id="map"></div>
+
+<div id="statusIndicator" class="status-indicator" style="display: none;">
+    Klar til sporing
+</div>
+
+<div class="tracking-controls">
+    <button id="startTracking" class="tracking-button start-button">Start sporing</button>
+    <button id="stopTracking" class="tracking-button stop-button" style="display: none;">Stopp sporing</button>
+    <button id="resetTracking" class="tracking-button reset-button" style="display: none;">Start på nytt</button>
+    <form method="get" action="@Url.Action("KartfeilSkjema", "KartfeilSkjema")" style="display: none;" id="submitForm">
+        <input type="hidden" id="geoJsonHidden" name="geoJson" />
+        <button type="submit" class="tracking-button submit-button">Gå til skjema</button>
+    </form>
+</div>
+<style>
+/* Kart container */
+#map {
+    height: 85vh;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Tracking kontroller */
+.tracking-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.status-indicator {
+    position: fixed;
+    top: 192px;
+    left: 50px;
+    z-index: 1000;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.3);
+    font-weight: bold;
+}
+
+/* Knapp stiler */
+.tracking-button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.start-button {
+        background-color: #1a833b;
+    color: white;
+}
+
+.start-button:hover {
+    background-color: #45a049;
+}
+
+.stop-button {
+        background-color: #fa3838;
+    color: white;
+}
+
+.stop-button:hover {
+    background-color: #da190b;
+}
+
+.reset-button {
+    background-color: #808080;
+    color: white;
+}
+
+.reset-button:hover {
+    background-color: #666666;
+}
+
+.submit-button {
+        background-color: #fa3838;
+    color: white;
+}
+
+.submit-button:hover {
+    background-color: #ff4418;
+}
+
+/* Modal stiler */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-title {
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.modal-text {
+    margin-bottom: 25px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    min-width: 100px;
+}
+
+.modal-button-primary {
+        background: #00509c;
+    color: white;
+}
+
+.modal-button-secondary {
+        background: #00509c;
+    color: white;
+}
+
+.modal-button-cancel {
+    background: #808080;
+    color: white;
+}
+
+.tracking-active {
+        color: #00509c;
+}
+</style>
+
+@section Scripts {
+    <!-- JavaScript biblioteker -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+    <!-- Våre konfigurasjonsfiler -->
+    <script src="~/js/maps/config/mapConfig.js"></script>
+    <script src="~/js/maps/config/drawConfig.js"></script>
+    <script src="~/js/maps/services/wmsService.js"></script>
+    <script src="~/js/maps/utils/mapControls.js"></script>
+
+    <script>
+        let map = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
+        let tracking = false;
+        let trackingData = [];
+        let userMarker = null;
+        let trackingLine = null;
+        let positionInterval = null;
+        
+        // Opprett en featureGroup for å håndtere sporingsdata
+        let drawnItems = new L.FeatureGroup().addTo(map);
+
+        // Initialiser kontroller
+        MapControls.initializeControls(map);
+
+        // Modal handling functions
+        function startApp() {
+            document.getElementById('introModal').style.display = 'none';
+            document.getElementById('statusIndicator').style.display = 'block';
+        }
+
+        function showStopConfirmModal() {
+            document.getElementById('stopConfirmModal').style.display = 'flex';
+        }
+
+        function hideStopConfirmModal() {
+            document.getElementById('stopConfirmModal').style.display = 'none';
+        }
+
+        function showResetConfirmModal() {
+            document.getElementById('resetConfirmModal').style.display = 'flex';
+        }
+
+        function hideResetConfirmModal() {
+            document.getElementById('resetConfirmModal').style.display = 'none';
+        }
+
+        function updateTrackingLine() {
+            if (trackingLine) {
+                map.removeLayer(trackingLine);
+            }
+            if (trackingData.length > 1) {
+                const coordinates = trackingData.map(pos => [pos.lat, pos.lng]);
+                trackingLine = L.polyline(coordinates, {
+                    color: 'blue',
+                    weight: 3,
+                    opacity: 0.8
+                }).addTo(drawnItems);
+            }
+        }
+
+        function resetTracking() {
+            tracking = false;
+            if (positionInterval) {
+                clearInterval(positionInterval);
+                positionInterval = null;
+            }
+            if (trackingLine) map.removeLayer(trackingLine);
+            if (userMarker) map.removeLayer(userMarker);
+            drawnItems.clearLayers();
+            trackingData = [];
+            userMarker = null;
+            trackingLine = null;
+            
+            document.getElementById('startTracking').style.display = 'inline';
+            document.getElementById('stopTracking').style.display = 'none';
+            document.getElementById('resetTracking').style.display = 'none';
+            document.getElementById('submitForm').style.display = 'none';
+            document.getElementById('statusIndicator').textContent = 'Klar til sporing';
+            document.getElementById('statusIndicator').className = 'status-indicator';
+        }
+
+        function updatePosition(position) {
+            const { latitude, longitude } = position.coords;
+            console.log('Position update:', { latitude, longitude });
+            
+            if (!userMarker) {
+                userMarker = L.marker([latitude, longitude]).addTo(map);
+                map.setView([latitude, longitude], 16);
+            } else {
+                userMarker.setLatLng([latitude, longitude]);
+            }
+
+            if (tracking) {
+                console.log('Adding point to trackingData');
+                trackingData.push({ lat: latitude, lng: longitude });
+                console.log('Current trackingData:', trackingData);
+                updateTrackingLine();
+                map.setView([latitude, longitude]);
+            }
+        }
+
+        function confirmStopTracking() {
+            tracking = false;
+            if (positionInterval) {
+                clearInterval(positionInterval);
+                positionInterval = null;
+            }
+
+            if (trackingData.length > 1) {
+                // Opprett et Leaflet layer fra sporingsdata
+                const coordinates = trackingData.map(pos => [pos.lat, pos.lng]);
+                const trackingLayer = L.polyline(coordinates, {
+                    color: 'blue',
+                    weight: 3
+                }).addTo(drawnItems);
+
+                // Konverter layer til GeoJSON
+                const geoJsonData = trackingLayer.toGeoJSON();
+                console.log('Generated GeoJSON:', geoJsonData);
+
+                document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
+                console.log('Hidden input value:', document.getElementById('geoJsonHidden').value);
+
+                document.getElementById('submitForm').style.display = 'inline';
+            } else {
+                alert('Ingen sporingsdata registrert. Prøv igjen.');
+                resetTracking();
+                hideStopConfirmModal();
+                return;
+            }
+
+            document.getElementById('stopTracking').style.display = 'none';
+            document.getElementById('resetTracking').style.display = 'inline';
+            document.getElementById('statusIndicator').textContent = 'Sporing fullført';
+            
+            hideStopConfirmModal();
+        }
+
+        // Event listeners
+        document.getElementById('startTracking').addEventListener('click', () => {
+            tracking = true;
+            document.getElementById('statusIndicator').textContent = 'Sporing aktiv';
+            document.getElementById('statusIndicator').className = 'status-indicator tracking-active';
+            document.getElementById('startTracking').style.display = 'none';
+            document.getElementById('stopTracking').style.display = 'inline';
+            
+            // Start posisjonssporing
+            if ("geolocation" in navigator) {
+                // Initielt posisjonskall
+                navigator.geolocation.getCurrentPosition(
+                    updatePosition,
+                    error => {
+                        console.error('GPS-feil:', error);
+                        alert('Kunne ikke få GPS-posisjon. Sjekk at posisjonstjenester er aktivert.');
+                        resetTracking();
+                    },
+                    { 
+                        enableHighAccuracy: true,
+                        timeout: 5000
+                    }
+                );
+
+                // Start regelmessig sporing
+                positionInterval = setInterval(() => {
+                    navigator.geolocation.getCurrentPosition(
+                        updatePosition,
+                        error => console.error('GPS-feil:', error),
+                        { 
+                            enableHighAccuracy: true,
+                            timeout: 5000
+                        }
+                    );
+                }, 3000); // Oppdater hvert 3. sekund
+            }
+        });
+
+        document.getElementById('stopTracking').addEventListener('click', showStopConfirmModal);
+        document.getElementById('resetTracking').addEventListener('click', showResetConfirmModal);
+    </script>
+}

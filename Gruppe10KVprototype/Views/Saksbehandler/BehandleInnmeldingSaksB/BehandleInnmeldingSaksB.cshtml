@@ -7,6 +7,7 @@
     <title>Innmelding Detaljer</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="~/css/chat_demo.css" />
 </head>
 <body>
     <div class="container">
@@ -14,7 +15,7 @@
             @if (Model?.InnmeldingModel != null)
             {
                 <h2>@Model.InnmeldingModel.Tittel</h2>
-                    <form asp-action="OppdateringAvInnmeldingSaksB" asp-route-id="@Model.InnmeldingModel.InnmeldingId" method="post">
+                <form asp-action="OppdateringAvInnmeldingSaksB" asp-route-id="@Model.InnmeldingModel.InnmeldingId" method="post">
                     <div class="status-info">
                         <div class="form-group mb-3">
                             <label for="statusDropdown">Status:</label>
@@ -38,7 +39,7 @@
                         </div>
 
                         <p>Sist endret: @Model.InnmeldingModel.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
-                
+
                         @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
                         {
                             <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
@@ -57,6 +58,20 @@
                     <h3>Innmelder</h3>
                     @if (Model.InnmelderModel != null && Model.PersonModel != null)
                     {
+                        <form asp-action="OppdaterInnmelderType" method="post">
+                            <input type="hidden" name="innmelderId" value="@Model.InnmelderModel.InnmelderId" />
+                            <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId" />
+                            <div class="form-group mb-3">
+                                <label for="innmelderTypeDropdown">Velg innmeldertype:</label>
+                                <select id="innmelderTypeDropdown"
+                                        name="innmelderType"
+                                        class="form-control"
+                                        asp-items="Model.InnmelderTypeOptions">
+                                    <option value="">Velg innmeldertype</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-3">Lagre innmeldertype</button>
+                        </form>
                         <p>Type: @Model.InnmelderModel.InnmelderType</p>
                         <p>Navn: @Model.PersonModel.Fornavn @Model.PersonModel.Etternavn</p>
                         <p>Telefon: @Model.PersonModel.Telefonnummer</p>
@@ -70,28 +85,72 @@
                         <p>Ingen innmelder informasjon tilgjengelig</p>
                     }
                 </div>
-                @if (Model.SaksbehandlerModel != null)
+
                 {
                     <div class="handler-info">
                         <h3>Saksbehandler</h3>
-                        <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
-                        <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
-                        <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                        <form asp-action="LagreSaksbehandler" method="post">
+                            <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId"/>
+                            <div class="form-group mb-3">
+                                <label for="saksbehandlerDropdown">Velg saksbehandler:</label>
+                                <select id="saksbehandlerDropdown"
+                                        name="saksbehandlerId"
+                                        class="form-control"
+                                        asp-items="Model.SaksbehandlerOptions">
+                                    <option value="">Velg saksbehandler</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mb-3">Lagre saksbehandler</button>
+                        </form>
+                        @if (Model.SaksbehandlerModel != null)
+                        {
+                            <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
+                            <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
+                            <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                        }
+                        else
+                        {
+                            <p>Ingen Saksbehandler Angit</p>
+                        }
                     </div>
                 }
             }
             else
             {
-                <p>Ingen innmeldingsdetaljer tilgjengelig</p>
+                <p>Ingen innmelding funnet</p>
             }
         </div>
         <div id="map" style="height: 500px;"></div>
+        <div class="chat-section">
+            <div class="chat-header">
+                <div class="chat-user-info">
+                    <span class="chat-user-name">
+                        @(Model?.PersonModel != null ? $"{Model.PersonModel.Fornavn} {Model.PersonModel.Etternavn}" : "Gjesteinnmelder")
+                    </span>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages"></div>
+
+            <div class="chat-input-container">
+                <form id="chatForm" class="chat-form">
+                    <input type="text"
+                           id="messageInput"
+                           placeholder="Skriv en melding..."
+                           class="chat-input"
+                           autocomplete="off" />
+                    <button type="submit" class="chat-send-button">Send</button>
+                </form>
+            </div>
+        </div>
     </div>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="~/js/maps/config/mapConfig.js"></script>
     <script src="~/js/maps/utils/mapControls.js"></script>
-<script>
+    <script src="~/js/chat_demo.js" asp-append-version="true"></script>
+    <script>
         const map = MapConfig.initializeMap('map');
         MapControls.initializeSearch(map);
         @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
@@ -103,35 +162,36 @@
             </text>
         }
     </script>
-<!-- Form handling script -->
-<script>
-    // Error handling
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <text>
-            alert('@TempData["ErrorMessage"]');
-        </text>
-    }
-    // Form submit handling
-    document.querySelector('form').addEventListener('submit', function() {
-    // Success handling
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <text>
-            const button = document.getElementById('saveButton');
-            button.textContent = 'Lagret!';
-            button.classList.remove('btn-primary');
-            button.classList.add('btn-success');
-            
-            // Reset after 5 seconds
-            setTimeout(() => {
-                button.textContent = 'Lagre endringer';
-                button.classList.remove('btn-success');
-                button.classList.add('btn-primary');
-                button.disabled = false;
-            }, 5000);
-        </text>
-    }
-</script>
+    <!-- Form handling script -->
+    <script>
+            // Error handling
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <text>
+                    alert('@TempData["ErrorMessage"]');
+            </text>
+        }
+            // Form submit handling
+            document.querySelector('form[asp-action="OppdateringAvInnmeldingSaksB"]').addEventListener('submit', function () {
+                // Success handling
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <text>
+                            const button = document.getElementById('saveButton');
+                            button.textContent = 'Lagret!';
+                            button.classList.remove('btn-primary');
+                            button.classList.add('btn-success');
+
+                        // Reset after 5 seconds
+                        setTimeout(() => {
+                                button.textContent = 'Lagre endringer';
+                            button.classList.remove('btn-success');
+                            button.classList.add('btn-primary');
+                            button.disabled = false;
+                        }, 5000);
+            </text>
+        }
+        });
+    </script>
 </body>
 </html>
