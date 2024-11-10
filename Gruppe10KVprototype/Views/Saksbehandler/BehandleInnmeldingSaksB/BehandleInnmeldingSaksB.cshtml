@@ -7,7 +7,7 @@
     <title>Innmelding Detaljer</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <link rel="stylesheet" href="~/css/chat_demo.css" />
+    <link rel="stylesheet" href="~/css/pages/diverse/chat_demo.css" />
 </head>
 <body>
     <div class="container">
@@ -86,62 +86,63 @@
                     }
                 </div>
 
-                {
-                    <div class="handler-info">
-                        <h3>Saksbehandler</h3>
-                        <form asp-action="LagreSaksbehandler" method="post">
-                            <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId"/>
-                            <div class="form-group mb-3">
-                                <label for="saksbehandlerDropdown">Velg saksbehandler:</label>
-                                <select id="saksbehandlerDropdown"
-                                        name="saksbehandlerId"
-                                        class="form-control"
-                                        asp-items="Model.SaksbehandlerOptions">
-                                    <option value="">Velg saksbehandler</option>
-                                </select>
-                            </div>
+                <div class="handler-info">
+                    <h3>Saksbehandler</h3>
+                    <form asp-action="LagreSaksbehandler" method="post">
+                        <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId" />
+                        <div class="form-group mb-3">
+                            <label for="saksbehandlerDropdown">Velg saksbehandler:</label>
+                            <select id="saksbehandlerDropdown"
+                                    name="saksbehandlerId"
+                                    class="form-control"
+                                    asp-items="Model.SaksbehandlerOptions">
+                                <option value="">Velg saksbehandler</option>
+                            </select>
+                        </div>
 
-                            <button type="submit" class="btn btn-primary mb-3">Lagre saksbehandler</button>
-                        </form>
-                        @if (Model.SaksbehandlerModel != null)
-                        {
-                            <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
-                            <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
-                            <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
-                        }
-                        else
-                        {
-                            <p>Ingen Saksbehandler Angit</p>
-                        }
-                    </div>
-                }
+                        <button type="submit" class="btn btn-primary mb-3">Lagre saksbehandler</button>
+                    </form>
+                    @if (Model.SaksbehandlerModel != null)
+                    {
+                        <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
+                        <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
+                        <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                    }
+                    else
+                    {
+                        <p>Ingen Saksbehandler Angit</p>
+                    }
+                </div>
             }
             else
             {
                 <p>Ingen innmelding funnet</p>
             }
         </div>
-        <div id="map" style="height: 500px;"></div>
-        <div class="chat-section">
-            <div class="chat-header">
-                <div class="chat-user-info">
-                    <span class="chat-user-name">
-                        @(Model?.PersonModel != null ? $"{Model.PersonModel.Fornavn} {Model.PersonModel.Etternavn}" : "Gjesteinnmelder")
-                    </span>
+
+        <div class="right-column">
+            <div id="map" style="height: 400px; margin-bottom: 2rem;"></div>
+            <div class="chat-section">
+                <div class="chat-header">
+                    <div class="chat-user-info">
+                        <span class="chat-user-name">
+                            @(Model?.PersonModel != null ? $"{Model.PersonModel.Fornavn} {Model.PersonModel.Etternavn}" : "Gjesteinnmelder")
+                        </span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-messages" id="chatMessages"></div>
 
-            <div class="chat-input-container">
-                <form id="chatForm" class="chat-form">
-                    <input type="text"
-                           id="messageInput"
-                           placeholder="Skriv en melding..."
-                           class="chat-input"
-                           autocomplete="off" />
-                    <button type="submit" class="chat-send-button">Send</button>
-                </form>
+                <div class="chat-input-container">
+                    <form id="chatForm" class="chat-form">
+                        <input type="text"
+                               id="messageInput"
+                               placeholder="Skriv en melding..."
+                               class="chat-input"
+                               autocomplete="off" />
+                        <button type="submit" class="chat-send-button">Send</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
