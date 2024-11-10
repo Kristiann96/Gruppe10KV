@@ -7,7 +7,7 @@
     <title>Innmelding Detaljer</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
 
         body {
@@ -82,57 +82,151 @@
             margin: 10px 0 5px 0;
         }
 
-      
+        .title-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .vis-detaljer {
+            text-decoration: none;
+            color: #1a833b;
+            font-size: 0.9em;
+        }
+
+        .vurderinger-info {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .vis-kommentarer {
+            color: #1a833b;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .popup-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .popup-content {
+            position: relative;
+            background-color: white;
+            padding: 20px;
+            margin: 10% auto;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .close-popup {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        @foreach (var (innmelding, person, innmelder, saksbehandler, geometri) in Model.AlleInnmeldinger)
-        {
-            <div class="innmelding-card" data-innmelding-id="@innmelding.InnmeldingId">
-                <div class="innmelding-info">
+<div class="container">
+    @foreach (var (innmelding, person, innmelder, saksbehandler, geometri) in Model.AlleInnmeldinger)
+    {
+        <div class="innmelding-card" data-innmelding-id="@innmelding.InnmeldingId">
+            <div class="innmelding-info">
+                <div class="title-container">
                     <h2>@innmelding.Tittel</h2>
+                    <a href="@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB",
+                                 new { id = innmelding.InnmeldingId })"
+                       class="vis-detaljer">
+                        Vis detaljer →
+                    </a>
+                </div>
 
-                    <div class="status-info">
-                        <p>Status: <span class="badge">@innmelding.Status</span></p>
-                        <p>Prioritet: <span class="badge">@innmelding.Prioritet</span></p>
-                        <p>Sist endret: @innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
-                        <p>KartType: <span class="badge">@innmelding.KartType</span></p>
+                <div class="status-info">
+                    <p>Status: <span class="badge">@innmelding.Status</span></p>
+                    <p>Prioritet: <span class="badge">@innmelding.Prioritet</span></p>
+                    <p>Sist endret: @innmelding.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
+                    <p>KartType: <span class="badge">@innmelding.KartType</span></p>
 
-                        @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
-                        {
-                            <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
-                        }
-                    </div>
-
-                    <div class="reporter-info">
-                        <h3>Innmelder</h3>
-                        @if (innmelder != null)
-                        {
-                            <p>Type: @innmelder.InnmelderType</p>
-                        }
-                        else
-                        {
-                            <p>Gjesteinnmelder</p>
-                        }
-                    </div>
-
-                    @if (saksbehandler != null)
+                    @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
                     {
-                        <div class="handler-info">
-                            <h3>Saksbehandler</h3>
-                            <p>@(person != null ? $"{person.Fornavn} {person.Etternavn}" : "Ikke tildelt")</p>
-                            <p>Stilling: @saksbehandler.Stilling</p>
-                        </div>
+                        <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
                     }
                 </div>
-                
-                <div class="innmelding-map-container">
-                    <div class="innmelding-map" id="map-@innmelding.InnmeldingId"></div>
+
+                @* Ny seksjon for vurderinger *@
+                <div class="vurderinger-info">
+                    @if (Model.AntallBekreftelser == 0 && Model.AntallAvkreftelser == 0)
+                    {
+                        <p>Ingen vurderinger å vise</p>
+                    }
+                    else
+                    {
+                        <p>
+                            <i class="fa-regular fa-handshake"></i>
+                            Bekreftelser: @Model.AntallBekreftelser Avkreftelser: @Model.AntallAvkreftelser
+                            @if (Model.Kommentarer?.Any() == true)
+                            {
+                                <span class="vis-kommentarer"
+                                      onclick="visKommentarer(@innmelding.InnmeldingId)">
+                                    Klikk for å se kommentarer
+                                </span>
+                            }
+                        </p>
+                    }
                 </div>
+
+
+                <div class="reporter-info">
+                    <h3>Innmelder</h3>
+                    @if (innmelder != null)
+                    {
+                        <p>Type: @innmelder.InnmelderType</p>
+                    }
+                    else
+                    {
+                        <p>Gjesteinnmelder</p>
+                    }
+                </div>
+
+                @if (saksbehandler != null)
+                {
+                    <div class="handler-info">
+                        <h3>Saksbehandler</h3>
+                        <p>@(person != null ? $"{person.Fornavn} {person.Etternavn}" : "Ikke tildelt")</p>
+                        <p>Stilling: @saksbehandler.Stilling</p>
+                    </div>
+                }
             </div>
-        }
-    </div>
+
+            <div class="innmelding-map-container">
+                <div class="innmelding-map" id="map-@innmelding.InnmeldingId"></div>
+            </div>
+        </div>
+
+        <!-- Popup container -->
+        <div id="kommentarPopup" class="popup-container">
+            <div class="popup-content">
+                <span class="close-popup" onclick="lukkKommentarer()">&times;</span>
+                <h3>Kommentarer</h3>
+                <div id="kommentarListe"></div>
+            </div>
+        </div>
+    }
+</div>
+
 
     <!-- JavaScript biblioteker -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -141,6 +235,41 @@
     <!-- Våre konfigurasjonsfiler -->
     <script src="~/js/maps/config/mapConfig.js"></script>
     <script src="~/js/maps/utils/mapControls.js"></script>
+    
+    
+    <script>
+    function visKommentarer(innmeldingId) {
+        const popup = document.getElementById('kommentarPopup');
+        const kommentarListe = document.getElementById('kommentarListe');
+        
+        // Tøm tidligere kommentarer
+        kommentarListe.innerHTML = '';
+        
+        // Legg til alle kommentarer
+        @if (Model.Kommentarer != null)
+        {
+            @foreach (var kommentar in Model.Kommentarer)
+            {
+                @:kommentarListe.innerHTML += '<p>@Html.Raw(kommentar)</p>';
+            }
+        }
+        
+    popup.style.display = 'block';
+    }
+
+    function lukkKommentarer() {
+    const popup = document.getElementById('kommentarPopup');
+    popup.style.display = 'none';
+    }
+
+    // Lukk popup hvis man klikker utenfor
+    window.onclick = function(event) {
+    const popup = document.getElementById('kommentarPopup');
+    if (event.target == popup) {
+    popup.style.display = 'none';
+    }
+    }
+    </script>
 
     <script>
         // Initialiser hvert kart med sin egen geometri
