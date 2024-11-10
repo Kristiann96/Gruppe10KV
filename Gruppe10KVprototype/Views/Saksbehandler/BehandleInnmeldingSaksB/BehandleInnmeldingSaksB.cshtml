@@ -58,6 +58,20 @@
                     <h3>Innmelder</h3>
                     @if (Model.InnmelderModel != null && Model.PersonModel != null)
                     {
+                        <form asp-action="OppdaterInnmelderType" method="post">
+                            <input type="hidden" name="innmelderId" value="@Model.InnmelderModel.InnmelderId" />
+                            <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId" />
+                            <div class="form-group mb-3">
+                                <label for="innmelderTypeDropdown">Velg innmeldertype:</label>
+                                <select id="innmelderTypeDropdown"
+                                        name="innmelderType"
+                                        class="form-control"
+                                        asp-items="Model.InnmelderTypeOptions">
+                                    <option value="">Velg innmeldertype</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-3">Lagre innmeldertype</button>
+                        </form>
                         <p>Type: @Model.InnmelderModel.InnmelderType</p>
                         <p>Navn: @Model.PersonModel.Fornavn @Model.PersonModel.Etternavn</p>
                         <p>Telefon: @Model.PersonModel.Telefonnummer</p>
@@ -71,19 +85,40 @@
                         <p>Ingen innmelder informasjon tilgjengelig</p>
                     }
                 </div>
-                @if (Model.SaksbehandlerModel != null)
+
                 {
                     <div class="handler-info">
                         <h3>Saksbehandler</h3>
-                        <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
-                        <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
-                        <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                        <form asp-action="LagreSaksbehandler" method="post">
+                            <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId"/>
+                            <div class="form-group mb-3">
+                                <label for="saksbehandlerDropdown">Velg saksbehandler:</label>
+                                <select id="saksbehandlerDropdown"
+                                        name="saksbehandlerId"
+                                        class="form-control"
+                                        asp-items="Model.SaksbehandlerOptions">
+                                    <option value="">Velg saksbehandler</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mb-3">Lagre saksbehandler</button>
+                        </form>
+                        @if (Model.SaksbehandlerModel != null)
+                        {
+                            <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
+                            <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
+                            <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                        }
+                        else
+                        {
+                            <p>Ingen Saksbehandler Angit</p>
+                        }
                     </div>
                 }
             }
             else
             {
-                <p>Ingen innmeldingsdetaljer tilgjengelig</p>
+                <p>Ingen innmelding funnet</p>
             }
         </div>
         <div id="map" style="height: 500px;"></div>

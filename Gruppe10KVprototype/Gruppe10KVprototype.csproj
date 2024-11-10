@@ -27,13 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-   
-   
-   
-    <Folder Include="wwwroot\Images\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\Images\FrontPageBackground.png" />
     <None Include="wwwroot\Images\LogoKartverket.png" />
     <None Include="wwwroot\Images\MapIcon.png" />
@@ -59,6 +52,15 @@
   <ItemGroup>
     <Content Include="..\.dockerignore">
       <Link>.dockerignore</Link>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\Images\Not_Vennesla.png">
+      <CopyToOutputDirectory>Copy</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\Images\So_Not_Vennesla.png">
+      <CopyToOutputDirectory>Copy</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
