@@ -1,72 +1,89 @@
 ﻿using Interface;
 using Interfaces;
+using LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Models.Models;
 using ViewModels;
+using LogicInterfaces;
 
-namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
+public class KartvisningEnInnmeldingSaksBController : Controller
 {
-    public class KartvisningEnInnmeldingSaksBController : Controller
+    private readonly IGeometriRepository _geometriRepository;
+    private readonly IDataSammenstillingSaksBRepository _dataSammenstillingsRepo;
+    private readonly IEnumLogic _enumLogic;  // Legg til denne
+
+    public KartvisningEnInnmeldingSaksBController(
+        IGeometriRepository geometriRepository,
+        IDataSammenstillingSaksBRepository dataSammenstillingsRepo,
+        IEnumLogic enumLogic)  // Legg til denne
     {
-        private readonly IGeometriRepository _geometriRepository;
-        private readonly IDataSammenstillingSaksBRepository _dataSammenstillingsRepo;
+        _geometriRepository = geometriRepository;
+        _dataSammenstillingsRepo = dataSammenstillingsRepo;
+        _enumLogic = enumLogic;
+    }
 
-        public KartvisningEnInnmeldingSaksBController(
-            IGeometriRepository geometriRepository,
-            IDataSammenstillingSaksBRepository dataSammenstillingsRepo)
+    [HttpGet]
+    public async Task<IActionResult> KartvisningEnInnmeldingSaksB(int? innmeldingId, string innmeldingIds)
+    {
+        var alleSaker = new List<(InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel, Geometri)>();
+
+        if (innmeldingId.HasValue)
         {
-            _geometriRepository = geometriRepository;
-            _dataSammenstillingsRepo = dataSammenstillingsRepo;
-        }
+            var (innmelding, person, innmelder, saksbehandler) =
+                await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(innmeldingId.Value);
+            var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId.Value);
 
-        [HttpGet]
-        public async Task<IActionResult> KartvisningEnInnmeldingSaksB(int? innmeldingId, string innmeldingIds)
-        {
-            // Liste som skal holde alle innmeldinger med detaljer
-            var alleSaker = new List<(InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel, Geometri)>();
-
-            if (innmeldingId.HasValue)
+            if (innmelding != null)
             {
-                // Håndter enkelt innmelding som før
+                // Formater enum verdier før de legges til
+                innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
+                innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
+                innmelding.KartType = _enumLogic.ConvertToDisplayFormat(innmelding.KartType);
+                if (innmelder != null)
+                {
+                    innmelder.InnmelderType = _enumLogic.ConvertToDisplayFormat(innmelder.InnmelderType);
+                }
+
+                alleSaker.Add((innmelding, person, innmelder, saksbehandler, geometriData));
+            }
+        }
+        else if (!string.IsNullOrEmpty(innmeldingIds))
+        {
+            var idListe = innmeldingIds.Split(',').Select(int.Parse);
+
+            foreach (var id in idListe)
+            {
                 var (innmelding, person, innmelder, saksbehandler) =
-                    await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(innmeldingId.Value);
-                var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId.Value);
+                    await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(id);
+                var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
 
                 if (innmelding != null)
                 {
+                    // Formater enum verdier før de legges til
+                    innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
+                    innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
+                    innmelding.KartType = _enumLogic.ConvertToDisplayFormat(innmelding.KartType);
+                    if (innmelder != null)
+                    {
+                        innmelder.InnmelderType = _enumLogic.ConvertToDisplayFormat(innmelder.InnmelderType);
+                    }
+
                     alleSaker.Add((innmelding, person, innmelder, saksbehandler, geometriData));
                 }
             }
-            else if (!string.IsNullOrEmpty(innmeldingIds))
-            {
-                // Håndter flere innmeldinger
-                var idListe = innmeldingIds.Split(',').Select(int.Parse);
-
-                foreach (var id in idListe)
-                {
-                    var (innmelding, person, innmelder, saksbehandler) =
-                        await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(id);
-                    var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
-
-                    if (innmelding != null)
-                    {
-                        alleSaker.Add((innmelding, person, innmelder, saksbehandler, geometriData));
-                    }
-                }
-            }
-
-            if (!alleSaker.Any())
-            {
-                return NotFound("Ingen innmeldinger funnet");
-            }
-
-            var viewModel = new KartvisningEnInnmeldingSaksBViewModel
-            {
-                AlleInnmeldinger = alleSaker
-            };
-
-            return View(viewModel);
         }
+
+        if (!alleSaker.Any())
+        {
+            return NotFound("Ingen innmeldinger funnet");
+        }
+
+        var viewModel = new KartvisningEnInnmeldingSaksBViewModel
+        {
+            AlleInnmeldinger = alleSaker
+        };
+
+        return View(viewModel);
     }
 }
