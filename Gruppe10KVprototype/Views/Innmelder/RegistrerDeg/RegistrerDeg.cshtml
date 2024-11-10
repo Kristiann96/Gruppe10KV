@@ -1,50 +1,74 @@
 ﻿@model ViewModels.Registrering.KomplettRegistreringViewModel
-@{
-    ViewData["Title"] = "Registrer deg";
-}
 
 @{
     Layout = "_Layout";
+    ViewData["Title"] = "Registrer deg";
 }
+
+<link rel="stylesheet" href="~/css/pages/innmelder/RegistrerDegInnmelder.css" />
 
 <div class="registrering-page">
     <div class="registrering-card">
         <h1 class="registrering-card__title">Registrer deg</h1>
 
         <form method="post" asp-controller="Innmelder" asp-action="RegistrerDeg" style="width: 100%;">
+
+            <!-- Fornavn og Etternavn på samme linje -->
             <div class="fornavn-etternavn-container">
                 <div class="registrering-form-group" style="flex: 1;">
                     <label class="registrering-label" for="firstName">Fornavn</label>
-                    <input id="firstName" type="text" class="registrering-input" placeholder="Ditt fornavn" required />
+                    <input id="firstName"
+                           type="text"
+                           class="registrering-input"
+                           placeholder="Ditt fornavn"
+                           required />
                     <span class="registrering-error"></span>
                 </div>
 
                 <div class="registrering-form-group" style="flex: 1;">
                     <label class="registrering-label" for="lastName">Etternavn</label>
-                    <input id="lastName" type="text" class="registrering-input" placeholder="Ditt etternavn" required />
+                    <input id="lastName"
+                           type="text"
+                           class="registrering-input"
+                           placeholder="Ditt etternavn"
+                           required />
                     <span class="registrering-error"></span>
                 </div>
             </div>
 
             <div class="registrering-form-group">
                 <label class="registrering-label" for="email">E-post</label>
-                <input id="email" type="email" class="registrering-input" placeholder="Din e-postadresse" required />
+                <input id="email"
+                       type="email"
+                       class="registrering-input"
+                       placeholder="Din e-postadresse"
+                       required />
                 <span class="registrering-error"></span>
             </div>
 
             <div class="registrering-form-group">
                 <label class="registrering-label" for="password">Passord</label>
-                <input id="password" type="password" class="registrering-input" placeholder="Velg et passord" required />
+                <input id="password"
+                       type="password"
+                       class="registrering-input"
+                       placeholder="Velg et passord"
+                       required />
                 <span class="registrering-error"></span>
             </div>
 
             <div class="registrering-form-group">
                 <label class="registrering-label" for="confirmPassword">Bekreft passord</label>
-                <input id="confirmPassword" type="password" class="registrering-input" placeholder="Bekreft passord" required />
+                <input id="confirmPassword"
+                       type="password"
+                       class="registrering-input"
+                       placeholder="Bekreft passord"
+                       required />
                 <span class="registrering-error"></span>
             </div>
 
-            <button type="submit" class="registrering-button">Registrer deg</button>
+            <button type="submit" class="registrering-button">
+                Registrer deg
+            </button>
         </form>
 
         <div class="back-to-login">
@@ -53,5 +77,7 @@
                 <a href="@Url.Action("LoggInn", "LoggInn")" class="register-link">Logg inn her.</a>
             </p>
         </div>
+
+
     </div>
 </div>

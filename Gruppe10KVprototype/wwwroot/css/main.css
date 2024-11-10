@@ -8,4 +8,9 @@
 /* Shared components */
 @import "components/_shared.css";
 
+/* Page-specific styles */
+@import "pages/innmelder/LoggInnInnmelder.css";
+@import "pages/style.css";
+@import "pages/main.css";
+
 /* Add other page-specific imports as needed */
