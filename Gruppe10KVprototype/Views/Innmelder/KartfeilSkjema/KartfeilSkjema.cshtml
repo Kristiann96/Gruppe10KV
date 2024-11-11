@@ -48,7 +48,7 @@
 
                     <div class="checkbox-group">
                         <div class="form-check">
-                            <input type="checkbox" id="bildeFunksjonalitet" class="form-check-input" onclick="visBildeDialog()" />
+                            <input type="checkbox" id="bildeFunksjonalitet" class="form-check-input" onclick="showUploadAlert()" />
                             <label class="form-check-label">Last opp bilde</label>
                         </div>
                     </div>
@@ -116,6 +116,13 @@
         window.onclick = function (event) {
             if (event.target == document.getElementById('bildeDialog')) {
                 lukkDialog();
+            }
+        }
+
+        function showUploadAlert() {
+            const checkbox = document.getElementById('bildeFunksjonalitet');
+            if (checkbox.checked) {
+                alert("Her kan du legge ved bilder, og gi kartverket anledning til å hente bildets innebygde gps lokasjon. Data vil slettes når saken avsluttes");
             }
         }
     </script>

@@ -29,12 +29,13 @@
 
 #miniMap {
     height: 150%;
-    min-height: 80vh;
+    min-height: 77vh;
     width: 100%;
     border-radius: 12px;
     border: 2px solid rgba(146, 194, 145, 0.3);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     margin-top: 4em;
+    z-index: 1;
 }
 
 .map-card {
