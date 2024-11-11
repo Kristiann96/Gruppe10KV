@@ -1,23 +1,23 @@
 ﻿using Models.Models;
 using Models.Entities;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ViewModels
 {
     public class KartvisningEnInnmeldingSaksBViewModel
     {
-        // For bakoverkompatibilitet og enkel tilgang til første innmelding
-        public InnmeldingModel Innmelding => AlleInnmeldinger?.FirstOrDefault().Item1;
-        public PersonModel Person => AlleInnmeldinger?.FirstOrDefault().Item2;
-        public InnmelderModel Innmelder => AlleInnmeldinger?.FirstOrDefault().Item3;
-        public SaksbehandlerModel Saksbehandler => AlleInnmeldinger?.FirstOrDefault().Item4;
-        public Geometri GeometriData => AlleInnmeldinger?.FirstOrDefault().Item5;
+        public List<InnmeldingMedDetaljerViewModel> AlleInnmeldinger { get; set; } = new();
+    }
 
-        // Ny property for alle innmeldinger
-        public List<(InnmeldingModel Innmelding, PersonModel Person, InnmelderModel Innmelder,
-            SaksbehandlerModel Saksbehandler, Geometri Geometri)> AlleInnmeldinger
-        { get; set; }
+    // Ny klasse for å holde all informasjon om én innmelding
+    public class InnmeldingMedDetaljerViewModel
+    {
+        public InnmeldingModel Innmelding { get; set; }
+        public PersonModel Person { get; set; }
+        public InnmelderModel Innmelder { get; set; }
+        public SaksbehandlerModel Saksbehandler { get; set; }
+        public Geometri Geometri { get; set; }
 
+        // Vurderingsdata per innmelding
         public int AntallBekreftelser { get; set; }
         public int AntallAvkreftelser { get; set; }
         public IEnumerable<string> Kommentarer { get; set; }
