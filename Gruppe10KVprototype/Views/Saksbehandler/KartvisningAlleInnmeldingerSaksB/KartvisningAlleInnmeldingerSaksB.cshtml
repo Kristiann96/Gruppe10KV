@@ -96,32 +96,45 @@
 
     // Legg til geometrier fra viewmodel
     const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
-    geometriData.forEach(function (data) {
-        try {
-            const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
-            geoJsonFeature.properties = { InnmeldingId: data.InnmeldingId };
+geometriData.forEach(function (data) {
+    try {
+        const rawGeoJson = JSON.parse(data.GeometriGeoJson);
+        const geoJsonFeature = {
+            type: "Feature",
+            geometry: {
+                type: rawGeoJson.type,
+                coordinates: rawGeoJson.coordinates
+            },
+            properties: { InnmeldingId: data.InnmeldingId }
+        };
 
-            const geoJsonLayer = L.geoJSON(geoJsonFeature, {
-                onEachFeature: function (feature, layer) {
+        const geoJsonLayer = L.geoJSON(geoJsonFeature, {
+            onEachFeature: function (feature, layer) {
+                let center;
+                
+                if (feature.geometry.type === 'Point') {
+                    center = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+                } else {
                     const bounds = layer.getBounds();
-                    const center = bounds.getCenter();
-
-                    const handleClick = function (event) {
-                        const coordinates = event.latlng;
-                        window.location.href = `/KartvisningAlleInnmeldingerSaksB/GetKommunenummer?innmeldingId=${data.InnmeldingId}&lat=${coordinates.lat}&lng=${coordinates.lng}`;
-                    };
-
-                    const marker = L.marker(center).addTo(map);
-                    marker.on('click', handleClick);
-                    layer.on('click', handleClick);
+                    center = bounds.getCenter();
                 }
-            });
 
-            geoJsonLayer.addTo(innmeldingLag);
-        } catch (e) {
-            console.error('Feil ved parsing av geometri:', e, data);
-        }
-    });
+                const handleClick = function (event) {
+                    const coordinates = event.latlng;
+                    window.location.href = `/KartvisningAlleInnmeldingerSaksB/GetKommunenummer?innmeldingId=${data.InnmeldingId}&lat=${coordinates.lat}&lng=${coordinates.lng}`;
+                };
+
+                const marker = L.marker(center).addTo(map);
+                marker.on('click', handleClick);
+                layer.on('click', handleClick);
+            }
+        });
+
+        geoJsonLayer.addTo(innmeldingLag);
+    } catch (e) {
+        console.error('Feil ved parsing av geometri:', e, data);
+    }
+});
 
     map.on(L.Draw.Event.CREATED, function (event) {
         console.log('Tegning opprettet:', event);
