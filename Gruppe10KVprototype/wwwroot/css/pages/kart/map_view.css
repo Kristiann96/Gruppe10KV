@@ -1,65 +1,108 @@
-﻿/* Map Container Layout */
-.map-page-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 2rem;
-}
-
-.map-card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+﻿body {
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 90c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10zm70 0c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10S10 15.523 10 10zm70 0c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10z' fill='%2392C291' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E"), linear-gradient(120deg, #e6f3e6 0%, #f0f7f0 100%);
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
     overflow: hidden;
 }
 
-.map-header {
-    padding: 1.5rem 2rem;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
+/* Container Layout */
+.map-page-container {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
+/* Card Styles */
+.map-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid rgba(146, 194, 145, 0.2);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styles*/
+.map-header {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #2d6a4f, #40916c);
+    position: relative;
+    overflow: hidden;
+    margin-top: 5em;
+    border-radius: 12px;
+}
+
+    .map-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0; 
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+        pointer-events: none;
+    }
 
 .map-title {
     margin: 0;
-    font-size: 1.75rem;
-    color: #333;
-    font-weight: 600;
+    font-size: 1.5rem;
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 .map-description {
-    margin-top: 0.5rem;
-    color: #666;
-    font-size: 1rem;
-    line-height: 1.5;
+    margin-top: 0.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    line-height: 1.4;
 }
 
+/* Map Content Area - Expanded */
 .map-content {
-    padding: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(248, 250, 248, 0.8);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Map Container */
+/* Map Container - Expanded */
 #map {
-    height: 600px;
+    height: calc(100vh - 250px); /* Adjusted to account for header margin */
     width: 100%;
-    border-radius: 4px;
-    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    border: 2px solid rgba(146, 194, 145, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    flex: 1;
 }
 
-/* Mini Map for Form */
-#miniMap {
-    height: 400px;
-    width: 100%;
-    border-radius: 4px;
-    border: 1px solid #e9ecef;
-    margin-bottom: 1.5rem;
-}
+    #map:hover {
+        border-color: rgba(146, 194, 145, 0.5);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
 
-/* Button Container */
+/* Control buttons and stuff */
+
 .map-controls {
     display: flex;
     gap: 1rem;
-    padding: 1.5rem;
-    background-color: #f8f9fa;
-    border-top: 1px solid #e9ecef;
+    padding: 1rem;
+    background: linear-gradient(135deg, #2d6a4f, #40916c);
+    border-top: 1px solid rgba(146, 194, 145, 0.2);
+    align-items: center;
+    justify-content: flex-end;
+    border-radius: 12px;
+    margin: 0 1rem 1rem 1rem;
 }
 
 /* Button Styles */
@@ -67,192 +110,104 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 120px;
+    min-width: 140px;
     padding: 0.75rem 1.5rem;
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
     text-align: center;
     text-decoration: none;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-}
-
-.map-button-primary {
-    background-color: #0066cc;
-    color: white;
-}
-
-.map-button-primary:hover:not(:disabled) {
-    background-color: #0052a3;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.map-button-primary:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.map-button-secondary {
-    background-color: #28a745;
-    color: white;
-}
-
-.map-button-secondary:hover {
-    background-color: #218838;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Form Styles */
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #333;
-}
-
-.form-control {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #e9ecef;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.2s ease;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: #0066cc;
-    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.25);
-}
-
-textarea.form-control {
-    resize: vertical;
-    min-height: 120px;
-}
-
-/* Checkbox Styles */
-.checkbox-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-check {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-}
-
-.form-check-input {
-    margin-right: 0.75rem;
-    width: 18px;
-    height: 18px;
-}
-
-.form-check-label {
-    color: #333;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-
-.modal-content {
     position: relative;
-    background-color: #fff;
-    margin: 15% auto;
-    padding: 2rem;
-    max-width: 500px;
+    overflow: hidden;
+}
+
+/* Primary Button */
+.map-button-primary {
+    background-color: #145a2e;
+    color: white;
+    box-shadow: 0 4px 12px rgba(26, 131, 59, 0.2);
+}
+
+    .map-button-primary:hover:not(:disabled) {
+        background-color: #1a833b !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(26, 131, 59, 0.5) !important;
+    }
+
+/* Secondary Button */
+.map-button-secondary {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #2d6a4f;
+    border: 2px solid rgba(255, 255, 255, 0.3); 
+}
+
+    .map-button-secondary:hover {
+        background-color: rgba(255, 255, 255, 0.9);
+        transform: translateY(-2px);
+    }
+
+/* Leaflet Custom Styles */
+.leaflet-control-zoom { 
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(4px);
 }
 
-.close {
-    position: absolute;
-    right: 1.5rem;
-    top: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #666;
-    cursor: pointer;
-    transition: color 0.2s ease;
+    .leaflet-control-zoom a {
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        color: #2d6a4f !important;
+        border-color: rgba(45, 106, 79, 0.2) !important;
+    }
+
+        .leaflet-control-zoom a:hover {
+            background-color: rgba(45, 106, 79, 0.05) !important;
+            color: #40916c !important;
+        }
+
+.leaflet-draw-toolbar {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(4px);
 }
 
-.close:hover {
-    color: #333;
-}
+    .leaflet-draw-toolbar a {
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        border-color: rgba(45, 106, 79, 0.2) !important;
+    }
 
-/* Validation */
-.text-danger {
-    color: #dc3545;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    display: block;
+        .leaflet-draw-toolbar a:hover {
+            background-color: rgba(45, 106, 79, 0.05) !important;
+        }
+
+/* Drawing Active State */
+.drawing-active #map {
+    border-color: #2d6a4f;
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-    .map-page-container {
-        margin: 1rem;
-        padding: 0 1rem;
-    }
-}
-
 @media (max-width: 768px) {
     .map-page-container {
-        margin: 0.5rem;
-        padding: 0 0.5rem;
-    }
-
-    .map-header {
-        padding: 1rem;
-    }
-
-    .map-content {
-        padding: 1rem;
+        padding: 0.5rem;
     }
 
     #map {
-        height: 400px;
-    }
-
-    #miniMap {
-        height: 300px;
+        height: calc(100vh - 250px);
     }
 
     .map-controls {
         flex-direction: column;
-        padding: 1rem;
+        padding: 0.75rem;
+        gap: 0.5rem;
     }
 
     .map-button {
         width: 100%;
-    }
-
-    .map-title {
-        font-size: 1.5rem;
-    }
-
-    .modal-content {
-        margin: 10% 1rem;
-        padding: 1.5rem;
+        min-width: auto;
     }
 }

@@ -38,12 +38,11 @@ body {
     background-color: #f0f0f0;
 }
 
-.homeFrontPage {
+.frontHomePage {
     background-image: url('../images/frontpagebackground.png');
 }
 
 .Index {
-    background-image: url('../images/frontpagebackground.png');
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
