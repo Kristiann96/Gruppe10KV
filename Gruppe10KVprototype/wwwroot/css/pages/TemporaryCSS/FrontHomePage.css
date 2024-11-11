@@ -1,0 +1,213 @@
+﻿.page.Index {
+    background: linear-gradient( 135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100% );
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+    .page.Index::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, transparent 0%, transparent 100%);
+        opacity: 0.1;
+        animation: shimmer 8s infinite linear;
+        pointer-events: none;
+    }
+
+.posterPage {
+    animation: fadeIn 0.8s ease-in;
+    position: relative;
+    z-index: 1;
+}
+
+.innmeldCard {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(-2rem);
+    animation: slideUp 0.6s ease-out forwards;
+    max-width: 90%;
+    width: 28em;
+    padding: 3.5em 2.8em;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    position: relative;
+    overflow: hidden;
+}
+
+    /* Add subtle gradient border effect */
+    .innmeldCard::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1) );
+        z-index: -1;
+        border-radius: 22px;
+        animation: borderGlow 3s infinite;
+    }
+
+    .innmeldCard h1 {
+        color: var(--color-primary-dark);
+        font-size: 2.8rem;
+        margin-bottom: 1.8rem;
+        font-weight: 800;
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        position: relative;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .innmeldCard h1::before {
+            left: -40px;
+        }
+
+        .innmeldCard h1::after {
+            right: -40px;
+        }
+
+.cardText {
+    color: var(--color-text);
+    font-size: 1.25rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+    text-align: center;
+    position: relative;
+}
+
+.Button-MeldInn {
+    background: linear-gradient( 45deg, var(--color-primary) 0%, var(--color-primary-dark) 100% );
+    transform: translateY(0);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    padding: 1.2em 2.8em;
+    border-radius: var(--border-radius-lg);
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+    /* Add shine effect on hover */
+    .Button-MeldInn::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient( 45deg, transparent, rgba(255, 255, 255, 0.1), transparent );
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+    }
+
+    .Button-MeldInn:hover {
+        transform: translateY(-3px) scale(1.02);
+        background: linear-gradient( 45deg, var(--color-primary-dark) 0%, var(--color-primary) 100% );
+        box-shadow: 0 10px 20px rgba(0, 102, 204, 0.3), 0 6px 6px rgba(0, 102, 204, 0.2), 0 0 100px rgba(0, 102, 204, 0.1);
+    }
+
+        .Button-MeldInn:hover::before {
+            transform: translateX(100%);
+        }
+
+    .Button-MeldInn:active {
+        transform: translateY(-1px) scale(0.98);
+    }
+
+/* Enhanced Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(-2rem);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px -1000px;
+    }
+
+    100% {
+        background-position: 1000px 1000px;
+    }
+}
+
+@keyframes borderGlow {
+    0%, 100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Responsive Design with enhanced mobile experience */
+@media (max-width: 768px) {
+    .innmeldCard {
+        width: 92%;
+        padding: 2.8em 1.8em;
+        margin: 1rem;
+        transform: translateY(0);
+    }
+
+        .innmeldCard h1 {
+            font-size: 2.2rem;
+        }
+
+            .innmeldCard h1::before,
+            .innmeldCard h1::after {
+                width: 20px;
+            }
+
+    .cardText {
+        font-size: 1.15rem;
+        padding: 0 0.8rem;
+    }
+
+    .Button-MeldInn {
+        padding: 1em 2.2em;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .innmeldCard {
+        padding: 2.2em 1.5em;
+    }
+
+        .innmeldCard h1 {
+            font-size: 2rem;
+        }
+
+    .cardText {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+}

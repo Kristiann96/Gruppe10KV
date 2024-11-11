@@ -84,41 +84,41 @@
     color: white;
 }
 
-.map-button-primary:hover:not(:disabled) {
-    background-color: #0052a3;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+    .map-button-primary:hover:not(:disabled) {
+        background-color: #0052a3;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-.map-button-primary:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
+    .map-button-primary:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
 
 .map-button-secondary {
     background-color: #28a745;
     color: white;
 }
 
-.map-button-secondary:hover {
-    background-color: #218838;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+    .map-button-secondary:hover {
+        background-color: #218838;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
 /* Form Styles */
 .form-group {
     margin-bottom: 1.5rem;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #333;
-}
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #333;
+    }
 
 .form-control {
     width: 100%;
@@ -129,11 +129,11 @@
     transition: border-color 0.2s ease;
 }
 
-.form-control:focus {
-    outline: none;
-    border-color: #0066cc;
-    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.25);
-}
+    .form-control:focus {
+        outline: none;
+        border-color: #0066cc;
+        box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.25);
+    }
 
 textarea.form-control {
     resize: vertical;
@@ -196,9 +196,9 @@ textarea.form-control {
     transition: color 0.2s ease;
 }
 
-.close:hover {
-    color: #333;
-}
+    .close:hover {
+        color: #333;
+    }
 
 /* Validation */
 .text-danger {

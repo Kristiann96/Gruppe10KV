@@ -1,0 +1,134 @@
+﻿/* Container styling */
+.bekreftelses-container {
+    max-width: 1200px; /* Restore original max width */
+    margin: 0 auto; /* Center horizontally */
+    padding: 20px;
+    min-height: 100vh; /* Full height for vertical centering */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Flex container for layout */
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .flex-container {
+        flex-direction: row;
+    }
+}
+
+/* Map section */
+.map-section {
+    flex: 1;
+    min-width: 400px;
+}
+
+#miniMap {
+    height: 400px;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid #00509c;
+}
+
+/* Details section */
+.details-section {
+    flex: 1;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Info group styling */
+.info-group {
+    margin-bottom: 20px;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #00509c;
+    font-size: 1.2em;
+    margin-bottom: 8px;
+}
+
+.info-content {
+    color: #2c3e50;
+    background-color: #f9fafc;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    font-size: 1em;
+}
+
+/* Priority badge styling */
+.priority-badge {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    background-color: #ff7675;
+    color: white;
+    font-size: 0.9em;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+/* Button group styling */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+@media (min-width: 500px) {
+    .button-group {
+        flex-direction: row;
+    }
+}
+
+/* Button base styling */
+.btn {
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex: 1;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    border: none;
+}
+
+/* Back button styling */
+.btn-back {
+    background-color: #00509c;
+    color: white;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    margin-top: 2em;
+}
+
+    .btn-back:hover {
+        background-color: #003d7a;
+        transform: translateY(-2px);
+    }
+
+/* Confirm button styling */
+.btn-confirm {
+    background-color: #1a833b;
+    color: white;
+    margin-top: 2em;
+}
+
+    .btn-confirm:hover {
+        background-color: #14662b;
+        transform: translateY(-2px); 
+    }
