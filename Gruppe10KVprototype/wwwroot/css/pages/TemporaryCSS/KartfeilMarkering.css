@@ -37,6 +37,8 @@
     position: relative;
     overflow: hidden;
     margin-top: 5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
     border-radius: 12px;
 }
 
@@ -68,7 +70,7 @@
 
 /* Map Content Area - Expanded */
 .map-content {
-    margin: 2em;
+    margin: 0.5em;
     background-color: rgba(248, 250, 248, 0.8);
     flex: 1;
     display: flex;
@@ -96,12 +98,14 @@
     display: flex;
     gap: 1rem;
     padding: 1rem;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
     background: linear-gradient(135deg, #2d6a4f, #40916c);
     border-top: 1px solid rgba(146, 194, 145, 0.2);
     align-items: center;
     justify-content: flex-end;
     border-radius: 12px;
-    margin: 0 1rem 1rem 1rem;
 }
 
 /* Button Styles */

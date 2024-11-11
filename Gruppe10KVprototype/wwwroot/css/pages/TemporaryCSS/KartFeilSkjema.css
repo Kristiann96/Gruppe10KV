@@ -34,6 +34,8 @@
     position: relative;
     overflow: hidden;
     margin-top: 5em;
+    margin-left: 1em;
+    margin-right: 1em;
     border-radius: 12px;
 }
 
@@ -95,7 +97,6 @@
     align-items: center;
     justify-content: flex-end;
     border-radius: 12px;
-    margin: 0 1rem 1rem 1rem;
 }
 
 .map-button {
