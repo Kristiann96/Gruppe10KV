@@ -93,7 +93,7 @@
                     color: '##fcd7fa',     // lyserosa kant
                     weight: 4,            // Tykkere kant
                     opacity: 1,
-                    fillOpacity: 0.9      // Mer solid farge
+                    fillOpacity: 0.1      // Mer solid farge
                 }).addTo(map);
 
                 return marker;
@@ -217,32 +217,48 @@
         // Legg til geometrier på kartet
         geometriData.forEach(function (data) {
             try {
-                const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
+                // Parse og strukturer GeoJSON data
+                const rawGeoJson = JSON.parse(data.GeometriGeoJson);
+                const geoJsonFeature = {
+                    type: "Feature",
+                    geometry: {
+                        type: rawGeoJson.type,
+                        coordinates: rawGeoJson.coordinates
+                    },
+                    properties: {}
+                };
+
                 const layer = L.geoJSON(geoJsonFeature, {
                     style: function (feature) {
                         return {
-                            color: '#05ede9',     // Orange
-                            weight: 8,            // Tykkere linjer
-                            opacity: 0.9,         // Mer solid
-                            fillColor: '#fa05ed', // Orange fyll for polygoner
-                            fillOpacity: 0.4      // Semi-transparent fyll
+                            color: '#05ede9',     // Turkis linje
+                            weight: 8,            // Linjetykkelse
+                            opacity: 0.9,         // Gjennomsiktighet
+                            fillColor: '#fa05ed', // Rosa fyll
+                            fillOpacity: 0.4      // Fyll-gjennomsiktighet
                         };
                     },
                     onEachFeature: function (feature, layer) {
-                        // Få bounds for laget, uansett geometritype
-                        const bounds = layer.getBounds();
-                        // Bruk senterpunktet for å plassere markøren
-                        const center = bounds.getCenter();
+                        let center;
+
+                        // Håndter forskjellige geometrityper
+                        if (feature.geometry.type === 'Point') {
+                            center = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+                        } else {
+                            const bounds = layer.getBounds();
+                            center = bounds.getCenter();
+                        }
 
                         // Legg til markør på senterpunktet
                         const marker = L.marker(center).addTo(map);
 
-                        // Opprett popup
+                        // Opprett popup med zoom-tilpasset størrelse
                         const popup = L.popup({
                             closeButton: true,
                             closeOnClick: false,
                             autoClose: false,
-                            className: 'persistent-popup'
+                            className: 'persistent-popup',
+                            maxWidth: 250  // Standard maksbredde
                         });
 
                         popup.setContent(createPopupContent(data));
@@ -250,6 +266,18 @@
                         // Bind popup til både layer og markør
                         layer.bindPopup(popup);
                         marker.bindPopup(popup);
+
+                        // Håndter popup-størrelse ved zoom
+                        map.on('zoomend', function () {
+                            const zoom = map.getZoom();
+                            // Beregn ny maksbredde basert på zoom-nivå
+                            // 250 er maksbredde, reduseres ved høyere zoom-nivå
+                            const newMaxWidth = Math.max(200, Math.min(250, 250 * (1 - zoom / 20)));
+                            if (popup.isOpen()) {
+                                popup.options.maxWidth = newMaxWidth;
+                                popup.update();
+                            }
+                        });
 
                         let hoverTimeout;
 
@@ -318,27 +346,29 @@
                     });
                 }
 
-                // Legg til visuell indikator for mindre synlige geometrier
-                const circleMarker = addVisualIndicator(layer, geoJsonFeature.geometry.type);
-                if (circleMarker) {
-                    circleMarker.bindPopup(popup);
+                // Legg til visuell indikator kun for ikke-punkt geometrier
+                if (geoJsonFeature.geometry.type !== 'Point') {
+                    const circleMarker = addVisualIndicator(layer, geoJsonFeature.geometry.type);
+                    if (circleMarker) {
+                        circleMarker.bindPopup(popup);
 
-                    // Samme hover-oppførsel for sirkelmarkøren
-                    circleMarker.on('mouseover', function (e) {
-                        if (hoverTimeout) clearTimeout(hoverTimeout);
-                        hoverTimeout = setTimeout(() => {
+                        // Samme hover-oppførsel for sirkelmarkøren
+                        circleMarker.on('mouseover', function (e) {
+                            if (hoverTimeout) clearTimeout(hoverTimeout);
+                            hoverTimeout = setTimeout(() => {
+                                if (!aktivVurdering) {
+                                    this.openPopup();
+                                }
+                            }, 500);
+                        });
+
+                        circleMarker.on('mouseout', function (e) {
+                            if (hoverTimeout) clearTimeout(hoverTimeout);
                             if (!aktivVurdering) {
-                                this.openPopup();
+                                this.closePopup();
                             }
-                        }, 500);
-                    });
-
-                    circleMarker.on('mouseout', function (e) {
-                        if (hoverTimeout) clearTimeout(hoverTimeout);
-                        if (!aktivVurdering) {
-                            this.closePopup();
-                        }
-                    });
+                        });
+                    }
                 }
 
             } catch (e) {
