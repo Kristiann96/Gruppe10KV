@@ -67,19 +67,6 @@
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-        /* Add decorative elements around the heading */
-        .innmeldCard h1::before,
-        .innmeldCard h1::after {
-            content: '';
-            position: absolute;
-            height: 3px;
-            width: 30px;
-            background: var(--color-primary);
-            top: 50%;
-            transform: translateY(-50%);
-            border-radius: 2px;
-        }
-
         .innmeldCard h1::before {
             left: -40px;
         }
