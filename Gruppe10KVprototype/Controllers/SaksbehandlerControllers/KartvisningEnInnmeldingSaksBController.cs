@@ -17,7 +17,8 @@ public class KartvisningEnInnmeldingSaksBController : Controller
     public KartvisningEnInnmeldingSaksBController(
         IGeometriRepository geometriRepository,
         IDataSammenstillingSaksBRepository dataSammenstillingsRepo,
-        IEnumLogic enumLogic, IVurderingRepository vurderingRepository)
+        IEnumLogic enumLogic,
+        IVurderingRepository vurderingRepository)
     {
         _geometriRepository = geometriRepository;
         _dataSammenstillingsRepo = dataSammenstillingsRepo;
@@ -28,26 +29,49 @@ public class KartvisningEnInnmeldingSaksBController : Controller
     [HttpGet]
     public async Task<IActionResult> KartvisningEnInnmeldingSaksB(int? innmeldingId, string innmeldingIds)
     {
-        var alleSaker = new List<(InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel, Geometri)>();
+        var viewModel = new KartvisningEnInnmeldingSaksBViewModel();
+
+        async Task<InnmeldingMedDetaljerViewModel> HentInnmeldingMedVurderinger(int id)
+        {
+            var (innmelding, person, innmelder, saksbehandler) =
+                await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(id);
+            var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
+
+            if (innmelding == null) return null;
+
+            // Formater enum verdier
+            innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
+            innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
+            innmelding.KartType = _enumLogic.ConvertToDisplayFormat(innmelding.KartType);
+            if (innmelder != null)
+            {
+                innmelder.InnmelderType = _enumLogic.ConvertToDisplayFormat(innmelder.InnmelderType);
+            }
+
+            // Hent vurderinger for denne innmeldingen
+            var (antallBekreftelser, antallAvkreftelser) =
+                await _vurderingRepository.HentAntallVurderingerAsync(id);
+            var kommentarer = await _vurderingRepository.HentKommentarerForInnmeldingAsync(id);
+
+            return new InnmeldingMedDetaljerViewModel
+            {
+                Innmelding = innmelding,
+                Person = person,
+                Innmelder = innmelder,
+                Saksbehandler = saksbehandler,
+                Geometri = geometriData,
+                AntallBekreftelser = antallBekreftelser,
+                AntallAvkreftelser = antallAvkreftelser,
+                Kommentarer = kommentarer
+            };
+        }
 
         if (innmeldingId.HasValue)
         {
-            var (innmelding, person, innmelder, saksbehandler) =
-                await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(innmeldingId.Value);
-            var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId.Value);
-
-            if (innmelding != null)
+            var innmeldingDetaljer = await HentInnmeldingMedVurderinger(innmeldingId.Value);
+            if (innmeldingDetaljer != null)
             {
-                // Formater enum verdier før de legges til
-                innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
-                innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
-                innmelding.KartType = _enumLogic.ConvertToDisplayFormat(innmelding.KartType);
-                if (innmelder != null)
-                {
-                    innmelder.InnmelderType = _enumLogic.ConvertToDisplayFormat(innmelder.InnmelderType);
-                }
-
-                alleSaker.Add((innmelding, person, innmelder, saksbehandler, geometriData));
+                viewModel.AlleInnmeldinger.Add(innmeldingDetaljer);
             }
         }
         else if (!string.IsNullOrEmpty(innmeldingIds))
@@ -55,45 +79,18 @@ public class KartvisningEnInnmeldingSaksBController : Controller
             var idListe = innmeldingIds.Split(',').Select(int.Parse);
             foreach (var id in idListe)
             {
-                var (innmelding, person, innmelder, saksbehandler) =
-                    await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(id);
-                var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
-
-                if (innmelding != null)
+                var innmeldingDetaljer = await HentInnmeldingMedVurderinger(id);
+                if (innmeldingDetaljer != null)
                 {
-                    // Formater enum verdier før de legges til
-                    innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
-                    innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
-                    innmelding.KartType = _enumLogic.ConvertToDisplayFormat(innmelding.KartType);
-                    if (innmelder != null)
-                    {
-                        innmelder.InnmelderType = _enumLogic.ConvertToDisplayFormat(innmelder.InnmelderType);
-                    }
-
-                    alleSaker.Add((innmelding, person, innmelder, saksbehandler, geometriData));
+                    viewModel.AlleInnmeldinger.Add(innmeldingDetaljer);
                 }
             }
         }
 
-        if (!alleSaker.Any())
+        if (!viewModel.AlleInnmeldinger.Any())
         {
             return NotFound("Ingen innmeldinger funnet");
         }
-
-        // Hent vurderingsdata for første innmelding
-        var førsteInnmelding = alleSaker.First().Item1;
-        var (antallBekreftelser, antallAvkreftelser) =
-            await _vurderingRepository.HentAntallVurderingerAsync(førsteInnmelding.InnmeldingId);
-        var kommentarer =
-            await _vurderingRepository.HentKommentarerForInnmeldingAsync(førsteInnmelding.InnmeldingId);
-
-        var viewModel = new KartvisningEnInnmeldingSaksBViewModel
-        {
-            AlleInnmeldinger = alleSaker,
-            AntallBekreftelser = antallBekreftelser,
-            AntallAvkreftelser = antallAvkreftelser,
-            Kommentarer = kommentarer
-        };
 
         return View(viewModel);
     }
