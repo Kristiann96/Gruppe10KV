@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/pages/kart/map_view.css"/>
 }
 <style>
+    /* Styling for the popup */
     .info-panel {
         position: absolute;
         top: 50%;
@@ -21,10 +22,17 @@
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         z-index: 1000;
-        max-width: 450px;
+        max-width: 800px;
         text-align: center;
         font-family: 'Arial', sans-serif;
     }
+
+        .info-panel p {
+            margin: 0;
+            line-height: 1.6;
+            color: #333;
+            font-size: 16px;
+        }
 
     .close-button {
         position: absolute;
@@ -35,6 +43,7 @@
         cursor: pointer;
         font-size: 20px;
         color: #999;
+        transition: color 0.3s;
     }
 
         .close-button:hover {
@@ -49,12 +58,26 @@
         text-decoration: underline;
         cursor: pointer;
         font-size: 14px;
+        transition: color 0.3s;
     }
 
         .hide-forever:hover {
             color: #333;
         }
+
 </style>
+<div id="infoPanel" class="info-panel">
+    <button class="close-button">&times;</button>
+    <h3>Marker feil med verktøyene til venstre.</h3>
+    <p>Polygon: Tegn et område ved å klikke. Klikk på startpunktet igjen for å fullføre.</p>
+    <p>Polyline: Tegn en linje ved å klikke på flere punkter langs ruten.</p>
+    <p>Rektangel: Klikk og dra for å lage et rektangel.</p>
+    <p>Sirkel: Klikk og dra for å definere sirkulens størrelse.</p>
+    <p>Markør: Klikk et punkt på kartet for å plassere en markør.</p>
+    <p>Du kan også redigere eller slette objektene du har laget ved å velge det tilsvarende ikonet.</p>
+    <p>Tips: Kartet senterer til din posisjon med (finner ikon som passer)</p>
+    <button class="hide-forever">Ikke vis dette igjen</button>
+</div>
 
 <div class="map-page-container">
     <div class="map-card">
@@ -66,11 +89,7 @@
         <div class="map-content">
             <div id="map"></div>
         </div>
-        <div id="infoPanel" class="info-panel">
-            <button class="close-button">&times;</button>
-            <p>Her kan du enten velge flere saker ved å tegne et utsnitt med verktøyet, eller klikke direkte på en enkeltsak for å se oppsummering</p>
-            <button class="hide-forever">Ikke vis dette igjen</button>
-        </div>
+        
 
         <div class="map-controls">
             <button onclick="toggleKommuneGrenser()" id="kommuneButton" class="map-button map-button-secondary">
