@@ -10,11 +10,23 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
     <!--<link rel="stylesheet" href="~/css/pages/kart/map_view.css"/>-->
     <link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartfeilMarkering.css" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 }
 
-
 <div class="map-page-container">
+    <div id="welcomeModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Marker feil med verktøyene til venstre.</h3>
+            <p><b>Polygon:</b> Tegn et område ved å klikke. Klikk på startpunktet igjen for å fullføre.</p>
+            <p><b>Polyline:</b> Tegn en linje ved å klikke på flere punkter langs ruten.</p>
+            <p><b>Rektangel:</b>Rektangel: Klikk og dra for å lage et rektangel.</p>
+            <p class="markorThing"><b>Markør:</b> Klikk et punkt på kartet for å plassere en markør.</p>
+            <p>Du kan også redigere eller slette objektene du har laget ved å velge det tilsvarende ikonet.</p>
+            <p><b>Tips:</b> Kartet senterer til din posisjon med <i class="fa-solid fa-location-arrow"></i></p>
+            <button id="acceptBtn" class="modal-button">OK, jeg forstår</button>
+        </div>
+    </div>
+
     <div class="map-card">
         <div class="map-header">
             <h1 class="map-title">Marker feil på kart</h1>
@@ -25,12 +37,13 @@
             <div id="map"></div>
         </div>
 
+
         <div class="map-controls">
             <button onclick="toggleKommuneGrenser()" id="kommuneButton" class="map-button map-button-secondary">
                 Vis kommunegrenser
             </button>
             <form method="get" action="@Url.Action("KartfeilSkjema", "KartfeilSkjema")" class="d-inline">
-                <input type="hidden" id="geoJsonHidden" name="geoJson" />
+                <input type="hidden" id="geoJsonHidden" name="geoJson"/>
                 <button type="submit" id="sendGeometri" class="map-button map-button-primary" disabled>
                     Gå til skjema
                 </button>
@@ -45,14 +58,99 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
         <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
         <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+        <script>
+            // Disable map interaction when modal is shown
+            document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('map').style.pointerEvents = 'none';
+            });
+
+            // Enable map interaction when modal is closed
+            document.getElementById('acceptBtn').addEventListener('click', function () {
+            document.getElementById('welcomeModal').classList.add('hide');
+            document.getElementById('map').style.pointerEvents = 'auto';
+            });
+        </script>
+        
 
         <!-- Våre konfigurasjonsfiler -->
         <script src="~/js/maps/config/mapConfig.js"></script>
-        <script src="~/js/maps/config/drawConfig.js"></script>
+        <script>
+                    // drawConfig.js
+        const DrawConfig = {
+            // Konfigurasjon for tegne-verktøy
+            drawOptions: {
+                draw: {
+                    polygon: true,
+                    polyline: true,
+                    rectangle: true,
+                    circle: false,
+                    marker: true,
+                    circlemarker: false
+                },
+                edit: {
+                    featureGroup: null, // Dette settes når vi initialiserer
+                    edit: true,
+                    remove: true
+                }
+            },
+
+            // Initialiser tegne-verktøy på et kart
+            initializeDrawControl: function (map) {
+                // Opprett en FeatureGroup for å lagre tegnede elementer
+                const drawnItems = new L.FeatureGroup();
+                map.addLayer(drawnItems);
+
+                // Oppdater edit options med FeatureGroup
+                this.drawOptions.edit.featureGroup = drawnItems;
+
+                // Opprett og legg til tegne-kontroll
+                const drawControl = new L.Control.Draw(this.drawOptions);
+                map.addControl(drawControl);
+
+                // Håndter tegne-hendelser
+                map.on(L.Draw.Event.CREATED, function (event) {
+                    const layer = event.layer;
+                    drawnItems.addLayer(layer);
+
+                    // Konverter til GeoJSON
+                    const geoJsonData = layer.toGeoJSON();
+
+                    // Hvis det finnes et skjult felt, oppdater det
+                    const hiddenField = document.getElementById('geoJsonHidden');
+                    if (hiddenField) {
+                        hiddenField.value = JSON.stringify(geoJsonData);
+                    }
+                });
+
+                return drawnItems;
+            }
+                    };
+        </script>
         <script src="~/js/maps/services/wmsService.js"></script>
         <script src="~/js/maps/utils/mapControls.js"></script>
 
         <script>
+            function closePanel() {
+                const infoPanel = document.getElementById('infoPanel');
+                if (infoPanel) {
+                    infoPanel.style.display = 'none';
+                }
+                        }
+
+            // Add event listeners when DOM is loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                const closeButton = document.querySelector('.close-button');
+                const hideForeverButton = document.querySelector('.hide-forever');
+    
+                if (closeButton) {
+                    closeButton.addEventListener('click', closePanel);
+                }
+    
+                if (hideForeverButton) {
+                    hideForeverButton.addEventListener('click', closePanel);
+                }
+            });
+
             // Initialiser kartet
             const map = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
 
@@ -86,5 +184,6 @@
                 document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
                 document.getElementById('sendGeometri').disabled = false; // Aktiver knappen
             });
+            
         </script>
 }
