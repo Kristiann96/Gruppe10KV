@@ -39,64 +39,6 @@ namespace DataAccess
             return await connection.QuerySingleOrDefaultAsync<Geometri>(sql, new { InnmeldingId = innmeldingId });
         }
 
-        // Hent geometri med limit for OppdatereInnmelding (Innmelderside)
-        public async Task<Geometri> GetGeometriOppdatereInnmelding(int innmeldingId)
-        {
-            using var connection = _dbConnection.CreateConnection();
-            var sql = @"
-                    SELECT 
-                    geometri_id AS GeometriId, 
-                    innmelding_id AS InnmeldingId, 
-                    ST_AsGeoJSON(geometri_data) AS GeometriGeoJson 
-                FROM geometri 
-                WHERE innmelding_id = @InnmeldingId
-                LIMIT 1";
-
-            var result = await connection.QuerySingleOrDefaultAsync<Geometri>(sql,
-                new { InnmeldingId = innmeldingId });
-
-            return result;
-        }
-
-        //Oppdatering av geometri data fra bruker på "OppdatereInnmelding"
-        /*public async Task<Geometri> OppdatereInnmeldingGeometriAsync(int innmeldingId, string geometriGeoJson)
-        {
-            using var connection = _dbConnection.CreateConnection();
-            using var transaction = await connection.BeginTransactionAsync();
-
-            try
-            {
-                var sql = @"
-                        UPDATE geometri 
-                        SET geometri_data = ST_GeomFromGeoJSON(@GeometriGeoJson)
-                        WHERE innmelding_id = @InnmeldingId";
-
-                var parameters = new
-                {
-                    InnmeldingId = innmeldingId,
-                    GeometriGeoJson = geometriGeoJson
-                };
-
-                var rowsAffected = await connection.ExecuteAsync(sql, parameters, transaction);
-                await transaction.CommitAsync();
-
-                if (rowsAffected > 0)
-                {
-                    return await GetGeometriByInnmeldingIdAsync(innmeldingId);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }*/
-
-
         public async Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync()
         {
             using var connection = _dbConnection.CreateConnection();

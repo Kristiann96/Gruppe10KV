@@ -117,20 +117,6 @@ namespace DataAccess
 
         /* Ørjan over */
 
-        //InnmeldingEnumLogic for status
-        /*public async Task<string> GetStatusEnumValuesAsync()
-        {
-            using var connection = _dbConnection.CreateConnection();
-            var sql = @"
-            SELECT SUBSTRING(COLUMN_TYPE, 6, LENGTH(COLUMN_TYPE) - 6) AS EnumValues
-            FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_SCHEMA = DATABASE()
-            AND TABLE_NAME = 'innmelding'
-            AND COLUMN_NAME = 'status'";
-            return await connection.QuerySingleOrDefaultAsync<string>(sql);
-        }*/
-
-
         public async Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(int innmelderId)
         {
             using var connection = _dbConnection.CreateConnection();

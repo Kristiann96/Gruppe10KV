@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Models.Entities
 {
-    internal class TilbakemeldingModel
-    {
+    
+    
         public class Tilbakemelding
         {
             // Primærnøkkel
@@ -23,5 +23,5 @@ namespace Models.Entities
         }
 
 
-    }
+    
 }
