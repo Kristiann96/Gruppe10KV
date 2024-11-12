@@ -9,7 +9,6 @@
     <div class="login-card">
         <h1 class="login-card__title">Logg inn</h1>
         <form method="post" asp-controller="LoggInn" asp-action="LoggInn" style="width: 100%;">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="login-form-group">
                 <label asp-for="Email" class="login-label"></label>
                 <input asp-for="Email" class="login-input" placeholder="Din e-postadresse" />
@@ -20,6 +19,7 @@
                 <input asp-for="Password" class="login-input" placeholder="Ditt passord" />
                 <span asp-validation-for="Password" class="login-error"></span>
             </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger" align="center"></div>
             @Html.AntiForgeryToken()
             <button type="submit" class="login-button">Logg inn</button>
         </form>
