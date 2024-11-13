@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ViewModels.LoggInnViewModel
+@{
     Layout = "_Layout";
 }
 <head>
@@ -7,27 +8,24 @@
 <div class="login-page">
     <div class="login-card">
         <h1 class="login-card__title">Logg inn</h1>
-
-        <form method="post" asp-controller="LandingsSide" asp-action="LandingsSide" style="width: 100%;">
+        <form method="post" asp-controller="LoggInn" asp-action="LoggInn" style="width: 100%;">
             <div class="login-form-group">
-                <label class="login-label" for="email">E-post</label>
-                <input id="email" type="email" class="login-input" placeholder="Din e-postadresse" required />
-                <span class="login-error"></span>
+                <label asp-for="Email" class="login-label"></label>
+                <input asp-for="Email" class="login-input" placeholder="Din e-postadresse" />
+                <span asp-validation-for="Email" class="login-error"></span>
             </div>
-
             <div class="login-form-group">
-                <label class="login-label" for="password">Passord</label>
-                <input id="password" type="password" class="login-input" placeholder="Ditt passord" required />
-                <span class="login-error"></span>
+                <label asp-for="Password" class="login-label">Passord</label>
+                <input asp-for="Password" class="login-input" placeholder="Ditt passord" />
+                <span asp-validation-for="Password" class="login-error"></span>
             </div>
-
+            <div asp-validation-summary="ModelOnly" class="text-danger" align="center"></div>
+            @Html.AntiForgeryToken()
             <button type="submit" class="login-button">Logg inn</button>
         </form>
-
         <div class="forgot-password">
             <a href="#" class="forgot-password-link">Glemt passord?</a>
         </div>
-
         <div class="register-section">
             <p class="register-text">
                 Ikke registrert?
