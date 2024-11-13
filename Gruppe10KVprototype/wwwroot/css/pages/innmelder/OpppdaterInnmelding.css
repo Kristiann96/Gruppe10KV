@@ -1,5 +1,14 @@
-﻿/* OppdatereInnmelding.css */
+﻿/* OppdaterInnmelding.css */
+/* Fargevariabler */
+:root {
+    --kartverket-gronn: #1a833b;
+    --kartverket-blaa: #00509c;
+    --bakgrunn-graa: #f0f0f0;
+    --avbryt-graa: #808080;
+    --roed: #fa3838;
+}
 
+/* Layout */
 .map-page-container {
     display: flex;
     min-height: 90vh;
@@ -9,12 +18,12 @@
 
 /* Venstre side - Skjema */
 .form-side {
-    flex: 0 0 40%; /* Fast bredde på 40% */
+    flex: 0 0 40%;
 }
 
 /* Høyre side - Kart */
 .map-side {
-    flex: 0 0 60%; /* Fast bredde på 60% */
+    flex: 0 0 60%;
 }
 
 #map {
@@ -22,7 +31,7 @@
     height: 100%;
     min-height: 600px;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--bakgrunn-graa);
 }
 
 /* Skjema styling */
@@ -34,19 +43,20 @@
 }
 
 .map-header {
+    background-color: var(--kartverket-gronn);
     padding: 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--bakgrunn-graa);
 }
 
 .map-title {
+    color: white;
     margin: 0;
     font-size: 24px;
-    color: #333;
 }
 
 .map-description {
+    color: rgba(255, 255, 255, 0.9);
     margin: 10px 0 0;
-    color: #666;
 }
 
 .map-content {
@@ -67,7 +77,7 @@
 .form-control {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--bakgrunn-graa);
     border-radius: 4px;
     font-size: 14px;
 }
@@ -80,8 +90,8 @@ textarea.form-control {
 /* Knapper */
 .map-controls {
     padding: 20px;
-    background-color: #f8f9fa;
-    border-top: 1px solid #eee;
+    background-color: var(--bakgrunn-graa);
+    border-top: 1px solid var(--bakgrunn-graa);
     display: flex;
     gap: 10px;
     justify-content: flex-end;
@@ -93,24 +103,82 @@ textarea.form-control {
     border: none;
     cursor: pointer;
     font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .map-button-secondary {
-    background-color: #e9ecef;
-    color: #212529;
-}
-
-    .map-button-secondary:hover {
-        background-color: #dee2e6;
-    }
-
-.map-button-primary {
-    background-color: #dc3545;
+    background-color: var(--kartverket-blaa);
     color: white;
 }
 
-    .map-button-primary:hover {
-        background-color: #c82333;
+    .map-button-secondary:hover:not(:disabled) {
+        background-color: #0060b9;
+        transform: translateY(-1px);
+    }
+
+    .map-button-secondary:disabled {
+        background-color: var(--avbryt-graa);
+        cursor: not-allowed;
+        opacity: 0.7;
+        transform: none;
+    }
+
+.map-button-primary {
+    background-color: var(--roed);
+    color: white;
+}
+
+    .map-button-primary:hover:not(:disabled) {
+        background-color: #e62e2e;
+        transform: translateY(-1px);
+    }
+
+.info-popup {
+    display: block; /* Endret fra 'none' for å vise ved start */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid var(--kartverket-gronn);
+    max-width: 350px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+
+.info-popup-title {
+    color: var(--kartverket-gronn);
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+    .info-popup-title i {
+        font-size: 18px;
+    }
+
+.info-popup-content {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+    .info-popup-content ol {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+
+    .info-popup-content li {
+        margin-bottom: 8px;
+    }
+
+    .info-popup-content i {
+        color: var(--kartverket-gronn);
     }
 
 /* Modal styling */
@@ -162,7 +230,7 @@ textarea.form-control {
 
 /* Validering */
 .text-danger {
-    color: #dc3545;
+    color: var(--roed);
     font-size: 12px;
     margin-top: 4px;
 }
@@ -173,7 +241,8 @@ textarea.form-control {
         flex-direction: column;
     }
 
-    .form-side, .map-side {
+    .form-side,
+    .map-side {
         flex: 1 1 auto;
         width: 100%;
     }
