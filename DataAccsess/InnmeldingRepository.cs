@@ -35,41 +35,10 @@ namespace DataAccess
                     beskrivelse AS Beskrivelse
                 FROM innmelding
                 WHERE innmelding_id = @InnmeldingId";
-            
+
             return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingIdUpdate });
         }
 
-        //Oppdatering av innmelding for "OppdatereInnmelding"
-        public async Task OppdatereInnmeldingFormAsync(InnmeldingModel innmelding)
-        {
-            using var connection = _dbConnection.CreateConnection();
-            if (connection.State != System.Data.ConnectionState.Open)
-            {
-                await connection.OpenAsync(); // Explicitly open the connection
-            }
-            using var transaction = await connection.BeginTransactionAsync();
-
-            try
-            {
-                var sql = @"UPDATE innmelding
-                        SET tittel = @Tittel,
-                            beskrivelse = @Beskrivelse
-                        WHERE innmelding_id = @InnmeldingId";
-
-                // Execute the database operation within the transaction
-                await connection.ExecuteAsync(sql, innmelding, transaction);
-
-                // Commit the transaction if everything goes well
-                await transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                // Rollback the transaction if an error occurs
-                await transaction.RollbackAsync();
-                Console.WriteLine(e);
-                throw;
-            }
-        }
 
         /* Ørjan */
         public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber,
@@ -264,6 +233,40 @@ namespace DataAccess
                 throw;
             }
         }
+        //innmelder oppdaterer kun tittel og beskrivelse
+        public async Task<bool> OppdatereInnmeldingAsync(InnmeldingModel innmelding)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                var sql = @"
+            UPDATE innmelding 
+            SET tittel = @Tittel,
+                beskrivelse = @Beskrivelse,
+                siste_endring = CURRENT_TIMESTAMP
+            WHERE innmelding_id = @InnmeldingId";
+
+                var parameters = new
+                {
+                    innmelding.InnmeldingId,
+                    innmelding.Tittel,
+                    innmelding.Beskrivelse
+                };
+
+                var rowsAffected = await connection.ExecuteAsync(sql, parameters, transaction);
+                await transaction.CommitAsync();
+
+                return rowsAffected > 0;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
 
     }
 }

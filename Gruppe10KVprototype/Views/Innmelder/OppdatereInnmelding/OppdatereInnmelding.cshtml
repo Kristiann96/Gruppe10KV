@@ -1,55 +1,97 @@
-﻿@model ViewModels.OppdatereInnmeldingViewModel
+﻿@model OppdatereInnmeldingViewModel
 @{
-
+    ViewData["Title"] = "Oppdatere innmelding";
     Layout = "_Layout";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
-    <link rel="stylesheet" href="~/css/pages/innmelder/OpppdaterInnmelding.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
+    <link rel="stylesheet" href="~/css/pages/innmelder/OppdaterInnmelding.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 }
-<title>Oppdatere Innmelding</title>
-<div class="main-container">
-    <div class="left-panel">
-        @foreach (var OppdatereInnmeldinger in Model.OppdatereInnmeldinger)
-        {
-            <form asp-action="OppdatereInnmeldingForm" method="post" class="updateRegisteredCaseForm">
-                <div class="updateRegisteredCaseID">
-                    <h3>Sak ID #@OppdatereInnmeldinger.InnmeldingId</h3>
-                    <div class="updateRegisteredCaseStatus">
-                        <h3>Status: @OppdatereInnmeldinger.Status</h3>
+
+<div class="map-page-container">
+    <!-- Venstre side: Form -->
+    <div class="form-side">
+        <div class="map-card">
+            <div class="map-header">
+                <h1 class="map-title">Oppdatere innmelding</h1>
+                <p class="map-description">Rediger informasjon om kartfeilen</p>
+            </div>
+
+            <div class="map-content">
+                <form id="innmeldingForm" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.InnmeldingId)
+                    @Html.HiddenFor(m => m.GeometriGeoJson)
+
+                    <div class="form-group">
+                        <label asp-for="Tittel">Tittel</label>
+                        <input asp-for="Tittel" class="form-control" />
+                        <span asp-validation-for="Tittel" class="text-danger"></span>
                     </div>
-                    <input type="hidden" name="InnmeldingId" value="@OppdatereInnmeldinger.InnmeldingId" />
-                </div>
 
-                <div class="updateRegisteredCaseSubject">
-                    <h3 class="oppdaterInnmeldingTittel">Tittel:</h3>
-                    <input type="text" name="Tittel" value="@OppdatereInnmeldinger.Tittel" />
-                </div>
-
-                <div class="updateRegisteredCaseDescription">
-                    <h3>Beskrivelse:</h3>
-                    <textarea name="Beskrivelse">@OppdatereInnmeldinger.Beskrivelse</textarea>
-                </div>
-
-                <div class="button-container">
-                    <div class="updateRegisteredCaseActionButtons">
-                        <button type="button" id="redirectToLandingsSideButton">Oppdater innmelding</button>
+                    <div class="form-group">
+                        <label asp-for="Beskrivelse">Beskrivelse</label>
+                        <textarea asp-for="Beskrivelse" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Beskrivelse" class="text-danger"></span>
                     </div>
-                </div>
-            </form>
-        }
+
+                    <div class="map-controls">
+                        <button type="button" id="lagreTekstBtn" class="map-button map-button-secondary">
+                            Lagre tekst
+                        </button>
+                        <button type="button" id="lagreGeometriBtn" class="map-button map-button-secondary" disabled>
+                            Lagre geometri
+                        </button>
+                        <button type="button" id="slettInnmeldingBtn" class="map-button map-button-primary">
+                            Slett innmelding
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <div class="right-panel">
-        <div class="map-container">
-            <!--<h3 class="kartvisningFeilTitel"></h3>-->
-            <div class="updateRegisteredMapViewErrors">
-                <div id="map"></div>
-            </div>
+    <!-- Høyre side: Kart -->
+    <div class="map-side">
+        <div id="map"></div>
+    </div>
+</div>
+
+<!-- Modal for sletting -->
+<div id="slettModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Bekreft sletting</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Er du sikker på at du vil slette denne innmeldingen? Dette kan ikke angres.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="map-button map-button-secondary" onclick="lukkSlettModal()">Avbryt</button>
+            <button class="map-button map-button-primary" onclick="slettInnmelding()">Slett</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for ulagrede endringer -->
+<div id="endringerModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Ulagrede endringer</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Du har ulagrede endringer. Vil du lagre før du forlater siden?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="map-button map-button-secondary" onclick="forlat()">Forlat uten å lagre</button>
+            <button class="map-button map-button-primary" onclick="lagreOgForlat()">Lagre og forlat</button>
         </div>
     </div>
 </div>
@@ -60,63 +102,174 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
-
-    <!-- Konfig av MapViews -->
+    
+    <!-- Våre konfigurasjonsfiler -->
     <script src="~/js/maps/config/mapConfig.js"></script>
     <script src="~/js/maps/config/drawConfig.js"></script>
     <script src="~/js/maps/services/wmsService.js"></script>
     <script src="~/js/maps/utils/mapControls.js"></script>
 
+    <!-- Validering -->
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script>
-        const map = MapConfig.initializeMap('map');
-        // Initialize draw control
+        let harUlagredeEndringer = false;
+        let geometriEndret = false;
+
+        // Initialisering av kart
+        const map = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
         const drawnItems = DrawConfig.initializeDrawControl(map);
 
-        MapControls.initializeSearch(map);
-        @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
-        {
-            <text>
-                const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
-                const geoJsonLayer = L.geoJSON(geoJsonFeature, {
+        // Initialiser søk og lokalisering
+        MapControls.initializeControls(map);
+
+        // Last eksisterende geometri hvis den finnes
+        if ('@Model.GeometriGeoJson') {
+            try {
+                const geoJson = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
+                console.log('Parsed GeoJSON:', geoJson);
+                L.geoJSON(geoJson, {
                     onEachFeature: function (feature, layer) {
-                    drawnItems.addLayer(layer);
+                        drawnItems.addLayer(layer);
                     }
-                }).addTo(map);
-                map.fitBounds(geoJsonLayer.getBounds());
-            </text>
+                });
+                map.fitBounds(drawnItems.getBounds());
+            } catch (error) {
+                console.error('Error parsing or displaying GeoJSON:', error);
+            }
         }
 
-        // Handle draw:edited event to update hidden input field
-        map.on(L.Draw.Event.EDITED, function (event) {
-            const layers = event.layers;
+        // Håndter tegning og redigering
+        map.on(L.Draw.Event.CREATED, function (e) {
+            drawnItems.clearLayers(); // Fjerner eksisterende geometri
+            const layer = e.layer;
+            drawnItems.addLayer(layer);
+            
+            const geoJson = layer.toGeoJSON();
+            document.getElementById('GeometriGeoJson').value = JSON.stringify(geoJson);
+            document.getElementById('lagreGeometriBtn').disabled = false;
+            geometriEndret = true;
+        });
+
+        map.on(L.Draw.Event.EDITED, function (e) {
+            const layers = e.layers;
             layers.eachLayer(function (layer) {
-                const geoJsonData = layer.toGeoJSON();
-                document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
+                const geoJson = layer.toGeoJSON();
+                document.getElementById('GeometriGeoJson').value = JSON.stringify(geoJson);
+                geometriEndret = true;
+                document.getElementById('lagreGeometriBtn').disabled = false;
             });
         });
 
-        // Handle draw:created event to update hidden input field
-        map.on(L.Draw.Event.CREATED, function (event) {
-            const layer = event.layer;
-            drawnItems.addLayer(layer);
-            const geoJsonData = layer.toGeoJSON();
-            document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
+        map.on(L.Draw.Event.DELETED, function (e) {
+            if (drawnItems.getLayers().length === 0) {
+                document.getElementById('GeometriGeoJson').value = '';
+                geometriEndret = true;
+                document.getElementById('lagreGeometriBtn').disabled = false;
+            }
         });
 
-        // Handle draw:deleted event to clear hidden input field
-        map.on(L.Draw.Event.DELETED, function (event) {
-            document.getElementById('geoJsonHidden').value = '';
+        // Form endringer
+        const form = document.getElementById('innmeldingForm');
+        form.addEventListener('input', function () {
+            harUlagredeEndringer = true;
         });
 
-        // Handle button click and redirect
-        document.getElementById('redirectToLandingsSideButton').addEventListener('click', function () {
-            this.classList.add('clicked');
-            
-            // Delay to show the color change
-            setTimeout(() => {
-                alert('Takk for din oppdaterte innmelding!');
-                window.location.href = '@Url.Action("LandingsSide", "LandingsSide")';
-            }, 500);
+        // Lagre tekst
+        document.getElementById('lagreTekstBtn').addEventListener('click', async function () {
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const formData = new FormData(form);
+            try {
+                const response = await fetch('@Url.Action("OppdatereInnmeldingDetaljer")', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    harUlagredeEndringer = false;
+                    visStatusMelding('Tekst lagret');
+                } else {
+                    visStatusMelding('Kunne ikke lagre tekst', true);
+                }
+            } catch (error) {
+                visStatusMelding('En feil oppstod', true);
+            }
         });
+
+        // Lagre geometri
+        document.getElementById('lagreGeometriBtn').addEventListener('click', async function () {
+            const geometriData = {
+                innmeldingId: @Model.InnmeldingId,
+                geometriGeoJson: document.getElementById('GeometriGeoJson').value
+            };
+
+            try {
+                const response = await fetch('@Url.Action("OppdatereGeometri")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify(geometriData)
+                });
+
+                if (response.ok) {
+                    geometriEndret = false;
+                    document.getElementById('lagreGeometriBtn').disabled = true;
+                    visStatusMelding('Geometri lagret');
+                } else {
+                    visStatusMelding('Kunne ikke lagre geometri', true);
+                }
+            } catch (error) {
+                visStatusMelding('En feil oppstod', true);
+            }
+        });
+
+        // Slett-dialog
+        function visSlettModal() {
+            document.getElementById('slettModal').style.display = 'block';
+        }
+
+        function lukkSlettModal() {
+            document.getElementById('slettModal').style.display = 'none';
+        }
+
+        async function slettInnmelding() {
+            try {
+                const response = await fetch('@Url.Action("SlettInnmelding", new { innmeldingId = Model.InnmeldingId })', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                });
+
+                if (response.ok) {
+                    window.location.href = '@Url.Action("Index", "Home")';
+                } else {
+                    visStatusMelding('Kunne ikke slette innmeldingen', true);
+                }
+            } catch (error) {
+                visStatusMelding('En feil oppstod', true);
+            }
+        }
+
+        document.getElementById('slettInnmeldingBtn').addEventListener('click', visSlettModal);
+
+        // Håndtere ulagrede endringer
+        window.addEventListener('beforeunload', function (e) {
+            if (harUlagredeEndringer || geometriEndret) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // Helper for statusmeldinger
+        function visStatusMelding(melding, erFeil = false) {
+            alert(melding); // Midlertidig løsning
+        }
     </script>
 }

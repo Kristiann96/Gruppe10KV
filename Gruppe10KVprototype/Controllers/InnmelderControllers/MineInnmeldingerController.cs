@@ -9,7 +9,7 @@ using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers
 {
-    [Route("[controller]/[action]")]
+   
     public class MineInnmeldingerController : Controller
     {
         private readonly IInnmeldingRepository _innmeldingRepository;

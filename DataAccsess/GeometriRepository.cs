@@ -64,11 +64,41 @@ namespace DataAccess
 
             return result;
         }
+        //innmelder oppdaterer kun geoJson
+        public async Task<bool> OppdatereGeometriAsync(int innmeldingId, string geometriGeoJson)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                var sql = @"
+            UPDATE geometri 
+            SET geometri_data = ST_GeomFromGeoJSON(@GeometriGeoJson)
+            WHERE innmelding_id = @InnmeldingId";
+
+                var parameters = new
+                {
+                    InnmeldingId = innmeldingId,
+                    GeometriGeoJson = geometriGeoJson
+                };
+
+                var rowsAffected = await connection.ExecuteAsync(sql, parameters, transaction);
+                await transaction.CommitAsync();
+
+                return rowsAffected > 0;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
     }
-    
+
 }
 
-    
+
 
 
 
