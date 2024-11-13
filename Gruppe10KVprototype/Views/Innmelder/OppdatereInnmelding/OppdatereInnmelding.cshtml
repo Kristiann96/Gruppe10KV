@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
-    <link rel="stylesheet" href="~/css/pages/innmelder/OppdaterInnmelding.css" />
+    <link rel="stylesheet" href="~css\pages\innmelder\OpppdaterInnmelding.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 }
 
@@ -118,16 +118,38 @@
 
         // Initialisering av kart
         const map = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
-        const drawnItems = DrawConfig.initializeDrawControl(map);
+        const drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        // Konfigurer draw control
+        const drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems,
+                edit: {
+                    selectedPathOptions: {
+                        maintainColor: true,
+                        moveMarkers: true
+                    }
+                }
+            },
+            draw: {
+                polygon: true,
+                polyline: true,
+                rectangle: true,
+                circle: false,
+                circlemarker: false,
+                marker: true
+            }
+        });
+        map.addControl(drawControl);
 
         // Initialiser søk og lokalisering
         MapControls.initializeControls(map);
 
-        // Last eksisterende geometri hvis den finnes
+        // Last eksisterende geometri
         if ('@Model.GeometriGeoJson') {
             try {
                 const geoJson = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
-                console.log('Parsed GeoJSON:', geoJson);
                 L.geoJSON(geoJson, {
                     onEachFeature: function (feature, layer) {
                         drawnItems.addLayer(layer);
@@ -135,37 +157,74 @@
                 });
                 map.fitBounds(drawnItems.getBounds());
             } catch (error) {
-                console.error('Error parsing or displaying GeoJSON:', error);
+                console.error('Error loading geometry:', error);
             }
         }
 
-        // Håndter tegning og redigering
-        map.on(L.Draw.Event.CREATED, function (e) {
-            drawnItems.clearLayers(); // Fjerner eksisterende geometri
-            const layer = e.layer;
-            drawnItems.addLayer(layer);
+        // Håndter redigering
+map.on('draw:editstart', function (e) {
+    console.log('Edit started');
+});
+
+map.on('draw:editstop', function (e) {
+    console.log('Edit stopped');
+});
+
+// håndter ferdig redigering
+map.on('draw:edited', function (e) {
+    console.log('Edit save triggered');
+    const layers = e.layers;
+    layers.eachLayer(function (layer) {
+        const rawGeoJSON = layer.toGeoJSON();
+        console.log('Raw GeoJSON:', rawGeoJSON);
+        
+        // Forsikre oss om at vi har riktig struktur
+        if (rawGeoJSON && rawGeoJSON.geometry && rawGeoJSON.geometry.coordinates) {
+            const cleanGeoJSON = {
+                type: "Feature",
+                geometry: {
+                    type: rawGeoJSON.geometry.type,
+                    coordinates: rawGeoJSON.geometry.coordinates
+                },
+                properties: {}
+            };
             
-            const geoJson = layer.toGeoJSON();
-            document.getElementById('GeometriGeoJson').value = JSON.stringify(geoJson);
+            // Lagre som streng direkte
+            const geoJsonString = JSON.stringify(cleanGeoJSON);
+            console.log('GeoJSON string:', geoJsonString);
+            document.getElementById('GeometriGeoJson').value = geoJsonString;
             document.getElementById('lagreGeometriBtn').disabled = false;
             geometriEndret = true;
-        });
+        }
+    });
+});
 
-        map.on(L.Draw.Event.EDITED, function (e) {
-            const layers = e.layers;
-            layers.eachLayer(function (layer) {
-                const geoJson = layer.toGeoJSON();
-                document.getElementById('GeometriGeoJson').value = JSON.stringify(geoJson);
-                geometriEndret = true;
-                document.getElementById('lagreGeometriBtn').disabled = false;
-            });
-        });
+        // Håndter nye geometrier
+       map.on('draw:edited', function (e) {
+    console.log('Edit save triggered');
+    const layers = e.layers;
+    layers.eachLayer(function (layer) {
+        const rawGeoJSON = layer.toGeoJSON();
+        // Send bare geometry-objektet
+        const geometryOnly = {
+            type: rawGeoJSON.geometry.type,          // f.eks. "Polygon"
+            coordinates: rawGeoJSON.geometry.coordinates  // Koordinat-arrayet
+        };
+        
+        console.log('Clean Geometry:', geometryOnly);
+        document.getElementById('GeometriGeoJson').value = JSON.stringify(geometryOnly);
+        document.getElementById('lagreGeometriBtn').disabled = false;
+        geometriEndret = true;
+    });
+});
 
-        map.on(L.Draw.Event.DELETED, function (e) {
+        // Håndter sletting
+        map.on('draw:deleted', function (e) {
+            console.log('Deleted geometry');
             if (drawnItems.getLayers().length === 0) {
                 document.getElementById('GeometriGeoJson').value = '';
-                geometriEndret = true;
                 document.getElementById('lagreGeometriBtn').disabled = false;
+                geometriEndret = true;
             }
         });
 
@@ -186,14 +245,18 @@
             try {
                 const response = await fetch('@Url.Action("OppdatereInnmeldingDetaljer")', {
                     method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
                     body: formData
                 });
 
-                if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
                     harUlagredeEndringer = false;
                     visStatusMelding('Tekst lagret');
                 } else {
-                    visStatusMelding('Kunne ikke lagre tekst', true);
+                    visStatusMelding(result.message || 'Kunne ikke lagre tekst', true);
                 }
             } catch (error) {
                 visStatusMelding('En feil oppstod', true);
@@ -201,32 +264,46 @@
         });
 
         // Lagre geometri
-        document.getElementById('lagreGeometriBtn').addEventListener('click', async function () {
-            const geometriData = {
-                innmeldingId: @Model.InnmeldingId,
-                geometriGeoJson: document.getElementById('GeometriGeoJson').value
-            };
+    document.getElementById('lagreGeometriBtn').addEventListener('click', async function () {
+    try {
+        const geometriJson = document.getElementById('GeometriGeoJson').value;
+        // geometriJson er allerede en JSON-streng, så vi trenger ikke stringify den igjen
+        
+        const model = {
+            InnmeldingId: parseInt(document.querySelector('input[name="InnmeldingId"]').value),
+            GeometriGeoJson: geometriJson  // Bruk stringen direkte
+        };
 
-            try {
-                const response = await fetch('@Url.Action("OppdatereGeometri")', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                    },
-                    body: JSON.stringify(geometriData)
-                });
+        console.log('Model before stringify:', model); // Debug
 
-                if (response.ok) {
-                    geometriEndret = false;
-                    document.getElementById('lagreGeometriBtn').disabled = true;
-                    visStatusMelding('Geometri lagret');
-                } else {
-                    visStatusMelding('Kunne ikke lagre geometri', true);
-                }
-            } catch (error) {
-                visStatusMelding('En feil oppstod', true);
-            }
+        const response = await fetch('@Url.Action("OppdatereGeometri")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+            },
+            body: JSON.stringify(model)
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Server error response:', errorText);
+            throw new Error(errorText);
+        }
+
+        const result = await response.json();
+        
+        if (result.success) {
+            geometriEndret = false;
+            document.getElementById('lagreGeometriBtn').disabled = true;
+            visStatusMelding('Geometri lagret');
+        } else {
+            visStatusMelding(result.message || 'Kunne ikke lagre geometri', true);
+        }
+    } catch (error) {
+        console.error('Error details:', error);
+        visStatusMelding('Kunne ikke lagre geometri: ' + error.message, true);
+    }
         });
 
         // Slett-dialog

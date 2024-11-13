@@ -84,11 +84,17 @@ namespace DataAccess
                 };
 
                 var rowsAffected = await connection.ExecuteAsync(sql, parameters, transaction);
-                await transaction.CommitAsync();
 
-                return rowsAffected > 0;
+                // Hvis ingen rader ble påvirket, noe gikk galt
+                if (rowsAffected == 0)
+                {
+                    throw new KeyNotFoundException($"Ingen geometri funnet for innmelding_id {innmeldingId}");
+                }
+
+                await transaction.CommitAsync();
+                return true;
             }
-            catch
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
                 throw;

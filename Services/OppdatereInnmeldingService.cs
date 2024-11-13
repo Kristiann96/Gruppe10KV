@@ -69,6 +69,8 @@ namespace Services
 
         public async Task<bool> OppdatereGeometriAsync(int innmeldingId, string geometriGeoJson)
         {
+            Console.WriteLine($"Mottar geometri oppdatering: {geometriGeoJson}"); // Debug
+
             // Validerer geometri
             var geometri = new Geometri
             {
@@ -79,7 +81,9 @@ namespace Services
             await _innmeldingOpprettelseLogic.ValidereGeometriDataForOppdatering(innmeldingId, geometri);
 
             // Utfører oppdatering
-            return await _geometriRepository.OppdatereGeometriAsync(innmeldingId, geometriGeoJson);
+            var result = await _geometriRepository.OppdatereGeometriAsync(innmeldingId, geometriGeoJson);
+            Console.WriteLine($"Oppdatering resultat: {result}"); // Debug
+            return result;
         }
 
 

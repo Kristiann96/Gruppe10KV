@@ -41,22 +41,21 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             try
             {
                 await _innmeldingService.OppdatereInnmeldingAsync(model);
-                return RedirectToAction("Success");
+                return Json(new { success = true });  // Returner JSON istedenfor redirect
             }
             catch (ValidationException ex)
             {
-                ModelState.AddModelError("", ex.Message);
-                return View("OppdatereInnmelding", model);
+                return Json(new { success = false, message = ex.Message });
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OppdatereGeometri(int innmeldingId, string geometriGeoJson)
+        public async Task<IActionResult> OppdatereGeometri([FromBody] OppdatereInnmeldingViewModel model)
         {
             try
             {
-                await _innmeldingService.OppdatereGeometriAsync(innmeldingId, geometriGeoJson);
+                await _innmeldingService.OppdatereGeometriAsync(model.InnmeldingId, model.GeometriGeoJson);
                 return Json(new { success = true });
             }
             catch (ValidationException ex)
