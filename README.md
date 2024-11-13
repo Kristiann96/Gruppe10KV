@@ -3,6 +3,34 @@
 Welcome to the Gruppe10KV prototype repository! 
 This README serves as a quick guide to understanding, setting up, and working with the code within this repository.
 
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Setup Instructions](#setup-instructions)
+- [Repository Structure](#repository-structure)
+  - [Models](#models)
+  - [Interfaces](#interfaces)
+  - [Data Access](#data-access)
+- [Technologies Used](#technologies-used)
+- [Collaborators](#collaborators)
+- [License](#license)
+
+---
+
+## Overview
+The application "Gruppe10KVprototype" is based on a project from Kartverket, aiming to facilitate user reporting and handling of geospatial data. It provides a user-friendly interface for submitting reports with geolocation data and ensures efficient handling and review of these reports by system administrators.
+
+### What the Application Does
+
+- User Reporting: Users can submit reports and errors about geographical locations, including geospatial data (GeoJSON format).
+- Admin Review: Admin users ("saksbehandlere") can review, assess, and manage these reports efficiently.
+- Data Compilation: The system provides a detailed overview and compilation of various geospatial and user-submitted data.
+- Authentication and User Management: It features a user authentication system for different types of users, including guest reporters and registered users.
+
+---
+<br><br>
 
 ## Setup Instructions
 
@@ -21,13 +49,13 @@ Build the Project: You can build the project using your preferred .NET build com
 
 Configuration: Adjust configuration settings as required. Ensure the database connection strings and other pertinent settings are correctly configured for your environment.
 
-## Usage
-
-To get started with utilizing this repository, you may want to explore the various interfaces and models provided.
+---
+<br><br>
 
 ## Repository Structure
 
-Here's an overview of the key components of the repository:
+Below is an overview of the key components of the repository:
+
 
 ### Models
 
@@ -38,6 +66,8 @@ Below is a simple explanation of one of our models:
   
     Contains the Geometri class which represents geometric data.
     Properties include GeometriId, InnmeldingId, and GeometriGeoJson.
+
+<br><br>
 
 ### Interfaces:
 The Interfaces directory contains all interface definitions for repository patterns, facilitating data operations and abstractions.
@@ -87,6 +117,8 @@ The Interfaces directory contains all interface definitions for repository patte
     Interface for handling transaction-related operations.
     Includes methods for complete report saving, creating, and deleting persons and reporters.
 
+<br><br>
+
 ### Data Access
 
 The DataAccess directory comprises classes implementing interfaces for database operations. This layer interacts with the database using libraries like Dapper.
@@ -128,8 +160,38 @@ The DataAccess directory comprises classes implementing interfaces for database 
     Handles transaction operations for creating and managing composite report entries.
     Manages complex transactions between entities.
 
+---
+<br><br>
 
+## Technologies Used:
+
+- ASP.NET Core MVC: For building the web application with a structured MVC pattern.
+- C#: Main language for backend logic.
+- Dapper ORM: For lightweight and fast database operations.
+- MySQL/MariaDB: Database used for storing and querying user and geospatial data.
+- Leaflet.js: JavaScript library for interactive maps.
+- Kartverket API: For map data and geolocation services.
+
+### Why We Used the Technologies We Used
+
+- ASP.NET MVC: Chosen for its robust framework and built-in support for Model-View-Controller architecture, making it easier to manage different components of the application effectively.
+- Dapper ORM: Used for efficient database interaction with MySQL/MariaDB, providing a lightweight and flexible approach to query execution.
+- MySQL/MariaDB: Selected as the database system due to its scalability and support.
+- Kartverket API & Leaflet.js: Integrated for accurate mapping and visualization of geospatial data, offering users a real-time view of locations on an interactive map.
+
+---
+
+## Collaborators:
+- https://github.com/OlsenLene
+- https://github.com/Galescape
+- https://github.com/TriggeredBanana
+- https://github.com/Kristiann96
+- https://github.com/Martinstomnas
+- https://github.com/emkaas
+
+---
 
 ## License
 
-The project is licensed under the MIT License.
+The project is licensed under the MIT License. <br><br>
+Read more about the MIT License here: https://choosealicense.com/licenses/mit/
