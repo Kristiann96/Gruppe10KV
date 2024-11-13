@@ -15,25 +15,12 @@ namespace Logic
         private const double NORGE_MAX_LON = 32.0;
 
         private readonly ITransaksjonsRepository _transaksjonsRepository;
+        private readonly IGeometriRepository _geometriRepository;
 
-        public InnmeldingOpprettelseLogic(ITransaksjonsRepository transaksjonsRepository)
+        public InnmeldingOpprettelseLogic(ITransaksjonsRepository transaksjonsRepository, IGeometriRepository geometriRepository)
         {
             _transaksjonsRepository = transaksjonsRepository;
-        }
-
-        // Ny metode for bare validering
-        public async Task BareValidereGeometriData(Geometri geometri)
-        {
-            try
-            {
-                using var doc = JsonDocument.Parse(geometri.GeometriGeoJson);
-                ValidereGeometriType(doc.RootElement);
-                ValidereKoordinater(doc.RootElement);
-            }
-            catch (JsonException)
-            {
-                throw new ForretningsRegelExceptionModel("Ugyldig GeoJSON format");
-            }
+            _geometriRepository = geometriRepository;
         }
 
         public async Task<bool> ValidereOgLagreNyInnmelding(
@@ -155,5 +142,71 @@ namespace Logic
                 return false;
             }
         }
+
+        /// <summary>
+        /// Validerer GeoJSON-data for oppdatering av eksisterende geometri
+        /// </summary>
+        /// <param name="innmeldingId">ID for innmeldingen som skal oppdateres</param>
+        /// <param name="geometri">Ny geometri-data som skal valideres</param>
+        /// <returns>True hvis valideringen er vellykket</returns>
+        /// <exception cref="ForretningsRegelExceptionModel">Kastes ved valideringsfeil med spesifikk feilmelding</exception>
+        /// <exception cref="KeyNotFoundException">Kastes hvis geometri ikke finnes for gitt innmeldingId</exception>
+        public async Task<bool> ValidereGeometriDataForOppdatering(int innmeldingId, Geometri geometri)
+        {
+            // Sjekk først at det finnes en eksisterende geometri å oppdatere
+            var eksisterendeGeometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
+            if (eksisterendeGeometri == null)
+            {
+                throw new KeyNotFoundException($"Fant ingen geometri for innmelding med id {innmeldingId}");
+            }
+
+            // Valider at ny geometridata eksisterer
+            if (string.IsNullOrEmpty(geometri.GeometriGeoJson))
+            {
+                throw new ForretningsRegelExceptionModel("GeoJSON data mangler");
+            }
+
+            try
+            {
+                using var doc = JsonDocument.Parse(geometri.GeometriGeoJson);
+
+                // Valider geometritype
+                if (!doc.RootElement.TryGetProperty("type", out var typeProperty))
+                {
+                    throw new ForretningsRegelExceptionModel("GeoJSON mangler 'type' felt");
+                }
+
+                var type = typeProperty.GetString();
+                var støttedeTyper = new[] { "Point", "LineString", "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon" };
+
+                if (!støttedeTyper.Contains(type))
+                {
+                    throw new ForretningsRegelExceptionModel($"Geometritype '{type}' er ikke støttet");
+                }
+
+                // Valider koordinater
+                ValidereKoordinater(doc.RootElement);
+
+                return true;
+            }
+            catch (JsonException ex)
+            {
+                throw new ForretningsRegelExceptionModel($"Ugyldig GeoJSON format: {ex.Message}");
+            }
+        }
+        public async Task<bool> ValiderInnmeldingData(InnmeldingModel innmelding)
+        {
+            if (string.IsNullOrWhiteSpace(innmelding.Tittel))
+                throw new ForretningsRegelExceptionModel("Tittel må fylles ut");
+
+            if (innmelding.Tittel.Length > 100)
+                throw new ForretningsRegelExceptionModel("Tittel kan ikke være lengre enn 100 tegn");
+
+            if (string.IsNullOrWhiteSpace(innmelding.Beskrivelse))
+                throw new ForretningsRegelExceptionModel("Beskrivelse må fylles ut");
+
+            return true;
+        }
+
     }
 }

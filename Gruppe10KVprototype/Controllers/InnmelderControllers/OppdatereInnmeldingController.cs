@@ -1,171 +1,88 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Models.Entities;
-using Models.Models;
-using Interface;
+using System.ComponentModel.DataAnnotations;
 using ViewModels;
-using LogicInterfaces;
-using Models.Exceptions;
-using System.Text.Json;
+using ServicesInterfaces;
 
-
-namespace Gruppe10KVprototype.Controllers.OppdatereInnmelderControllers
+namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
-    [Route("OppdatereInnmelding/[controller]")]
+
+  
     public class OppdatereInnmeldingController : Controller
     {
-        private readonly IGeometriRepository _geometriRepository;
-        private readonly IInnmeldingRepository _innmeldingRepository;
-        private readonly IInnmeldingOpprettelseLogic _innmeldingOpprettelseLogic;
+        private readonly IOppdatereInnmeldingService _innmeldingService;
 
-        public OppdatereInnmeldingController(
-            IInnmeldingRepository innmeldingRepository, 
-            IGeometriRepository geometriRepository, 
-            IInnmeldingOpprettelseLogic innmeldingOpprettelseLogic)
+        public OppdatereInnmeldingController(IOppdatereInnmeldingService innmeldingService)
         {
-            _innmeldingRepository = innmeldingRepository;
-            _geometriRepository = geometriRepository;
-            _innmeldingOpprettelseLogic = innmeldingOpprettelseLogic;
+            _innmeldingService = innmeldingService;
         }
-
-        [HttpGet("index")]
-        public ActionResult Index(int innmeldingIdUpdate)
-        {
-            var viewModel = new OppdatereInnmeldingViewModel
-            {
-                OppdatereInnmeldinger = _innmeldingRepository.GetInnmeldingAsync(innmeldingIdUpdate).Result.ToList()
-            };
-            return View(viewModel);
-        }
-
         
-        [HttpGet("oppdatere")]
-        public async Task<IActionResult> OppdatereInnmelding(int id)
+        
+        [HttpGet]
+        public async Task<IActionResult> OppdatereInnmelding(int innmeldingId)
         {
-            // Retrieve data from repository
-            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.GetInnmeldingAsync(id);
-            
-            if (innmeldinger == null)
+            try
             {
-                return RedirectToAction("MineInnmeldinger", "MineInnmeldinger");
+                var viewModel = await _innmeldingService.HentInnmeldingForOppdateringAsync(innmeldingId);
+                return View(viewModel);
             }
-
-            var geometri = await _geometriRepository.GetGeometriOppdatereInnmelding(id);
-
-            // Create and populate the view model
-            var viewModel = new OppdatereInnmeldingViewModel
+            catch (KeyNotFoundException)
             {
-                OppdatereInnmeldinger = innmeldinger.ToList(),
-                InnmeldingId = id,
-                Geometri = geometri
-            };
-
-            // Pass data to the view
-            return View(viewModel);
+                return NotFound("Innmelding ikke funnet");
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> OppdatereInnmeldingForm(OppdatereInnmeldingViewModel viewModel)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OppdatereInnmeldingDetaljer(OppdatereInnmeldingViewModel model)
         {
-            // Fetch the existing record from the repository
-            var innmelding = (await _innmeldingRepository.GetInnmeldingAsync(viewModel.InnmeldingId)).FirstOrDefault();
-            if (innmelding == null)
+            if (!ModelState.IsValid)
+                return View("OppdatereInnmelding", model);
+
+            try
             {
-                return NotFound();
+                await _innmeldingService.OppdatereInnmeldingAsync(model);
+                return Json(new { success = true });  // Returner JSON istedenfor redirect
             }
-
-            // Update the record with new values
-            innmelding.Tittel = viewModel.Tittel;
-            innmelding.Beskrivelse = viewModel.Beskrivelse;
-
-            // Save changes to the repository
-            await _innmeldingRepository.OppdatereInnmeldingFormAsync(innmelding);
-
-            // Redirect back to the update page or another appropriate page
-            return RedirectToAction("MineInnmeldinger", "MineInnmeldinger");
+            catch (ValidationException ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
-        //Oppdatere geometri data fra bruker på "OppdatereInnmelding"
-        /*[HttpPost("oppdaterGeo")]
-        public async Task<IActionResult> OppdatereInnmeldingGeometri(OppdatereInnmeldingViewModel viewModel)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OppdatereGeometri([FromBody] OppdatereInnmeldingViewModel model)
         {
-            // Validate the input data
-            if (viewModel.InnmeldingId <= 0 || string.IsNullOrEmpty(viewModel.GeometriGeoJson))
-            {
-                // Handle invalid input
-                return BadRequest("Invalid input data.");
-            }
-
             try
             {
-                var geometri = new Geometri
-                {
-                    GeometriGeoJson = viewModel.GeometriGeoJson
-                };
-
-                // Validate only
-                await _innmeldingOpprettelseLogic.BareValidereGeometriData(geometri);
-
-                // If validation passes, update the database
-                var oppdatertGeometri = await _geometriRepository.OppdatereInnmeldingGeometriAsync(
-                    viewModel.InnmeldingId,
-                    viewModel.GeometriGeoJson);
-
-                if (oppdatertGeometri != null)
-                {
-                    return Json(new
-                    {
-                        success = true,
-                        message = "Geometri ble oppdatert",
-                        redirectUrl = Url.Action("MineOppdateringer")
-                    });
-                }
-                else
-                {
-                    return StatusCode(500, "Kunne ikke oppdatere geometrien.");
-                }
+                await _innmeldingService.OppdatereGeometriAsync(model.InnmeldingId, model.GeometriGeoJson);
+                return Json(new { success = true });
             }
-            catch (ForretningsRegelExceptionModel ex)
+            catch (ValidationException ex)
             {
-                return BadRequest(ex.Message);
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SlettInnmelding(int innmeldingId)
+        {
+            try
+            {
+                await _innmeldingService.SlettInnmeldingAsync(innmeldingId);
+                return RedirectToAction("Index", "Home"); // eller hvor du vil redirecte etter sletting
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Innmelding ikke funnet");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "En intern feil oppstod: " + ex.Message);
-            }*/
-
-            /* // Parse the GeoJSON to ensure it's valid
-            try
-            {
-                var geoJsonObject = Newtonsoft.Json.JsonConvert.DeserializeObject(viewModel.GeometriGeoJson);
-                if (geoJsonObject == null)
-                {
-                    return BadRequest("Invalid GeoJSON data.");
-                }
+                ModelState.AddModelError("", "Kunne ikke slette innmeldingen: " + ex.Message);
+                // Redirect tilbake til view med feilmelding
+                return RedirectToAction("OppdatereInnmelding", new { innmeldingId });
             }
-            catch (Exception)
-            {
-                return BadRequest("Invalid GeoJSON format.");
-            }
-
-            try
-            {
-                // Update the database with the new geometry data
-                var oppdatertGeometri = await _geometriRepository.OppdatereInnmeldingGeometriAsync(viewModel.InnmeldingId, viewModel.GeometriGeoJson);
-                if (oppdatertGeometri != null)
-                {
-                    // Provide feedback to the user
-                    return Ok("Geometry updated successfully.");
-                }
-                else
-                {
-                    return StatusCode(500, "An error occurred while updating the geometry.");
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "An internal server error occurred.");
-            }*/
         }
     }
-
+}

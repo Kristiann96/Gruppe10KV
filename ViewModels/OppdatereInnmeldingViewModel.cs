@@ -5,21 +5,32 @@ using Models.Entities;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace ViewModels
 {
     public class OppdatereInnmeldingViewModel
     {
-        public List<InnmeldingModel> OppdatereInnmeldinger { get; set; }
-
-        // Innmeldingdata
         public int InnmeldingId { get; set; }
+
+        [Required(ErrorMessage = "Tittel ma fylles ut")]
+        [StringLength(100, ErrorMessage = "Tittel kan ikke vaere lengre enn 100 tegn")]
+        [Display(Name = "Tittel")]
         public string Tittel { get; set; }
-        public string Status { get; set; }
+
+        [Required(ErrorMessage = "Beskrivelse ma fylles ut")]
+        [Display(Name = "Beskrivelse")]
         public string Beskrivelse { get; set; }
 
-        // Geometridata
-        public Geometri Geometri { get; set; }
         public string GeometriGeoJson { get; set; }
+
+        // Hjelpefelt for å spore endringer i viewet
+        public bool ErTittelEndret { get; set; }
+        public bool ErBeskrivelseEndret { get; set; }
+        public bool ErGeometriEndret { get; set; }
+
+        public bool ErIRedigeringsmodus { get; set; }
+
+
     }
 }

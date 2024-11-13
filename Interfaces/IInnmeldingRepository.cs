@@ -9,13 +9,9 @@ namespace Interface
     {
         //HENTING AV DATA
 
-        //Daniel's interface for "OppdatereInnmelding"
+        //OppdatereInnmelding
         Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate);
-        Task OppdatereInnmeldingFormAsync(InnmeldingModel innmelding);
-        //
-
-
-
+        
         Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm);
         Task<int> GetTotalInnmeldingerTellerSaksBAsync(string searchTerm);
 
@@ -32,7 +28,8 @@ namespace Interface
         Task<bool> OppdatereEnumSaksBAsync(int innmeldingId, InnmeldingModel model);
         Task<bool> OppdaterSaksbehandler(int innmeldingId, int? saksbehandlerId);
         Task<bool> OppdaterInnmelderType(int innmelderId, InnmeldingModel model);
-
+        //setter ny tittel og beskrivelse
+        Task<bool> OppdatereInnmeldingAsync(InnmeldingModel innmelding);
 
 
 

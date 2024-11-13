@@ -1,157 +1,255 @@
-﻿body {
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-    margin-top: 4em;
+﻿/* OppdaterInnmelding.css */
+/* Fargevariabler */
+
+/* Fargevariabler */
+:root {
+    --kartverket-gronn: #1a833b;
+    --kartverket-blaa: #00509c;
+    --bakgrunn-graa: #f0f0f0;
+    --avbryt-graa: #808080;
+    --roed: #fa3838;
 }
 
-.main-container {
+/* Layout */
+.map-page-container {
     display: flex;
-    gap: 2em;
-    max-width: 70%;
-    margin: 0 auto;
-    height: calc(100vh - 40px);
-    padding: 2em;
+    min-height: 90vh;
+    padding: 20px;
+    gap: 20px;
 }
 
-.left-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 400px;
-    max-width: 50%;
+/* Venstre side - Skjema */
+.form-side {
+    flex: 0 0 40%;
 }
 
-.right-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-}
-
-.updateRegisteredCaseID {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1a833b;
-    padding-right: 1em;
-    padding-left: 1em;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2em;
-}
-
-.updateRegisteredCaseID h3 {
-    color: white;
-}
-
-.updateRegisteredCaseStatus h3 {
-    color: white !important;
-}
-
-.updateRegisteredMapViewErrors {
-    flex: 1;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 0;
-    max-width: none;
-}
-
-.updateRegisteredCaseForm {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    max-width: 50em;
-}
-
-.updateRegisteredCaseSubject {
-    margin-bottom: 2em;
-}
-
-.kartvisningFeilTitel {
-    margin: 0 0 1em 0;
-}
-
-.updateRegisteredContainer {
-    max-width: 50em;
-    margin: 2em auto;
-}
-
-.oppdaterInnmeldingTittel {
-    margin-top: 0.5em;
-    margin-bottom: 1em;
-}
-
-.updateRegisteredCaseDescription {
-    margin-bottom: 6em;
-}
-
-.updateRegisteredCaseSubject input[type="text"],
-.updateRegisteredCaseDescription textarea {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    width: 100%;
-    padding: 1.5em;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    resize: none;
-    box-sizing: border-box;
-}
-
-.updateRegisteredCaseDescription textarea {
-    flex-grow: 1;
-    margin: 0;
-    height: 100%;
+/* Høyre side - Kart */
+.map-side {
+    flex: 0 0 60%;
 }
 
 #map {
-    height: 100% !important;
-    width: 100% !important;
-    min-height: 20em;
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    border-radius: 8px;
+    border: 1px solid var(--bakgrunn-graa);
 }
 
-.map-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    max-height: 60vh;
-    margin-bottom: 2em;
+/* Skjema styling */
+.map-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 100%;
 }
 
-#redirectToLandingsSideButton {
-    background-color: #00509c;
+.map-header {
+    background-color: var(--kartverket-gronn);
+    padding: 20px;
+    border-bottom: 1px solid var(--bakgrunn-graa);
+}
+
+.map-title {
     color: white;
-    border: none;
-    padding: 1em 2em;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    font-size: 24px;
 }
 
-#redirectToLandingsSideButton:hover {
-    background-color: #003f7f;
-    transform: scale(1.05);
+.map-description {
+    color: rgba(255, 255, 255, 0.9);
+    margin: 10px 0 0;
 }
 
-#redirectToLandingsSideButton:active {
-    background-color: #002f5f;
-    transform: scale(0.95);
+.map-content {
+    padding: 20px;
 }
 
-.button-container {
+/* Form elementer */
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--bakgrunn-graa);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Knapper */
+.map-controls {
+    padding: 20px;
+    background-color: var(--bakgrunn-graa);
+    border-top: 1px solid var(--bakgrunn-graa);
     display: flex;
-    justify-content: center;
-    padding: 1em 0;
+    gap: 10px;
+    justify-content: flex-end;
 }
 
-.clicked {
-    background-color: #1a833b !important;
+.map-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
-.updateRegisteredCaseActionButtons {
-    text-align: right;
+.map-button-secondary {
+    background-color: var(--kartverket-blaa);
+    color: white;
+}
+
+    .map-button-secondary:hover:not(:disabled) {
+        background-color: #0060b9;
+        transform: translateY(-1px);
+    }
+
+    .map-button-secondary:disabled {
+        background-color: var(--avbryt-graa);
+        cursor: not-allowed;
+        opacity: 0.7;
+        transform: none;
+    }
+
+.map-button-primary {
+    background-color: var(--roed);
+    color: white;
+}
+
+    .map-button-primary:hover:not(:disabled) {
+        background-color: #e62e2e;
+        transform: translateY(-1px);
+    }
+
+.info-popup {
+    display: block; /* Endret fra 'none' for å vise ved start */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid var(--kartverket-gronn);
+    max-width: 350px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+
+.info-popup-title {
+    color: var(--kartverket-gronn);
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+    .info-popup-title i {
+        font-size: 18px;
+    }
+
+.info-popup-content {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+    .info-popup-content ol {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+
+    .info-popup-content li {
+        margin-bottom: 8px;
+    }
+
+    .info-popup-content i {
+        color: var(--kartverket-gronn);
+    }
+
+/* Modal styling */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.close {
+    cursor: pointer;
+    font-size: 24px;
+    color: #666;
+}
+
+/* Validering */
+.text-danger {
+    color: var(--roed);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Responsivt design */
+@media (max-width: 768px) {
+    .map-page-container {
+        flex-direction: column;
+    }
+
+    .form-side,
+    .map-side {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    #map {
+        min-height: 400px;
+    }
 }

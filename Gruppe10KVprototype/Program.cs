@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authentication;
 using AuthInterface;
 using AuthDataAccess.Extensions;
 using AuthDataAccess.Services;
+using Services;
+using ServicesInterfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,6 +40,10 @@ builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository
 builder.Services.AddScoped<ITransaksjonsRepository, TransaksjonsRepository>();
 builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
 builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
+
+//Registrering av services og interfaces
+builder.Services.AddScoped<IOppdatereInnmeldingService, OppdatereInnmeldingService>();
+
 
 //og logic og logicinterfaces
 builder.Services.AddScoped<IInnmeldingOpprettelseLogic, InnmeldingOpprettelseLogic>();

@@ -9,7 +9,7 @@ using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers
 {
-    [Route("[controller]/[action]")]
+   
     public class MineInnmeldingerController : Controller
     {
         private readonly IInnmeldingRepository _innmeldingRepository;
@@ -23,7 +23,7 @@ namespace Gruppe10KVprototype.Controllers
         public async Task<IActionResult> MineInnmeldinger(int pageNumber = 1, int pageSize = 10, string sortColumn = "InnmeldingId", string sortOrder = "asc")
         {
             // Bruk en hardkodet innmelderId for testing
-            int innmelderId = 101; // Endre dette til en gyldig ID for testing
+            int innmelderId = 104; // Endre dette til en gyldig ID for testing
 
             // Hent innmeldinger for den aktuelle innmelderen
             IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.HentInnmeldingerFraInnmelderIdAsync(innmelderId);

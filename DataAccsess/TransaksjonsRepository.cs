@@ -165,6 +165,32 @@ namespace DataAccess
                 return false;
             }
         }
+
+
+        public async Task<bool> SlettInnmeldingMedTilhorendeDataAsync(int innmeldingId)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                // Slett geometri først (pga. fremmednøkkel)
+                var geometriSql = "DELETE FROM geometri WHERE innmelding_id = @InnmeldingId";
+                await connection.ExecuteAsync(geometriSql, new { InnmeldingId = innmeldingId }, transaction);
+
+                // Så slett innmeldingen
+                var innmeldingSql = "DELETE FROM innmelding WHERE innmelding_id = @InnmeldingId";
+                var rowsAffected = await connection.ExecuteAsync(innmeldingSql, new { InnmeldingId = innmeldingId }, transaction);
+
+                await transaction.CommitAsync();
+                return rowsAffected > 0;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
     }
 }
 
