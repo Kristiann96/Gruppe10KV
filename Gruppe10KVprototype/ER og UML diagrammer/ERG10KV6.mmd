@@ -55,5 +55,14 @@ erDiagram
         int saksbehandler_id FK "NOT NULL"
         datetime dato "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
         VARCHAR(MAX) innhold "NOT NULL"
+      }
+    vurdering {
+        int vurdering_id PK "UNIQUE,NOT NULL, AUTO_INCREMENT"
+        int innmelding_id FK "NOT NULL"
+        int innmelder_id FK "NOT NULL"
+        ENUM type "NOT NULL"
+        TEXT kommentar
+        datetime dato "NOT NULL, DEFAULT CURRENT_TIMESTAMP"
     }
     saksbehandler ||--o{ tilbakemelding : "skriver"
+    innmelder ||--o{ vurdering : "gir"
