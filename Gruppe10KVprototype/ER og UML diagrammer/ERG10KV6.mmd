@@ -1,7 +1,7 @@
 erDiagram
 
     person {
-        int PersonID PK "UNIQUE, NOT NULL, AUTO_INCREMENT"
+        int person_id PK "UNIQUE, NOT NULL, AUTO_INCREMENT"
         VARCHAR(50) fornavn "NOT NULL"
         VARCHAR(50) etternavn "NOT NULL"
         VARCHAR(15) telefonnummer "UNIQUE, NOT NULL"
@@ -46,7 +46,7 @@ erDiagram
     geometri {
         int geometri_id PK "UNIQUE, AUTO_INCREMENT"
         int innmelding_id FK "NOT NULL"
-        longtext geometri_data "NOT NULL"
+        geometry geometri_data "NOT NULL"
         
     }
     tilbakemelding {
