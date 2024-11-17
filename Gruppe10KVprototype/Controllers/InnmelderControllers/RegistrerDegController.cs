@@ -79,15 +79,22 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                     return View("RegistrerDeg", model);
                 }
 
-                // Alt gikk bra
-                return RedirectToAction("LandingsSide", "LandingsSide");
+                // Alt gikk bra - returner JSON respons
+                return Json(new
+                {
+                    success = true,
+                    message = "Registrering vellykket! Du vil nå bli videresendt til landingssiden.",
+                    redirectUrl = Url.Action("LandingsSide", "LandingsSide")
+                });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Feil under registrering av bruker");
-                ModelState.AddModelError(string.Empty,
-                    "Det oppstod en feil under registrering. Vennligst prøv igjen senere.");
-                return View("RegistrerDeg", model);
+                return Json(new
+                {
+                    success = false,
+                    message = "Det oppstod en feil under registrering. Vennligst prøv igjen senere."
+                });
             }
         }
     }
