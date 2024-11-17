@@ -2,76 +2,122 @@
 @{
     ViewData["Title"] = "Registrer deg";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/innmelder/registrering.css" asp-append-version="true" />
+}
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="mb-0">@ViewData["Title"]</h2>
-                </div>
-                <div class="card-body">
-                    <form asp-controller="RegistrerDeg" asp-action="RegistrerInnmelder" method="post">
-                        <div asp-validation-summary="All" class="text-danger"></div>
+<div class="registrering-side">
+    <div class="registrering-kort">
+        <h1 class="registrering-tittel">@ViewData["Title"]</h1>
 
-                        <div id="personInfo">
-                            <h4 class="mb-3">Personlig informasjon</h4>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="Fornavn" class="form-label"></label>
-                                    <input asp-for="Fornavn" class="form-control" />
-                                    <span asp-validation-for="Fornavn" class="text-danger"></span>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label asp-for="Etternavn" class="form-label"></label>
-                                    <input asp-for="Etternavn" class="form-control" />
-                                    <span asp-validation-for="Etternavn" class="text-danger"></span>
-                                </div>
-                            </div>
+        <form asp-controller="RegistrerDeg" asp-action="RegistrerInnmelder" method="post">
+            <div asp-validation-summary="All" class="validering-oppsummering"></div>
 
-                            <div class="mb-3">
-                                <label asp-for="Telefonnummer" class="form-label"></label>
-                                <input asp-for="Telefonnummer" class="form-control" />
-                                <span asp-validation-for="Telefonnummer" class="text-danger"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label asp-for="Email" class="form-label"></label>
-                                <input asp-for="Email" class="form-control" />
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <div id="passordInfo" class="mt-4">
-                            <h4 class="mb-3">Opprett passord</h4>
-                            <div class="mb-3">
-                                <label asp-for="Password" class="form-label"></label>
-                                <input asp-for="Password" class="form-control" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
-
-                            <div class="mb-3">
-                                <label asp-for="BekreftPassord" class="form-label"></label>
-                                <input asp-for="BekreftPassord" class="form-control" />
-                                <span asp-validation-for="BekreftPassord" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-primary">Registrer deg</button>
-                            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Avbryt</a>
-                        </div>
-                    </form>
-
-                    <div class="mt-3 text-center">
-                        <p>Har du allerede en bruker? <a asp-controller="LoggInn" asp-action="LoggInn">Logg inn her</a></p>
+            <div class="registrering-seksjon">
+                <h2 class="seksjon-tittel">Personlig informasjon</h2>
+                <div class="feltrad">
+                    <div class="feltgruppe">
+                        <label asp-for="Fornavn" class="feltetikett"></label>
+                        <input asp-for="Fornavn" class="inndatafelt" />
+                        <span asp-validation-for="Fornavn" class="validering-feil"></span>
+                    </div>
+                    <div class="feltgruppe">
+                        <label asp-for="Etternavn" class="feltetikett"></label>
+                        <input asp-for="Etternavn" class="inndatafelt" />
+                        <span asp-validation-for="Etternavn" class="validering-feil"></span>
                     </div>
                 </div>
+
+                <div class="feltgruppe">
+                    <label asp-for="Telefonnummer" class="feltetikett"></label>
+                    <input asp-for="Telefonnummer" class="inndatafelt" />
+                    <span asp-validation-for="Telefonnummer" class="validering-feil"></span>
+                </div>
+
+                <div class="feltgruppe">
+                    <label asp-for="Email" class="feltetikett"></label>
+                    <input asp-for="Email" class="inndatafelt" />
+                    <span asp-validation-for="Email" class="validering-feil"></span>
+                </div>
             </div>
+
+            <div class="registrering-seksjon">
+                <h2 class="seksjon-tittel">Opprett passord</h2>
+                <div class="feltgruppe">
+                    <label asp-for="Password" class="feltetikett"></label>
+                    <input asp-for="Password" class="inndatafelt" />
+                    <span asp-validation-for="Password" class="validering-feil"></span>
+                </div>
+
+                <div class="feltgruppe">
+                    <label asp-for="BekreftPassord" class="feltetikett"></label>
+                    <input asp-for="BekreftPassord" class="inndatafelt" />
+                    <span asp-validation-for="BekreftPassord" class="validering-feil"></span>
+                </div>
+            </div>
+
+            <div class="knappegruppe">
+                <button type="submit" class="hovedknapp">Registrer deg</button>
+                <a asp-controller="Home" asp-action="Index" class="sekundaerknapp">Avbryt</a>
+            </div>
+        </form>
+
+        <div class="innlogging-seksjon">
+            <a asp-controller="LoggInn" asp-action="LoggInn" class="innlogging-lenke">
+                Har du allerede en bruker? Logg inn her
+            </a>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Hurra!',
+                                text: response.message,
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true,
+                                didOpen: () => {
+                                    // Start timer for redirect
+                                    setTimeout(() => {
+                                        window.location.href = response.redirectUrl;
+                                    }, 2000);
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Oops!',
+                                text: response.message,
+                                icon: 'error',
+                                confirmButtonText: 'Prøv igjen'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Feil',
+                            text: 'Noe gikk galt under registreringen. Vennligst prøv igjen.',
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 }
