@@ -389,3 +389,55 @@ h3 {
         padding: 2em;
     }
 }
+
+/* Tilbakeknapp */
+
+.back-button {
+    position: fixed;
+    left: 20px;
+    bottom: 80px;
+    z-index: 1000;
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    box-shadow: var(--shadow-md);
+    width: 50px;
+    height: 50px;
+}
+
+.back-button:hover {
+    transform: translateX(-5px);
+    box-shadow: var(--shadow-lg);
+    background-color: var(--color-primary-dark);
+}
+
+.back-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+@media screen and (max-height: 600px) {
+    .back-button {
+        bottom: 20px;
+    }
+}
+
+@media print {
+    .back-button {
+        display: none;
+    }
+}
+
+@supports (padding: max(0px)) {
+    .back-button {
+        bottom: max(80px, env(safe-area-inset-bottom) + 80px);
+        left: max(20px, env(safe-area-inset-left) + 20px);
+    }
+}

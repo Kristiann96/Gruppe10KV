@@ -1,0 +1,13 @@
+@{
+    var isIndex = Context.Request.Path.Value?.EndsWith("/Index") ?? false;
+    var isHome = Context.Request.Path.Value?.Equals("/") ?? false;
+}
+
+@if (!isIndex && !isHome)
+{
+    <a href="javascript:history.back()" class="back-button" title="Gå tilbake">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 4L7 12L15 20" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </a>
+}
