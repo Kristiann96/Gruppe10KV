@@ -9,22 +9,25 @@
 .map-page-container {
     display: flex;
     justify-content: space-between;
-    align-items: stretch;
+    align-items: flex-start; /* Endret fra stretch */
     height: auto;
     padding: 1rem;
+    margin-top: 5em; /* Flyttet margin-top hit fra individuelle elementer */
 }
 
 .form-side {
     flex: 1;
-    margin-right: 1rem flex-direction: column;
+    margin-right: 1rem;
+    display: flex; /* Lagt til */
+    flex-direction: column;
     min-height: 77vh;
-    margin-top: 4em; 
+    margin-top: 0; /* Fjernet siden det nå er på container */
 }
 
 .map-side {
     flex: 1;
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Endret fra center */
     justify-content: stretch;
 }
 
@@ -40,10 +43,10 @@
 }*/
 
 #miniMap {
-    height: 100%; /* Endret fra 150% */
+    height: 100%;
     min-height: 77vh;
     width: 100%;
-    margin-top: 4em;
+    margin-top: 0; /* Fjernet siden det nå er på container */
 }
 
 /*.map-card {
@@ -69,7 +72,7 @@
     background: #1a833b;
     position: relative;
     overflow: hidden;
-    margin-top: 5em;
+    margin-top: 1em; /* Fjernet siden det nå er på container */
     margin-left: 1em;
     margin-right: 1em;
     border-radius: 12px;
@@ -103,6 +106,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between; 
 }
 
 
@@ -241,10 +245,11 @@ form {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
     .form-group label {
@@ -256,11 +261,13 @@ form {
     .form-group input,
     .form-group textarea {
         width: 100%;
-        padding: 0.75rem;
+        padding: 1rem;
         border: 1px solid #ccc;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         transition: border-color 0.2s ease-in-out;
+        font-family: Arial, sans-serif; 
+        font-size: 16px; 
     }
 
         .form-group input:focus,

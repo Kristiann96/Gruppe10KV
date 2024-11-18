@@ -125,7 +125,7 @@
 }
 
     .map-button-primary:hover:not(:disabled) {
-        background-color: #00509c;
+        background-color: #0f5adb;
         !important;
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 16px rgba(26, 131, 59, 0.5) !important;
