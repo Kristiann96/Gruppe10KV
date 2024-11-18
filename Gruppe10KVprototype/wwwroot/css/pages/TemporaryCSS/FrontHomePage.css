@@ -57,10 +57,10 @@
     }
 
     .innmeldCard h1 {
-        color: var(--color-primary-dark);
-        font-size: 2.8rem;
-        margin-bottom: 1.8rem;
-        font-weight: 800;
+        color: #00509c;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
         text-align: center;
         font-family: 'Arial', sans-serif;
         position: relative;
@@ -76,53 +76,44 @@
         }
 
 .cardText {
-    color: var(--color-text);
-    font-size: 1.25rem;
-    line-height: 1.7;
-    margin-bottom: 2.5rem;
+    color: #3f473b;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 1.3rem;
     padding: 0 1rem;
     text-align: center;
     position: relative;
 }
 
-.Button-MeldInn {
-    background: linear-gradient( 45deg, var(--color-primary) 0%, var(--color-primary-dark) 100% );
-    transform: translateY(0);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-weight: 600;
-    letter-spacing: 0.8px;
-    padding: 1.2em 2.8em;
-    border-radius: var(--border-radius-lg);
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
+button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
 }
 
-    /* Add shine effect on hover */
-    .Button-MeldInn::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient( 45deg, transparent, rgba(255, 255, 255, 0.1), transparent );
-        transform: translateX(-100%);
-        transition: transform 0.6s;
+.Button-MeldInn {
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    font-weight: 400;
+    padding: 1em 1em;
+    border-radius: 8px;
+    position: relative;
+    width: 100%;
+}
+
+    .Button-MeldInn.blue {
+        background-color: #1a833b;
+    }
+
+    .Button-MeldInn.green {
+        background-color: #00509c;
     }
 
     .Button-MeldInn:hover {
-        transform: translateY(-3px) scale(1.02);
-        background: linear-gradient( 45deg, var(--color-primary-dark) 0%, var(--color-primary) 100% );
-        box-shadow: 0 10px 20px rgba(0, 102, 204, 0.3), 0 6px 6px rgba(0, 102, 204, 0.2), 0 0 100px rgba(0, 102, 204, 0.1);
-    }
-
-        .Button-MeldInn:hover::before {
-            transform: translateX(100%);
-        }
-
-    .Button-MeldInn:active {
-        transform: translateY(-1px) scale(0.98);
+        transform: translateY(-4px);
+        transition: all 0.3s ease;
     }
 
 /* Enhanced Animations */
