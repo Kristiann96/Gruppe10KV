@@ -108,41 +108,43 @@
         }
 
         string GetStatusColor(string status)
+        {
+            if (string.IsNullOrEmpty(status))
             {
-                if (string.IsNullOrEmpty(status))
-                {
-                    return "#000000"; // Svart for null eller tomme verdier
-                }
-
-                var normalizedStatus = status.Trim().ToLower();
-                string color;
-                switch (normalizedStatus)
-                {
-                    case "ny":
-                        color = "#3CB043"; // Grønn
-                        break;
-                    case "ikke_påbegynt":
-                        color = "#808080"; // Grå
-                        break;
-                    case "under_behandling":
-                        color = "#0047AB"; // Blå
-                        break;
-                    case "pauset":
-                        color = "#FFA500"; // Oransje
-                        break;
-                    case "avsluttet":
-                        color = "#006400"; // Mørk grønn
-                        break;
-                    case "ikke_tatt_til_følge":
-                        color = "#FF0000"; // Rød
-                        break;
-                    default:
-                        color = "#000000"; // Svart for ukjente verdier
-                        break;
-                }
-                return color;
+                return "#000000";
             }
+
+            var normalizedStatus = status.ToLower().Replace(" ", "_");
+            string color;
+            switch (normalizedStatus)
+            {
+                case "ny":
+                    color = "#3CB043";
+                    break;
+                case "ikke_påbegynt":
+                case "ikke_pabegynt":
+                    color = "#808080";
+                    break;
+                case "under_behandling":
+                    color = "#0047AB";
+                    break;
+                case "pauset":
+                    color = "#FFA500";
+                    break;
+                case "avsluttet":
+                    color = "#006400";
+                    break;
+                case "ikke_tatt_til_følge":
+                case "ikke_tatt_til_folge":
+                    color = "#FF0000";
+                    break;
+                default:
+                    color = "#000000";
+                    break;
+            }
+            return color;
         }
+    }
 
 
 
