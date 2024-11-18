@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ViewModels;
+using LogicInterfaces;
 
 namespace Gruppe10KVprototype.Controllers
 {
@@ -13,10 +14,12 @@ namespace Gruppe10KVprototype.Controllers
     public class MineInnmeldingerController : Controller
     {
         private readonly IInnmeldingRepository _innmeldingRepository;
+        private readonly IEnumLogic _enumLogic;
 
-        public MineInnmeldingerController(IInnmeldingRepository innmeldingRepository)
+        public MineInnmeldingerController(IInnmeldingRepository innmeldingRepository, IEnumLogic enumLogic)
         {
             _innmeldingRepository = innmeldingRepository;
+            _enumLogic = enumLogic;
         }
 
         [HttpGet]
@@ -27,6 +30,11 @@ namespace Gruppe10KVprototype.Controllers
 
             // Hent innmeldinger for den aktuelle innmelderen
             IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.HentInnmeldingerFraInnmelderIdAsync(innmelderId);
+
+            foreach (var innmelding in innmeldinger)
+            {
+                innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
+            }
 
             // Sort innmeldinger based on sortColumn and sortOrder
             innmeldinger = SortInnmeldinger(innmeldinger, sortColumn, sortOrder);
