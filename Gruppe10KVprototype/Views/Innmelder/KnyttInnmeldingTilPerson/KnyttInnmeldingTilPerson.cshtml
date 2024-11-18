@@ -4,10 +4,12 @@
     Layout = "_Layout";
 }
 
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 10vh; font-family: 'Arial', sans-serif; padding: 2rem; text-align: center; background-color: #f5f5f5;">
-    <div style="max-width: 800px; width: 100%; background-color: white; padding: 3rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <h1 style="color: #333; font-size: 2.2rem; margin-bottom: 1.5rem;">For å kunne følge opp denne inmeldingen trenger vi din e-post!</h1>
-        <h2 style="color: #555; font-size: 1.6rem; margin-bottom: 1.5rem; line-height: 1.4;">Vennligst fyll inn din e-post.</h2>
+<link rel="stylesheet" href="~/css/pages/innmelder/KnyttInnmeldingTilPerson.css" />
+
+<div class="tilknytt-container">
+    <div class="tilknytt-kort">
+        <h1 class="tilknytt-tittel">Vi i Kartverket ønsker å følge opp din innmelding</h1>
+        <h2 class="tilknytt-undertittel">Vennligst oppgi din e-post eller logg inn</h2>
 
         <form asp-controller="KnyttInnmeldingTilPerson"
               asp-action="LagreKnyttInnmeldingTilPerson"
@@ -20,38 +22,42 @@
             @Html.HiddenFor(m => m.Beskrivelse)
             @Html.HiddenFor(m => m.ErNodEtatKritisk)
 
-            <div style="margin-bottom: 3rem;">
-                <div style="margin-bottom: 1rem;">
-                    <input asp-for="Epost" type="email"
-                           placeholder="Din e-postadresse"
-                           style="padding: 0.75rem; width: 50%; font-size: 1.1rem; border: 1px solid #ccc; border-radius: 4px;" />
-                    <span asp-validation-for="Epost" style="display: block; color: #dc3545; font-size: 0.875rem; margin-top: 0.5rem;"></span>
-                </div>
+            <div class="form-group">
+                <input asp-for="Epost"
+                       type="email"
+                       placeholder="Din e-postadresse"
+                       class="tilknytt-input" />
+                <span asp-validation-for="Epost" class="validering-feil"></span>
+            </div>
 
-                <div style="display: flex; justify-content: center; align-items: center;">
-                    <button type="submit"
-                            id="submitBtn"
-                            style="display: inline-block; padding: 0.75rem 2.5rem; font-size: 1.1rem; background-color: #007bff; color: white; border-radius: 4px; cursor: pointer; text-decoration: none; transition: background-color 0.3s; border: none;">
-                        Meld inn
-                    </button>
+            <div class="tilknytt-knapp-container">
+                <button type="submit" id="submitBtn" class="tilknytt-knapp tilknytt-knapp-primary">
+                    Meld inn
+                </button>
 
-                    <div style="position: relative; display: inline-block;">
-                        <span id="infoButton" style="display: inline-block; background-color: #007bff; color: white; border-radius: 50%; width: 20px; height: 20px; text-align: center; line-height: 20px; font-size: 1rem; margin-left: 0.5rem; cursor: pointer;">i</span>
-
-                        <div id="popup" style="max-width: 150px; width: 500%; display: none; position: absolute; background-color: white; border: 1px solid #ccc; padding: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); z-index: 100; bottom: 125%; left: 75%; transform: translateX(-50%);">
-                            <p style="color: #777; margin-bottom: 2rem; font-size: 1.1rem;">Du kan også følge vedlagt link for å lage bruker senere.</p>
-                            <button id="closePopup" style="background: none; border: none; color: #007bff; cursor: pointer; padding: 0; font-size: 1rem;">&times;</button>
-                        </div>
+                <div class="info-container">
+                    <span class="info-ikon">i</span>
+                    <div class="info-popup">
+                        <p class="info-tekst">
+                            Du vil motta en e-post med en lenke som du kan følge for å registrere deg og se status på din sak.
+                        </p>
                     </div>
                 </div>
             </div>
         </form>
 
-        <h3 style="color: #333; font-size: 1.3rem; margin-bottom: 1.5rem;">ELLER LOGG INN</h3>
-        <a href="@Url.Action("LoggInn", "LoggInn")"
-           style="display: inline-block; padding: 0.75rem 2.5rem; font-size: 1.1rem; background-color: #28a745; color: white; border-radius: 4px; cursor: pointer; text-decoration: none; transition: background-color 0.3s;">
+        <div class="eller-separator"></div>
+
+        <a href="@Url.Action("VisLoggInnSide", "LoggInn")" class="tilknytt-knapp tilknytt-knapp-secondary">
             Logg inn
         </a>
+
+        <div class="registrer-lenke-container">
+            <span>Ikke registrert? </span>
+            <a href="@Url.Action("RegistrerDeg", "RegistrerDeg")" class="registrer-lenke">
+                Opprett konto her!
+            </a>
+        </div>
     </div>
 </div>
 
@@ -60,24 +66,8 @@
 
     <script>
         document.getElementById('innmeldingForm').addEventListener('submit', function (e) {
-            // Deaktiver submit-knappen
             document.getElementById('submitBtn').disabled = true;
-        });
+                });
 
-        // Popup functionality
-        const infoButton = document.getElementById("infoButton");
-        const popup = document.getElementById("popup");
-
-        infoButton.addEventListener("mouseover", function () {
-            popup.style.display = "block";
-        });
-
-        infoButton.addEventListener("mouseout", function () {
-            popup.style.display = "none";
-        });
-
-        document.getElementById("closePopup").addEventListener("click", function () {
-            popup.style.display = "none";
-        });
     </script>
 }
