@@ -15,6 +15,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 2rem;
 }
 
 .card-container {
@@ -22,13 +23,15 @@
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 1000px;
+    width: 1000px; /* Fast bredde */
+    margin: 0 auto;
 }
 
 .cards {
     display: grid;
-    gap: 1rem;
+    grid-template-columns: repeat(2, calc(50% - 0.75rem)); /* To kolonner med fast bredde */
+    grid-template-rows: auto auto; /* To rader */
+    gap: 1.5rem;
     padding: 1rem;
 }
 
@@ -43,6 +46,8 @@
     text-decoration: none;
     color: #b7d8f7;
     transition: all 0.3s ease;
+    height: 200px; /* Fast høyde */
+    max-width: 100%;
 }
 
     .card:hover {
@@ -57,33 +62,39 @@
         margin-bottom: 1rem;
     }
 
-.card h2 {
-    font-size: 1.25rem;
-    margin: 0 0 1rem 0;
-    color: #2d3748;
-}
+    .card h2 {
+        font-size: 1.25rem;
+        margin: 0 0 1rem 0;
+        color: #2d3748;
+    }
 
-.card p {
-    font-size: 0.875rem;
-    color: #4a5568;
-    margin: 0;
-    line-height: 1.5;
-}
+    .card p {
+        font-size: 0.875rem;
+        color: #4a5568;
+        margin: 0;
+        line-height: 1.5;
+        /* Begrens teksten til 3 linjer */
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 
-/* Modal styling */
+/* Modal styling forblir uendret */
 .velkomst-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.35); /* Lys blur bakgrunn */
+    background: rgba(255, 255, 255, 0.35);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
     backdrop-filter: blur(8px);
 }
+
 .modal-innhold {
     background: white;
     padding: 2.5rem 3rem;
@@ -117,8 +128,8 @@
     cursor: pointer;
     transition: all 0.2s ease;
 }
+
     .modal-knapp:hover {
         background: #00509c;
         transform: translateY(-2px);
     }
-

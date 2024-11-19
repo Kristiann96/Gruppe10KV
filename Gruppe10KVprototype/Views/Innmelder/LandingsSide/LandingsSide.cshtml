@@ -28,14 +28,20 @@
             <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartforbedring")" class="card">
                 <i class="fa-regular fa-handshake"></i>
                 <h2>Bidra til Kartkvalitet</h2>
-                <p>Hjelp oss med å forbedre kartkvaliteten ved å bekrefte eller avkrefte saker rapportert av andre.</p>
+                <p>Hjelp oss med å forbedre kartkvaliteten ved å bekrefte eller avkrefte innmeldinger laget av andre.</p>
             </a>
-            @*
-                <a href="@Url.Action("SporKartfeil", "SporKartfeil")" class="card">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    <h2>Rapporter fra din Posisjon</h2>
-                    <p>Bruk din nåværende posisjon til å enkelt markere og rapportere kartfeil. Perfekt for feiloppdagelse mens du er på farten.</p>
-                </a>*@
+            
+            <a href="@Url.Action("SporKartfeil", "SporKartfeil")" class="card">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <h2>Lag innmelding med GPS</h2>
+                <p>Bruk din nåværende posisjon til å enkelt markere og melde inn kartfeil. Perfekt for feiloppdagelse mens du er på farten.</p>
+            </a>
+            
+            <a href="@Url.Action("KartfeilMarkering", "KartfeilMarkering")" class="card">
+                <i class="fa-solid fa-draw-polygon"></i>
+                <h2>Lag innmelding med tegneverktøy</h2>
+                <p>Opprett innmelding med linje, punkt, rektangel eller polygon. Med mulighet for å laste opp bilde som tilleggs dokumentasjon.</p>
+            </a>
 
             <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")" class="card">
                 <i class="fa-regular fa-folder-open"></i>
