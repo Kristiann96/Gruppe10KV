@@ -172,6 +172,12 @@
             }
         }
 
+        function confirmResetTracking() {
+    hideResetConfirmModal();
+    resetTracking();
+    window.location.href = '@Url.Action("SporKartfeil", "SporKartfeil")';
+}
+
         function confirmStopTracking() {
             tracking = false;
             if (positionInterval) {
