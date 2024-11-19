@@ -198,6 +198,14 @@ function closeGeometryInfo() {
         // Vis popup når redigering starter
         map.on('draw:editstart', function (e) {
             document.getElementById('geometryEditInfo').style.display = 'block';
+            setTimeout(() => {
+                const popup = document.getElementById('geometryEditInfo');
+                popup.style.opacity = '0';
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                    popup.style.opacity = '1';
+                }, 300);
+            }, 8000); 
         });
 
         // Håndter ferdig redigering
@@ -326,7 +334,7 @@ function closeGeometryInfo() {
                 });
 
                 if (response.ok) {
-                    window.location.href = '@Url.Action("Index", "Home")';
+                    window.location.href = '@Url.Action("MineInnmeldinger", "MineInnmeldinger")';
                 } else {
                     visStatusMelding('Kunne ikke slette innmeldingen', true);
                 }
@@ -345,9 +353,27 @@ function closeGeometryInfo() {
             }
         });
 
-        // Helper for statusmeldinger
         function visStatusMelding(melding, erFeil = false) {
-            alert(melding); // Midlertidig løsning
+            const popup = document.createElement('div');
+            popup.className = 'status-popup' + (erFeil ? ' error' : ' success');
+            popup.style.display = 'block'; 
+            popup.style.opacity = '1';     
+            popup.innerHTML = `
+                <div class="status-content">
+                    <i class="fas ${erFeil ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+                    <span>${melding}</span>
+                </div>
+            `;
+            document.body.appendChild(popup);
+
+            // Fjern popup etter 3 sekunder
+            setTimeout(() => {
+                popup.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(popup);
+                    window.location.href = '@Url.Action("MineInnmeldinger", "MineInnmeldinger")';
+                }, 500);
+            }, 4000)
         }
     </script>
 }
