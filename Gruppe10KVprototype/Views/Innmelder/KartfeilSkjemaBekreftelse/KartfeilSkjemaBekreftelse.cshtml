@@ -5,6 +5,7 @@
 
 @section Styles {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartFeilSkjemaBekreftelse.css" />
 }
 
@@ -37,8 +38,8 @@
                 @if (Model.ErNodEtatKritisk)
                 {
                     <div class="info-group">
-                        <div class="info-label">Prioritet</div>
                         <div class="priority-badge">
+                            <i class="fa-solid fa-triangle-exclamation" style="color: #fa3838;"></i>
                             Kan være til hinder for nødetater
                         </div>
                     </div>

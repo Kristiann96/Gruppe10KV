@@ -13,17 +13,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mine Innmeldinger (ID: @Model.Innmeldinger.FirstOrDefault()?.InnmelderId)</title>
+    <title>Mine innmeldinger (ID: @Model.Innmeldinger.FirstOrDefault()?.InnmelderId)</title>
     
 </head>
 <body>
 
     <main>
         <div class="tittelOversiktMineInnmeldinger">
-            <h1>Mine Innmeldinger (ID: @Model.Innmeldinger.FirstOrDefault()?.InnmelderId)</h1>
+            <h1>Mine innmeldinger </h1>
 
             <form method="get" action="@Url.Action("MineInnmeldinger")" class="search-bar">
-                <input type="text" name="searchTerm" placeholder="Søk i saker" />
+                <input type="text" name="searchTerm" placeholder="Søk i innmeldinger" />
                 <button type="submit">Søk</button>
             </form>
         </div>

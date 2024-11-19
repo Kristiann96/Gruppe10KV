@@ -76,7 +76,7 @@
         </div>
         <div class="modal-body">
             <p>Her kan du legge ved bilder, og gi kartverket anledning til å hente bildets innebygde gps lokasjon.
-               Data vil slettes når saken avsluttes</p>
+               Data vil slettes når innmeldingen er vurdert</p>
         </div>
         <div class="modal-footer">
             <button onclick="lukkDialog()" class="map-button map-button-secondary">OK</button>
@@ -119,11 +119,12 @@
             }
         }
 
-        function showUploadAlert() {
-            const checkbox = document.getElementById('bildeFunksjonalitet');
-            if (checkbox.checked) {
-                alert("Her kan du legge ved bilder, og gi kartverket anledning til å hente bildets innebygde gps lokasjon. Data vil slettes når saken avsluttes");
-            }
+       function showUploadAlert() {
+    const checkbox = document.getElementById('bildeFunksjonalitet');
+    if (checkbox.checked) {
+        document.getElementById('bildeDialog').style.display = 'block';
+        checkbox.checked = false; // Unchecks the checkbox
+    }
         }
     </script>
 }

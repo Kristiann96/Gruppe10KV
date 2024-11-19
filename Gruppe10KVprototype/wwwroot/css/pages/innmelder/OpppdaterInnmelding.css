@@ -39,15 +39,17 @@
 /* Skjema styling */
 .map-card {
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
     height: 100%;
+    overflow:hidden;
 }
 
 .map-header {
     background-color: var(--kartverket-gronn);
     padding: 20px;
     border-bottom: 1px solid var(--bakgrunn-graa);
+    border-radius: 10px 10px 0 0;
 }
 
 .map-title {
@@ -62,12 +64,12 @@
 }
 
 .map-content {
-    padding: 20px;
+    padding: 25px;
 }
 
 /* Form elementer */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
     .form-group label {
@@ -82,11 +84,24 @@
     border: 1px solid var(--bakgrunn-graa);
     border-radius: 4px;
     font-size: 14px;
+    background-color: #f8f9fa; /* Litt mørkere bakgrunn */
 }
+
+    .form-control:hover {
+        background-color: #f3f4f6;
+    }
+
+    .form-control:focus {
+        background-color: #fff;
+        border-color: var(--kartverket-blaa);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 80, 156, 0.1);
+    }
 
 textarea.form-control {
     min-height: 100px;
     resize: vertical;
+    font-family: Arial, sans-serif;
 }
 
 /* Knapper */
@@ -161,13 +176,14 @@ textarea.form-control {
 }
 
     .info-popup-title i {
-        font-size: 18px;
+        font-size: 20px;
     }
 
 .info-popup-content {
-    color: #666;
-    font-size: 14px;
+    color: #011c36;
+    font-size: 16px;
     line-height: 1.5;
+    font-weight: 500; 
 }
 
     .info-popup-content ol {
@@ -229,6 +245,61 @@ textarea.form-control {
     font-size: 24px;
     color: #666;
 }
+.status-popup {
+    position: fixed;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background: white;
+    padding: 25px 35px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+    min-width: 400px;
+    text-align: center; 
+}
+
+    .status-popup.success {
+        border-left: 4px solid var(--kartverket-gronn);
+        border-right: 4px solid var(--kartverket-gronn);
+    }
+
+    .status-popup.error {
+        border-left: 4px solid var(--roed);
+        border-right: 4px solid var(--roed);
+    }
+
+.status-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+}
+
+    .status-content i {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+.success i {
+    color: var(--kartverket-gronn);
+}
+
+.error i {
+    color: var(--roed);
+}
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
 
 /* Validering */
 .text-danger {

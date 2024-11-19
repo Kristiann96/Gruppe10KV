@@ -1,0 +1,174 @@
+﻿/* Bakgrunn og hovedcontainer */
+.tilknytt-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url('/images/So_Not_Vennesla.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    padding: 2rem;
+}
+
+/* Kort styling */
+.tilknytt-kort {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    padding: 2.5rem 3rem;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+}
+
+/* Overskrifter */
+.tilknytt-tittel {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.tilknytt-undertittel {
+    color: #666;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* Input felt */
+.tilknytt-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 1rem;
+}
+
+    .tilknytt-input:focus {
+        outline: none;
+        border-color: #00509c;
+        box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+    }
+
+/* Knapper */
+.tilknytt-knapp-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    gap: 1rem;
+    margin: 2rem 0;
+    position: relative; 
+}
+
+/* Gjør knappene like brede */
+.tilknytt-knapp {
+    width: 200px; 
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center; 
+}
+
+.tilknytt-knapp-primary {
+    background-color: #00509c;
+    color: white;
+}
+
+    .tilknytt-knapp-primary:hover {
+        background-color: #0f5adb;
+        transform: translateY(-2px);
+    }
+
+.tilknytt-knapp-secondary {
+    background-color: #1a833b;
+    color: white;
+}
+
+    .tilknytt-knapp-secondary:hover {
+        background-color: #146c30;
+        transform: translateY(-2px);
+    }
+
+/* Informasjonsikon og popup */
+.info-container {
+    position: absolute; 
+    left: calc(50% + 110px); 
+    top: 8px; 
+}
+
+.info-ikon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #00509c;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.info-popup {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: none;
+    z-index: 100;
+    margin-bottom: 0.5rem;
+}
+
+.info-container:hover .info-popup {
+    display: block;
+}
+
+.info-tekst {
+    color: #333;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Validering */
+.validering-feil {
+    color: #fa3838;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    text-align: left;
+}
+
+/* Registreringslenke */
+.registrer-lenke-container {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.registrer-lenke {
+    color: #00509c;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+    .registrer-lenke:hover {
+        text-decoration: underline;
+    }
+
+/* Separator */
+.eller-separator {
+    margin: 2rem 0;
+    color: #666;
+    font-size: 1rem;
+    font-weight: 600;
+}

@@ -90,13 +90,14 @@
                                 text: response.message,
                                 icon: 'success',
                                 showConfirmButton: false,
-                                timer: 2000,
+                                timer: 2700,
                                 timerProgressBar: true,
+                                iconColor: '#1a833b',
                                 didOpen: () => {
                                     // Start timer for redirect
                                     setTimeout(() => {
                                         window.location.href = response.redirectUrl;
-                                    }, 2000);
+                                    }, 2700);
                                 }
                             });
                         } else {

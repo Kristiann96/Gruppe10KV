@@ -74,9 +74,9 @@
                             </div>
                             <button type="submit" class="btn btn-primary mb-3">Lagre innmeldertype</button>
                         </form>
-                        <p>Type: @Model.InnmelderModel.InnmelderType</p>
-                        <p>Navn: @Model.PersonModel.Fornavn @Model.PersonModel.Etternavn</p>
-                        <p>Telefon: @Model.PersonModel.Telefonnummer</p>
+                        <p><strong>Type:</strong> @Model.InnmelderModel.InnmelderType</p>
+                        <p><strong>Navn:</strong> @Model.PersonModel.Fornavn @Model.PersonModel.Etternavn</p>
+                        <p><strong>Telefon:</strong> @Model.PersonModel.Telefonnummer</p>
                     }
                     else if (Model.InnmeldingModel.GjestInnmelderId.HasValue)
                     {
@@ -107,9 +107,9 @@
                     @if (Model.SaksbehandlerModel != null)
                     {
                         <div class="saksbehandlerInformasjon">
-                            <p>Stilling: @Model.SaksbehandlerModel.Stilling</p>
-                            <p>E-post: @Model.SaksbehandlerModel.Jobbepost</p>
-                            <p>Telefon: @Model.SaksbehandlerModel.Jobbtelefon</p>
+                            <p><strong>Stilling:</strong> @Model.SaksbehandlerModel.Stilling</p>
+                            <p><strong>E-post:</strong> @Model.SaksbehandlerModel.Jobbepost</p>
+                            <p><strong>Telefon:</strong> @Model.SaksbehandlerModel.Jobbtelefon</p>
                         </div>
                     }
                     else

@@ -1,6 +1,5 @@
 ﻿body {
-    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 90c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10zm70 0c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10S10 15.523 10 10zm70 0c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10z' fill='%2392C291' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E"), linear-gradient(120deg, #e6f3e6 0%, #f0f7f0 100%);
-    background-attachment: fixed;
+   
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -33,7 +32,7 @@
 /* Header Styles*/
 .map-header {
     padding: 1rem 2rem;
-    background: linear-gradient(135deg, #2d6a4f, #40916c);
+    background: #1a833b;
     position: relative;
     overflow: hidden;
     margin-top: 5em;
@@ -42,16 +41,7 @@
     border-radius: 12px;
 }
 
-    .map-header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10-10-4.477-10-10z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
-        pointer-events: none;
-    }
+    
 
 .map-title {
     margin: 0;
@@ -101,7 +91,7 @@
     margin-left: 0.5em;
     margin-right: 0.5em;
     margin-bottom: 0.5em;
-    background: linear-gradient(135deg, #2d6a4f, #40916c);
+    background: #1a833b;
     border-top: 1px solid rgba(146, 194, 145, 0.2);
     align-items: center;
     justify-content: flex-end;
@@ -129,20 +119,21 @@
 
 /* Primary Button */
 .map-button-primary {
-    background-color: #145a2e;
+    background-color: #00509c;
     color: white;
     box-shadow: 0 4px 12px rgba(26, 131, 59, 0.2);
 }
 
     .map-button-primary:hover:not(:disabled) {
-        background-color: #1a833b !important;
+        background-color: #0f5adb;
+        !important;
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 16px rgba(26, 131, 59, 0.5) !important;
     }
 
 /* Secondary Button */
 .map-button-secondary {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: #f0f0f0;
     color: #2d6a4f;
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
@@ -296,13 +287,14 @@
     width: 90%;
     text-align: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    line-height: 1.6;
 }
 
 .modal-title {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1rem;
-    color: #333;
+    color: #666;
 }
 
 .modal-text {
@@ -316,7 +308,8 @@
 }
 
 .modal-button {
-    background: #2196F3;
+    background: #00509c;
+    
     color: white;
     border: none;
     padding: 0.75rem 2rem;

@@ -145,6 +145,7 @@ footer {
 }
 
 .dev-button {
+    opacity:0;
     background-color: var(--color-danger);
     color: white;
     border: none;
@@ -152,8 +153,13 @@ footer {
     border-radius: var(--border-radius-sm);
     cursor: pointer;
     font-size: 0.8rem;
-    transition: background-color 0.3s ease;
+    transition: opacity 0.3s ease;
 }
+
+    .dev-button:hover,
+    .dev-dropdown:hover .dev-button {
+        opacity: 1;
+    }
 
 .dev-button:hover {
     background-color: var(--color-danger-dark);
@@ -168,7 +174,7 @@ footer {
     box-shadow: var(--shadow-md);
     z-index: 1000;
     border-radius: var(--border-radius-sm);
-    padding: 0.5rem 0;
+    padding: 0rem 0;
 }
 
 .dev-dropdown:hover .dev-dropdown-content {

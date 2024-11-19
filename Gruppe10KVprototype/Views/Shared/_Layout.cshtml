@@ -17,7 +17,7 @@
 
             <div id="navbar-menu">
                 <ul class="navbarlist">
-                    <li><a class="nav-link" asp-controller="Home" asp-action="Index">Hjem</a></li>
+                    <li><a class="nav-link" asp-controller="LandingsSide" asp-action="LandingsSide">Hjem</a></li>
                     <li><a class="nav-link" asp-controller="LoggInn" asp-action="VisLoggInnSide">Logg inn</a></li>
                     <li class="dev-dropdown">
                         <button class="dev-button">Utvikling</button>
@@ -39,6 +39,7 @@
                             <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")">Mine Innmeldinger</a>
                             <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartForbedring")">Bidra til kartforbedringer</a>
                             <a href="@Url.Action("SporKartfeil", "SporKartfeil")">GPS for feilmarkering</a>
+                            <a href="@Url.Action("Index", "Home")">HJEM/MELD INN FEIL</a>
                         </div>
                     </li>
                 </ul>

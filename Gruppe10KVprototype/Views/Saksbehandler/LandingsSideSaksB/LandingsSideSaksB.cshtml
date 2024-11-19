@@ -52,15 +52,16 @@
             align-items: center;
             text-align: center;
             padding: 1.5rem;
-            border: 1px solid #e2e8f0;
+            border: 2px solid #a4b2bf;
             border-radius: 8px;
             text-decoration: none;
-            color: inherit;
+            color: #b7d8f7;
             transition: all 0.3s ease;
         }
 
         .card:hover {
-            border-color: #cbd5e0;
+                border-color: #00509c;
+               
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
         }
@@ -94,14 +95,14 @@
             <div class="cards">
                 <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB")" class="card">
                     <i class="fa-solid fa-database"></i>
-                    <h2>Saksoversikt</h2>
-                    <p>Se oversikt over alle innmeldte saker.Vurder og oppdater prioritet og status.Se innmelder type og deleger saker.</p>
+                    <h2>Innmeldingsoversikt</h2>
+                    <p>Se oversikt over alle innmeldinger.Vurder og oppdater prioritet og status.Se innmeldertype og deleger saker.</p>
                 </a>
 
                 <a href="@Url.Action("KartvisningAlleInnmeldingerSaksB", "KartvisningAlleInnmeldingerSaksB")" class="card">
                     <i class="fa-solid fa-magnifying-glass-location"></i>
                     <h2> Kart over Innmeldinger</h2>
-                    <p>Utforsk kartet og se alle innmeldte saker. Klikk på en sak eller velg et område for å få rask tilgang til sakens detaljer og vurderinger.</p>
+                    <p>Utforsk kartet og se alle innmeldinger. Klikk på en innmelding eller velg flere for å få rask tilgang til detaljer og vurderinger.</p>
                 </a>
             </div>
         </div>

@@ -15,28 +15,41 @@
 
 </head>
 <body>
-    <div class="container">
-        <div class="card-container">
-            <div class="cards">
-                <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartforbedring")" class="card">
-                    <i class="fa-regular fa-handshake"></i>
-                    <h2>Bidra til Kartkvalitet</h2>
-                    <p>Hjelp oss med å forbedre kartkvaliteten ved å bekrefte eller avkrefte saker rapportert av andre.</p>
-                </a>
-
+<div class="container">
+    <div class="card-container">
+        <div class="velkomst-modal" id="velkomstModal">
+            <div class="modal-innhold">
+                <h2>Takk!</h2>
+                <p>Din innmelding er registrert.</p>
+                <button class="modal-knapp" onclick="lukkModal()">OK</button>
+            </div>
+        </div>
+        <div class="cards">
+            <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartforbedring")" class="card">
+                <i class="fa-regular fa-handshake"></i>
+                <h2>Bidra til Kartkvalitet</h2>
+                <p>Hjelp oss med å forbedre kartkvaliteten ved å bekrefte eller avkrefte saker rapportert av andre.</p>
+            </a>
+            @*
                 <a href="@Url.Action("SporKartfeil", "SporKartfeil")" class="card">
                     <i class="fa-solid fa-map-location-dot"></i>
                     <h2>Rapporter fra din Posisjon</h2>
                     <p>Bruk din nåværende posisjon til å enkelt markere og rapportere kartfeil. Perfekt for feiloppdagelse mens du er på farten.</p>
-                </a>
+                </a>*@
 
-                <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")" class="card">
-                    <i class="fa-regular fa-folder-open"></i>
-                    <h2>Mine Saker</h2>
-                    <p>Oversikt over dine innmeldte saker. Følg med på status, oppdater dine innmeldinger, og se historikk over tidligere meldinger.</p>
-                </a>
-            </div>
+            <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")" class="card">
+                <i class="fa-regular fa-folder-open"></i>
+                <h2>Mine innmeldinger</h2>
+                <p>Oversikt over dine innmeldinger. Følg med på status, oppdater dine innmeldinger, og se historikk over tidligere meldinger.</p>
+            </a>
         </div>
     </div>
+</div>
+
+    <script>
+        function lukkModal() {
+            document.getElementById('velkomstModal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
