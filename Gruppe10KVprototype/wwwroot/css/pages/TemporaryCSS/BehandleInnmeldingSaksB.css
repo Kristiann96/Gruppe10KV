@@ -86,9 +86,22 @@ h3 {
         background-color: #146c30;
     }
 
+
+.reporter-info form {
+    margin-bottom: 0.5rem !important;
+}
+.reporter-info .btn {
+    margin-bottom: 0.5rem !important; /* Øker mellomrommet etter knappen */
+}
+
 .saksbehandlerInformasjon {
     margin-top: 1em;
 }
+
+    .reporter-info p strong,
+    .saksbehandlerInformasjon p strong {
+        font-weight: 600;
+    }
 
 /* Status Badge */
 .badge {

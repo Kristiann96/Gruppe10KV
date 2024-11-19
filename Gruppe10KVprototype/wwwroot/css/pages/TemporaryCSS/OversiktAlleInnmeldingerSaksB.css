@@ -1,10 +1,36 @@
-﻿.content {
+﻿
+body {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    min-height: 100vh;
+    display: flex; /* Lagt til */
+    flex-direction: column; /* Lagt til */
+}
+
+    body.page { /* Øker spesifisiteten */
+        background-color: white !important; /* Overstyrer den grå bakgrunnen */
+        padding-top: 65px; /* Beholder padding for header */
+    }
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white !important;
+    margin: 0;
+    padding: 0;
+    min-height: 100%; /* Lagt til */
+}
+
+.content {
     display: flex;
     flex-direction: column;
     padding: 2rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    flex: 1; /* Endret fra min-height */
+    margin: 0;
+    position: relative; /* Lagt til */
 }
 
 .tittelOversiktAlleInnmeldinger {
