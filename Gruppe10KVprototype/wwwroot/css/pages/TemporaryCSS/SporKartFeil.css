@@ -35,13 +35,13 @@
     transition: all 0.3s ease;
 }
 
-    .status-indicator.tracking-active {
+    /*.status-indicator.tracking-active {
         color: #0f5adb;
         animation: pulseGlow 2s infinite;
-    }
+    }*/
 
 /* Legg til keyframes for pulserende effekt */
-@keyframes pulseGlow {
+/*@keyframes pulseGlow {
     0% {
         box-shadow: 0 10px 10px rgba(0,0,0,0.6);
     }
@@ -53,7 +53,7 @@
     100% {
         box-shadow: 0 10px 10px rgba(0,0,0,0.6);
     }
-}
+}*/
 
 /* Knapp stiler */
 .tracking-button {
