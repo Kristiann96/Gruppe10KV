@@ -1,187 +1,187 @@
 # Gruppe10KVprototype
 
-Welcome to the Gruppe10KV prototype repository! 
-This README serves as a quick guide to understanding, setting up, and working with the code within this repository.
+Velkommen til Gruppe10's Kartverket prototype! 
+Denne README-filen fungerer som en rask guide for å forstå, sette opp og jobbe med koden i dette repositoriet.
 
 ---
 
-## Table of Contents
+## Innholdsfortegnelse
 
-- [Overview](#overview)
-- [Setup Instructions](#setup-instructions)
-- [Repository Structure](#repository-structure)
-  - [Models](#models)
-  - [Interfaces](#interfaces)
+- [Oversikt](#oversikt)
+- [Oppsettsinstruksjoner](#oppsettsinstruksjoner)
+- [Repository-struktur](#repository-struktur)
+  - [Modeller](#modeller)
+  - [Grensesnitt](#grensesnitt)
   - [Data Access](#data-access)
-- [Technologies Used](#technologies-used)
-- [Collaborators](#collaborators)
-- [License](#license)
+- [Teknologier brukt](#teknologier-brukt)
+- [Samarbeidspartnere](#samarbeidspartnere)
+- [Lisens](#lisens)
 
 ---
 
-## Overview
-The application "Gruppe10KVprototype" is based on a project from Kartverket, aiming to facilitate user reporting and handling of geospatial data. It provides a user-friendly interface for submitting reports with geolocation data and ensures efficient handling and review of these reports by system administrators.
+## Oversikt
+Applikasjonen "Gruppe10KVprototype" er basert på et prosjekt fra Kartverket og har som mål å lette brukerrapportering og håndtering av geodata. Den gir et brukervennlig grensesnitt for å sende inn rapporter med geolokasjonsdata og sikrer effektiv håndtering og gjennomgang av disse rapportene for systemadministratorer.
 
-### What the Application Does
+### Hva applikasjonen gjør
 
-- User Reporting: Users can submit reports and errors about geographical locations, including geospatial data (GeoJSON format).
-- Admin Review: Admin users ("saksbehandlere") can review, assess, and manage these reports efficiently.
-- Data Compilation: The system provides a detailed overview and compilation of various geospatial and user-submitted data.
-- Authentication and User Management: It features a user authentication system for different types of users, including guest reporters and registered users.
+- **Brukerrapportering:** Brukere kan sende inn rapporter og feil for geografiske lokasjoner, inkludert geodata (GeoJSON-format).
+- **Administratorgjennomgang:** Administratorbrukere ("saksbehandlere") kan effektivt gjennomgå, vurdere og administrere rapporter.
+- **Datakompilering:** Systemet gir en detaljert oversikt over forskjellige geodata og brukerinnsendte data.
+- **Autentisering og brukeradministrasjon:** Inkluderer et autentiseringssystem for ulike brukertyper, som gjester og registrerte brukere.
 
 ---
 <br><br>
 
-## Setup Instructions
+## Oppsettsinstruksjoner
 
-Clone the Repository:
+Klon repositoriet:
 
     git clone https://github.com/Kristiann96/Gruppe10KV.git
 
 
-Navigate to the Project Directory:
+Naviger til prosjektmappen:
 
     cd Gruppe10KV 
 
-Dependencies: Ensure you have all the necessary libraries and runtime environments set up. The repository primarily depends on .NET.
+Avhengigheter: Sørg for at alle nødvendige biblioteker og kjøremiljøer er satt opp. Repositoriet er hovedsakelig avhengig av .NET.
 
-Build the Project: You can build the project using your preferred .NET build commands or using an IDE like Visual Studio.
+Bygg prosjektet: Du kan bygge prosjektet ved hjelp av dine foretrukne .NET-kommandoer eller en IDE som Visual Studio.
 
-Configuration: Adjust configuration settings as required. Ensure the database connection strings and other pertinent settings are correctly configured for your environment.
+Konfigurasjon: Juster konfigurasjonsinnstillingene etter behov. Sørg for at databasetilkoblinger og andre relevante innstillinger er korrekt konfigurert for ditt miljø.
 
 ---
 <br><br>
 
-## Repository Structure
+## Repository-struktur
 
-Below is an overview of the key components of the repository:
+Her er en oversikt over de viktigste komponentene i repositoriet:
 
 
-### Models
+### Modeller
 
-The Models directory is structured to keep entities and different model classes primarily used for data representation.
-Below is a simple explanation of one of our models:
+Modellmappen er strukturert for å inneholde enheter og ulike modellklasser som hovedsakelig brukes til datarepresentasjon.
+Nedenfor er en enkel forklaring av en av våre modeller:
 
   **GeometriModel.cs:**
   
-    Contains the Geometri class which represents geometric data.
-    Properties include GeometriId, InnmeldingId, and GeometriGeoJson.
+    Inneholder Geometri-klassen som representerer geometridata.
+    Egenskaper inkluderer GeometriId, InnmeldingId og GeometriGeoJson.
 
 <br><br>
 
-### Interfaces:
-The Interfaces directory contains all interface definitions for repository patterns, facilitating data operations and abstractions.
+### Grensesnitt:
+Mappen for grensesnitt inneholder alle definisjoner for repositorimønsteret, som legger til rette for dataoperasjoner og abstraksjoner.
 
   **IGeometriRepository.cs:**
     
-    Interface for geometry-related operations.
-    Methods for fetching all geometries, getting geometries by innmeldingId, etc.
+    Grensesnitt for geometrirelaterte operasjoner.
+    Metoder for å hente alle geometrier, hente geometrier basert på innmeldingId, osv.
 
   **IInnmeldingRepository.cs:** 
 
-    Interface for managing "innmeldinger".
-    Methods for fetching and updating "innmeldinger", getting enum values, and more.
+    Grensesnitt for håndtering av "innmeldinger".
+    Metoder for henting og oppdatering av "innmeldinger", hente enum-verdier med mer.
 
   **IVurderingRepository.cs:**
     
-    Interface for handling assessments.
-    Methods for adding and retrieving evaluations.
+    Grensesnitt for håndtering av vurderinger.
+    Metoder for å legge til og hente vurderinger.
 
   **IGjesteinnmelderRepository.cs:**
   
-    Interface for "gjesteinnmeldere".
-    Method for creating a "gjesteinnmelder" entry.
+    Grensesnitt for "gjesteinnmeldere".
+    Metode for å opprette en "gjesteinnmelder"-oppføring.
 
   **IInnmelderRepository.cs:**
     
-    Interface for registered "innmeldere".
-    Methods for validating and fetching "innmelder" information.
+    Grensesnitt for registrerte "innmeldere".
+    Metoder for validering og henting av "innmelder"-informasjon.
 
   **IDataSammenstillingSaksBRepository.cs:**
     
-    Interface for data compilation.
-    Methods for getting detailed reports and paginated overviews.
+    Grensesnitt for datakompilering.
+    Metoder for å hente detaljerte rapporter og paginerte oversikter.
 
   **ISaksbehandlerRepository.cs:** 
   
-    Interface for "saksbehandler".
-    Methods for validating and fetching "saksbehandler" information.
+    Grensesnitt for "saksbehandlere".
+    Metoder for validering og henting av "saksbehandler"-informasjon.
 
   **ILogginnLogic.cs:**
   
-    Interface for authentication processes.
-    Deals with user authentication logic.
+    Grensesnitt for autentiseringsprosesser.
+    Håndterer logikk for brukerautentisering.
 
   **ITransaksjonsRepository.cs:**
 
-    Interface for handling transaction-related operations.
-    Includes methods for complete report saving, creating, and deleting persons and reporters.
+    Grensesnitt for håndtering av transaksjonsrelaterte operasjoner.
+    Inkluderer metoder for komplett rapportlagring, oppretting og sletting av personer og innmeldere.
 
 <br><br>
 
 ### Data Access
 
-The DataAccess directory comprises classes implementing interfaces for database operations. This layer interacts with the database using libraries like Dapper.
+DataAccess-mappen inneholder klasser som implementerer grensesnitt for databaseoperasjoner. Dette laget samhandler med databasen ved hjelp av biblioteker som Dapper.
 
-#### Connections and Repository Implementations:
+#### Tilkoblinger og repositorieimplementasjoner:
 
   **DapperDBConnection.cs:** 
   
-    Manages database connections.
-    Utilizes MySQL for connecting and executing commands.
+    Håndterer databasetilkoblinger.
+    Bruker MySQL for tilkobling og utføring av kommandoer.
 
   **DataSammenstillingSaksBRepository.cs:** 
   
-    Implements complex queries associated with multiple data tables.
-    Fetches detailed reports and paginated data overviews and pagination features.
+    Implementerer komplekse spørringer knyttet til flere datatabeller.
+    Henter detaljerte rapporter og paginerte dataoversikter.
 
   **GjesteinnmelderRepository.cs:**
     
-    Manages database interactions for "gjesteinnmeldger".
-    Provides methods for creating and validating guest entries.
+    Håndterer databaseinteraksjoner for "gjesteinnmeldere".
+    Tilbyr metoder for oppretting og validering av gjesteoppføringer.
 
   **GeometriRepository.cs:**
     
-    Manages database interactions for the geometry.
-    Handles fetching and updating geometries from the database.
+    Håndterer databaseinteraksjoner for geometri.
+    Henter og oppdaterer geometrier i databasen.
 
   **InnmeldingRepository.cs:**
     
-    Manages database interactions for "innmelding".
-    Implements fetching, updating, and counting reports. Manages enum field operations and "innmelder" updates.
+    Håndterer databaseinteraksjoner for "innmelding".
+    Implementerer henting, oppdatering og telling av rapporter. Håndterer enum-feltoperasjoner og oppdateringer av "innmelder".
 
   **VurderingRepository.cs:**
     
-    Manages evaluation-related database tasks.
-    Features methods for adding and viewing assessments and associated evaluations.
+    Håndterer vurderingsrelaterte databaseoppgaver.
+    Inneholder metoder for å legge til og vise vurderinger og tilknyttede evalueringer.
 
   **TransaksjonsRepository.cs:**
     
-    Handles transaction operations for creating and managing composite report entries.
-    Manages complex transactions between entities.
+    Håndterer transaksjonsoperasjoner for oppretting og administrasjon av sammensatte rapportoppføringer.
+    Håndterer komplekse transaksjoner mellom enheter.
 
 ---
 <br><br>
 
-## Technologies Used:
+## Teknologier brukt:
 
-- ASP.NET Core MVC: For building the web application with a structured MVC pattern.
-- C#: Main language for backend logic.
-- Dapper ORM: For lightweight and fast database operations.
-- MySQL/MariaDB: Database used for storing and querying user and geospatial data.
-- Leaflet.js: JavaScript library for interactive maps.
-- Kartverket API: For map data and geolocation services.
+- ASP.NET Core MVC: For å bygge webapplikasjonen med et strukturert MVC-mønster.
+- C#: Hovedspråk for backend-logikk.
+- Dapper ORM: For lette og raske databaseoperasjoner.
+- MySQL/MariaDB: Database for lagring og spørring av bruker- og geodata.
+- Leaflet.js: JavaScript-bibliotek for interaktive kart.
+- Kartverket API: For kartdata og geolokasjonstjenester.
 
-### Why We Used the Technologies We Used
+### Hvorfor vi brukte disse teknologiene
 
-- ASP.NET MVC: Chosen for its robust framework and built-in support for Model-View-Controller architecture, making it easier to manage different components of the application effectively.
-- Dapper ORM: Used for efficient database interaction with MySQL/MariaDB, providing a lightweight and flexible approach to query execution.
-- MySQL/MariaDB: Selected as the database system due to its scalability and support.
-- Kartverket API & Leaflet.js: Integrated for accurate mapping and visualization of geospatial data, offering users a real-time view of locations on an interactive map.
+- **ASP.NET MVC:** Valgt for sin robuste ramme og innebygde støtte for Model-View-Controller-arkitektur, som gjør det enklere å administrere applikasjonens forskjellige komponenter.
+- **Dapper ORM:** Brukt for effektiv databaseinteraksjon med MySQL/MariaDB, gir en lett og fleksibel tilnærming til spørringsutføring.
+- **MySQL/MariaDB:** Valgt som databasesystem på grunn av skalerbarhet og støtte.
+- **Kartverket API & Leaflet.js:** Integrert for nøyaktig kartlegging og visualisering av geodata, noe som gir brukerne et sanntidsbilde av lokasjoner på et interaktivt kart.
 
 ---
 
-## Collaborators:
+## Samarbeidspartnere:
 - https://github.com/OlsenLene
 - https://github.com/Galescape
 - https://github.com/TriggeredBanana
@@ -191,7 +191,7 @@ The DataAccess directory comprises classes implementing interfaces for database 
 
 ---
 
-## License
+## Lisens
 
-The project is licensed under the MIT License. <br><br>
-Read more about the MIT License here: https://choosealicense.com/licenses/mit/
+Prosjektet er lisensiert under MIT-lisensen. <br><br>
+Les mer om MIT-lisensen her: https://choosealicense.com/licenses/mit/
