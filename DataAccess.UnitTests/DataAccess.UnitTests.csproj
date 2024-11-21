@@ -21,4 +21,10 @@
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\DataAccsess\DataAccess.csproj" />
+      <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
+      <ProjectReference Include="..\Models\Models.csproj" />
+    </ItemGroup>
+
 </Project>
