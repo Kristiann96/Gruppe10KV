@@ -24,5 +24,34 @@ public class InnmeldingLogicTests
         _logic = new InnmeldingLogic(_transaksjonsRepositoryMock.Object, _geometriRepositoryMock.Object);
     }
 
-    
+    [TestMethod]
+    [DataRow("test@example.com", true)]
+    [DataRow("invalid-email", false)]
+    [DataRow("", false)]
+    public async Task ValidereOgLagreNyInnmelding_SjekkUlikeEpostFormater(string epost, bool shouldBeValid)
+    {
+        // Arrange
+        var innmelding = new InnmeldingModel { Tittel = "Test", Beskrivelse = "Test" };
+        var geometri = new Geometri { GeometriGeoJson = "{ \"type\": \"Point\", \"coordinates\": [10.0, 60.0] }" };
+
+        if (!shouldBeValid)
+        {
+            // Act & Assert
+            await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () => 
+                await _logic.ValidereOgLagreNyInnmelding(innmelding, geometri, epost));
+        }
+        else
+        {
+            // Arrange
+            _transaksjonsRepositoryMock.Setup(x => x.LagreKomplettInnmeldingAsync(
+                    It.IsAny<string>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>()))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _logic.ValidereOgLagreNyInnmelding(innmelding, geometri, epost);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+    }
 }
