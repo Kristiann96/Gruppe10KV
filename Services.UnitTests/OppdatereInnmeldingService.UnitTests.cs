@@ -73,7 +73,7 @@ namespace Services.UnitTests
         }
         
         [TestMethod]
-        [Description("Sikrer at HentInnmeldingForOppdateringAsync returnerer riktig viewmodel når innmelding eksisterer")]
+        [Description("Sikrer at HentInnmeldingForOppdateringAsync faktisk returnerer riktig viewmodel når innmelding eksisterer")]
         public async Task HentInnmeldingForOppdateringAsync_NårInnmeldingEksisterer_ReturViewModel()
         {
             // Arrange
@@ -92,6 +92,21 @@ namespace Services.UnitTests
             Assert.AreEqual("Test", result.Tittel);
             Assert.AreEqual("Beskrivelse", result.Beskrivelse);
             Assert.AreEqual("{}", result.GeometriGeoJson);
+        }
+        
+        [TestMethod]
+        [Description("Sikrer at HentInnmeldingForOppdateringAsync faktisk kaster KeyNotFoundException når innmelding ikke eksisterer")]
+        public async Task HentInnmeldingForOppdateringAsync_NårInnmeldingIkkeEksisterer_KasterKeyNotFoundException()
+        {
+            // Arrange
+            _mockInnmeldingRepo.Setup(x => x.GetInnmeldingAsync(It.IsAny<int>()))
+                .ReturnsAsync(new List<InnmeldingModel>());
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<KeyNotFoundException>(() =>
+                _service.HentInnmeldingForOppdateringAsync(1));
+
+            Assert.AreEqual("Innmelding med id 1 ble ikke funnet", exception.Message);
         }
     }
 }
