@@ -107,10 +107,4 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "innmelderSkjema",
-    pattern: "form/{action=Form}/{id?}",
-    defaults: new { controller = "InnmelderSkjemaIncidentForm" });
-
 app.Run();
