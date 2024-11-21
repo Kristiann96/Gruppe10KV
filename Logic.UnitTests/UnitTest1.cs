@@ -96,6 +96,53 @@ public class InnmeldingLogicTests
             await _logic.ValiderInnmeldingData(innmelding));
     }
     
+    [TestMethod]
+    [DataRow("{ \"type\": \"Point\", \"coordinates\": [10.0, 60.0] }", true)]
+    [DataRow("{ \"type\": \"Feature\", \"geometry\": { \"type\": \"Point\", \"coordinates\": [10.0, 60.0] } }", true)]
+    [DataRow("{ \"type\": \"Invalid\", \"coordinates\": [10.0, 60.0] }", false)]
+    [DataRow("{ \"coordinates\": [10.0, 60.0] }", false)]
+    [DataRow("Invalid JSON", false)]
+    public async Task ValidereGeometriDataForOppdatering_SjekkUlikeGeoJsonFormater(string geoJson, bool shouldBeValid)
+    {
+        // Arrange
+        var innmeldingId = 1;
+        var geometri = new Geometri { GeometriGeoJson = geoJson };
+
+        _geometriRepositoryMock.Setup(x => x.GetGeometriByInnmeldingIdAsync(innmeldingId))
+            .ReturnsAsync(new Geometri());
+
+        if (!shouldBeValid)
+        {
+            // Act & Assert
+            await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () => 
+                await _logic.ValidereGeometriDataForOppdatering(innmeldingId, geometri));
+        }
+        else
+        {
+            // Act
+            var result = await _logic.ValidereGeometriDataForOppdatering(innmeldingId, geometri);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+    }
+
+    [TestMethod]
+    public async Task ValidereOgLagreNyInnmelding_LagringsfeilerIRepository_KasterException()
+    {
+        // Arrange
+        var innmelding = new InnmeldingModel { Tittel = "Test", Beskrivelse = "Test" };
+        var geometri = new Geometri { GeometriGeoJson = "{ \"type\": \"Point\", \"coordinates\": [10.0, 60.0] }" };
+        var epost = "test@example.com";
+
+        _transaksjonsRepositoryMock.Setup(x => x.LagreKomplettInnmeldingAsync(
+                It.IsAny<string>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>()))
+            .ThrowsAsync(new Exception("Database error"));
+
+        // Act & Assert
+        await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () => 
+            await _logic.ValidereOgLagreNyInnmelding(innmelding, geometri, epost));
+    }
     
     
 }
