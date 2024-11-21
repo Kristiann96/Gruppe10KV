@@ -77,4 +77,38 @@ public class OversiktAlleInnmeldingerSaksBController_UnitTests
         Assert.IsNotNull(viewModel);
         Assert.AreEqual(2, viewModel.InnmeldingId.Count());
     }
+    
+    [TestMethod]
+    [Description("Verifiserer at enum-verdier blir korrekt formatert for visning:" +
+                 "\n1. Status 'ny' blir til 'Ny'" +
+                 "\n2. Status 'under_behandling' blir til 'Under behandling'" +
+                 "\n3. Prioritet 'høy' blir til 'Høy'" +
+                 "\n4. Prioritet 'lav' blir til 'Lav'" +
+                 "\n5. Sjekker at antall status- og prioritetsverdier matcher testdataen" +
+                 "\n6. Bekrefter at rekkefølgen på de formaterte verdiene er korrekt")]
+    public async Task OversiktAlleInnmeldingerSaksB_FormattererEnumVerdierKorrekt()
+    {
+        // Arrange
+        _mockDataSammenstillingsRepo.Setup(x => x.GetOversiktAlleInnmeldingerSaksBAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
+            .ReturnsAsync((_testData, 2));
+
+        _mockEnumLogic.Setup(x => x.ConvertToDisplayFormat("ny"))
+            .Returns(Logic.EnumFormatter.ToNormalText("ny"));
+        _mockEnumLogic.Setup(x => x.ConvertToDisplayFormat("under_behandling"))
+            .Returns(Logic.EnumFormatter.ToNormalText("under_behandling"));
+        _mockEnumLogic.Setup(x => x.ConvertToDisplayFormat("høy"))
+            .Returns(Logic.EnumFormatter.ToNormalText("høy"));
+        _mockEnumLogic.Setup(x => x.ConvertToDisplayFormat("lav"))
+            .Returns(Logic.EnumFormatter.ToNormalText("lav"));
+
+        // Act
+        var result = await _controller.OversiktAlleInnmeldingerSaksB(1, 10, "");
+        var viewModel = (result as ViewResult).Model as OversiktAlleInnmeldingerSaksBViewModel;
+
+        // Assert
+        Assert.IsNotNull(viewModel);
+        Assert.AreEqual(2, viewModel.Status.Count(), "Status count mismatch");
+        Assert.IsTrue(viewModel.Status.SequenceEqual(new[] { "Ny", "Under behandling" }), "Status mismatch");
+        Assert.IsTrue(viewModel.Prioritet.SequenceEqual(new[] { "Høy", "Lav" }), "Prioritet mismatch");
+    }
 }
