@@ -18,15 +18,17 @@ namespace Services.UnitTests
         [TestInitialize]
         public void TestInitialize()
         {
-            // Oppretter mock-objekter for å simulere avhengigheter
+            // Oppretter mock-objekter for alle avhengigheter
             _mockInnmeldingRepo = new Mock<IInnmeldingRepository>();
             _mockInnmeldingLogic = new Mock<IInnmeldingLogic>();
+            var mockGeometriRepo = new Mock<IGeometriRepository>();
+            var mockTransaksjonsRepo = new Mock<ITransaksjonsRepository>();
 
-            // Oppretter service-instans med mock-avhengigheter
+            // Oppretter service-instans med alle mock-avhengigheter
             _service = new OppdatereInnmeldingService(
                 _mockInnmeldingRepo.Object,
-                null!, // Null for andre avhengigheter som ikke brukes i denne testen
-                null!,
+                mockGeometriRepo.Object,
+                mockTransaksjonsRepo.Object,
                 _mockInnmeldingLogic.Object
             );
         }
