@@ -46,7 +46,7 @@ builder.Services.AddScoped<IOppdatereInnmeldingService, OppdatereInnmeldingServi
 
 
 //og logic og logicinterfaces
-builder.Services.AddScoped<IInnmeldingOpprettelseLogic, InnmeldingOpprettelseLogic>();
+builder.Services.AddScoped<IInnmeldingLogic, InnmeldingLogic>();
 
 //AuthService registrering
 builder.Services.AddScoped<IAuthService, AuthService>();
