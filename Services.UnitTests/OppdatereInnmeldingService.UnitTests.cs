@@ -108,5 +108,20 @@ namespace Services.UnitTests
 
             Assert.AreEqual("Innmelding med id 1 ble ikke funnet", exception.Message);
         }
+        
+        [TestMethod]
+        [Description("Sikrer at HentInnmeldingForOppdateringAsync håndterer unntak kastet av innmelding repository")]
+        public async Task HentInnmeldingForOppdateringAsync_NårInnmeldingRepoKasterException_HåndtererException()
+        {
+            // Arrange
+            _mockInnmeldingRepo.Setup(x => x.GetInnmeldingAsync(It.IsAny<int>()))
+                .ThrowsAsync(new Exception("Database error"));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() =>
+                _service.HentInnmeldingForOppdateringAsync(1));
+
+            Assert.AreEqual("Database error", exception.Message);
+        }
     }
 }
