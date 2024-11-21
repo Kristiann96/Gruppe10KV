@@ -9,11 +9,11 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
     public class KnyttInnmeldingTilPersonController : Controller
     {
-        private readonly IInnmeldingOpprettelseLogic _innmeldingOpprettelseLogic;
+        private readonly IInnmeldingLogic _innmeldingLogic;
 
-        public KnyttInnmeldingTilPersonController(IInnmeldingOpprettelseLogic innmeldingOpprettelseLogic)
+        public KnyttInnmeldingTilPersonController(IInnmeldingLogic innmeldingLogic)
         {
-            _innmeldingOpprettelseLogic = innmeldingOpprettelseLogic;
+            _innmeldingLogic = innmeldingLogic;
         }
 
         [HttpGet]
@@ -52,7 +52,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                     GeometriGeoJson = model.GeometriGeoJson
                 };
 
-                var resultat = await _innmeldingOpprettelseLogic.ValidereOgLagreNyInnmelding(
+                var resultat = await _innmeldingLogic.ValidereOgLagreNyInnmelding(
                     innmelding,
                     geometri,
                     model.Epost);

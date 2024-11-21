@@ -24,47 +24,17 @@ namespace Models.Entities
             public string Beskrivelse { get; set; } = null!;       // NOT NULL
             public DateTime Innmeldingstidspunkt { get; set; }     // NOT NULL, default til nåværende timestamp
 
-
-            public string Status { get; set; }         // Default 'ny'
+            public string Status { get; set; }         // enum Default 'ny' de andre verdiene er: 'ikke_påbegynt', 'under_behandling', 'pauset', 'avsluttet', 'ikke_tatt_til_følge'
             public DateTime SisteEndring { get; set; }             // NOT NULL, oppdateres automatisk
-            public string Prioritet { get; set; }   // Default 'ikke_vurdert'
+            public string Prioritet { get; set; }   // enum Default 'ikke_vurdert' de andre verdiene er: 'lav', 'moderat', 'høy', 'kritisk', 'farlig_for_liv_helse', 'ekstrem_haster'
 
-            public string KartType { get; set; }         // Default 'standard'
+            public string KartType { get; set; }         // enum Default 'standard' de andre verdiene er: 'topografisk', 'sjøkart', 'ortofoto', 'administrativt'
 
-            public Geometri Geometri { get; set; } = null!;     // NOT NULL
+       
             public string InnmelderType { get; set; }
 
-    }
-
-        // Enums for status, prioritet og kart_type
-        public enum Status
-        {
-            Ny,
-            IkkePåBegynt,
-            UnderBehandling,
-            Pauset,
-            Avsluttet,
-            IkkeTattTilFølge
+    
         }
-
-        public enum Prioritet
-        {
-            IkkeVurdert,
-            Lav,
-            Moderat,
-            Høy,
-            Kritisk,
-            FarligForLivHelse,
-            EkstremHaster
-        }
-
-        public enum KartType
-        {
-            Standard,
-            Topografisk,
-            Sjøkart,
-            Ortofoto,
-            Administrativt
-        }
+       
     
 }

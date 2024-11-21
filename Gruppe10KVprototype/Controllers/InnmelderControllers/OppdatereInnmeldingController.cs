@@ -6,7 +6,7 @@ using ServicesInterfaces;
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
 
-  
+
     public class OppdatereInnmeldingController : Controller
     {
         private readonly IOppdatereInnmeldingService _innmeldingService;
@@ -15,8 +15,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         {
             _innmeldingService = innmeldingService;
         }
-        
-        
+
         [HttpGet]
         public async Task<IActionResult> OppdatereInnmelding(int innmeldingId)
         {
@@ -27,25 +26,51 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             }
             catch (KeyNotFoundException)
             {
-                return NotFound("Innmelding ikke funnet");
+                // Ved ikke-eksisterende innmelding, redirect til liste med feilmelding
+                TempData["ErrorMessage"] = "Innmelding ikke funnet";
+                return RedirectToAction("MineInnmeldinger", "MineInnmeldinger");
+            }
+            catch (Exception ex)
+            {
+                // Ved uventet feil, redirect til liste med generisk feilmelding
+                TempData["ErrorMessage"] = "En feil oppstod ved henting av innmelding";
+                return RedirectToAction("MineInnmeldinger", "MineInnmeldinger");
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OppdatereInnmeldingDetaljer(OppdatereInnmeldingViewModel model)
+        public async Task<IActionResult> OppdatereInnmeldingDetaljer([FromForm] OppdatereInnmeldingViewModel model)
         {
             if (!ModelState.IsValid)
-                return View("OppdatereInnmelding", model);
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Validering feilet. Sjekk at alle påkrevde felt er fylt ut."
+                });
+            }
 
             try
             {
                 await _innmeldingService.OppdatereInnmeldingAsync(model);
-                return Json(new { success = true });  // Returner JSON istedenfor redirect
+                return Json(new { success = true });
             }
             catch (ValidationException ex)
             {
                 return Json(new { success = false, message = ex.Message });
+            }
+            catch (KeyNotFoundException)
+            {
+                return Json(new { success = false, message = "Innmelding ikke funnet" });
+            }
+            catch (Exception)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "En uventet feil oppstod ved oppdatering av innmeldingen"
+                });
             }
         }
 
@@ -62,6 +87,18 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             {
                 return Json(new { success = false, message = ex.Message });
             }
+            catch (KeyNotFoundException)
+            {
+                return Json(new { success = false, message = "Innmelding ikke funnet" });
+            }
+            catch (Exception)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "En uventet feil oppstod ved oppdatering av geometrien"
+                });
+            }
         }
 
         [HttpPost]
@@ -70,18 +107,24 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         {
             try
             {
-                await _innmeldingService.SlettInnmeldingAsync(innmeldingId);
-                return RedirectToAction("Index", "Home"); // eller hvor du vil redirecte etter sletting
+                var result = await _innmeldingService.SlettInnmeldingAsync(innmeldingId);
+                return Json(new { success = result });
             }
             catch (KeyNotFoundException)
             {
-                return NotFound("Innmelding ikke funnet");
+                return Json(new
+                {
+                    success = false,
+                    message = "Innmelding ikke funnet"
+                });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ModelState.AddModelError("", "Kunne ikke slette innmeldingen: " + ex.Message);
-                // Redirect tilbake til view med feilmelding
-                return RedirectToAction("OppdatereInnmelding", new { innmeldingId });
+                return Json(new
+                {
+                    success = false,
+                    message = "Kunne ikke slette innmeldingen, om feilen vedvarer vennligst ta kontakt"
+                });
             }
         }
     }

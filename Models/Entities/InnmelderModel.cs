@@ -18,19 +18,9 @@ namespace Models.Entities
 
         // E-post og Innmelder-type med angitte egenskaper
         public string Epost { get; set; } = null!;  // NOT NULL og unik
-        public string InnmelderType { get; set; }   // Standardverdi 'privat'
+        public string InnmelderType { get; set; }   // enum Standardverdi 'privat' de andre verdiene er: 'offentlig', 'utrykningspersonell', 'frivillig', 'firma'
 
     }
-
-    public enum InnmelderType
-    {
-        Privat,
-        Offentlig,
-        Utrykningspersonell,
-        Frivillig,
-        Firma
-    }
-
 
 
 }
