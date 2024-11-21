@@ -12,6 +12,7 @@ using AuthDataAccess.Extensions;
 using AuthDataAccess.Services;
 using Services;
 using ServicesInterfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,6 +85,13 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
+// Konfigurering av authentication defaults
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Innmelder/LoggInn"; // disse må refaktoreres til å bruke konstanter
+    options.AccessDeniedPath = "/Views/Home/Error";
+});
+
 var app = builder.Build();
 
 await IdentityDataInitializer.InitializeRoles(app.Services);
@@ -102,6 +110,7 @@ app.UseRouting();
 // Riktig rekkefølge for auth middleware
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStatusCodePages();
 
 // Routing
 app.MapControllerRoute(

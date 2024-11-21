@@ -2,11 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using ViewModels;
 using ServicesInterfaces;
+using Microsoft.AspNetCore.Authorization;
+using AuthInterface;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
 
-
+    [Authorize(Roles = UserRoles.Innmelder)]
     public class OppdatereInnmeldingController : Controller
     {
         private readonly IOppdatereInnmeldingService _innmeldingService;

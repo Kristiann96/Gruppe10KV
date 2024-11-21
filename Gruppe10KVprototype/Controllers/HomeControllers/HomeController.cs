@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.HomeModels;
 
@@ -22,12 +23,17 @@ public class HomeController : Controller
     {
         return View();
     }
-
-   
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    [AllowAnonymous]
+    public IActionResult AccessDenied()
+    {
+        var errorMessage = "Du har ikke adgang til denne siden";
+        return View("Error", new ErrorViewModel{Message = errorMessage});
+        
     }
 }
