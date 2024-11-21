@@ -111,4 +111,23 @@ public class OversiktAlleInnmeldingerSaksBController_UnitTests
         Assert.IsTrue(viewModel.Status.SequenceEqual(new[] { "Ny", "Under behandling" }), "Status mismatch");
         Assert.IsTrue(viewModel.Prioritet.SequenceEqual(new[] { "Høy", "Lav" }), "Prioritet mismatch");
     }
+    
+    [TestMethod]
+    [Description("Verifiserer at geometri blir korrekt hentet for innmeldinger:" +
+                 "\n- Henter geometri én gang for hver innmelding" + 
+                 "\n- Henter geometri med korrekt innmeldingId")]
+    public async Task OversiktAlleInnmeldingerSaksB_HenterGeometriDataKorrekt()
+    {
+        // Arrange
+        _mockDataSammenstillingsRepo.Setup(x => x.GetOversiktAlleInnmeldingerSaksBAsync(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
+            .ReturnsAsync((_testData, 2));
+
+        // Act
+        var result = await _controller.OversiktAlleInnmeldingerSaksB(1, 10, "");
+
+        // Assert
+        // Verifiser at metoden blir kalt nøyaktig én gang for hver innmelding
+        _mockGeometriRepo.Verify(x => x.GetGeometriByInnmeldingIdAsync(1), Times.Once());
+        _mockGeometriRepo.Verify(x => x.GetGeometriByInnmeldingIdAsync(2), Times.Once());
+    }
 }
