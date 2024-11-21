@@ -143,6 +143,4 @@ public class InnmeldingLogicTests
         await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () => 
             await _logic.ValidereOgLagreNyInnmelding(innmelding, geometri, epost));
     }
-    
-    
 }
