@@ -4,6 +4,7 @@
 }
 
 <link rel="stylesheet" href="~/css/style.css" />
+<link rel="stylesheet" href="~/css/pages/TemporaryCSS/Error.css" />
 
 <head>
     <meta charset="UTF-8">
@@ -19,7 +20,7 @@
         <div class="cardText">Det har oppstått en feil</div>
         @if (!string.IsNullOrEmpty(Model.Message))
         {
-            <div class="error-message">@Model.Message</div>
+            <div class="errorMessage">@Model.Message</div>
         }
     </div>
 </div>
