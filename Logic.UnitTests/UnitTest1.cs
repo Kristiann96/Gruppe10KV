@@ -23,12 +23,12 @@ public class InnmeldingLogicTests
         _geometriRepositoryMock = new Mock<IGeometriRepository>();
         _logic = new InnmeldingLogic(_transaksjonsRepositoryMock.Object, _geometriRepositoryMock.Object);
     }
-
+    
     [TestMethod]
     [DataRow("test@example.com", true)]
     [DataRow("invalid-email", false)]
     [DataRow("", false)]
-    public async Task ValidereOgLagreNyInnmelding_SjekkUlikeEpostFormater(string epost, bool shouldBeValid)
+    public async Task ValidereOgLagreNyInnmelding_SjekkUlikeEpostFormater_KasterException(string epost, bool shouldBeValid)
     {
         // Arrange
         var innmelding = new InnmeldingModel { Tittel = "Test", Beskrivelse = "Test" };
