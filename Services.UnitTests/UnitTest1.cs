@@ -12,8 +12,6 @@ namespace Services.UnitTests;
 public class OppdatereInnmeldingServiceTests
 {
     private Mock<IInnmeldingRepository> _mockInnmeldingRepo = null!;
-    private Mock<IGeometriRepository> _mockGeometriRepo = null!;
-    private Mock<ITransaksjonsRepository> _mockTransaksjonsRepo = null!;
     private Mock<IInnmeldingLogic> _mockInnmeldingLogic = null!;
     private OppdatereInnmeldingService _service = null!;
 
@@ -21,13 +19,11 @@ public class OppdatereInnmeldingServiceTests
     public void TestInitialize()
     {
         _mockInnmeldingRepo = new Mock<IInnmeldingRepository>();
-        _mockGeometriRepo = new Mock<IGeometriRepository>();
-        _mockTransaksjonsRepo = new Mock<ITransaksjonsRepository>();
         _mockInnmeldingLogic = new Mock<IInnmeldingLogic>();
         _service = new OppdatereInnmeldingService(
             _mockInnmeldingRepo.Object,
-            _mockGeometriRepo.Object,
-            _mockTransaksjonsRepo.Object,
+            null!,  // IGeometriRepository ikke brukt i denne testen
+            null!,  // ITransaksjonsRepository ikke brukt i denne testen
             _mockInnmeldingLogic.Object
         );
     }
