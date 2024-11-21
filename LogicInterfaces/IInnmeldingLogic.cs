@@ -8,7 +8,7 @@ using Models.Models;
 
 namespace LogicInterfaces
 {
-    public interface IInnmeldingOpprettelseLogic
+    public interface IInnmeldingLogic
     {
         Task<bool> ValidereOgLagreNyInnmelding(InnmeldingModel innmelding, Geometri geometri, string gjesteEpost);
         Task<bool> ValidereGeometriDataForOppdatering(int innmeldingId, Geometri geometri);

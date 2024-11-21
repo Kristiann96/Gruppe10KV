@@ -240,6 +240,16 @@ textarea.form-control {
     gap: 10px;
 }
 
+.modal-button-blue {
+    background-color: var(--kartverket-blaa);
+    color: white;
+}
+
+    .modal-button-blue:hover {
+        background-color: #0060b9;
+        transform: translateY(-1px);
+    }
+
 .close {
     cursor: pointer;
     font-size: 24px;

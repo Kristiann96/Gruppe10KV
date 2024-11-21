@@ -125,6 +125,7 @@
     <script src="~/js/maps/config/drawConfig.js"></script>
     <script src="~/js/maps/services/wmsService.js"></script>
     <script src="~/js/maps/utils/mapControls.js"></script>
+    <script src="~/js/config/timeoutConfig.js"></script>
 
     <!-- Validering -->
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -136,9 +137,7 @@
         document.addEventListener('DOMContentLoaded', function() {
     // Vis popup automatisk ved lasting
     document.getElementById('geometryEditInfo').style.display = 'block';
-    
-    // Skjul etter 15 sekunder (økt fra 10 for mer lesetid)
-    setTimeout(closeGeometryInfo, 15000);
+            setTimeout(closeGeometryInfo, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_GEOMETRY_INFO_DISPLAY);
 });
 
 function closeGeometryInfo() {
@@ -181,18 +180,18 @@ function closeGeometryInfo() {
         MapControls.initializeControls(map);
 
         // Last eksisterende geometri
-        if ('@Model.GeometriGeoJson') {
-            try {
-                const geoJson = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
-                L.geoJSON(geoJson, {
-                    onEachFeature: function (feature, layer) {
-                        drawnItems.addLayer(layer);
-                    }
-                });
-                map.fitBounds(drawnItems.getBounds());
-            } catch (error) {
-                console.error('Error loading geometry:', error);
+   if ('@Model.GeometriGeoJson') {
+    try {
+        const geoJson = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
+        L.geoJSON(geoJson, {
+            onEachFeature: function (feature, layer) {
+                drawnItems.addLayer(layer);
             }
+        });
+        map.fitBounds(drawnItems.getBounds());
+    } catch (error) {
+        console.error('Error loading geometry:', error);
+    }
         }
 
         // Vis popup når redigering starter
@@ -204,8 +203,8 @@ function closeGeometryInfo() {
                 setTimeout(() => {
                     popup.style.display = 'none';
                     popup.style.opacity = '1';
-                }, 300);
-            }, 8000); 
+                }, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_FADE_DURATION);
+            }, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_EDIT_POPUP);
         });
 
         // Håndter ferdig redigering
@@ -213,13 +212,7 @@ function closeGeometryInfo() {
             const layers = e.layers;
             layers.eachLayer(function (layer) {
                 const rawGeoJSON = layer.toGeoJSON();
-                // Send bare geometry-objektet
-                const geometryOnly = {
-                    type: rawGeoJSON.geometry.type,
-                    coordinates: rawGeoJSON.geometry.coordinates
-                };
-                
-                document.getElementById('GeometriGeoJson').value = JSON.stringify(geometryOnly);
+                document.getElementById('GeometriGeoJson').value = JSON.stringify(rawGeoJSON.geometry);
                 document.getElementById('lagreGeometriBtn').disabled = false;
                 geometriEndret = true;
             });
@@ -325,23 +318,49 @@ function closeGeometryInfo() {
         }
 
         async function slettInnmelding() {
-            try {
-                const response = await fetch('@Url.Action("SlettInnmelding", new { innmeldingId = Model.InnmeldingId })', {
-                    method: 'POST',
-                    headers: {
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                    }
-                });
-
-                if (response.ok) {
-                    window.location.href = '@Url.Action("MineInnmeldinger", "MineInnmeldinger")';
-                } else {
-                    visStatusMelding('Kunne ikke slette innmeldingen', true);
-                }
-            } catch (error) {
-                visStatusMelding('En feil oppstod', true);
+    try {
+        const response = await fetch('@Url.Action("SlettInnmelding", new { innmeldingId = Model.InnmeldingId })', {
+            method: 'POST',
+            headers: {
+                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
             }
+        });
+
+        if (response.ok) {
+            visSlettingResultat(true);
+        } else {
+            visSlettingResultat(false);
         }
+    } catch (error) {
+        visSlettingResultat(false);
+    }
+        }
+
+function visSlettingResultat(success) {
+    const modal = document.getElementById('slettModal');
+    const modalTitle = modal.querySelector('.modal-header h3');
+    const modalBody = modal.querySelector('.modal-body');
+    const modalFooter = modal.querySelector('.modal-footer');
+    
+    if (success) {
+        modalTitle.textContent = 'Sletting vellykket';
+        modalBody.innerHTML = '<p>Innmeldingen er nå slettet</p>';
+    } else {
+        modalTitle.textContent = 'Feil ved sletting';
+        modalBody.innerHTML = '<p>Kunne ikke slette innmeldingen, om feilen vedvarer vennligst ta kontakt</p>';
+    }
+    
+    modalFooter.innerHTML = `
+        <button class="map-button modal-button-blue" onclick="lukkModalOgRedirect('@Url.Action("MineInnmeldinger", "MineInnmeldinger")')">OK</button>
+    `;
+    
+    modal.style.display = 'block';
+}
+
+function lukkModalOgRedirect(url) {
+    document.getElementById('slettModal').style.display = 'none';
+    window.location.href = url;
+}
 
         document.getElementById('slettInnmeldingBtn').addEventListener('click', visSlettModal);
 
@@ -372,8 +391,8 @@ function closeGeometryInfo() {
                 setTimeout(() => {
                     document.body.removeChild(popup);
                     window.location.href = '@Url.Action("MineInnmeldinger", "MineInnmeldinger")';
-                }, 500);
-            }, 4000)
+                }, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_FADE_DURATION);
+            }, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_STATUS_MESSAGE);
         }
     </script>
 }
