@@ -57,16 +57,27 @@ public class SaksbehandlerRepository : ISaksbehandlerRepository
         return await connection.QuerySingleOrDefaultAsync<SaksbehandlerModel>(sql, new { PersonId = personId });
     }
 
-    public async Task<IEnumerable<SaksbehandlerNavnModel>> HentAlleSaksbehandlereNavnId()
+    public async Task<List<(SaksbehandlerModel, PersonModel)>> HentAlleSaksbehandlereMedPersonAsync()
     {
         using var connection = _dbConnection.CreateConnection();
         var sql = @"
         SELECT 
-            s.saksbehandler_id as Id,
-            CONCAT(p.fornavn, ' ', p.etternavn) as Navn
+            s.saksbehandler_id AS SaksbehandlerId,
+            s.person_id AS PersonId,
+            p.fornavn AS Fornavn,
+            p.etternavn AS Etternavn
         FROM saksbehandler s
-        JOIN person p ON s.person_id = p.person_id";
+        JOIN person p ON s.person_id = p.person_id;";
 
-        return await connection.QueryAsync<SaksbehandlerNavnModel>(sql);
+        var result = await connection.QueryAsync<SaksbehandlerModel, PersonModel, (SaksbehandlerModel, PersonModel)>(
+            sql,
+            (saksbehandler, person) =>
+            {
+                return (saksbehandler, person); // Kombiner modellene
+            },
+            splitOn: "PersonId" // Dapper starter ny mapping ved "PersonId"
+        );
+
+        return result.ToList();
     }
 }

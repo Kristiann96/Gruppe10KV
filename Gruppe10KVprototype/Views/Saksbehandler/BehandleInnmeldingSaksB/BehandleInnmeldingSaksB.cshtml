@@ -97,14 +97,15 @@
                             <select id="saksbehandlerDropdown"
                                     name="saksbehandlerId"
                                     class="form-control"
-                                    asp-items="Model.SaksbehandlerOptions">
+                                    asp-items="Model.ValgbareSaksbehandlere">
                                 <option value="">Velg saksbehandler</option>
                             </select>
                         </div>
-
-                        <button type="submit" class="btn btn-primary mb-3">Lagre saksbehandler</button>
+                        <button type="submit" class="btn btn-primary">Lagre</button>
                     </form>
-                    @if (Model.SaksbehandlerModel != null)
+                
+
+                @if (Model.SaksbehandlerModel != null)
                     {
                         <div class="saksbehandlerInformasjon">
                             <p><strong>Stilling:</strong> @Model.SaksbehandlerModel.Stilling</p>
@@ -198,5 +199,27 @@
         }
         });
     </script>
-</body>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentSaksbehandlerId = '@Model.ValgtSaksbehandlerId';
+            const dropdown = document.getElementById('saksbehandlerDropdown');
+
+            fetch('/BehandleInnmeldingSaksB/HentSaksbehandlere')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        const option = new Option(
+                            item.Text, 
+                            item.Value, 
+                            item.Value === currentSaksbehandlerId,
+                            item.Value === currentSaksbehandlerId
+                        );
+                        dropdown.add(option);
+                    });
+                })
+                .catch(error => console.error('Feil ved henting av saksbehandlere:', error));
+        });
+    </script>
+    </body>
 </html>
