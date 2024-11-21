@@ -82,7 +82,7 @@ public class InnmeldingLogicTests
         await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () => 
             await _logic.ValiderInnmeldingData(innmelding));
     }
-
+    
     [TestMethod]
     [DataRow("")]
     [DataRow(" ")]
@@ -126,7 +126,7 @@ public class InnmeldingLogicTests
             Assert.IsTrue(result);
         }
     }
-
+    
     [TestMethod]
     public async Task ValidereOgLagreNyInnmelding_LagringsfeilerIRepository_KasterException()
     {
