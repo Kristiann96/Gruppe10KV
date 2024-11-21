@@ -1,10 +1,9 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.HomeModels;
+using ViewModels.HomeViewModels;
 
 namespace Gruppe10KVprototype.Controllers.HomeControllers;
-
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -26,14 +25,11 @@ public class HomeController : Controller
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-
-    [AllowAnonymous]
-    public IActionResult AccessDenied()
-    {
-        var errorMessage = "Du har ikke adgang til denne siden";
-        return View("Error", new ErrorViewModel{Message = errorMessage});
-        
+        var errorMessage = TempData["ErrorMessage"] as string;
+        return View(new ErrorViewModel
+        {
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+            Message = errorMessage
+        });
     }
 }
