@@ -54,4 +54,48 @@ public class InnmeldingLogicTests
             Assert.IsTrue(result);
         }
     }
+    
+    [TestMethod]
+    [DataRow("")]
+    [DataRow(" ")]
+    public async Task ValiderInnmeldingData_UgyldigTittel_KasterException(string tittel)
+    {
+        // Arrange
+        var innmelding = new InnmeldingModel { Tittel = tittel, Beskrivelse = "Test" };
+
+        // Act & Assert
+        await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () => 
+            await _logic.ValiderInnmeldingData(innmelding));
+    }
+
+    [TestMethod]
+    public async Task ValiderInnmeldingData_TittelForLang_KasterException()
+    {
+        // Arrange
+        var innmelding = new InnmeldingModel 
+        { 
+            Tittel = new string('a', 101),
+            Beskrivelse = "Test" 
+        };
+
+        // Act & Assert
+        await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () => 
+            await _logic.ValiderInnmeldingData(innmelding));
+    }
+
+    [TestMethod]
+    [DataRow("")]
+    [DataRow(" ")]
+    public async Task ValiderInnmeldingData_UgyldigBeskrivelse_KasterException(string beskrivelse)
+    {
+        // Arrange
+        var innmelding = new InnmeldingModel { Tittel = "Test", Beskrivelse = beskrivelse };
+
+        // Act & Assert
+        await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () => 
+            await _logic.ValiderInnmeldingData(innmelding));
+    }
+    
+    
+    
 }
