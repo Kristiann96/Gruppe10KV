@@ -24,12 +24,7 @@ namespace ViewModels
 
         public string GeometriGeoJson { get; set; }
 
-        // Hjelpefelt for å spore endringer i viewet
-        public bool ErTittelEndret { get; set; }
-        public bool ErBeskrivelseEndret { get; set; }
-        public bool ErGeometriEndret { get; set; }
-
-        public bool ErIRedigeringsmodus { get; set; }
+       
 
 
     }

@@ -18,35 +18,35 @@ namespace Services
         private readonly IInnmeldingRepository _innmeldingRepository;
         private readonly IGeometriRepository _geometriRepository;
         private readonly ITransaksjonsRepository _transaksjonsRepository;
-        private readonly IInnmeldingOpprettelseLogic _innmeldingOpprettelseLogic;
+        private readonly IInnmeldingLogic _innmeldingLogic;
 
         public OppdatereInnmeldingService(
             IInnmeldingRepository innmeldingRepository,
             IGeometriRepository geometriRepository,
             ITransaksjonsRepository transaksjonsRepository,
-            IInnmeldingOpprettelseLogic innmeldingOppdateringLogic)
+            IInnmeldingLogic innmeldingOppdateringLogic)
         {
             _innmeldingRepository = innmeldingRepository;
             _geometriRepository = geometriRepository;
             _transaksjonsRepository = transaksjonsRepository;
-            _innmeldingOpprettelseLogic = innmeldingOppdateringLogic;
+            _innmeldingLogic = innmeldingOppdateringLogic;
         }
 
         public async Task<OppdatereInnmeldingViewModel> HentInnmeldingForOppdateringAsync(int innmeldingId)
         {
-            // Henter data fra flere repositories og sammenstiller det
             var innmelding = await _innmeldingRepository.GetInnmeldingAsync(innmeldingId);
+            if (!innmelding.Any())
+            {
+                throw new KeyNotFoundException($"Innmelding med id {innmeldingId} ble ikke funnet");
+            }
+
             var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(innmeldingId);
 
-            if (innmelding == null || !innmelding.Any())
-                throw new KeyNotFoundException($"Innmelding med id {innmeldingId} ble ikke funnet");
-
-            // Mapper til ViewModel
             return new OppdatereInnmeldingViewModel
             {
                 InnmeldingId = innmeldingId,
-                Tittel = innmelding.FirstOrDefault()?.Tittel,
-                Beskrivelse = innmelding.FirstOrDefault()?.Beskrivelse,
+                Tittel = innmelding.First().Tittel,
+                Beskrivelse = innmelding.First().Beskrivelse,
                 GeometriGeoJson = geometri?.GeometriGeoJson
             };
         }
@@ -60,43 +60,30 @@ namespace Services
                 Beskrivelse = model.Beskrivelse
             };
 
-            
-            await _innmeldingOpprettelseLogic.ValiderInnmeldingData(innmelding);
-
+            await _innmeldingLogic.ValiderInnmeldingData(innmelding);
             return await _innmeldingRepository.OppdatereInnmeldingAsync(innmelding);
         }
 
-
         public async Task<bool> OppdatereGeometriAsync(int innmeldingId, string geometriGeoJson)
         {
-            Console.WriteLine($"Mottar geometri oppdatering: {geometriGeoJson}"); // Debug
-
-            // Validerer geometri
             var geometri = new Geometri
             {
                 InnmeldingId = innmeldingId,
                 GeometriGeoJson = geometriGeoJson
             };
 
-            await _innmeldingOpprettelseLogic.ValidereGeometriDataForOppdatering(innmeldingId, geometri);
-
-            // Utfører oppdatering
-            var result = await _geometriRepository.OppdatereGeometriAsync(innmeldingId, geometriGeoJson);
-            Console.WriteLine($"Oppdatering resultat: {result}"); // Debug
-            return result;
+            await _innmeldingLogic.ValidereGeometriDataForOppdatering(innmeldingId, geometri);
+            return await _geometriRepository.OppdatereGeometriAsync(innmeldingId, geometriGeoJson);
         }
-
 
         public async Task<bool> SlettInnmeldingAsync(int innmeldingId)
         {
-            // Sjekker først om innmeldingen eksisterer
             var innmelding = await _innmeldingRepository.GetInnmeldingAsync(innmeldingId);
             if (!innmelding.Any())
             {
                 throw new KeyNotFoundException($"Innmelding med id {innmeldingId} ble ikke funnet");
             }
 
-            // Utfører sletting via transaksjonsRepository
             return await _transaksjonsRepository.SlettInnmeldingMedTilhorendeDataAsync(innmeldingId);
         }
     }
