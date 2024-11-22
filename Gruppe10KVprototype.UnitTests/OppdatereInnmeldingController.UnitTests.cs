@@ -22,7 +22,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
             _serviceMock = new Mock<IOppdatereInnmeldingService>();
             _controller = new OppdatereInnmeldingController(_serviceMock.Object);
         }
-
+ 
         [TestMethod]
         public async Task OppdatereInnmelding_ValidId_ReturnsViewWithModel()
         {
