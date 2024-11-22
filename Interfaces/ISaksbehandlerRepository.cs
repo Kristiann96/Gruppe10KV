@@ -10,6 +10,6 @@ namespace Interface
 
         //hente saksbehandler data når de er logget inn
         Task<SaksbehandlerModel?> HentSaksbehandler(int personId);
-        Task<IEnumerable<SaksbehandlerNavnModel>> HentAlleSaksbehandlereNavnId();
+        Task<List<(SaksbehandlerModel, PersonModel)>> HentAlleSaksbehandlereMedPersonAsync();
     }
 }
