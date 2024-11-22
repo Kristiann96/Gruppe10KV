@@ -102,7 +102,7 @@ public class InnmeldingLogicTests
     [DataRow("{ \"type\": \"Invalid\", \"coordinates\": [10.0, 60.0] }", false)]
     [DataRow("{ \"coordinates\": [10.0, 60.0] }", false)]
     [DataRow("Invalid JSON", false)]
-    public async Task ValidereGeometriDataForOppdatering_SjekkUlikeGeoJsonFormater(string geoJson, bool shouldBeValid)
+    public async Task ValidereGeometriDataForOppdatering_SjekkUlikeGeoJsonFormater_GodkjenneGyldigGeoJsonOgFeileVedUgyldig(string geoJson, bool shouldBeValid)
     {
         // Arrange
         var innmeldingId = 1;
