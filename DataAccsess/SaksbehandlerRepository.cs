@@ -73,9 +73,9 @@ public class SaksbehandlerRepository : ISaksbehandlerRepository
             sql,
             (saksbehandler, person) =>
             {
-                return (saksbehandler, person); // Kombiner modellene
+                return (saksbehandler, person); 
             },
-            splitOn: "PersonId" // Dapper starter ny mapping ved "PersonId"
+            splitOn: "PersonId" 
         );
 
         return result.ToList();
