@@ -138,8 +138,15 @@ Under er en oversikt over de viktigste komponentene i gruppens system og en kort
 | **ServicesInterfaces**  | Definerer grensesnittene for "Services".                                           |
 | **ViewModels**          | Inneholder view-modeller som brukes for å presentere data i brukergrensesnittet.                   |
 
+
+### Systemets arkitektur illustrert:
+---
+
+<img src="https://github.com/user-attachments/assets/942c76c8-428e-4a02-aedd-b03daae84d45" alt="Eksempelbilde 11" width="600"/>
+
 ---
 <br><br>
+
 
 ## Teknologier brukt:
 
