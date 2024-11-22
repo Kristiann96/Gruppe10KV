@@ -156,6 +156,7 @@ Under er en oversikt over de viktigste komponentene i gruppens system og en kort
 - MySQL/MariaDB: Database for lagring og spørring av bruker- og geodata.
 - Leaflet.js: JavaScript-bibliotek for interaktive kart.
 - Kartverket API: For kartdata og geolokasjonstjenester.
+- Entity Framework & Identity: For autorisasjon og autentisering.
 
 ### Hvorfor vi brukte disse teknologiene
 
@@ -163,6 +164,7 @@ Under er en oversikt over de viktigste komponentene i gruppens system og en kort
 - **Dapper ORM:** Brukt for effektiv databaseinteraksjon med MySQL/MariaDB, gir en lett og fleksibel tilnærming til spørringsutføring.
 - **MySQL/MariaDB:** Valgt som databasesystem på grunn av skalerbarhet og støtte.
 - **Kartverket API & Leaflet.js:** Integrert for nøyaktig kartlegging og visualisering av geodata, noe som gir brukerne et sanntidsbilde av lokasjoner på et interaktivt kart.
+- **Entity Framework ORM & Identity:** Brukt for autorisasjon og autentisering grunnet automatisk integrasjon mellom identitet og Entity Framework.
 
 ---
 
