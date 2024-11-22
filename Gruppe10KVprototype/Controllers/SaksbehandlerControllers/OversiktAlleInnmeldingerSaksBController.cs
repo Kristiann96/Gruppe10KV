@@ -1,10 +1,12 @@
-﻿using Interface;
+﻿using AuthInterface;
+using Interface;
 using Interfaces;
 using LogicInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.Entities;
 using ViewModels;
 
+[Authorize(Roles = UserRoles.Saksbehandler)]
 public class OversiktAlleInnmeldingerSaksBController : Controller
 {
     private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;

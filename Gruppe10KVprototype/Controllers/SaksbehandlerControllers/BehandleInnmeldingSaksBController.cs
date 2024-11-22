@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Interfaces;
 using LogicInterfaces;
 using Models.Entities;
+using AuthInterface;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
