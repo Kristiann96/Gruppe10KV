@@ -17,16 +17,8 @@
 
             <div id="navbar-menu">
                 <ul class="navbarlist">
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <li><span class="nav-link">@User.Identity.Name</span></li>
-                        <li><a class="nav-link" asp-controller="LoggInn" asp-action="LoggUt">Logg ut</a></li>
-                    }
-                    else
-                    {
-                        <li><a class="nav-link" asp-controller="LoggInn" asp-action="VisLoggInnSide">Logg inn</a></li>
-                    }
                     <li><a class="nav-link" asp-controller="LandingsSide" asp-action="LandingsSide">Hjem</a></li>
+                    <li><a class="nav-link" asp-controller="LoggInn" asp-action="VisLoggInnSide">Logg inn</a></li>
                     <li class="dev-dropdown">
                         <button class="dev-button">Utvikling</button>
 
