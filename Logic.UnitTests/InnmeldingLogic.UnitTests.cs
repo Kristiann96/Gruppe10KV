@@ -230,7 +230,41 @@ namespace InnmeldingLogic.UnitTests
             
             Assert.AreEqual("GeoJSON data mangler", exception.Message);
         }
+        
+        
+        [TestMethod]
+        [Description("Tester at koordinater utenfor Norge gir feilmelding")]
+        public async Task ValidereGeometriData_KoordinaterUtenforNorge_KasterException()
+        {
+            // Arrange
+            var geometri = new Geometri 
+            { 
+                GeometriGeoJson = "{ \"type\": \"Point\", \"coordinates\": [0.0, 0.0] }" 
+            };
+            SetupGeometriRepository();
 
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(
+                async () => await _logic.ValidereGeometriDataForOppdatering(TEST_INNMELDING_ID, geometri));
+    
+            Assert.IsTrue(exception.Message.Contains("Koordinater må være innenfor Norge"));
+        }
+        
+        [TestMethod]
+        [Description("Tester at ugyldig JSON-format gir feilmelding")]
+        public async Task ValidereGeometriData_UgyldigJsonFormat_KasterException()
+        {
+            // Arrange
+            var geometri = new Geometri { GeometriGeoJson = "{invalid json}" };
+            SetupGeometriRepository();
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(
+                async () => await _logic.ValidereGeometriDataForOppdatering(TEST_INNMELDING_ID, geometri));
+    
+            Assert.AreEqual("Ugyldig geometriformat. Vennligst prøv igjen.", exception.Message);
+        }
+        
         #endregion
 
         #region Helper Methods
