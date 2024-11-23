@@ -60,6 +60,7 @@ namespace InnmeldingLogic.UnitTests
         }
 
         [TestMethod]
+        [Description("Tester at tom tittel gir feilmelding")]
         [DataRow("")]
         [DataRow(" ")]
         public async Task ValiderInnmeldingData_UgyldigTittel_KasterException(string tittel)
@@ -73,6 +74,7 @@ namespace InnmeldingLogic.UnitTests
         }
 
         [TestMethod]
+        [Description("Tester at tittel over 100 tegn gir feilmelding")]
         public async Task ValiderInnmeldingData_TittelForLang_KasterException()
         {
             // Arrange
@@ -88,6 +90,7 @@ namespace InnmeldingLogic.UnitTests
         }
 
         [TestMethod]
+        [Description("Tester at tom beskrivelse gir feilmelding")]
         [DataRow("")]
         [DataRow(" ")]
         public async Task ValiderInnmeldingData_UgyldigBeskrivelse_KasterException(string beskrivelse)
@@ -101,6 +104,7 @@ namespace InnmeldingLogic.UnitTests
         }
 
         [TestMethod]
+        [Description("Tester validering av geometri-data")]
         [DataRow("{ \"type\": \"Point\", \"coordinates\": [10.0, 60.0] }", true)]
         [DataRow("{ \"type\": \"Feature\", \"geometry\": { \"type\": \"Point\", \"coordinates\": [10.0, 60.0] } }",
             true)]
@@ -132,9 +136,10 @@ namespace InnmeldingLogic.UnitTests
                 // Assert
                 Assert.IsTrue(result);
             }
-        }
+        }           
 
         [TestMethod]
+        [Description("Tester at databasefeil ved lagring håndteres korrekt")]
         public async Task ValidereOgLagreNyInnmelding_LagringsfeilerIRepository_KasterException()
         {
             // Arrange
