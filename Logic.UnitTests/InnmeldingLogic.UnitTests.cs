@@ -102,18 +102,21 @@ namespace InnmeldingLogic.UnitTests
             await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () =>
                 await _logic.ValiderInnmeldingData(innmelding));
         }
-
+        
         [TestMethod]
-        [Description("Tester validering av geometri-data")]
-        [DataRow("{ \"type\": \"Point\", \"coordinates\": [10.0, 60.0] }", true)]
-        [DataRow("{ \"type\": \"Feature\", \"geometry\": { \"type\": \"Point\", \"coordinates\": [10.0, 60.0] } }",
-            true)]
-        [DataRow("{ \"type\": \"Invalid\", \"coordinates\": [10.0, 60.0] }", false)]
-        [DataRow("{ \"coordinates\": [10.0, 60.0] }", false)]
-        [DataRow("Invalid JSON", false)]
-        public async Task
-            ValidereGeometriDataForOppdatering_SjekkUlikeGeoJsonFormater_GodkjenneGyldigGeoJsonOgFeileVedUgyldig(
-                string geoJson, bool shouldBeValid)
+        [Description("Tester validering av geometri-data med ulike GeoJSON-formater")]
+        [DataRow("{ \"type\": \"Point\", \"coordinates\": [10.0, 60.0] }", true, "Gyldig Point GeoJSON")]
+        [DataRow("{ \"type\": \"Feature\", \"geometry\": { \"type\": \"Point\", \"coordinates\": [10.0, 60.0] } }", 
+            true, "Gyldig Feature GeoJSON")]
+        [DataRow("{ \"type\": \"Invalid\", \"coordinates\": [10.0, 60.0] }", false, "Ugyldig type")]
+        [DataRow("{ \"coordinates\": [10.0, 60.0] }", false, "Manglende type")]
+        [DataRow("Invalid JSON", false, "Ugyldig JSON-format")]
+        [DataRow(null, false, "Null GeoJSON")]
+        [DataRow("", false, "Tom GeoJSON")]
+        public async Task ValidereGeometriData_MedUlikeFormater_ValidererKorrekt(
+            string geoJson, 
+            bool shouldBeValid,
+            string testScenario)
         {
             // Arrange
             var innmeldingId = 1;
@@ -125,8 +128,10 @@ namespace InnmeldingLogic.UnitTests
             if (!shouldBeValid)
             {
                 // Act & Assert
-                await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(async () =>
-                    await _logic.ValidereGeometriDataForOppdatering(innmeldingId, geometri));
+                var exception = await Assert.ThrowsExceptionAsync<ForretningsRegelExceptionModel>(
+                    async () => await _logic.ValidereGeometriDataForOppdatering(innmeldingId, geometri));
+        
+                Assert.IsNotNull(exception, $"Scenario '{testScenario}' skulle kaste en exception");
             }
             else
             {
@@ -134,10 +139,14 @@ namespace InnmeldingLogic.UnitTests
                 var result = await _logic.ValidereGeometriDataForOppdatering(innmeldingId, geometri);
 
                 // Assert
-                Assert.IsTrue(result);
+                Assert.IsTrue(result, $"Scenario '{testScenario}' skulle returnere true");
+                _geometriRepositoryMock.Verify(x => x.GetGeometriByInnmeldingIdAsync(innmeldingId), 
+                    Times.Once, 
+                    "Repository skulle kalles én gang for gyldig data");
             }
-        }           
-
+        }
+        
+        
         [TestMethod]
         [Description("Tester at databasefeil ved lagring håndteres korrekt")]
         public async Task ValidereOgLagreNyInnmelding_LagringsfeilerIRepository_KasterException()
