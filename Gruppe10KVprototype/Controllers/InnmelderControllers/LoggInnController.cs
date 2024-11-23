@@ -40,14 +40,15 @@ public class LoggInnController : Controller
             return View("LoggInn");
         }
     }
-    
-    public IActionResult MidlertidigBypass()
-    {
-        return RedirectToAction("LandingsSide", "LandingsSide");
-    }
     public IActionResult VisLoggInnSide()
     {
         return View("LoggInn");
+    }
+    
+    public async Task<IActionResult> LoggUt()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
     }
 }
 
