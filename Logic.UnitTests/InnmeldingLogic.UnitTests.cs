@@ -146,7 +146,6 @@ namespace InnmeldingLogic.UnitTests
             }
         }
         
-        
         [TestMethod]
         [Description("Tester at databasefeil ved lagring håndteres korrekt")]
         public async Task ValidereOgLagreNyInnmelding_LagringsfeilerIRepository_KasterException()
