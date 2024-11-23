@@ -123,5 +123,38 @@ namespace Services.UnitTests
 
             Assert.AreEqual("Database error", exception.Message);
         }
+        
+        [TestMethod]
+        [Description("Sikrer at SlettInnmeldingAsync kaster KeyNotFoundException når innmelding ikke eksisterer")]
+        public async Task SlettInnmeldingAsync_NårInnmeldingIkkeEksisterer_KasterKeyNotFoundException()
+        {
+            // Arrange
+            var innmeldingId = 1;
+    
+            _mockInnmeldingRepo
+                .Setup(x => x.GetInnmeldingAsync(innmeldingId))
+                .ReturnsAsync(new List<InnmeldingModel>());
+    
+            var mockTransaksjonsRepo = new Mock<ITransaksjonsRepository>();
+            var service = new OppdatereInnmeldingService(
+                _mockInnmeldingRepo.Object,
+                _mockGeometriRepo.Object,
+                mockTransaksjonsRepo.Object,
+                _mockInnmeldingLogic.Object
+            );
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<KeyNotFoundException>(() =>
+                service.SlettInnmeldingAsync(innmeldingId));
+
+            Assert.AreEqual($"Innmelding med id {innmeldingId} ble ikke funnet", exception.Message);
+            _mockInnmeldingRepo.Verify(x => x.GetInnmeldingAsync(innmeldingId), Times.Once);
+            mockTransaksjonsRepo.Verify(
+                x => x.SlettInnmeldingMedTilhorendeDataAsync(innmeldingId), 
+                Times.Never
+            );
+        }
+        
+        
     }
 }
