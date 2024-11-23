@@ -27,6 +27,7 @@ namespace InnmeldingLogic.UnitTests
         }
 
         [TestMethod]
+        [Description("Tester validering av e-postadresser ved innmelding")]
         [DataRow("test@example.com", true)]
         [DataRow("invalid-email", false)]
         [DataRow("", false)]
