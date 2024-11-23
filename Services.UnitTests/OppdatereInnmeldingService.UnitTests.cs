@@ -15,6 +15,7 @@ namespace Services.UnitTests
         private Mock<IInnmeldingRepository> _mockInnmeldingRepo = null!;
         private Mock<IInnmeldingLogic> _mockInnmeldingLogic = null!;
         private Mock<IGeometriRepository> _mockGeometriRepo = null!;
+        private Mock<ITransaksjonsRepository> _mockTransaksjonsRepo = null!;
         private OppdatereInnmeldingService _service = null!;
 
         [TestInitialize]
@@ -24,13 +25,13 @@ namespace Services.UnitTests
             _mockInnmeldingRepo = new Mock<IInnmeldingRepository>();
             _mockInnmeldingLogic = new Mock<IInnmeldingLogic>();
             _mockGeometriRepo = new Mock<IGeometriRepository>();
-            var mockTransaksjonsRepo = new Mock<ITransaksjonsRepository>();
+            _mockTransaksjonsRepo = new Mock<ITransaksjonsRepository>();
 
             // Oppretter service-instans med alle mock-avhengigheter
             _service = new OppdatereInnmeldingService(
                 _mockInnmeldingRepo.Object,
                 _mockGeometriRepo.Object,
-                mockTransaksjonsRepo.Object,
+                _mockTransaksjonsRepo.Object,
                 _mockInnmeldingLogic.Object
             );
         }
@@ -122,6 +123,57 @@ namespace Services.UnitTests
                 _service.HentInnmeldingForOppdateringAsync(1));
 
             Assert.AreEqual("Database error", exception.Message);
+        }
+
+        [TestMethod]
+        [Description("Sikrer at SlettInnmeldingAsync sletter innmelding når den eksisterer")]
+        public async Task SlettInnmeldingAsync_NårInnmeldingEksisterer_SletterOgReturnereSant()
+        {
+            // Arrange
+            var innmeldingId = 1;
+            var testInnmelding = new InnmeldingModel { InnmeldingId = innmeldingId };
+            
+            _mockInnmeldingRepo
+                .Setup(x => x.GetInnmeldingAsync(innmeldingId))
+                .ReturnsAsync(new List<InnmeldingModel> { testInnmelding });
+            
+            _mockTransaksjonsRepo
+                .Setup(x => x.SlettInnmeldingMedTilhorendeDataAsync(innmeldingId))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _service.SlettInnmeldingAsync(innmeldingId);
+
+            // Assert
+            Assert.IsTrue(result);
+            _mockInnmeldingRepo.Verify(x => x.GetInnmeldingAsync(innmeldingId), Times.Once);
+            _mockTransaksjonsRepo.Verify(
+                x => x.SlettInnmeldingMedTilhorendeDataAsync(innmeldingId), 
+                Times.Once
+            );
+        }
+
+        [TestMethod]
+        [Description("Sikrer at SlettInnmeldingAsync kaster KeyNotFoundException når innmelding ikke eksisterer")]
+        public async Task SlettInnmeldingAsync_NårInnmeldingIkkeEksisterer_KasterKeyNotFoundException()
+        {
+            // Arrange
+            var innmeldingId = 1;
+    
+            _mockInnmeldingRepo
+                .Setup(x => x.GetInnmeldingAsync(innmeldingId))
+                .ReturnsAsync(new List<InnmeldingModel>());
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<KeyNotFoundException>(() =>
+                _service.SlettInnmeldingAsync(innmeldingId));
+
+            Assert.AreEqual($"Innmelding med id {innmeldingId} ble ikke funnet", exception.Message);
+            _mockInnmeldingRepo.Verify(x => x.GetInnmeldingAsync(innmeldingId), Times.Once);
+            _mockTransaksjonsRepo.Verify(
+                x => x.SlettInnmeldingMedTilhorendeDataAsync(innmeldingId), 
+                Times.Never
+            );
         }
     }
 }
