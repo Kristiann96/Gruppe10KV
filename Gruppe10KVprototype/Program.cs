@@ -12,6 +12,10 @@ using AuthDataAccess.Extensions;
 using AuthDataAccess.Services;
 using Services;
 using ServicesInterfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Gruppe10KVprototype.Controllers.HomeControllers;
+using Gruppe10KVprototype.Controllers.InnmelderControllers;
+using Microsoft.Extensions.DependencyInjection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,6 +88,13 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
+// Konfigurering av authentication defaults
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/LoggInn/VisLoggInnSide";
+    options.AccessDeniedPath = "/Authorization/AccessDenied";
+});
+
 var app = builder.Build();
 
 await IdentityDataInitializer.InitializeRoles(app.Services);
@@ -102,15 +113,10 @@ app.UseRouting();
 // Riktig rekkefølge for auth middleware
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStatusCodePages();
 
 // Routing
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "innmelderSkjema",
-    pattern: "form/{action=Form}/{id?}",
-    defaults: new { controller = "InnmelderSkjemaIncidentForm" });
-
 app.Run();

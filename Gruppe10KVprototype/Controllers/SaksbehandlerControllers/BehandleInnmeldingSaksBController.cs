@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Interfaces;
 using LogicInterfaces;
 using Models.Entities;
+using AuthInterface;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
@@ -20,7 +22,7 @@ public class BehandleInnmeldingSaksBController : Controller
     private readonly IGeometriRepository _geometriRepository;
     private readonly IEnumLogic _enumLogic;
     private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
-    private readonly IInnmeldingRepository _innmeldingRepository; // Ny: Trenger for oppdatering
+    private readonly IInnmeldingRepository _innmeldingRepository;
     private readonly ISaksbehandlerRepository _saksbehandlerRepository;
 
     public BehandleInnmeldingSaksBController(
@@ -40,6 +42,7 @@ public class BehandleInnmeldingSaksBController : Controller
     [HttpGet("{id}")]
     public async Task<IActionResult> BehandleInnmeldingSaksB(int id)
     {
+        // 1. Hent hoveddata først
         var (innmelding, person, innmelder, saksbehandler) =
             await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
 
@@ -48,15 +51,17 @@ public class BehandleInnmeldingSaksBController : Controller
             return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
         }
 
+        // 2. Hent geometri
         var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
-        var saksbehandlere = await _saksbehandlerRepository.HentAlleSaksbehandlereNavnId();
 
-
-        // Hent alle enum verdier
+        // 3. Hent enum-verdier
         var statusOptions = await _enumLogic.GetFormattedStatusEnumValuesAsync();
         var prioritetOptions = await _enumLogic.GetFormattedPrioritetEnumValuesAsync();
         var kartTypeOptions = await _enumLogic.GetFormattedKartTypeEnumValuesAsync();
-        var inmmelderOptions = await _enumLogic.GetFormattedInnmelderTypeEnumValuesAsync();
+        var innmelderOptions = await _enumLogic.GetFormattedInnmelderTypeEnumValuesAsync();
+
+        // 4. Hent saksbehandlere for dropdown
+        var saksbehandlereMedPerson = await _saksbehandlerRepository.HentAlleSaksbehandlereMedPersonAsync();
 
         var viewModel = new BehandleInnmeldingSaksBViewModel
         {
@@ -68,15 +73,27 @@ public class BehandleInnmeldingSaksBController : Controller
             StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList(),
             PrioritetOptions = prioritetOptions.Select(po => new SelectListItem { Value = po, Text = po }).ToList(),
             KartTypeOptions = kartTypeOptions.Select(ko => new SelectListItem { Value = ko, Text = ko }).ToList(),
-            SaksbehandlerOptions = saksbehandlere.Select(s => new SelectListItem
-                { Value = s.Id.ToString(), Text = s.Navn, Selected = saksbehandler?.SaksbehandlerId == s.Id }).ToList(),
+            InnmelderTypeOptions = innmelderOptions.Select(i => new SelectListItem
+            { Value = i, Text = i, Selected = innmelder?.InnmelderType == i }).ToList(),
             ValgtSaksbehandlerId = saksbehandler?.SaksbehandlerId,
-            InnmelderTypeOptions = inmmelderOptions.Select(i => new SelectListItem
-                { Value = i, Text = i, Selected = innmelder?.InnmelderType == i }).ToList(),
+            SaksbehandlereMedPerson = saksbehandlereMedPerson
         };
 
         return View(viewModel);
     }
+
+    [HttpGet("HentSaksbehandlere")]
+    public async Task<IActionResult> HentSaksbehandlereForDropdown()
+    {
+        var saksbehandlereMedPerson = await _saksbehandlerRepository.HentAlleSaksbehandlereMedPersonAsync();
+
+        return Json(saksbehandlereMedPerson.Select(s => new
+        {
+            Value = s.Item1.SaksbehandlerId.ToString(),
+            Text = $"{s.Item2.Fornavn} {s.Item2.Etternavn}"
+        }));
+    }
+
 
     [HttpPost("{id}")]
     public async Task<IActionResult> OppdateringAvInnmeldingSaksB(int id,
@@ -186,4 +203,6 @@ public class BehandleInnmeldingSaksBController : Controller
         }
     }
 }
+
+
 

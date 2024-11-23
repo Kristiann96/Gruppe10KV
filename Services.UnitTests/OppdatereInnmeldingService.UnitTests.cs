@@ -2,6 +2,7 @@ using Interface;
 using LogicInterfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models.Entities;
+using Models.Models;
 using Moq;
 using ViewModels;
 using Models.Exceptions;
@@ -13,6 +14,7 @@ namespace Services.UnitTests
     {
         private Mock<IInnmeldingRepository> _mockInnmeldingRepo = null!;
         private Mock<IInnmeldingLogic> _mockInnmeldingLogic = null!;
+        private Mock<IGeometriRepository> _mockGeometriRepo = null!;
         private OppdatereInnmeldingService _service = null!;
 
         [TestInitialize]
@@ -21,13 +23,13 @@ namespace Services.UnitTests
             // Oppretter mock-objekter for alle avhengigheter
             _mockInnmeldingRepo = new Mock<IInnmeldingRepository>();
             _mockInnmeldingLogic = new Mock<IInnmeldingLogic>();
-            var mockGeometriRepo = new Mock<IGeometriRepository>();
+            _mockGeometriRepo = new Mock<IGeometriRepository>();
             var mockTransaksjonsRepo = new Mock<ITransaksjonsRepository>();
 
             // Oppretter service-instans med alle mock-avhengigheter
             _service = new OppdatereInnmeldingService(
                 _mockInnmeldingRepo.Object,
-                mockGeometriRepo.Object,
+                _mockGeometriRepo.Object,
                 mockTransaksjonsRepo.Object,
                 _mockInnmeldingLogic.Object
             );
@@ -68,6 +70,58 @@ namespace Services.UnitTests
                 x => x.ValiderInnmeldingData(It.IsAny<InnmeldingModel>()), 
                 Times.Once() // Bekrefter at validering kun ble kalt én gang
             );
+        }
+        
+        [TestMethod]
+        [Description("Sikrer at HentInnmeldingForOppdateringAsync faktisk returnerer riktig viewmodel når innmelding eksisterer")]
+        public async Task HentInnmeldingForOppdateringAsync_NårInnmeldingEksisterer_ReturViewModel()
+        {
+            // Arrange
+            var testInnmelding = new InnmeldingModel { Tittel = "Test", Beskrivelse = "Beskrivelse" };
+            var testGeometri = new Geometri { GeometriGeoJson = "{}" };
+
+            _mockInnmeldingRepo.Setup(x => x.GetInnmeldingAsync(It.IsAny<int>()))
+                .ReturnsAsync(new List<InnmeldingModel> { testInnmelding });
+            _mockGeometriRepo.Setup(x => x.GetGeometriByInnmeldingIdAsync(It.IsAny<int>()))
+                .ReturnsAsync(testGeometri);
+
+            // Act
+            var result = await _service.HentInnmeldingForOppdateringAsync(1);
+
+            // Assert
+            Assert.AreEqual("Test", result.Tittel);
+            Assert.AreEqual("Beskrivelse", result.Beskrivelse);
+            Assert.AreEqual("{}", result.GeometriGeoJson);
+        }
+        
+        [TestMethod]
+        [Description("Sikrer at HentInnmeldingForOppdateringAsync faktisk kaster KeyNotFoundException når innmelding ikke eksisterer")]
+        public async Task HentInnmeldingForOppdateringAsync_NårInnmeldingIkkeEksisterer_KasterKeyNotFoundException()
+        {
+            // Arrange
+            _mockInnmeldingRepo.Setup(x => x.GetInnmeldingAsync(It.IsAny<int>()))
+                .ReturnsAsync(new List<InnmeldingModel>());
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<KeyNotFoundException>(() =>
+                _service.HentInnmeldingForOppdateringAsync(1));
+
+            Assert.AreEqual("Innmelding med id 1 ble ikke funnet", exception.Message);
+        }
+        
+        [TestMethod]
+        [Description("Sikrer at HentInnmeldingForOppdateringAsync håndterer unntak kastet av innmelding repository")]
+        public async Task HentInnmeldingForOppdateringAsync_NårInnmeldingRepoKasterException_HåndtererException()
+        {
+            // Arrange
+            _mockInnmeldingRepo.Setup(x => x.GetInnmeldingAsync(It.IsAny<int>()))
+                .ThrowsAsync(new Exception("Database error"));
+
+            // Act & Assert
+            var exception = await Assert.ThrowsExceptionAsync<Exception>(() =>
+                _service.HentInnmeldingForOppdateringAsync(1));
+
+            Assert.AreEqual("Database error", exception.Message);
         }
     }
 }
