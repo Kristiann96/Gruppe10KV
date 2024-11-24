@@ -54,5 +54,16 @@ namespace DataAccess
             using var connection = _dbConnection.CreateConnection();
             return await connection.QuerySingleOrDefaultAsync<InnmelderModel>(sql, new { PersonId = personId });
         }
+
+        public async Task<int> HentInnmelderIdMedEpost(string epost)
+        {
+            const string sql = @"
+            SELECT i.innmelder_id as InnmelderId
+            FROM innmelder i
+            WHERE i.epost = @Epost";
+
+            using var connection = _dbConnection.CreateConnection();
+            return await connection.QuerySingleOrDefaultAsync<int>(sql, new { Epost = epost });
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using AuthInterface;
+﻿using System.Security.Claims;
+using AuthInterface;
 using Interface;
 using LogicInterfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -12,53 +13,63 @@ public class MineInnmeldingerController : Controller
 {
     private readonly IInnmeldingRepository _innmeldingRepository;
     private readonly IEnumLogic _enumLogic;
+    private readonly IInnmelderRepository _innmelderRepository;
 
-    public MineInnmeldingerController(IInnmeldingRepository innmeldingRepository, IEnumLogic enumLogic)
+    public MineInnmeldingerController(IInnmeldingRepository innmeldingRepository, IEnumLogic enumLogic, IInnmelderRepository inmelderRepository)
     {
         _innmeldingRepository = innmeldingRepository;
         _enumLogic = enumLogic;
+        _innmelderRepository = inmelderRepository;
     }
 
     [HttpGet]
     public async Task<IActionResult> MineInnmeldinger(int pageNumber = 1, int pageSize = 10, string sortColumn = "InnmeldingId", string sortOrder = "asc")
     {
-        // Bruk en hardkodet innmelderId for testing
-        int innmelderId = 104; // Endre dette til en gyldig ID for testing
-
-        // Hent innmeldinger for den aktuelle innmelderen
-        IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.HentInnmeldingerFraInnmelderIdAsync(innmelderId);
-
-        foreach (var innmelding in innmeldinger)
+        try
         {
-            innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
-        }
+            var userEmail = User.Identity?.Name;
+            
+            // Hent innmeldinger for den aktuelle innmelderen
+            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.HentInnmeldingerFraInnmelderIdAsync(userEmail);
 
-        // Sort innmeldinger based on sortColumn and sortOrder
-        innmeldinger = SortInnmeldinger(innmeldinger, sortColumn, sortOrder);
+            foreach (var innmelding in innmeldinger)
+            {
+                innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
+            }
 
-        // Calculate total pages
-        int totalInnmeldinger = innmeldinger.Count();
-        int totalPages = (int)Math.Ceiling(totalInnmeldinger / (double)pageSize);
+            // Sort innmeldinger based on sortColumn and sortOrder
+            innmeldinger = SortInnmeldinger(innmeldinger, sortColumn, sortOrder);
 
-        // Get the innmeldinger for the current page
-        var pagedInnmeldinger = innmeldinger
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
+            // Calculate total pages
+            int totalInnmeldinger = innmeldinger.Count();
+            int totalPages = (int)Math.Ceiling(totalInnmeldinger / (double)pageSize);
 
-        // Create the ViewModel
-        var viewModel = new MineInnmeldingerViewModel
-        {
-            Innmeldinger = pagedInnmeldinger,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            TotalPages = totalPages,
-            CurrentSortColumn = sortColumn,
-            CurrentSortOrder = sortOrder
-        };
+            // Get the innmeldinger for the current page
+            var pagedInnmeldinger = innmeldinger
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Create the ViewModel
+            var viewModel = new MineInnmeldingerViewModel
+            {
+                Innmeldinger = pagedInnmeldinger,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                CurrentSortColumn = sortColumn,
+                CurrentSortOrder = sortOrder
+            };
 
         // Return the view with the ViewModel
         return View(viewModel);
+        }
+        catch (Exception ex)
+        {
+            // Ved uventet feil, redirect til liste med generisk feilmelding
+            TempData["ErrorMessage"] = "En feil oppstod ved henting av innmeldinger";
+            return RedirectToAction("Error", "Home");
+        }
     }
 
     private IEnumerable<InnmeldingModel> SortInnmeldinger(IEnumerable<InnmeldingModel> innmeldinger, string sortColumn, string sortOrder)
@@ -74,4 +85,3 @@ public class MineInnmeldingerController : Controller
             : innmeldinger.OrderByDescending(x => propertyInfo.GetValue(x, null));
     }
 }
-
