@@ -230,3 +230,91 @@ h3 {
     font-size: 0.875rem;
     margin-top: 0.25rem;
 }
+
+/* Popup Container */
+.popup-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999; /* Øk denne verdien */
+    max-width: 400px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.3s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Animation */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Message Types */
+.popup-message.success {
+    background-color: #1a833b;
+    color: white;
+    border-left: 4px solid #146c30;
+}
+
+.popup-message.error {
+    background-color: #dc3545;
+    color: white;
+    border-left: 4px solid #bd2130;
+}
+
+.popup-message.warning {
+    background-color: #00509c;
+    color: white;
+    border-left: 4px solid #003c73;
+}
+
+/* Close Button */
+.popup-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 0 0 1rem;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+    .popup-close:hover {
+        opacity: 1;
+    }
+
+/* Message Text */
+.popup-text {
+    margin-right: 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Auto-hide Animation */
+.popup-message.fade-out {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
