@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels;
 
-// for å finne dette igjen [Authorize(Roles = UserRoles.Saksbehandler)]
+[Authorize(Roles = UserRoles.Saksbehandler)]
 public class OversiktAlleInnmeldingerSaksBController : Controller
 {
     private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
