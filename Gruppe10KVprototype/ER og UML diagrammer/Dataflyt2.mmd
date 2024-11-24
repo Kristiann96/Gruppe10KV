@@ -1,0 +1,73 @@
+classDiagram
+    View --> ViewModel : bruker
+    View --> Controller : sender input
+    Controller --> ViewModel : oppdaterer
+    Controller --> Model : bruker
+    Controller --> ILogic : bruker
+    Controller --> IRepository : bruker
+    Controller --> IService : bruker
+    
+    Logic ..|> ILogic : implementerer
+    Repository ..|> IRepository : implementerer
+    Service ..|> IService : implementerer
+    Repository --> Database1 : lagrer/henter
+    
+    ILogic --> IRepository : sender validert data
+    ILogic --> Model : validerer
+    IRepository --> Model : mapper data
+    IService --> ILogic : bruker
+    IService --> IRepository : bruker
+
+    Controller --> IAuth : bruker
+    AuthDataAccess ..|> IAuth : implementerer
+    AuthDataAccess --> Database2 : lagrer/henter auth data
+    class View{
+        +VisData()
+        +TaImotInput()
+    }
+    class ViewModel{
+        +VisningsData
+    }
+    class Controller{
+        +HåndterInput()
+        +HentData()
+    }
+    class Model{
+        +Data
+    }
+    class ILogic{
+        <<interface>>
+        +ValiderData()
+    }
+    class Logic{
+        +ValiderData()
+    }
+    class IRepository{
+        <<interface>>
+        +LagreData()
+        +HentData()
+    }
+    class Repository{
+        +LagreData()
+        +HentData()
+    }
+    class IService{
+        <<interface>>
+        +UtførOperasjon()
+    }
+    class Service{
+        +UtførOperasjon()
+    }
+    class IAuth{
+        <<interface>>
+        +HåndterBruker()
+    }
+    class AuthDataAccess{
+        +HåndterBruker()
+    }
+    class Database1{
+        +Data
+    }
+    class Database2{
+        +Data
+    }

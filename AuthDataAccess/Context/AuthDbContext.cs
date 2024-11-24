@@ -21,7 +21,6 @@ namespace AuthDataAccess.Context
             {
                 base.OnModelCreating(builder);
 
-                // Konfigurer tabellnavn for Identity
                 builder.Entity<IdentityUser>().ToTable("Users");
                 builder.Entity<IdentityRole>().ToTable("Roles");
                 builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");

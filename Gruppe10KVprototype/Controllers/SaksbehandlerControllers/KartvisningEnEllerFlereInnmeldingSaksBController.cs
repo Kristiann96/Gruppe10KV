@@ -39,7 +39,7 @@ public class KartvisningEnEllerFlereInnmeldingSaksBController : Controller
 
             if (innmelding == null) return null;
 
-            // Formater enum verdier
+            
             innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
             innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
             innmelding.KartType = _enumLogic.ConvertToDisplayFormat(innmelding.KartType);
@@ -48,7 +48,7 @@ public class KartvisningEnEllerFlereInnmeldingSaksBController : Controller
                 innmelder.InnmelderType = _enumLogic.ConvertToDisplayFormat(innmelder.InnmelderType);
             }
 
-            // Hent vurderinger for denne innmeldingen
+            
             var (antallBekreftelser, antallAvkreftelser) =
                 await _vurderingRepository.HentAntallVurderingerAsync(id);
             var kommentarer = await _vurderingRepository.HentKommentarerForInnmeldingAsync(id);

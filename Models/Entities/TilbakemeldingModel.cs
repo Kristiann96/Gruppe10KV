@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//representerer entitet på db, og er derfor beholdt for å speile databasen - ikke brukt i kode
 namespace Models.Entities
 {
-    
-    
         public class Tilbakemelding
         {
             // Primærnøkkel

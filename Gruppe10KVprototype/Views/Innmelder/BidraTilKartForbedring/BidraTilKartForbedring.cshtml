@@ -29,7 +29,7 @@
 </div>
 
 @section Scripts {
-    <!-- Nødvendige scripts - IKKE ENDRE -->
+    
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
@@ -39,19 +39,19 @@
     <script src="~/js/maps/utils/mapControls.js"></script>
 
     <script>
-        // Disable map interaction when modal is shown
+       
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('map').style.pointerEvents = 'none';
         });
 
-        // Enable map interaction when modal is closed
+        
         document.getElementById('acceptBtn').addEventListener('click', function () {
             document.getElementById('welcomeModal').classList.add('hide');
             document.getElementById('map').style.pointerEvents = 'auto';
         });
 
 
-        // Kart-initialisering
+      
         const map = MapConfig.initializeMap('map');
         const baseMaps = {};
         const overlayMaps = {
@@ -60,17 +60,17 @@
         L.control.layers(baseMaps, overlayMaps).addTo(map);
         MapControls.initializeControls(map);
 
-        // Globale variabler for tilstandshåndtering
+       
         let hoverTimer;
         let popupTimer;
         const vurdertGeometrier = new Set();
         let aktivVurdering = false;
         let isPopupOpen = false;
 
-        // Hent geometridata
+     
         const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
 
-        // Hjelpefunksjoner
+       
         function showMessage(message, isError = false) {
             const messageElement = document.getElementById('validationMessage');
             messageElement.textContent = message;
@@ -105,13 +105,13 @@
             const container = document.createElement('div');
             container.className = 'popup-content';
 
-            // Tittel
+            
             const title = document.createElement('div');
             title.className = 'popup-title';
             title.textContent = data.Tittel;
             container.appendChild(title);
 
-            // Hvis allerede vurdert i denne sesjonen
+           
             if (vurdertGeometrier.has(data.InnmeldingId)) {
                 const takkDiv = document.createElement('div');
                 takkDiv.className = 'takk-melding';
@@ -120,15 +120,15 @@
                 return container;
             }
 
-            // Knapper-container
+          
             const buttonsDiv = document.createElement('div');
             buttonsDiv.className = 'popup-buttons';
 
-            // Kommentar-container
+            
             const kommentarDiv = document.createElement('div');
             kommentarDiv.className = 'kommentar-container';
 
-            // Bekreft/Avkreft knapper
+            
             const bekreftBtn = document.createElement('button');
             bekreftBtn.className = 'popup-button bekreft-button';
             bekreftBtn.textContent = 'Bekreft';
@@ -141,7 +141,7 @@
             buttonsDiv.appendChild(avkreftBtn);
             container.appendChild(buttonsDiv);
 
-            // Kommentar elementer
+            
             const textarea = document.createElement('textarea');
             textarea.className = 'kommentar-textarea';
             textarea.placeholder = 'Skriv en kort kommentar...';
@@ -156,7 +156,7 @@
 
             let valgtType = null;
 
-            // Knappehåndtering
+         
             bekreftBtn.onclick = () => {
                 valgtType = 'bekreftelse';
                 aktivVurdering = true;
@@ -173,7 +173,7 @@
                 clearTimeout(popupTimer);
             };
 
-            // Send-knapp håndtering
+          
             sendBtn.onclick = async () => {
                 const kommentar = textarea.value.trim();
 
@@ -214,10 +214,10 @@
             return container;
         }
 
-        // Legg til geometrier på kartet
+     
         geometriData.forEach(function (data) {
             try {
-                // Parse og strukturer GeoJSON data
+              
                 const rawGeoJson = JSON.parse(data.GeometriGeoJson);
                 const geoJsonFeature = {
                     type: "Feature",
@@ -231,17 +231,17 @@
                 const layer = L.geoJSON(geoJsonFeature, {
                     style: function (feature) {
                         return {
-                            color: '#05ede9',     // Turkis linje
-                            weight: 8,            // Linjetykkelse
-                            opacity: 0.9,         // Gjennomsiktighet
-                            fillColor: '#fa05ed', // Rosa fyll
-                            fillOpacity: 0.4      // Fyll-gjennomsiktighet
+                            color: '#05ede9',     
+                            weight: 8,            
+                            opacity: 0.9,         
+                            fillColor: '#fa05ed', 
+                            fillOpacity: 0.4      
                         };
                     },
                     onEachFeature: function (feature, layer) {
                         let center;
 
-                        // Håndter forskjellige geometrityper
+                        
                         if (feature.geometry.type === 'Point') {
                             center = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
                         } else {
@@ -249,29 +249,29 @@
                             center = bounds.getCenter();
                         }
 
-                        // Legg til markør på senterpunktet
+                     
                         const marker = L.marker(center).addTo(map);
 
-                        // Opprett popup med zoom-tilpasset størrelse
+                        
                         const popup = L.popup({
                             closeButton: true,
                             closeOnClick: false,
                             autoClose: false,
                             className: 'persistent-popup',
-                            maxWidth: 250  // Standard maksbredde
+                            maxWidth: 250  
                         });
 
                         popup.setContent(createPopupContent(data));
 
-                        // Bind popup til både layer og markør
+                        
                         layer.bindPopup(popup);
                         marker.bindPopup(popup);
 
-                        // Håndter popup-størrelse ved zoom
+                      
                         map.on('zoomend', function () {
                             const zoom = map.getZoom();
-                            // Beregn ny maksbredde basert på zoom-nivå
-                            // 250 er maksbredde, reduseres ved høyere zoom-nivå
+                            
+                            
                             const newMaxWidth = Math.max(200, Math.min(250, 250 * (1 - zoom / 20)));
                             if (popup.isOpen()) {
                                 popup.options.maxWidth = newMaxWidth;
@@ -281,7 +281,7 @@
 
                         let hoverTimeout;
 
-                        // Håndter hover events for både layer og markør
+                        
                         const handleMouseOver = function () {
                             if (hoverTimeout) clearTimeout(hoverTimeout);
 
@@ -322,7 +322,7 @@
                     }
                 }).addTo(map);
 
-                // Legg til popup mouseover/mouseout håndtering
+                
                 const popup = layer.getPopup();
                 if (popup) {
                     popup.on('add', function () {
@@ -346,13 +346,13 @@
                     });
                 }
 
-                // Legg til visuell indikator kun for ikke-punkt geometrier
+                
                 if (geoJsonFeature.geometry.type !== 'Point') {
                     const circleMarker = addVisualIndicator(layer, geoJsonFeature.geometry.type);
                     if (circleMarker) {
                         circleMarker.bindPopup(popup);
 
-                        // Samme hover-oppførsel for sirkelmarkøren
+                       
                         circleMarker.on('mouseover', function (e) {
                             if (hoverTimeout) clearTimeout(hoverTimeout);
                             hoverTimeout = setTimeout(() => {
