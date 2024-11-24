@@ -101,6 +101,22 @@ namespace DataAccess
             return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmelderId = innmelderId });
         }
 
+        public async Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(string epost)
+        {
+            using var connection = _dbConnection.CreateConnection();
+
+            var sql = @"SELECT innmelding_id AS InnmeldingId,
+                       tittel AS Tittel,
+                       status AS Status,
+                       siste_endring AS SisteEndring,
+                       ig.innmelder_id AS InnmelderId                       
+                FROM innmelding ig
+                JOIN innmelder ir ON ig.innmelder_id = ir.innmelder_id
+                WHERE ir.epost = @Epost";
+
+            return await connection.QueryAsync<InnmeldingModel>(sql, new { @Epost = epost });
+        }
+
         //Henting for enummene
 
         private async Task<string> GetEnumValuesForColumnAsync(string tableName, string columnName)

@@ -1,9 +1,13 @@
-﻿using LogicInterfaces;
+﻿using AuthInterface;
+using LogicInterfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Models.Exceptions;
 using Models.Models;
+using System.Data;
 using ViewModels;
+
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
@@ -17,15 +21,22 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         }
 
         [HttpGet]
-        public IActionResult KnyttInnmeldingTilPerson(KnyttInnmeldingTilPersonViewModel model)
+        public async Task<IActionResult> KnyttInnmeldingTilPerson(KnyttInnmeldingTilPersonViewModel model)
         {
+            
             if (string.IsNullOrEmpty(model.GeometriGeoJson) ||
                 string.IsNullOrEmpty(model.Tittel) ||
                 string.IsNullOrEmpty(model.Beskrivelse))
             {
                 return RedirectToAction("KartfeilMarkering", "KartfeilMarkering");
             }
-
+            bool innlogget = !string.IsNullOrEmpty(User.Identity?.Name);
+            if (innlogget)
+            {
+                ModelState.Remove("Epost");
+                model.Epost = User.Identity?.Name;
+                return await LagreKnyttInnmeldingTilPerson(model);
+            }
             return View(model);
         }
 
@@ -33,6 +44,8 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LagreKnyttInnmeldingTilPerson(KnyttInnmeldingTilPersonViewModel model)
         {
+            bool innlogget = !string.IsNullOrEmpty(User.Identity?.Name);
+            
             try
             {
                 if (!ModelState.IsValid)
@@ -55,15 +68,17 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                 var resultat = await _innmeldingLogic.ValidereOgLagreNyInnmelding(
                     innmelding,
                     geometri,
-                    model.Epost);
+                    model.Epost,
+                    innlogget);
 
-                if (resultat)
+                if (!resultat)
                 {
-                    return RedirectToAction("LandingsSide", "LandingsSide");
+                    ModelState.AddModelError("", "Kunne ikke lagre innmeldingen. Vennligst prøv igjen.");
+                    return View("KnyttInnmeldingTilPerson", model);
                 }
-
-                ModelState.AddModelError("", "Kunne ikke lagre innmeldingen. Vennligst prøv igjen.");
-                return View("KnyttInnmeldingTilPerson", model);
+                return innlogget
+                    ? RedirectToAction("LandingsSide", "LandingsSide")
+                    : RedirectToAction("Index", "Home");
             }
             catch (ForretningsRegelExceptionModel ex)
             {
