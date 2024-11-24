@@ -27,7 +27,7 @@ namespace Logic
         public async Task<bool> ValidereOgLagreNyInnmelding(
             InnmeldingModel innmelding,
             Geometri geometri,
-            string epost,
+            string? epost,
             bool erLoggetInn)
         {
             if (!ErGyldigEpost(epost))
@@ -192,7 +192,7 @@ namespace Logic
             }
         }
 
-        private bool ErGyldigEpost(string epost)
+        private bool ErGyldigEpost(string? epost)
         {
             try
             {

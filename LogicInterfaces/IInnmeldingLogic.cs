@@ -13,7 +13,7 @@ namespace LogicInterfaces
         Task<bool> ValidereOgLagreNyInnmelding(
             InnmeldingModel innmelding, 
             Geometri geometri, 
-            string gjesteEpost, 
+            string? gjesteEpost, 
             bool ErLoggetInn);
         Task<bool> ValidereGeometriDataForOppdatering(int innmeldingId, Geometri geometri);
 

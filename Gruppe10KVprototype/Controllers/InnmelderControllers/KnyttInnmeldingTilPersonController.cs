@@ -21,15 +21,22 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         }
 
         [HttpGet]
-        public IActionResult KnyttInnmeldingTilPerson(KnyttInnmeldingTilPersonViewModel model)
+        public async Task<IActionResult> KnyttInnmeldingTilPerson(KnyttInnmeldingTilPersonViewModel model)
         {
+            
             if (string.IsNullOrEmpty(model.GeometriGeoJson) ||
                 string.IsNullOrEmpty(model.Tittel) ||
                 string.IsNullOrEmpty(model.Beskrivelse))
             {
                 return RedirectToAction("KartfeilMarkering", "KartfeilMarkering");
             }
-
+            bool innlogget = !string.IsNullOrEmpty(User.Identity?.Name);
+            if (innlogget)
+            {
+                ModelState.Remove("Epost");
+                model.Epost = User.Identity?.Name;
+                return await LagreKnyttInnmeldingTilPerson(model);
+            }
             return View(model);
         }
 
@@ -64,18 +71,14 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                     model.Epost,
                     innlogget);
 
-                if (resultat || !innlogget)
+                if (!resultat)
                 {
-                    return RedirectToAction("Index", "Home");
+                    ModelState.AddModelError("", "Kunne ikke lagre innmeldingen. Vennligst prøv igjen.");
+                    return View("KnyttInnmeldingTilPerson", model);
                 }
-
-                if (resultat || innlogget)
-                {
-                    return RedirectToAction("LandingsSide", "LandingsSide");
-                }
-
-                ModelState.AddModelError("", "Kunne ikke lagre innmeldingen. Vennligst prøv igjen.");
-                return View("KnyttInnmeldingTilPerson", model);
+                return innlogget
+                    ? RedirectToAction("LandingsSide", "LandingsSide")
+                    : RedirectToAction("Index", "Home");
             }
             catch (ForretningsRegelExceptionModel ex)
             {

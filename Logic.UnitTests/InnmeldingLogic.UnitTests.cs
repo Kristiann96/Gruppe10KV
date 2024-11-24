@@ -28,7 +28,7 @@ public class InnmeldingLogicTests
     [DataRow("test@example.com", true)]
     [DataRow("invalid-email", false)]
     [DataRow("", false)]
-    public async Task ValidereOgLagreNyInnmelding_SjekkUlikeEpostFormater_KasterException(string epost, bool shouldBeValid)
+    public async Task ValidereOgLagreNyInnmelding_SjekkUlikeEpostFormater_KasterException(string? epost, bool shouldBeValid)
     {
         // Arrange
         var innmelding = new InnmeldingModel { Tittel = "Test", Beskrivelse = "Test" };

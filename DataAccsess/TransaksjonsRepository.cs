@@ -23,7 +23,7 @@ namespace DataAccess
         }
 
         public async Task<bool> LagreKomplettInnmeldingAsync(
-            string gjesteEpost,
+            string? gjesteEpost,
             InnmeldingModel innmelding,
             Geometri geometri)
         {
@@ -194,7 +194,7 @@ namespace DataAccess
         }
 
         public async Task<bool> LagreKomplettInnmeldingInnloggetAsync(
-            string epost,
+            string? epost,
             InnmeldingModel innmelding,
             Geometri geometri)
         {

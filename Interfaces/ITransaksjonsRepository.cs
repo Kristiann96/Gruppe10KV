@@ -14,11 +14,11 @@ namespace Interface
     
 
     Task<bool> LagreKomplettInnmeldingAsync(
-            string gjesteEpost,
+            string? gjesteEpost,
             InnmeldingModel innmelding,
             Geometri geometri);
     public Task<bool> LagreKomplettInnmeldingInnloggetAsync(
-        string epost,
+        string? epost,
         InnmeldingModel innmelding,
         Geometri geometri);
 
