@@ -12,18 +12,27 @@ public class MineInnmeldingerController : Controller
 {
     private readonly IInnmeldingRepository _innmeldingRepository;
     private readonly IEnumLogic _enumLogic;
+    private readonly IInnmelderRepository _innmelderRepository;
 
-    public MineInnmeldingerController(IInnmeldingRepository innmeldingRepository, IEnumLogic enumLogic)
+    public MineInnmeldingerController(IInnmeldingRepository innmeldingRepository, IEnumLogic enumLogic, IInnmelderRepository inmelderRepository)
     {
         _innmeldingRepository = innmeldingRepository;
         _enumLogic = enumLogic;
+        _innmelderRepository = inmelderRepository;
     }
 
     [HttpGet]
     public async Task<IActionResult> MineInnmeldinger(int pageNumber = 1, int pageSize = 10, string sortColumn = "InnmeldingId", string sortOrder = "asc")
     {
-        // Bruk en hardkodet innmelderId for testing
-        int innmelderId = 104; // Endre dette til en gyldig ID for testing
+
+        var userEmail = User.Identity?.Name;
+
+        if (string.IsNullOrEmpty(userEmail))
+        {
+            return View();
+        }
+        
+        int innmelderId = await _innmelderRepository.HentInnmelderIdMedEpost(userEmail);
 
         // Hent innmeldinger for den aktuelle innmelderen
         IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.HentInnmeldingerFraInnmelderIdAsync(innmelderId);

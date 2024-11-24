@@ -4,6 +4,7 @@ using System.Text.Json;
 using LogicInterfaces;
 using Models.Models;
 using Models.Exceptions;
+using System.Data;
 
 namespace Logic
 {
@@ -26,14 +27,15 @@ namespace Logic
         public async Task<bool> ValidereOgLagreNyInnmelding(
             InnmeldingModel innmelding,
             Geometri geometri,
-            string gjesteEpost)
+            string epost,
+            bool erLoggetInn)
         {
-            if (!ErGyldigEpost(gjesteEpost))
+            if (!ErGyldigEpost(epost))
             {
                 throw new ForretningsRegelExceptionModel("Ugyldig epost-format");
             }
 
-            // Validere innmeldingsdata først
+            // Validere innmeldingsdata
             await ValiderInnmeldingData(innmelding);
 
             // Validere geometri
@@ -41,8 +43,17 @@ namespace Logic
 
             try
             {
+                if (erLoggetInn)
+                {
+                    return await _transaksjonsRepository.LagreKomplettInnmeldingInnloggetAsync(
+                        epost,
+                        innmelding,
+                        geometri);
+
+                }
+
                 return await _transaksjonsRepository.LagreKomplettInnmeldingAsync(
-                    gjesteEpost,
+                    epost,
                     innmelding,
                     geometri);
             }

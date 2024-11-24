@@ -1,9 +1,13 @@
-﻿using LogicInterfaces;
+﻿using AuthInterface;
+using LogicInterfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Models.Exceptions;
 using Models.Models;
+using System.Data;
 using ViewModels;
+
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
@@ -33,6 +37,8 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LagreKnyttInnmeldingTilPerson(KnyttInnmeldingTilPersonViewModel model)
         {
+            bool innlogget = !string.IsNullOrEmpty(User.Identity?.Name);
+            
             try
             {
                 if (!ModelState.IsValid)
@@ -55,9 +61,15 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                 var resultat = await _innmeldingLogic.ValidereOgLagreNyInnmelding(
                     innmelding,
                     geometri,
-                    model.Epost);
+                    model.Epost,
+                    innlogget);
 
-                if (resultat)
+                if (resultat || !innlogget)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                if (resultat || innlogget)
                 {
                     return RedirectToAction("LandingsSide", "LandingsSide");
                 }

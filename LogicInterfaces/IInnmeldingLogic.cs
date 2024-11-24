@@ -10,7 +10,11 @@ namespace LogicInterfaces
 {
     public interface IInnmeldingLogic
     {
-        Task<bool> ValidereOgLagreNyInnmelding(InnmeldingModel innmelding, Geometri geometri, string gjesteEpost);
+        Task<bool> ValidereOgLagreNyInnmelding(
+            InnmeldingModel innmelding, 
+            Geometri geometri, 
+            string gjesteEpost, 
+            bool ErLoggetInn);
         Task<bool> ValidereGeometriDataForOppdatering(int innmeldingId, Geometri geometri);
 
         Task<bool> ValiderInnmeldingData(InnmeldingModel innmelding);
