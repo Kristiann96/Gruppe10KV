@@ -10,5 +10,6 @@ namespace Interface
 
         // hente innmelderdata når de er logget inn
         Task<InnmelderModel?> HentInnmelding(int personId);
+        Task<int> HentInnmelderIdMedEpost(string epost);
     }
 }

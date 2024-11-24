@@ -12,6 +12,7 @@ namespace Interface
     {
 
 
+
         Task<bool> LagreKomplettInnmeldingAsync(
             string? gjesteEpost,
             InnmeldingModel innmelding,
@@ -20,6 +21,7 @@ namespace Interface
             string? epost,
             InnmeldingModel innmelding,
             Geometri geometri);
+
 
         //registrer innmelder som preson og innmelder
         Task<(bool success, int personId)> OpprettPersonOgInnmelder(
@@ -33,6 +35,7 @@ namespace Interface
 
         //innmelder sletter egen innmelding
         Task<bool> SlettInnmeldingMedTilhorendeDataAsync(int innmeldingId);
+        
     }
 
 
