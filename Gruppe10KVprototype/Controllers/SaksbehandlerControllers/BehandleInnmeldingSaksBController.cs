@@ -1,4 +1,3 @@
-
 using Logic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -42,44 +41,68 @@ public class BehandleInnmeldingSaksBController : Controller
     [HttpGet("{id}")]
     public async Task<IActionResult> BehandleInnmeldingSaksB(int id)
     {
-        // 1. Hent hoveddata først
-        var (innmelding, person, innmelder, saksbehandler) =
-            await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
-
-        if (innmelding == null)
+        try
         {
+            // 1. Hent hoveddata først
+            var (innmelding, person, innmelder, saksbehandler) =
+                await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
+
+            if (innmelding == null)
+            {
+                TempData["ErrorMessage"] = "Innmelding ikke funnet";
+                return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
+            }
+
+            // 2. Hent geometri
+            var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
+
+            // 3. Hent enum-verdier med feilhåndtering
+            var statusOptions = await TryGetEnumOptions(_enumLogic.GetFormattedStatusEnumValuesAsync);
+            var prioritetOptions = await TryGetEnumOptions(_enumLogic.GetFormattedPrioritetEnumValuesAsync);
+            var kartTypeOptions = await TryGetEnumOptions(_enumLogic.GetFormattedKartTypeEnumValuesAsync);
+            var innmelderOptions = await TryGetEnumOptions(_enumLogic.GetFormattedInnmelderTypeEnumValuesAsync);
+
+            // 4. Hent saksbehandlere med feilhåndtering
+            var saksbehandlereMedPerson = await _saksbehandlerRepository.HentAlleSaksbehandlereMedPersonAsync()
+                ?? new List<(SaksbehandlerModel, PersonModel)>();
+
+            var viewModel = new BehandleInnmeldingSaksBViewModel
+            {
+                InnmeldingModel = innmelding,
+                PersonModel = person,
+                InnmelderModel = innmelder,
+                SaksbehandlerModel = saksbehandler,
+                Geometri = geometri,
+                StatusOptions = statusOptions,
+                PrioritetOptions = prioritetOptions,
+                KartTypeOptions = kartTypeOptions,
+                InnmelderTypeOptions = innmelderOptions,
+                ValgtSaksbehandlerId = saksbehandler?.SaksbehandlerId,
+                SaksbehandlereMedPerson = saksbehandlereMedPerson
+            };
+
+            return View(viewModel);
+        }
+        catch (Exception ex)
+        {
+           
+            TempData["ErrorMessage"] = "Det oppstod en feil ved lasting av innmeldingen";
             return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
         }
+    }
 
-        // 2. Hent geometri
-        var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
-
-        // 3. Hent enum-verdier
-        var statusOptions = await _enumLogic.GetFormattedStatusEnumValuesAsync();
-        var prioritetOptions = await _enumLogic.GetFormattedPrioritetEnumValuesAsync();
-        var kartTypeOptions = await _enumLogic.GetFormattedKartTypeEnumValuesAsync();
-        var innmelderOptions = await _enumLogic.GetFormattedInnmelderTypeEnumValuesAsync();
-
-        // 4. Hent saksbehandlere for dropdown
-        var saksbehandlereMedPerson = await _saksbehandlerRepository.HentAlleSaksbehandlereMedPersonAsync();
-
-        var viewModel = new BehandleInnmeldingSaksBViewModel
+    private static async Task<List<SelectListItem>> TryGetEnumOptions(Func<Task<IEnumerable<string>>> getEnumValues)
+    {
+        try
         {
-            InnmeldingModel = innmelding,
-            PersonModel = person,
-            InnmelderModel = innmelder,
-            SaksbehandlerModel = saksbehandler,
-            Geometri = geometri,
-            StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList(),
-            PrioritetOptions = prioritetOptions.Select(po => new SelectListItem { Value = po, Text = po }).ToList(),
-            KartTypeOptions = kartTypeOptions.Select(ko => new SelectListItem { Value = ko, Text = ko }).ToList(),
-            InnmelderTypeOptions = innmelderOptions.Select(i => new SelectListItem
-            { Value = i, Text = i, Selected = innmelder?.InnmelderType == i }).ToList(),
-            ValgtSaksbehandlerId = saksbehandler?.SaksbehandlerId,
-            SaksbehandlereMedPerson = saksbehandlereMedPerson
-        };
-
-        return View(viewModel);
+            var values = await getEnumValues();
+            return values?.Select(v => new SelectListItem { Value = v, Text = v }).ToList()
+                ?? new List<SelectListItem>();
+        }
+        catch
+        {
+            return new List<SelectListItem>();
+        }
     }
 
     [HttpGet("HentSaksbehandlere")]

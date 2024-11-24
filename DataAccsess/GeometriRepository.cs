@@ -30,7 +30,7 @@ namespace DataAccess
             return await connection.QueryAsync<Geometri>(sql);
         }
 
-        // Hent spesifikk geometri basert på innmelding_id  KartvisningEnInnmeldingSaksB
+        // Hent spesifikk geometri basert på innmelding_id  KartvisningEnEllerFlereInnmeldingSaksB
         public async Task<Geometri> GetGeometriByInnmeldingIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();

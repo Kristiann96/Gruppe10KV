@@ -21,21 +21,33 @@
                     <div class="status-info">
                         <div class="form-group mb-3">
                             <label for="statusDropdown">Status:</label>
-                            <select id="statusDropdown" class="form-control" asp-for="InnmeldingModel.Status" asp-items="Model.StatusOptions">
+                            <select id="statusDropdown" 
+                                    class="form-control" 
+                                    name="InnmeldingModel.Status" 
+                                    asp-for="InnmeldingModel.Status" 
+                                    asp-items="Model.StatusOptions">
                                 <option value="">Velg status</option>
                             </select>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="prioritetDropdown">Prioritet:</label>
-                            <select id="prioritetDropdown" class="form-control" asp-for="InnmeldingModel.Prioritet" asp-items="Model.PrioritetOptions">
+                            <select id="prioritetDropdown" 
+                                    class="form-control" 
+                                    name="InnmeldingModel.Prioritet" 
+                                    asp-for="InnmeldingModel.Prioritet" 
+                                    asp-items="Model.PrioritetOptions">
                                 <option value="">Velg prioritet</option>
                             </select>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="kartTypeDropdown">Kart Type:</label>
-                            <select id="kartTypeDropdown" class="form-control" asp-for="InnmeldingModel.KartType" asp-items="Model.KartTypeOptions">
+                            <select id="kartTypeDropdown" 
+                                    class="form-control" 
+                                    name="InnmeldingModel.KartType" 
+                                    asp-for="InnmeldingModel.KartType" 
+                                    asp-items="Model.KartTypeOptions">
                                 <option value="">Velg kart type</option>
                             </select>
                         </div>

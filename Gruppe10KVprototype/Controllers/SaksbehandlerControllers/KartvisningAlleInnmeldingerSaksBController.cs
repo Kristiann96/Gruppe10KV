@@ -47,7 +47,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             TempData["Kommunenummer"] = kommune.Kommunenummer;
             TempData["Kommunenavn"] = kommune.Kommunenavn;
 
-            return RedirectToAction("KartvisningEnInnmeldingSaksB", "KartvisningEnInnmeldingSaksB", new { innmeldingId });
+            return RedirectToAction("KartvisningEnEllerFlereInnmeldingSaksB", "KartvisningEnEllerFlereInnmeldingSaksB", new { innmeldingId });
         }
     }
 }

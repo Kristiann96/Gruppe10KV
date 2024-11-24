@@ -3,7 +3,7 @@ using Models.Entities;
 
 namespace ViewModels
 {
-    public class KartvisningEnInnmeldingSaksBViewModel
+    public class KartvisningEnEllerFlereInnmeldingSaksBViewModel
     {
         public List<InnmeldingMedDetaljerViewModel> AlleInnmeldinger { get; set; } = new();
     }
@@ -17,6 +17,7 @@ namespace ViewModels
         public SaksbehandlerModel Saksbehandler { get; set; }
         public Geometri Geometri { get; set; }
 
+
         // Vurderingsdata per innmelding
         public int AntallBekreftelser { get; set; }
         public int AntallAvkreftelser { get; set; }
@@ -27,6 +28,6 @@ namespace ViewModels
             ? $"{Person.Fornavn} {Person.Etternavn}"
             : "Ikke tildelt";
 
-        public string FormaterSisteEndring => Innmelding?.SisteEndring.ToString("dd.MM.yyyy HH:mm");
+
     }
 }

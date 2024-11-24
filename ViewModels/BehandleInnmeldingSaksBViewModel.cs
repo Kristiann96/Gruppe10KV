@@ -15,9 +15,7 @@ public class BehandleInnmeldingSaksBViewModel
     public PersonModel PersonModel { get; set; }
     public InnmelderModel InnmelderModel { get; set; }
     public SaksbehandlerModel SaksbehandlerModel { get; set; }
-    public IEnumerable<SelectListItem> SaksbehandlerOptions { get; set; }
     public int? ValgtSaksbehandlerId { get; set; }
-    public IEnumerable<SelectListItem> InnmelderType { get; set; }
     public List<SelectListItem> InnmelderTypeOptions { get; set; }
 
     public List<(SaksbehandlerModel, PersonModel)> SaksbehandlereMedPerson { get; set; }
@@ -26,15 +24,18 @@ public class BehandleInnmeldingSaksBViewModel
     {
         get
         {
-            return SaksbehandlereMedPerson.Select(sb => new SelectListItem
-            {
-                Text = $"{sb.Item2.Fornavn} {sb.Item2.Etternavn}", // Bruker PersonModel
-                Value = sb.Item1.SaksbehandlerId.ToString(), // Bruker SaksbehandlerModel
-                Selected = sb.Item1.SaksbehandlerId == ValgtSaksbehandlerId
-            });
+            if (SaksbehandlereMedPerson == null) return Enumerable.Empty<SelectListItem>();
+
+            return SaksbehandlereMedPerson
+                .Where(sb => sb.Item1 != null && sb.Item2 != null)
+                .Select(sb => new SelectListItem
+                {
+                    Text = $"{sb.Item2.Fornavn} {sb.Item2.Etternavn}",
+                    Value = sb.Item1.SaksbehandlerId.ToString(),
+                    Selected = sb.Item1.SaksbehandlerId == ValgtSaksbehandlerId
+                });
         }
     }
 }
-
 
 

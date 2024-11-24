@@ -7,14 +7,14 @@ using Models.Models;
 using ViewModels;
 
 
-public class KartvisningEnInnmeldingSaksBController : Controller
+public class KartvisningEnEllerFlereInnmeldingSaksBController : Controller
 {
     private readonly IGeometriRepository _geometriRepository;
     private readonly IDataSammenstillingSaksBRepository _dataSammenstillingsRepo;
     private readonly IEnumLogic _enumLogic;
     private readonly IVurderingRepository _vurderingRepository;
 
-    public KartvisningEnInnmeldingSaksBController(
+    public KartvisningEnEllerFlereInnmeldingSaksBController(
         IGeometriRepository geometriRepository,
         IDataSammenstillingSaksBRepository dataSammenstillingsRepo,
         IEnumLogic enumLogic,
@@ -27,9 +27,9 @@ public class KartvisningEnInnmeldingSaksBController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> KartvisningEnInnmeldingSaksB(int? innmeldingId, string innmeldingIds)
+    public async Task<IActionResult> KartvisningEnEllerFlereInnmeldingSaksB(int? innmeldingId, string innmeldingIds)
     {
-        var viewModel = new KartvisningEnInnmeldingSaksBViewModel();
+        var viewModel = new KartvisningEnEllerFlereInnmeldingSaksBViewModel();
 
         async Task<InnmeldingMedDetaljerViewModel> HentInnmeldingMedVurderinger(int id)
         {

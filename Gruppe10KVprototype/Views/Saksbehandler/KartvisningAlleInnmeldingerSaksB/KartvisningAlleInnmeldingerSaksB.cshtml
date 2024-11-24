@@ -204,7 +204,7 @@ geometriData.forEach(function (data) {
             if (response.redirected) {
                 // Samle alle innmelding-IDer og send med som parameter
                 const ids = innmeldinger.map(i => i.id).join(',');
-                window.location.href = `/KartvisningEnInnmeldingSaksB/KartvisningEnInnmeldingSaksB?innmeldingIds=${ids}`;
+                window.location.href = `/KartvisningEnEllerFlereInnmeldingSaksB/KartvisningEnEllerFlereInnmeldingSaksB?innmeldingIds=${ids}`;
             }
         } catch (error) {
             console.error('Feil ved henting av kommunenummer:', error);
