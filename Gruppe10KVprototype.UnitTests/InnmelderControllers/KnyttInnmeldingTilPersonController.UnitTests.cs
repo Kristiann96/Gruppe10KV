@@ -1,11 +1,15 @@
+using AuthInterface;
 using LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Models.Entities;
 using Models.Exceptions;
+using Models.Models;
 using ViewModels;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
-using Models.Models;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Gruppe10KVprototype.Tests.Controllers
 {
@@ -14,14 +18,29 @@ namespace Gruppe10KVprototype.Tests.Controllers
     {
         private KnyttInnmeldingTilPersonController _controller;
         private Mock<IInnmeldingLogic> _mockInnmeldingLogic;
+        private Mock<IHttpContextAccessor> _mockHttpContextAccessor;
 
         [TestInitialize]
         public void SetUp()
         {
             _mockInnmeldingLogic = new Mock<IInnmeldingLogic>();
             _controller = new KnyttInnmeldingTilPersonController(_mockInnmeldingLogic.Object);
+
+            // Mock HttpContext to simulate a logged-in user
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, "testuser@example.com") // Simulate logged-in user
+            };
+            var identity = new ClaimsIdentity(claims, "TestAuthentication");
+            var principal = new ClaimsPrincipal(identity);
+
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext
+            {
+                User = principal
+            };
         }
 
+        // Tester at GET-metoden KnyttInnmeldingTilPerson returnerer redirect når required fields er tomme eller null
         [TestMethod]
         [Description("Tester at GET-metoden KnyttInnmeldingTilPerson returnerer redirect når required fields er tomme eller null")]
         public void KnyttInnmeldingTilPerson_FieldsMissing_Redirigerer()
@@ -33,13 +52,14 @@ namespace Gruppe10KVprototype.Tests.Controllers
                 Beskrivelse = ""
             };
 
-            var result = _controller.KnyttInnmeldingTilPerson(model) as RedirectToActionResult;
+            var result = _controller.KnyttInnmeldingTilPerson(model).Result as RedirectToActionResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual("KartfeilMarkering", result.ActionName);
             Assert.AreEqual("KartfeilMarkering", result.ControllerName);
         }
 
+        // Tester at GET-metoden KnyttInnmeldingTilPerson returnerer View med riktig modell
         [TestMethod]
         [Description("Tester at GET-metoden KnyttInnmeldingTilPerson returnerer View med riktig modell")]
         public void KnyttInnmeldingTilPerson_FieldsProvided_ReturnererViewMedModel()
@@ -51,7 +71,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
                 Beskrivelse = "Test Beskrivelse"
             };
 
-            var result = _controller.KnyttInnmeldingTilPerson(model) as ViewResult;
+            var result = _controller.KnyttInnmeldingTilPerson(model).Result as ViewResult;
 
             Assert.IsNotNull(result);
             var returnedModel = result.Model as KnyttInnmeldingTilPersonViewModel;
@@ -61,29 +81,24 @@ namespace Gruppe10KVprototype.Tests.Controllers
             Assert.AreEqual(model.Beskrivelse, returnedModel.Beskrivelse);
         }
 
+        // Tester at POST-metoden LagreKnyttInnmeldingTilPerson returnerer View ved ugyldig modell
         [TestMethod]
         [Description("Tester at POST-metoden LagreKnyttInnmeldingTilPerson returnerer View ved ugyldig modell")]
         public async Task LagreKnyttInnmeldingTilPerson_InvalidModel_ReturnererView()
         {
-            // Arrange - Lag en ugyldig modell
             var model = new KnyttInnmeldingTilPersonViewModel
             {
                 GeometriGeoJson = "{\"type\":\"Point\",\"coordinates\":[10.0,60.0]}",
                 Tittel = "", // Tittel er tom, som gir en valideringsfeil
-                Beskrivelse = "", // Beskrivelse er tom, men dette er ikke en valideringsfeil i denne testen
+                Beskrivelse = "",
                 Epost = "test@example.com"
             };
-    
-            // Legg til en modelfeil for "Tittel" (krav for at modellen skal være gyldig)
+
             _controller.ModelState.AddModelError("Tittel", "Tittel er påkrevd");
 
-            // Act - Kall på POST-metoden asynkront
             var result = await _controller.LagreKnyttInnmeldingTilPerson(model) as ViewResult;
 
-            // Assert - Verifiser at resultatet er et ViewResult
             Assert.IsNotNull(result);
-    
-            // Verifiser at det returnerte ViewModel er av riktig type og inneholder de samme verdiene
             var returnedModel = result.Model as KnyttInnmeldingTilPersonViewModel;
             Assert.IsNotNull(returnedModel);
             Assert.AreEqual(model.Tittel, returnedModel.Tittel);
@@ -91,12 +106,11 @@ namespace Gruppe10KVprototype.Tests.Controllers
             Assert.AreEqual(model.Epost, returnedModel.Epost);
         }
 
-
+        // Tester at POST-metoden LagreKnyttInnmeldingTilPerson returnerer LandingsSide ved gyldig modell
         [TestMethod]
         [Description("Tester at POST-metoden LagreKnyttInnmeldingTilPerson returnerer LandingsSide ved gyldig modell")]
         public async Task LagreKnyttInnmeldingTilPerson_ValidModel_RedirigererTilLandingsSide()
         {
-            // Arrange - Lag en gyldig modell
             var model = new KnyttInnmeldingTilPersonViewModel
             {
                 GeometriGeoJson = "{\"type\":\"Point\",\"coordinates\":[10.0,60.0]}",
@@ -107,19 +121,17 @@ namespace Gruppe10KVprototype.Tests.Controllers
             };
 
             _mockInnmeldingLogic
-                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(), It.IsAny<string>()))
-                .ReturnsAsync(true); // Simulerer en vellykket lagring
+                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .ReturnsAsync(true);
 
-            // Act - Kaller POST-metoden med en gyldig modell
             var result = await _controller.LagreKnyttInnmeldingTilPerson(model) as RedirectToActionResult;
 
-            // Assert - Verifiserer at det er en omdirigering til LandingsSide
             Assert.IsNotNull(result);
             Assert.AreEqual("LandingsSide", result.ActionName);
             Assert.AreEqual("LandingsSide", result.ControllerName);
         }
 
-
+        // Tester at POST-metoden LagreKnyttInnmeldingTilPerson håndterer ForretningsRegelExceptionModel
         [TestMethod]
         [Description("Tester at POST-metoden LagreKnyttInnmeldingTilPerson håndterer ForretningsRegelExceptionModel")]
         public async Task LagreKnyttInnmeldingTilPerson_ForretningsRegelException_HåndtererFeil()
@@ -133,7 +145,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
             };
 
             _mockInnmeldingLogic
-                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(), It.IsAny<string>()))
+                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Throws(new ForretningsRegelExceptionModel("Forretningsregel-feil"));
 
             var result = await _controller.LagreKnyttInnmeldingTilPerson(model) as ViewResult;
@@ -146,6 +158,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
             Assert.AreEqual("Forretningsregel-feil", _controller.ModelState[""].Errors[0].ErrorMessage);
         }
 
+        // Tester at POST-metoden LagreKnyttInnmeldingTilPerson håndterer uventet feil
         [TestMethod]
         [Description("Tester at POST-metoden LagreKnyttInnmeldingTilPerson håndterer uventet feil")]
         public async Task LagreKnyttInnmeldingTilPerson_UnexpectedException_HåndtererFeil()
@@ -159,7 +172,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
             };
 
             _mockInnmeldingLogic
-                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(), It.IsAny<string>()))
+                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(), It.IsAny<string>(), It.IsAny<bool>()))
                 .Throws(new Exception("Uventet feil"));
 
             var result = await _controller.LagreKnyttInnmeldingTilPerson(model) as ViewResult;
