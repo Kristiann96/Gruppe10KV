@@ -14,7 +14,7 @@ public class KartfeilSkjemaController : Controller
             GeometriGeoJson = geoJson,
             Tittel = "",
             Beskrivelse = "",
-            ErNodEtatKritisk = false // For prioritet enum
+            ErNodEtatKritisk = false 
         };
 
         return View(viewModel);
@@ -31,6 +31,6 @@ public class KartfeilSkjemaController : Controller
 
         model.Prioritet = model.ErNodEtatKritisk ? "høy" : "ikke_vurdert";
 
-        return View("KartfeilSkjemaBekreftelse", model);
+        return View("KartfeilSkjema", model);
     }
 }

@@ -4,14 +4,14 @@
     Layout = "_Layout";
 }
 
-<!-- Nødvendige stilark -->
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
 <link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartvisningAlleInnmeldingerSaksB.css" />
 
-<!-- Kartcontainer med kontroller -->
+
 <div class="container-fluid p-0">
     <div id="welcomeModal" class="modal-overlay">
         <div class="modal-content">
@@ -31,13 +31,13 @@
         <button id="clearUtsnittBtn" class="utsnitt-button clear" disabled>Fjern utsnitt</button>
     </div>
 </div>
-<!-- JavaScript biblioteker -->
+
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
 
-<!-- Våre konfigurasjonsfiler -->
+
 <script src="~/js/maps/config/mapConfig.js"></script>
 <script src="~/js/maps/config/drawConfig.js"></script>
 <script src="~/js/maps/services/wmsService.js"></script>
@@ -45,38 +45,38 @@
 
 
 <script>
-    // Disable map interaction when modal is shown
+   
     document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('map').style.pointerEvents = 'none';
     });
 
-    // Enable map interaction when modal is closed
+    
     document.getElementById('acceptBtn').addEventListener('click', function() {
     document.getElementById('welcomeModal').classList.add('hide');
     document.getElementById('map').style.pointerEvents = 'auto';
     });
 
-    // Initialiserer kart
+   
     console.log('Initialiserer kart');
     const map = MapConfig.initializeMap('map');
     MapControls.initializeControls(map)
     console.log('Kart initialisert:', map);
 
-    // Panel-håndtering
+  
     function closePanel() {
         document.getElementById('infoPanel').style.display = 'none';
     }
 
     
 
-    // Lag for utsnitt og innmeldinger
+    
     const utvalgLag = new L.FeatureGroup();
     const innmeldingLag = new L.FeatureGroup();
     map.addLayer(utvalgLag);
     map.addLayer(innmeldingLag);
     console.log('Lag opprettet:', { utvalgLag, innmeldingLag });
 
-    // Konfigurer tegneverkøy
+   
     const drawControl = new L.Control.Draw({
         draw: {
             polygon: false,
@@ -94,7 +94,7 @@
     console.log('DrawControl opprettet:', drawControl);
     map.addControl(drawControl);
 
-    // Legg til geometrier fra viewmodel
+   
     const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
 geometriData.forEach(function (data) {
     try {
@@ -144,17 +144,17 @@ geometriData.forEach(function (data) {
         const bounds = event.layer.getBounds();
         const innmeldingerInnenforUtsnitt = [];
 
-        // Debug info
+       
         console.log('Utsnitt bounds:', bounds);
 
-        // Gå gjennom alle originale geometriData istedenfor lagene
+        
         geometriData.forEach(function (data) {
             try {
                 const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
                 const layer = L.geoJSON(geoJsonFeature);
                 const layerBounds = layer.getBounds();
 
-                // Debug info
+                
                 console.log('Sjekker innmelding:', data.InnmeldingId);
                 console.log('Layer bounds:', layerBounds);
 
@@ -174,7 +174,7 @@ geometriData.forEach(function (data) {
 
         console.log('Antall innmeldinger funnet:', innmeldingerInnenforUtsnitt.length);
 
-        // Aktiver/deaktiver knapper
+        
         const visUtsnittBtn = document.getElementById('visUtsnittBtn');
         const clearUtsnittBtn = document.getElementById('clearUtsnittBtn');
 
@@ -188,13 +188,13 @@ geometriData.forEach(function (data) {
             console.log('Ingen innmeldinger funnet i utsnitt');
         }
 
-        // Stopp tegnemodusen
+       
         if (drawControl._toolbars.draw._modes.rectangle.handler.enabled()) {
             drawControl._toolbars.draw._modes.rectangle.handler.disable();
         }
     });
 
-    // Håndter visning av utsnitt
+    
     document.getElementById('visUtsnittBtn').addEventListener('click', async function() {
         const innmeldinger = JSON.parse(this.dataset.innmeldinger);
         const firstInnmelding = innmeldinger[0];
@@ -204,14 +204,14 @@ geometriData.forEach(function (data) {
             if (response.redirected) {
                 // Samle alle innmelding-IDer og send med som parameter
                 const ids = innmeldinger.map(i => i.id).join(',');
-                window.location.href = `/KartvisningEnInnmeldingSaksB/KartvisningEnInnmeldingSaksB?innmeldingIds=${ids}`;
+                window.location.href = `/KartvisningEnEllerFlereInnmeldingSaksB/KartvisningEnEllerFlereInnmeldingSaksB?innmeldingIds=${ids}`;
             }
         } catch (error) {
             console.error('Feil ved henting av kommunenummer:', error);
         }
     });
 
-    // Håndter nullstilling av utsnitt
+  
     document.getElementById('clearUtsnittBtn').addEventListener('click', function() {
         utvalgLag.clearLayers();
         this.disabled = true;

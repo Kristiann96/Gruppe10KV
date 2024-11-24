@@ -1,4 +1,3 @@
-
 using Logic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -42,44 +41,68 @@ public class BehandleInnmeldingSaksBController : Controller
     [HttpGet("{id}")]
     public async Task<IActionResult> BehandleInnmeldingSaksB(int id)
     {
-        // 1. Hent hoveddata først
-        var (innmelding, person, innmelder, saksbehandler) =
-            await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
-
-        if (innmelding == null)
+        try
         {
+            
+            var (innmelding, person, innmelder, saksbehandler) =
+                await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
+
+            if (innmelding == null)
+            {
+                TempData["ErrorMessage"] = "Innmelding ikke funnet";
+                return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
+            }
+
+           
+            var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
+
+           
+            var statusOptions = await TryGetEnumOptions(_enumLogic.GetFormattedStatusEnumValuesAsync);
+            var prioritetOptions = await TryGetEnumOptions(_enumLogic.GetFormattedPrioritetEnumValuesAsync);
+            var kartTypeOptions = await TryGetEnumOptions(_enumLogic.GetFormattedKartTypeEnumValuesAsync);
+            var innmelderOptions = await TryGetEnumOptions(_enumLogic.GetFormattedInnmelderTypeEnumValuesAsync);
+
+          
+            var saksbehandlereMedPerson = await _saksbehandlerRepository.HentAlleSaksbehandlereMedPersonAsync()
+                ?? new List<(SaksbehandlerModel, PersonModel)>();
+
+            var viewModel = new BehandleInnmeldingSaksBViewModel
+            {
+                InnmeldingModel = innmelding,
+                PersonModel = person,
+                InnmelderModel = innmelder,
+                SaksbehandlerModel = saksbehandler,
+                Geometri = geometri,
+                StatusOptions = statusOptions,
+                PrioritetOptions = prioritetOptions,
+                KartTypeOptions = kartTypeOptions,
+                InnmelderTypeOptions = innmelderOptions,
+                ValgtSaksbehandlerId = saksbehandler?.SaksbehandlerId,
+                SaksbehandlereMedPerson = saksbehandlereMedPerson
+            };
+
+            return View(viewModel);
+        }
+        catch (Exception)
+        {
+           
+            TempData["ErrorMessage"] = "Det oppstod en feil ved lasting av innmeldingen";
             return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
         }
+    }
 
-        // 2. Hent geometri
-        var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
-
-        // 3. Hent enum-verdier
-        var statusOptions = await _enumLogic.GetFormattedStatusEnumValuesAsync();
-        var prioritetOptions = await _enumLogic.GetFormattedPrioritetEnumValuesAsync();
-        var kartTypeOptions = await _enumLogic.GetFormattedKartTypeEnumValuesAsync();
-        var innmelderOptions = await _enumLogic.GetFormattedInnmelderTypeEnumValuesAsync();
-
-        // 4. Hent saksbehandlere for dropdown
-        var saksbehandlereMedPerson = await _saksbehandlerRepository.HentAlleSaksbehandlereMedPersonAsync();
-
-        var viewModel = new BehandleInnmeldingSaksBViewModel
+    private static async Task<List<SelectListItem>> TryGetEnumOptions(Func<Task<IEnumerable<string>>> getEnumValues)
+    {
+        try
         {
-            InnmeldingModel = innmelding,
-            PersonModel = person,
-            InnmelderModel = innmelder,
-            SaksbehandlerModel = saksbehandler,
-            Geometri = geometri,
-            StatusOptions = statusOptions.Select(so => new SelectListItem { Value = so, Text = so }).ToList(),
-            PrioritetOptions = prioritetOptions.Select(po => new SelectListItem { Value = po, Text = po }).ToList(),
-            KartTypeOptions = kartTypeOptions.Select(ko => new SelectListItem { Value = ko, Text = ko }).ToList(),
-            InnmelderTypeOptions = innmelderOptions.Select(i => new SelectListItem
-            { Value = i, Text = i, Selected = innmelder?.InnmelderType == i }).ToList(),
-            ValgtSaksbehandlerId = saksbehandler?.SaksbehandlerId,
-            SaksbehandlereMedPerson = saksbehandlereMedPerson
-        };
-
-        return View(viewModel);
+            var values = await getEnumValues();
+            return values?.Select(v => new SelectListItem { Value = v, Text = v }).ToList()
+                ?? new List<SelectListItem>();
+        }
+        catch
+        {
+            return new List<SelectListItem>();
+        }
     }
 
     [HttpGet("HentSaksbehandlere")]
@@ -103,12 +126,11 @@ public class BehandleInnmeldingSaksBController : Controller
         {
             var model = viewModel.InnmeldingModel;
 
-            // Konverter verdiene tilbake til database format
+           
             model.Status = _enumLogic.ConvertToDbFormat(model.Status);
             model.Prioritet = _enumLogic.ConvertToDbFormat(model.Prioritet);
             model.KartType = _enumLogic.ConvertToDbFormat(model.KartType);
 
-            // Valider verdiene //burde refactoreres bort fra controller??!
             var isStatusValid = await _enumLogic.ValidateStatusValueAsync(model.Status);
             var isPrioritetValid = await _enumLogic.ValidatePrioritetValueAsync(model.Prioritet);
             var isKartTypeValid = await _enumLogic.ValidateKartTypeValueAsync(model.KartType);
@@ -123,7 +145,7 @@ public class BehandleInnmeldingSaksBController : Controller
 
             if (result)
             {
-                TempData["SuccessMessage"] = "Lagret"; // Lagt til denne
+                TempData["SuccessMessage"] = "Lagret";
             }
             else
             {
@@ -132,7 +154,7 @@ public class BehandleInnmeldingSaksBController : Controller
 
             return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id });
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             TempData["ErrorMessage"] = "Lagring feilet";
             return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id });
@@ -156,7 +178,7 @@ public class BehandleInnmeldingSaksBController : Controller
                 TempData["ErrorMessage"] = "Kunne ikke finne innmeldingen";
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             TempData["ErrorMessage"] = "Kunne ikke oppdatere saksbehandler";
         }
@@ -169,10 +191,10 @@ public class BehandleInnmeldingSaksBController : Controller
     {
         try
         {
-            // Konverter til database format
+           
             var dbInnmelderType = _enumLogic.ConvertToDbFormat(innmelderType);
 
-            // Valider
+           
             var isValid = await _enumLogic.ValidateInnmelderTypeValueAsync(dbInnmelderType);
             if (!isValid)
             {
@@ -180,7 +202,7 @@ public class BehandleInnmeldingSaksBController : Controller
                 return await BehandleInnmeldingSaksB(innmeldingId);
             }
 
-            // Oppdater
+            
             var model = new InnmeldingModel { InnmelderType = dbInnmelderType };
             var result = await _innmeldingRepository.OppdaterInnmelderType(innmelderId, model);
 
@@ -193,7 +215,7 @@ public class BehandleInnmeldingSaksBController : Controller
                 TempData["ErrorMessage"] = "Kunne ikke finne innmelderen";
             }
 
-            // Returner til samme view med oppdatert data
+           
             return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id = innmeldingId });
         }
         catch (Exception)

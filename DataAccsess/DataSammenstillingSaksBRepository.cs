@@ -69,7 +69,7 @@ namespace DataAccess
         {
             await using var connection = _dbConnection.CreateConnection();
 
-            // Calculate total items for pagination
+            
             var countSql = @"
                 SELECT COUNT(*)
                 FROM innmelding im
@@ -84,10 +84,10 @@ namespace DataAccess
 
             var totalItems = await connection.ExecuteScalarAsync<int>(countSql, new { SearchTerm = "%" + searchTerm + "%" });
 
-            // Calculate total pages
+            
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-            // Main query to fetch paginated data with all necessary fields
+          
             var dataSql = @"
                 SELECT
                     -- Innmelding fields
@@ -144,14 +144,14 @@ namespace DataAccess
                 SearchTerm = "%" + searchTerm + "%"
             };
 
-            Console.WriteLine($"Executing query with parameters: Offset={parameters.Offset}, PageSize={parameters.PageSize}, SearchTerm={parameters.SearchTerm}");
+            
 
             var result = await connection.QueryAsync<InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel,
                 (InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)>(
                 dataSql,
                 (innmelding, person, geometri, gjesteinnmelder, innmelder) =>
                 {
-                    // Handle Gjesteinnmelder email
+                  
                     if (gjesteinnmelder != null)
                     {
                         Console.WriteLine($"GjesteinnmelderEmail before: {gjesteinnmelder.Epost}");
@@ -159,7 +159,7 @@ namespace DataAccess
                         Console.WriteLine($"GjesteinnmelderEmail after: {gjesteinnmelder.Epost}");
                     }
 
-                    // Handle Innmelder email
+                    
                     if (innmelder != null)
                     {
                         Console.WriteLine($"InnmelderEmail before: {innmelder.Epost}");
@@ -173,23 +173,9 @@ namespace DataAccess
                 splitOn: "PersonId,GeometriId,GjestInnmelderId,InnmelderId"
             );
 
-            // Log the results for debugging
+           
             var resultList = result.ToList();
-            if (resultList.Any())
-            {
-                foreach (var item in resultList)
-                {
-                    Console.WriteLine($"InnmeldingId: {item.Item1?.InnmeldingId}");
-                    Console.WriteLine($"InnmelderEpost: {item.Item5?.Epost}");
-                    Console.WriteLine($"GjestEpost: {item.Item4?.Epost}");
-                    Console.WriteLine("---");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No results found.");
-            }
-
+            
             return (resultList, totalPages);
         }
     }

@@ -32,7 +32,7 @@ public class KartfeilMarkeringController : Controller
             return BadRequest("Ingen geometri er tegnet på kartet");
         }
 
-        // Validerer at det er gyldig GeoJSON
+       
         try
         {
             JsonDocument.Parse(geometri.GeometriGeoJson);

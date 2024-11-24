@@ -18,12 +18,12 @@
         @Html.HiddenFor(m => m.ErNodEtatKritisk)
 
         <div class="flex-container">
-            <!-- Venstre side - Kart -->
+           
             <div class="map-section">
                 <div id="miniMap"></div>
             </div>
 
-            <!-- Høyre side - Detaljer -->
+           
             <div class="details-section">
                 <div class="info-group">
                     <div class="info-label">Tittel</div>
@@ -63,10 +63,10 @@
     <script src="~/js/maps/config/mapConfig.js"></script>
 
     <script>
-        // Initialiser mini-kart
+       
         const miniMap = MapConfig.initializeMap('miniMap', [62.1995, 6.1286], 15);
 
-        // Vis geometri fra hidden field
+        
         const geoJson = @Html.Raw(Json.Serialize(Model.GeometriGeoJson));
         if (geoJson) {
             const geoJsonLayer = L.geoJSON(JSON.parse(geoJson)).addTo(miniMap);

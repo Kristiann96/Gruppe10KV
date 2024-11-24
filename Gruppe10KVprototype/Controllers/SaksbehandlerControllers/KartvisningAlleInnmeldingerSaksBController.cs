@@ -21,7 +21,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             _kommuneAPILogic = kommuneAPILogic;
         }
 
-        // Henter alle geometriobjekter og kommunedata fra Kartverket og sender dem til viewet
+        
         [HttpGet]
         public async Task<IActionResult> KartvisningAlleInnmeldingerSaksB()
         {
@@ -47,7 +47,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             TempData["Kommunenummer"] = kommune.Kommunenummer;
             TempData["Kommunenavn"] = kommune.Kommunenavn;
 
-            return RedirectToAction("KartvisningEnInnmeldingSaksB", "KartvisningEnInnmeldingSaksB", new { innmeldingId });
+            return RedirectToAction("KartvisningEnEllerFlereInnmeldingSaksB", "KartvisningEnEllerFlereInnmeldingSaksB", new { innmeldingId });
         }
     }
 }
