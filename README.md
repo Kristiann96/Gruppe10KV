@@ -1,7 +1,7 @@
 # Gruppe10KVprototype
 
 Velkommen til Gruppe10's Kartverket prototype! 
-Denne README-filen fungerer som en rask guide for å forstå, sette opp og jobbe med koden i dette repositoriet.
+Denne README-filen fungerer som en rask guide for å forstå, sette opp og jobbe med koden i dette repositoriet. For mer detaljer, se vår [Wiki](https://github.com/Kristiann96/Gruppe10KV/wiki/Gruppe10KVprototype-%E2%80%90-Wiki).
 
 ---
 
