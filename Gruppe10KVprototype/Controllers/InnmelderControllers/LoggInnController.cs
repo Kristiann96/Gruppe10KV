@@ -7,6 +7,7 @@ using ViewModels;
 
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
+[AutoValidateAntiforgeryToken]
 public class LoggInnController : Controller
 
 {
@@ -20,7 +21,7 @@ public class LoggInnController : Controller
 
     [HttpPost]
     [AllowAnonymous]
-    [ValidateAntiForgeryToken]
+    
     public async Task<IActionResult> LoggInn(LoggInnViewModel model)
     {
         if (!ModelState.IsValid)

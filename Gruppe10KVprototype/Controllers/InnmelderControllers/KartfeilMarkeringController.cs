@@ -5,7 +5,9 @@ using System.Text.Json;
 using LogicInterfaces;
 using Models.Models;
 
+[AutoValidateAntiforgeryToken]
 public class KartfeilMarkeringController : Controller
+
 {
     private readonly IGeometriRepository _geometriRepository;
     private readonly IKommuneAPILogic _kommuneAPILogic;
