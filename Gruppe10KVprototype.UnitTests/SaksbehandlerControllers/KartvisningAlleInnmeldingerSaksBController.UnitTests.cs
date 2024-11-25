@@ -1,12 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
 using LogicInterfaces;
 using Models.Models;
 using ViewModels;
 using Interface;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class KartvisningAlleInnmeldingerSaksBControllerTests
@@ -32,6 +37,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         }
 
         #region KartvisningAlleInnmeldingerSaksB Tests
+
         [TestMethod]
         [Description("Tester at KartvisningAlleInnmeldingerSaksB henter data og returnerer korrekt ViewModel")]
         public async Task KartvisningAlleInnmeldingerSaksB_ReturnsViewWithCorrectData()
@@ -66,9 +72,11 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             Assert.AreEqual(1, viewModel.GeometriData.Count());
             Assert.AreEqual(1, viewModel.KommunerData.Count());
         }
+
         #endregion
 
         #region GetKommunenummer Tests
+
         [TestMethod]
         [Description("Tester at GetKommunenummer henter kommunenummer og navn, og redirecter til korrekt action")]
         public async Task GetKommunenummer_RedirectsToCorrectActionWithTempData()
@@ -93,13 +101,14 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             Assert.IsInstanceOfType(actionResult, typeof(RedirectToActionResult));
 
             var redirectResult = (RedirectToActionResult)actionResult;
-            Assert.AreEqual("KartvisningEnInnmeldingSaksB", redirectResult.ActionName);
-            Assert.AreEqual("KartvisningEnInnmeldingSaksB", redirectResult.ControllerName);
+            Assert.AreEqual("KartvisningEnEllerFlereInnmeldingSaksB", redirectResult.ActionName);
+            Assert.AreEqual("KartvisningEnEllerFlereInnmeldingSaksB", redirectResult.ControllerName);
 
             // Verify TempData was set correctly
             _tempDataMock.VerifySet(td => td["Kommunenummer"] = "0301");
             _tempDataMock.VerifySet(td => td["Kommunenavn"] = "Oslo");
         }
+
         #endregion
     }
 }

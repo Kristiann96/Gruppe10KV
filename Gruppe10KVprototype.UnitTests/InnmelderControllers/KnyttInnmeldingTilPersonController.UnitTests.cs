@@ -1,3 +1,4 @@
+using System;
 using LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -8,8 +9,10 @@ using ViewModels;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Gruppe10KVprototype.Tests.Controllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class KnyttInnmeldingTilPersonControllerTester
@@ -40,7 +43,8 @@ namespace Gruppe10KVprototype.Tests.Controllers
 
         // Tester at GET-metoden KnyttInnmeldingTilPerson returnerer redirect når required fields er tomme eller null
         [TestMethod]
-        [Description("Tester at GET-metoden KnyttInnmeldingTilPerson returnerer redirect når required fields er tomme eller null")]
+        [Description(
+            "Tester at GET-metoden KnyttInnmeldingTilPerson returnerer redirect når required fields er tomme eller null")]
         public void KnyttInnmeldingTilPerson_FieldsMissing_Redirigerer()
         {
             var model = new KnyttInnmeldingTilPersonViewModel
@@ -119,7 +123,8 @@ namespace Gruppe10KVprototype.Tests.Controllers
             };
 
             _mockInnmeldingLogic
-                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(),
+                    It.IsAny<string>(), It.IsAny<bool>()))
                 .ReturnsAsync(true);
 
             var result = await _controller.LagreKnyttInnmeldingTilPerson(model) as RedirectToActionResult;
@@ -143,7 +148,8 @@ namespace Gruppe10KVprototype.Tests.Controllers
             };
 
             _mockInnmeldingLogic
-                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(),
+                    It.IsAny<string>(), It.IsAny<bool>()))
                 .Throws(new ForretningsRegelExceptionModel("Forretningsregel-feil"));
 
             var result = await _controller.LagreKnyttInnmeldingTilPerson(model) as ViewResult;
@@ -170,7 +176,8 @@ namespace Gruppe10KVprototype.Tests.Controllers
             };
 
             _mockInnmeldingLogic
-                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(), It.IsAny<string>(), It.IsAny<bool>()))
+                .Setup(m => m.ValidereOgLagreNyInnmelding(It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>(),
+                    It.IsAny<string>(), It.IsAny<bool>()))
                 .Throws(new Exception("Uventet feil"));
 
             var result = await _controller.LagreKnyttInnmeldingTilPerson(model) as ViewResult;

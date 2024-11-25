@@ -3,8 +3,9 @@ using Moq;
 using Models.Models;
 using Interface;
 using LogicInterfaces;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Gruppe10KVprototype.Tests.Controllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class KartfeilControllerTester

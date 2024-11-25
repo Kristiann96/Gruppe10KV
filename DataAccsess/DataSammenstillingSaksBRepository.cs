@@ -141,7 +141,7 @@ namespace DataAccess
                 parameters,
                 splitOn: "PersonId,GeometriId,GjestInnmelderId,InnmelderId"
             );
-            
+
             var resultList = result.ToList();
 
             return (resultList, totalPages);
