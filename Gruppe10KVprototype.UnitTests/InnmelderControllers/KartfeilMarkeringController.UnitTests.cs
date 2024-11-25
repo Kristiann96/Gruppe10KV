@@ -4,7 +4,7 @@ using Models.Models;
 using Interface;
 using LogicInterfaces;
 
-namespace Gruppe10KVprototype.Tests.Controllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class KartfeilControllerTester

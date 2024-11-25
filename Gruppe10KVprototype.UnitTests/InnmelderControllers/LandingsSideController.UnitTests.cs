@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
 
-namespace Gruppe10KVprototype.Tests.Controllers.InnmelderControllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class LandingsSideControllerTests

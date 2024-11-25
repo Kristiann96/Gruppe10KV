@@ -1,18 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using Logic;
 using LogicInterfaces;
 using Models.Models;
 using ViewModels;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
 using Interface;
 
-namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class KartvisningAlleInnmeldingerSaksBControllerTests
@@ -38,6 +33,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         }
 
         #region KartvisningAlleInnmeldingerSaksB Tests
+
         [TestMethod]
         [Description("Tester at KartvisningAlleInnmeldingerSaksB henter data og returnerer korrekt ViewModel")]
         public async Task KartvisningAlleInnmeldingerSaksB_ReturnsViewWithCorrectData()
@@ -72,9 +68,11 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             Assert.AreEqual(1, viewModel.GeometriData.Count());
             Assert.AreEqual(1, viewModel.KommunerData.Count());
         }
+
         #endregion
 
         #region GetKommunenummer Tests
+
         [TestMethod]
         [Description("Tester at GetKommunenummer henter kommunenummer og navn, og redirecter til korrekt action")]
         public async Task GetKommunenummer_RedirectsToCorrectActionWithTempData()
@@ -106,6 +104,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             _tempDataMock.VerifySet(td => td["Kommunenummer"] = "0301");
             _tempDataMock.VerifySet(td => td["Kommunenavn"] = "Oslo");
         }
+
         #endregion
     }
 }

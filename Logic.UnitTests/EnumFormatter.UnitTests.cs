@@ -1,7 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Logic;
-
-namespace Logic.Tests
+﻿namespace Logic.Tests
 {
     [TestClass]
     public class EnumFormatterTests

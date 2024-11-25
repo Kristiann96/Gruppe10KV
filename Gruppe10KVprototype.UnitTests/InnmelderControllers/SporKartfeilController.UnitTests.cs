@@ -1,13 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Interface;
 using LogicInterfaces;
 using Models.Models;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
-using System.Text.Json;
 
-namespace Gruppe10KVprototype.Tests.Controllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class SporKartfeilControllerTests
@@ -28,7 +26,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
         }
 
         [TestMethod]
-        [Description("Verifiserer at kontrolleren håndterer en tom GeoJSON-streng ved å returnere en BadRequest med korrekt feilmelding")]
+        [Description("Verifiserer at kontrolleren hï¿½ndterer en tom GeoJSON-streng ved ï¿½ returnere en BadRequest med korrekt feilmelding")]
         public void A_BehandleGeoJson_GirFeilmelding_NaarGeoJsonErTom()
         {
             // Arrange
@@ -44,7 +42,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
         }
 
         [TestMethod]
-        [Description("Verifiserer at kontrolleren håndterer en ugyldig GeoJSON-streng ved å returnere en BadRequest med korrekt feilmelding")]
+        [Description("Verifiserer at kontrolleren hï¿½ndterer en ugyldig GeoJSON-streng ved ï¿½ returnere en BadRequest med korrekt feilmelding")]
         public void B_BehandleGeoJson_GirFeilmelding_NaarGeoJsonErUgyldig()
         {
             // Arrange
@@ -60,7 +58,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
         }
 
         [TestMethod]
-        [Description("Verifiserer at kontrolleren håndterer en null GeoJSON-verdi ved å returnere en BadRequest med korrekt feilmelding")]
+        [Description("Verifiserer at kontrolleren hï¿½ndterer en null GeoJSON-verdi ved ï¿½ returnere en BadRequest med korrekt feilmelding")]
         public void C_BehandleGeoJson_GirFeilmelding_NaarGeoJsonErNull()
         {
             // Arrange
@@ -76,7 +74,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
         }
 
         [TestMethod]
-        [Description("Verifiserer at kontrolleren videresender til riktig action med korrekte parametere når en gyldig GeoJSON blir sendt inn")]
+        [Description("Verifiserer at kontrolleren videresender til riktig action med korrekte parametere nï¿½r en gyldig GeoJSON blir sendt inn")]
         public void D_BehandleGeoJson_OmdirigererTilSkjema_NaarGeoJsonErGyldig()
         {
             // Arrange

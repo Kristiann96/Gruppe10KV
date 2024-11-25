@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
 using Interface;
 using Interfaces;
 using LogicInterfaces;
 using Models.Models;
-using ViewModels;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models.Entities;
+using ViewModels;
 
-namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class KartvisningEnInnmeldingSaksBControllerTests
@@ -21,7 +17,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         private Mock<IDataSammenstillingSaksBRepository> _dataSammenstillingsRepoMock;
         private Mock<IEnumLogic> _enumLogicMock;
         private Mock<IVurderingRepository> _vurderingRepositoryMock;
-        private KartvisningEnInnmeldingSaksBController _controller;
+        private KartvisningEnEllerFlereInnmeldingSaksBController _controller;
         private Mock<ITempDataDictionary> _tempDataMock;
 
         [TestInitialize]
@@ -33,7 +29,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             _vurderingRepositoryMock = new Mock<IVurderingRepository>();
             _tempDataMock = new Mock<ITempDataDictionary>();
 
-            _controller = new KartvisningEnInnmeldingSaksBController(
+            _controller = new KartvisningEnEllerFlereInnmeldingSaksBController(
                 _geometriRepositoryMock.Object,
                 _dataSammenstillingsRepoMock.Object,
                 _enumLogicMock.Object,
@@ -78,7 +74,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                 .Returns<string>(s => $"Formatert_{s}");
 
             // Act
-            IActionResult actionResult = await _controller.KartvisningEnInnmeldingSaksB(innmeldingId, null);
+            IActionResult actionResult = await _controller.KartvisningEnEllerFlereInnmeldingSaksB(innmeldingId, null);
 
             // Assert
             Assert.IsNotNull(actionResult);
@@ -86,9 +82,9 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 
             var viewResult = (ViewResult)actionResult;
             Assert.IsNotNull(viewResult.Model);
-            Assert.IsInstanceOfType(viewResult.Model, typeof(KartvisningEnInnmeldingSaksBViewModel));
+            Assert.IsInstanceOfType(viewResult.Model, typeof(KartvisningEnEllerFlereInnmeldingSaksBController));
 
-            var viewModel = (KartvisningEnInnmeldingSaksBViewModel)viewResult.Model;
+            var viewModel = (KartvisningEnEllerFlereInnmeldingSaksBViewModel)viewResult.Model;
             Assert.AreEqual(1, viewModel.AlleInnmeldinger.Count);
 
             var innmeldingDetaljer = viewModel.AlleInnmeldinger.First();
@@ -143,14 +139,14 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                 .Returns<string>(s => $"Formatert_{s}");
 
             // Act
-            IActionResult actionResult = await _controller.KartvisningEnInnmeldingSaksB(null, innmeldingIds);
+            IActionResult actionResult = await _controller.KartvisningEnEllerFlereInnmeldingSaksB(null, innmeldingIds);
 
             // Assert
             Assert.IsNotNull(actionResult);
             Assert.IsInstanceOfType(actionResult, typeof(ViewResult));
 
             var viewResult = (ViewResult)actionResult;
-            var viewModel = (KartvisningEnInnmeldingSaksBViewModel)viewResult.Model;
+            var viewModel = (KartvisningEnEllerFlereInnmeldingSaksBViewModel)viewResult.Model;
             Assert.AreEqual(2, viewModel.AlleInnmeldinger.Count);
         }
 
@@ -164,7 +160,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                 .ReturnsAsync((null, null, null, null));
 
             // Act
-            IActionResult actionResult = await _controller.KartvisningEnInnmeldingSaksB(innmeldingId, null);
+            IActionResult actionResult = await _controller.KartvisningEnEllerFlereInnmeldingSaksB(innmeldingId, null);
 
             // Assert
             Assert.IsNotNull(actionResult);
