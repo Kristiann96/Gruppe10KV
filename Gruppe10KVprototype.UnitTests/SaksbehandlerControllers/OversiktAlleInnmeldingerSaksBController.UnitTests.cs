@@ -1,4 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Interface;
@@ -7,7 +6,6 @@ using LogicInterfaces;
 using Models.Entities;
 using Models.Models;
 using ViewModels;
-using Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
 
 namespace Gruppe10KVprototype.UnitTests;
 

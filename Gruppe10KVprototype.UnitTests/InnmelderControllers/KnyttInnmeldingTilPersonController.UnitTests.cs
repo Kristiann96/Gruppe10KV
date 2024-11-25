@@ -1,4 +1,3 @@
-using AuthInterface;
 using LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -9,7 +8,6 @@ using ViewModels;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Gruppe10KVprototype.Tests.Controllers
 {

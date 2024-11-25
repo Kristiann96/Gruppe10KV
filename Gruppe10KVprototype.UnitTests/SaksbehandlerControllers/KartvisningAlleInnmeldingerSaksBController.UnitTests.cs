@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq;
-using Logic;
 using LogicInterfaces;
 using Models.Models;
 using ViewModels;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
 using Interface;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers

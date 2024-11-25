@@ -1,9 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using ViewModels;
 using ServicesInterfaces;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
