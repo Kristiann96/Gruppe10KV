@@ -3,7 +3,6 @@
     Layout = "_Layout";
 }
 
-
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -12,40 +11,38 @@
     <title>Navigasjonskort</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="~/css/pages/TemporaryCSS/LandingsSideInnmelder.css">
-
 </head>
-<body>
-<div class="container">
-    <div class="card-container">
-        
-        <div class="cards">
-            <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartforbedring")" class="card">
-                <i class="fa-regular fa-handshake"></i>
-                <h2>Bidra til Kartkvalitet</h2>
-                <p>Hjelp oss med å forbedre kartkvaliteten ved å bekrefte eller avkrefte innmeldinger laget av andre.</p>
-            </a>
-            
-            <a href="@Url.Action("SporKartfeil", "SporKartfeil")" class="card">
-                <i class="fa-solid fa-map-location-dot"></i>
-                <h2>Lag innmelding med GPS</h2>
-                <p>Bruk din nåværende posisjon til å enkelt markere og melde inn kartfeil. Perfekt for feiloppdagelse mens du er på farten.</p>
-            </a>
-            
-            <a href="@Url.Action("KartfeilMarkering", "KartfeilMarkering")" class="card">
-                <i class="fa-solid fa-draw-polygon"></i>
-                <h2>Lag innmelding med tegneverktøy</h2>
-                    <p>Opprett innmelding med linje, punkt, rektangel eller polygon. Last opp bilde for tilleggs dokumentasjon</p>
-            </a>
 
-            <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")" class="card">
-                <i class="fa-regular fa-folder-open"></i>
-                <h2>Mine innmeldinger</h2>
-                <p>Oversikt over dine innmeldinger. Følg med på status, oppdater dine innmeldinger, og se historikk over tidligere meldinger.</p>
-            </a>
+<body>
+    <div class="container">
+        <div class="card-container">
+            
+            <div class="cards">
+                <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartforbedring")" class="card">
+                    <i class="fa-regular fa-handshake"></i>
+                    <h2>Bidra til Kartkvalitet</h2>
+                    <p>Hjelp oss med å forbedre kartkvaliteten ved å bekrefte eller avkrefte innmeldinger laget av andre.</p>
+                </a>
+                
+                <a href="@Url.Action("SporKartfeil", "SporKartfeil")" class="card">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <h2>Lag innmelding med GPS</h2>
+                    <p>Bruk din nåværende posisjon til å enkelt markere og melde inn kartfeil. Perfekt for feiloppdagelse mens du er på farten.</p>
+                </a>
+                
+                <a href="@Url.Action("KartfeilMarkering", "KartfeilMarkering")" class="card">
+                    <i class="fa-solid fa-draw-polygon"></i>
+                    <h2>Lag innmelding med tegneverktøy</h2>
+                        <p>Opprett innmelding med linje, punkt, rektangel eller polygon. Last opp bilde for tilleggs dokumentasjon</p>
+                </a>
+
+                <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")" class="card">
+                    <i class="fa-regular fa-folder-open"></i>
+                    <h2>Mine innmeldinger</h2>
+                    <p>Oversikt over dine innmeldinger. Følg med på status, oppdater dine innmeldinger, og se historikk over tidligere meldinger.</p>
+                </a>
+            </div>
         </div>
     </div>
-</div>
-
-   
 </body>
 </html>
