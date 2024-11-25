@@ -8,7 +8,7 @@ namespace ViewModels
         public List<InnmeldingMedDetaljerViewModel> AlleInnmeldinger { get; set; } = new();
     }
 
-    // Ny klasse for å holde all informasjon om én innmelding
+    
     public class InnmeldingMedDetaljerViewModel
     {
         public InnmeldingModel Innmelding { get; set; }

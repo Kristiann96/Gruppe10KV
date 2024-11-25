@@ -6,10 +6,13 @@ using ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LogicInterfaces;
+using AuthInterface;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
+    [Authorize(Roles = UserRoles.Saksbehandler)]
     public class KartvisningAlleInnmeldingerSaksBController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;

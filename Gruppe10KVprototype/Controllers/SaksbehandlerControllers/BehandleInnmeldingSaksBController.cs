@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
 
+[Authorize(Roles = UserRoles.Saksbehandler)]
 public class BehandleInnmeldingSaksBController : Controller
 {
     private readonly IGeometriRepository _geometriRepository;
@@ -54,7 +55,7 @@ public class BehandleInnmeldingSaksBController : Controller
             }
 
            
-            var geometri = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
+            var geometri = await _geometriRepository.GetForBehandleInnmedingAsync(id);
 
            
             var statusOptions = await TryGetEnumOptions(_enumLogic.GetFormattedStatusEnumValuesAsync);
@@ -68,11 +69,24 @@ public class BehandleInnmeldingSaksBController : Controller
 
             var viewModel = new BehandleInnmeldingSaksBViewModel
             {
-                InnmeldingModel = innmelding,
-                PersonModel = person,
-                InnmelderModel = innmelder,
-                SaksbehandlerModel = saksbehandler,
-                Geometri = geometri,
+                InnmeldingId = innmelding.InnmeldingId,
+                Tittel = innmelding.Tittel,
+                Beskrivelse = innmelding.Beskrivelse,
+                Status = innmelding.Status,        
+                Prioritet = innmelding.Prioritet,     
+                KartType = innmelding.KartType,
+
+                // Map innmelder info hvis tilgjengelig
+                Fornavn = person?.Fornavn,
+                Etternavn = person?.Etternavn,
+                Telefonnummer = person?.Telefonnummer,
+                InnmelderType = innmelder?.InnmelderType,
+
+                // Map saksbehandler info hvis tilgjengelig
+                SaksbehandlerStilling = saksbehandler?.Stilling,
+                SaksbehandlerJobbepost = saksbehandler?.Jobbepost,
+                SaksbehandlerJobbtelefon = saksbehandler?.Jobbtelefon,
+                GeometriGeoJson = geometri.GeometriGeoJson,
                 StatusOptions = statusOptions,
                 PrioritetOptions = prioritetOptions,
                 KartTypeOptions = kartTypeOptions,
@@ -124,10 +138,17 @@ public class BehandleInnmeldingSaksBController : Controller
     {
         try
         {
-            var model = viewModel.InnmeldingModel;
 
-           
-            model.Status = _enumLogic.ConvertToDbFormat(model.Status);
+        
+        var model = new InnmeldingModel
+        {
+            InnmeldingId = id,
+            Status = _enumLogic.ConvertToDbFormat(viewModel.Status),
+            Prioritet = _enumLogic.ConvertToDbFormat(viewModel.Prioritet),
+            KartType = _enumLogic.ConvertToDbFormat(viewModel.KartType)
+        };
+
+        model.Status = _enumLogic.ConvertToDbFormat(model.Status);
             model.Prioritet = _enumLogic.ConvertToDbFormat(model.Prioritet);
             model.KartType = _enumLogic.ConvertToDbFormat(model.KartType);
 

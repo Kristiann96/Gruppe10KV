@@ -27,7 +27,6 @@ namespace DataAccess
                 im.innmelding_id AS InnmeldingId, 
                 im.tittel AS Tittel,
                 im.beskrivelse AS Beskrivelse,
-                im.siste_endring AS SisteEndring,
                 im.status AS Status,
                 im.prioritet AS Prioritet,
                 im.kart_type AS KartType,
@@ -41,9 +40,9 @@ namespace DataAccess
                 i.innmelder_type AS InnmelderType,
                 -- Saksbehandler fields
                 s.saksbehandler_id AS SaksbehandlerId,
-                s.stilling AS Stilling,
-                s.jobbepost AS Jobbepost,
-                s.jobbtelefon AS Jobbtelefon,
+                s.stilling AS SaksbehadlderStilling,
+                s.jobbepost AS SaksbehandlerJobbepost,
+                s.jobbtelefon AS SaksbehandlerJobbtelefon,
                 -- Gjest fields
                 g.gjest_innmelder_id AS GjestInnmelderId
             FROM innmelding im
@@ -64,12 +63,14 @@ namespace DataAccess
 
             return result.FirstOrDefault();
         }
-        
-        public async Task<(IEnumerable<(InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)> Data, int TotalPages)> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm)
+
+        public async
+            Task<(IEnumerable<(InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)> Data, int
+                TotalPages)> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm)
         {
             await using var connection = _dbConnection.CreateConnection();
 
-            
+
             var countSql = @"
                 SELECT COUNT(*)
                 FROM innmelding im
@@ -82,12 +83,13 @@ namespace DataAccess
                 OR i.epost LIKE @SearchTerm
                 OR gi.epost LIKE @SearchTerm";
 
-            var totalItems = await connection.ExecuteScalarAsync<int>(countSql, new { SearchTerm = "%" + searchTerm + "%" });
+            var totalItems =
+                await connection.ExecuteScalarAsync<int>(countSql, new { SearchTerm = "%" + searchTerm + "%" });
 
-            
+
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-          
+
             var dataSql = @"
                 SELECT
                     -- Innmelding fields
@@ -144,39 +146,88 @@ namespace DataAccess
                 SearchTerm = "%" + searchTerm + "%"
             };
 
-            
 
-            var result = await connection.QueryAsync<InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel,
-                (InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)>(
-                dataSql,
-                (innmelding, person, geometri, gjesteinnmelder, innmelder) =>
-                {
-                  
-                    if (gjesteinnmelder != null)
+
+            var result = await connection
+                .QueryAsync<InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel,
+                    (InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)>(
+                    dataSql,
+                    (innmelding, person, geometri, gjesteinnmelder, innmelder) =>
                     {
-                        Console.WriteLine($"GjesteinnmelderEmail before: {gjesteinnmelder.Epost}");
-                        gjesteinnmelder.Epost = string.IsNullOrEmpty(gjesteinnmelder.Epost) ? "N/A" : gjesteinnmelder.Epost;
-                        Console.WriteLine($"GjesteinnmelderEmail after: {gjesteinnmelder.Epost}");
-                    }
 
-                    
-                    if (innmelder != null)
-                    {
-                        Console.WriteLine($"InnmelderEmail before: {innmelder.Epost}");
-                        innmelder.Epost = string.IsNullOrEmpty(innmelder.Epost) ? "N/A" : innmelder.Epost;
-                        Console.WriteLine($"InnmelderEmail after: {innmelder.Epost}");
-                    }
+                        if (gjesteinnmelder != null)
+                        {
+                            Console.WriteLine($"GjesteinnmelderEmail before: {gjesteinnmelder.Epost}");
+                            gjesteinnmelder.Epost = string.IsNullOrEmpty(gjesteinnmelder.Epost)
+                                ? "N/A"
+                                : gjesteinnmelder.Epost;
+                            Console.WriteLine($"GjesteinnmelderEmail after: {gjesteinnmelder.Epost}");
+                        }
 
-                    return (innmelding, person, geometri, gjesteinnmelder, innmelder);
-                },
-                parameters,
-                splitOn: "PersonId,GeometriId,GjestInnmelderId,InnmelderId"
-            );
 
-           
+                        if (innmelder != null)
+                        {
+                            Console.WriteLine($"InnmelderEmail before: {innmelder.Epost}");
+                            innmelder.Epost = string.IsNullOrEmpty(innmelder.Epost) ? "N/A" : innmelder.Epost;
+                            Console.WriteLine($"InnmelderEmail after: {innmelder.Epost}");
+                        }
+
+                        return (innmelding, person, geometri, gjesteinnmelder, innmelder);
+                    },
+                    parameters,
+                    splitOn: "PersonId,GeometriId,GjestInnmelderId,InnmelderId"
+                );
+
+
             var resultList = result.ToList();
-            
+
             return (resultList, totalPages);
         }
+
+
+        public async Task<(InnmeldingModel, PersonModel?, InnmelderModel?, SaksbehandlerModel?)>
+            ForBehandlingAvInnmeldingAsync(int innmeldingId)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql = @"
+        SELECT 
+            -- Innmelding fields
+            i.tittel AS Tittel,
+            i.beskrivelse AS Beskrivelse,
+            -- Person fields
+            p.fornavn AS Fornavn,
+            p.etternavn AS Etternavn,
+            p.telefonnummer AS Telefonnummer,
+            -- Innmelder fields
+            im.innmelder_id AS InnmelderId,
+            im.innmelder_type AS InnmelderType,
+            -- Saksbehandler fields
+            sb.stilling AS Stilling,
+            sb.jobbepost AS Jobbepost,
+            sb.jobbtelefon AS Jobbtelefon
+            -- Gjest fields
+            g.gjest_innmelder_id AS GjestInnmelderId
+        FROM innmelding i
+        LEFT JOIN innmelder im ON i.innmelder_id = im.innmelder_id
+        LEFT JOIN person p ON im.person_id = p.person_id
+        LEFT JOIN saksbehandler sb ON i.saksbehandler_id = sb.saksbehandler_id
+        LEFT JOIN gjesteinnmelder g ON i.gjest_innmelder_id = g.gjest_innmelder_id
+        WHERE i.innmelding_id = @InnmeldingId";
+
+            var result = await connection.QueryAsync<InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel,
+                (InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel)>(
+                sql,
+                (innmelding, person, innmelder, saksbehandler) =>
+                {
+                    return (innmelding, person, innmelder, saksbehandler);
+                },
+                new { InnmeldingId = innmeldingId },
+                splitOn: "Fornavn,InnmelderId,Stilling");
+
+            return result.FirstOrDefault();
+        }
+
+
     }
 }
+

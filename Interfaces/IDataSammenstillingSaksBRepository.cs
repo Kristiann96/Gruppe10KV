@@ -15,5 +15,8 @@ namespace Interfaces
 
         Task<(IEnumerable<(InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)> Data, int TotalPages)>
             GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm);
+
+        Task<(InnmeldingModel, PersonModel?, InnmelderModel?, SaksbehandlerModel?)>
+            ForBehandlingAvInnmeldingAsync(int innmeldingId);
     }
 }

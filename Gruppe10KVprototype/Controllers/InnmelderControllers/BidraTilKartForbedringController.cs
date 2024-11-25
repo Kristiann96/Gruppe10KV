@@ -4,9 +4,12 @@ using ViewModels;
 using System.Threading.Tasks;
 using Models.Entities;
 using Models.Models;
+using AuthInterface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
+    [Authorize(Roles = UserRoles.Innmelder)]
     public class BidraTilKartForbedringController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;
