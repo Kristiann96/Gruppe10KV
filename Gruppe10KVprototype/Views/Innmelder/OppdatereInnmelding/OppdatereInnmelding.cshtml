@@ -220,7 +220,7 @@
         form.addEventListener('input', function () {
             harUlagredeEndringer = true;
         });
-        
+
         document.getElementById('lagreTekstBtn').addEventListener('click', async function () {
             if (!form.checkValidity()) {
                 form.reportValidity();
@@ -232,7 +232,7 @@
                 const response = await fetch('@Url.Action("OppdatereInnmeldingDetaljer")', {
                     method: 'POST',
                     headers: {
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
                     },
                     body: formData
                 });
@@ -245,14 +245,15 @@
                     visStatusMelding(result.message || 'Kunne ikke lagre tekst', true);
                 }
             } catch (error) {
+                console.error('Error:', error); // Legg til denne for debugging
                 visStatusMelding('En feil oppstod', true);
             }
         });
-        
+
         document.getElementById('lagreGeometriBtn').addEventListener('click', async function () {
             try {
                 const geometriJson = document.getElementById('GeometriGeoJson').value;
-                
+
                 const model = {
                     InnmeldingId: parseInt(document.querySelector('input[name="InnmeldingId"]').value),
                     GeometriGeoJson: geometriJson
@@ -262,7 +263,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
                     },
                     body: JSON.stringify(model)
                 });
@@ -273,7 +274,7 @@
                 }
 
                 const result = await response.json();
-                
+
                 if (result.success) {
                     geometriEndret = false;
                     document.getElementById('lagreGeometriBtn').disabled = true;
@@ -282,6 +283,7 @@
                     visStatusMelding(result.message || 'Kunne ikke lagre geometri', true);
                 }
             } catch (error) {
+                console.error('Error:', error); // Legg til denne for debugging
                 visStatusMelding('Kunne ikke lagre geometri: ' + error.message, true);
             }
         });
@@ -301,22 +303,24 @@
         }
 
         async function slettInnmelding() {
-        try {
-            const response = await fetch('@Url.Action("SlettInnmelding", new { innmeldingId = Model.InnmeldingId })', {
-                method: 'POST',
-                headers: {
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-            }
-        });
+            try {
+                const response = await fetch('@Url.Action("SlettInnmelding", new { innmeldingId = Model.InnmeldingId })', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                });
 
-        if (response.ok) {
-            visSlettingResultat(true);
-        } else {
-            visSlettingResultat(false);
-        }
-    } catch (error) {
-        visSlettingResultat(false);
-    }
+                const result = await response.json();
+                if (result.success) {
+                    visSlettingResultat(true);
+                } else {
+                    visSlettingResultat(false, result.message);
+                }
+            } catch (error) {
+                visSlettingResultat(false);
+            }
         }
 
 function visSlettingResultat(success) {
