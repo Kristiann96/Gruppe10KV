@@ -31,7 +31,7 @@ Gruppens system introduserer en ny og kreativ løsning der innmeldere kan benytt
 
 ### Hva applikasjonen gjør
 
-- **Motta innmeldinger:** Brukere kan melde inn feil på geografiske lokasjoner, inkludert geodata (GeoJSON-format) samt bruke sporing via GPS for å melde inn feil i sanntid.
+- **Motta innmeldinger:** Brukere kan melde inn feil på geografiske lokasjoner, inkludert geodata (GeoJSON-format), samt bruke sporing via GPS for å melde inn feil i sanntid.
 - **Administratorgjennomgang:** Saksbehandlere kan effektivt gjennomgå, vurdere, administrere og delegere innmeldinger.
 - **Datakompilering:** Systemet gir en detaljert oversikt over forskjellige geodata og brukerinnsendte data.
 - **Autentisering og brukeradministrasjon:** Inkluderer et autentiseringssystem for ulike brukertyper, som gjester og registrerte brukere.
