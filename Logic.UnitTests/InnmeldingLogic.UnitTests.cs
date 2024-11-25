@@ -8,7 +8,7 @@ using Models.Models;
 using Models.Exceptions;
 using Interface;
 
-namespace Logic.Tests
+namespace Logic.UnitTests
 {
     [TestClass]
     public class InnmeldingLogicTests
