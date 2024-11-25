@@ -7,6 +7,7 @@ using System.Transactions;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
+    [AutoValidateAntiforgeryToken]
     public class RegistrerDegController : Controller
     {
         private readonly ITransaksjonsRepository _transaksjonsRepository;

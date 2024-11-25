@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
     [Authorize(Roles = UserRoles.Saksbehandler)]
+    [AutoValidateAntiforgeryToken]
     public class KartvisningAlleInnmeldingerSaksBController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;

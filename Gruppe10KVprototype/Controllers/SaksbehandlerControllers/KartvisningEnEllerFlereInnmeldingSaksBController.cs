@@ -9,6 +9,7 @@ using Models.Models;
 using ViewModels;
 
 [Authorize(Roles = UserRoles.Saksbehandler)]
+[AutoValidateAntiforgeryToken]
 public class KartvisningEnEllerFlereInnmeldingSaksBController : Controller
 {
     private readonly IGeometriRepository _geometriRepository;

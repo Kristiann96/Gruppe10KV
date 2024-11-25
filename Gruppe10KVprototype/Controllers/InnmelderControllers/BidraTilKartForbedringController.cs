@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
     [Authorize(Roles = UserRoles.Innmelder)]
+    [AutoValidateAntiforgeryToken]
     public class BidraTilKartForbedringController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;
