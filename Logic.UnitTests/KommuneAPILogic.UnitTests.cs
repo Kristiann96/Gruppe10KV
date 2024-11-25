@@ -12,11 +12,14 @@ namespace Logic.Tests
     [TestClass]
     public class KommuneAPILogicTests
     {
+        #region Fields
         private Mock<HttpMessageHandler> _httpMessageHandlerMock;
         private HttpClient _httpClient;
         private Mock<ILogger<KommuneAPILogic>> _loggerMock;
         private KommuneAPILogic _kommuneAPILogic;
+        #endregion
 
+        #region Setup
         [TestInitialize]
         public void Initialize()
         {
@@ -25,7 +28,9 @@ namespace Logic.Tests
             _loggerMock = new Mock<ILogger<KommuneAPILogic>>();
             _kommuneAPILogic = new KommuneAPILogic(_httpClient, _loggerMock.Object);
         }
+        #endregion
 
+        #region API Tests
         [TestMethod]
         [Description("Tester henting av alle kommuner fra API")]
         public async Task HentKommuner_VellykketAPIKall_ReturnererKommuneListe()
@@ -99,7 +104,9 @@ namespace Logic.Tests
             Assert.AreEqual("Oslo", result.Kommunenavn);
             Assert.AreEqual("0301", result.Kommunenummer);
         }
+        #endregion
 
+        #region Geometry Tests
         [TestMethod]
         [Description("Tester håndtering av geometridata fra database")]
         public async Task HentKommuneStringFraGeometri_GyldigGeometri_ReturnererKommuneString()
@@ -225,7 +232,9 @@ namespace Logic.Tests
             // Assert
             Assert.AreEqual("Ikke tilgjengelig", result);
         }
+        #endregion
 
+        #region Helper Methods
         private void SetupHttpMockResponse(string expectedUrl, string content, HttpStatusCode statusCode)
         {
             Console.WriteLine($"Setting up mock for URL: {expectedUrl}");
@@ -250,5 +259,6 @@ namespace Logic.Tests
                 })
                 .Verifiable();
         }
+        #endregion
     }
 }

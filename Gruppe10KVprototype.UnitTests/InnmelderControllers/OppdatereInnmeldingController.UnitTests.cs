@@ -4,7 +4,7 @@ using ViewModels;
 using ServicesInterfaces;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
 
-namespace Gruppe10KVprototype.Tests.Controllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class OppdatereInnmeldingControllerTests

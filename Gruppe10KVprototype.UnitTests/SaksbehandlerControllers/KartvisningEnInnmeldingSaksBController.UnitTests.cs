@@ -8,7 +8,7 @@ using Models.Models;
 using Models.Entities;
 using ViewModels;
 
-namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class KartvisningEnInnmeldingSaksBControllerTests

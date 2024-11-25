@@ -6,7 +6,7 @@ using ViewModels;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
 using Models.Models;
 
-namespace Gruppe10KVprototype.Tests.Controllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class BidraTilKartForbedringControllerTester
@@ -42,9 +42,15 @@ namespace Gruppe10KVprototype.Tests.Controllers
                 .ReturnsAsync(new List<(Geometri, InnmeldingModel)>
                 {
                     (new Geometri { GeometriId = 1, GeometriGeoJson = "{\"type\":\"Point\",\"coordinates\":[10.0,60.0]}" },
-                        new InnmeldingModel { /* Fyll ut egenskaper for modellen */ }),
+                        new InnmeldingModel
+                        {
+                            /* Fyll ut egenskaper for modellen */
+                        }),
                     (new Geometri { GeometriId = 2, GeometriGeoJson = "{\"type\":\"Point\",\"coordinates\":[11.0,61.0]}" },
-                        new InnmeldingModel { /* Fyll ut egenskaper for modellen */ })
+                        new InnmeldingModel
+                        {
+                            /* Fyll ut egenskaper for modellen */
+                        })
                 });
 
 
@@ -85,7 +91,6 @@ namespace Gruppe10KVprototype.Tests.Controllers
         }
 
 
-        
         [TestMethod]
         [Description("Tester at POST-metoden returnerer BadRequest når modellen er ugyldig")]
         public async Task LagreVurdering_UgyldigModell_ReturnererBadRequest()
