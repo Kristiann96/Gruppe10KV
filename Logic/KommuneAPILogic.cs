@@ -1,8 +1,10 @@
-﻿using LogicInterfaces;
+﻿using System.Text.Json;
+using LogicInterfaces;
 using Microsoft.Extensions.Logging;
 using Models.Models;
 using Newtonsoft.Json;
-using System.Text.Json;
+
+namespace Logic;
 
 public class KommuneAPILogic : IKommuneAPILogic
 {

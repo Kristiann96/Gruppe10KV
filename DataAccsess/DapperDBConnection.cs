@@ -9,7 +9,12 @@ public class DapperDBConnection
 
     public DapperDBConnection(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("MariaDbConnection_kartverket")!;
+        var template = configuration.GetConnectionString("MariaDbConnection_kartverket")!;
+        _connectionString = template
+            .Replace("${DB_SERVER}", configuration["DbSettings:MariaDb:Server"])
+            .Replace("${DB_PORT}", configuration["DbSettings:MariaDb:Port"])
+            .Replace("${DB_USER}", configuration["DbSettings:MariaDb:User"])
+            .Replace("${DB_PASSWORD}", configuration["DbSettings:MariaDb:Password"]);
     }
 
     public MySqlConnection CreateConnection()

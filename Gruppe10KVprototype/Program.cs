@@ -20,6 +20,36 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Legg til user secrets hvis i development miljø
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
+// Konfigurasjon av DapperDb
+string BuildConnectionString(string? template, IConfiguration configuration, string dbType)
+{
+    return template
+        .Replace("${DB_SERVER}", configuration[$"DbSettings:{dbType}:Server"])
+        .Replace("${DB_PORT}", configuration[$"DbSettings:{dbType}:Port"])
+        .Replace("${DB_USER}", configuration[$"DbSettings:{dbType}:User"])
+        .Replace("${DB_PASSWORD}", configuration[$"DbSettings:{dbType}:Password"]);
+}
+
+// EF konfigurasjon
+// Bygge connectionStrings
+var loginConnString = BuildConnectionString(
+    builder.Configuration.GetConnectionString("MariaDbConnection_login_server"),
+    builder.Configuration,
+    "LoginDb"
+);
+
+// Registrering av DbContext
+builder.Services.AddDbContext<AuthDbContext>(options =>
+    options.UseMySql(
+        loginConnString,
+        ServerVersion.AutoDetect(loginConnString)
+    ));
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();  
@@ -37,7 +67,7 @@ builder.Services.AddControllersWithViews()
 // Register DapperDBConnectionDummy as a service
 builder.Services.AddScoped<DapperDBConnection>();
 
-//Registrering av repos og interfaces, og logic og logicinterfaces
+// Registrering av repos og interfaces, og logic og logicinterfaces
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
 builder.Services.AddHttpClient<IKommuneAPILogic, KommuneAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
@@ -49,27 +79,19 @@ builder.Services.AddScoped<ITransaksjonsRepository, TransaksjonsRepository>();
 builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
 builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
 
-//Registrering av services og interfaces
+// Registrering av services og interfaces
 builder.Services.AddScoped<IOppdatereInnmeldingService, OppdatereInnmeldingService>();
 
-
-
-//og logic og logicinterfaces
+// og logic og logicinterfaces
 builder.Services.AddScoped<IInnmeldingLogic, InnmeldingLogic>();
 
-//AuthService registrering
+// AuthService registrering
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-//HttpContextAccessor for AuthService
+// HttpContextAccessor for AuthService
 builder.Services.AddHttpContextAccessor();
 
 // LoggInn
-// DbContext for Identity
-builder.Services.AddDbContext<AuthDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("MariaDbConnection_login_server"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MariaDbConnection_login_server"))
-    ));
 
 // Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
