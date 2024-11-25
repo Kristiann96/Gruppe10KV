@@ -15,13 +15,11 @@ public class MineInnmeldingerController : Controller
 {
     private readonly IInnmeldingRepository _innmeldingRepository;
     private readonly IEnumLogic _enumLogic;
-    private readonly IInnmelderRepository _innmelderRepository;
 
-    public MineInnmeldingerController(IInnmeldingRepository innmeldingRepository, IEnumLogic enumLogic, IInnmelderRepository inmelderRepository)
+    public MineInnmeldingerController(IInnmeldingRepository innmeldingRepository, IEnumLogic enumLogic)
     {
         _innmeldingRepository = innmeldingRepository;
         _enumLogic = enumLogic;
-        _innmelderRepository = inmelderRepository;
     }
 
     [HttpGet]
