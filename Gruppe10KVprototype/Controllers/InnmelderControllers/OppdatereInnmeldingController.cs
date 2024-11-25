@@ -29,13 +29,11 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             }
             catch (KeyNotFoundException)
             {
-                // Ved ikke-eksisterende innmelding, redirect til liste med feilmelding
                 TempData["ErrorMessage"] = "Innmelding ikke funnet";
                 return RedirectToAction("MineInnmeldinger", "MineInnmeldinger");
             }
             catch (Exception)
             {
-                // Ved uventet feil, redirect til liste med generisk feilmelding
                 TempData["ErrorMessage"] = "En feil oppstod ved henting av innmelding";
                 return RedirectToAction("MineInnmeldinger", "MineInnmeldinger");
             }

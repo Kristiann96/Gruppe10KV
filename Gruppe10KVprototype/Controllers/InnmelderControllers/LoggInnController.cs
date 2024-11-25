@@ -21,7 +21,6 @@ public class LoggInnController : Controller
 
     [HttpPost]
     [AllowAnonymous]
-    
     public async Task<IActionResult> LoggInn(LoggInnViewModel model)
     {
         if (!ModelState.IsValid)
@@ -39,7 +38,6 @@ public class LoggInnController : Controller
 
             _logger.LogInformation(1, "User logged in.");
 
-            // Redirect basert på rolle
             if (isSaksbehandler)
             {
                 return RedirectToAction("LandingsSideSaksB", "LandingsSideSaksB");
