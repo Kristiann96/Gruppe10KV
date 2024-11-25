@@ -92,17 +92,46 @@ Markerte innmeldinger på kart:
 
 ## Oppsettsinstruksjoner
 
-Klon repositoriet:
+### Forutsetninger:
 
-    git clone https://github.com/Kristiann96/Gruppe10KV.git
+- .NET 8.0 SDK
+- Docker Desktop
+- Visual Studio 2022 eller JetBrains Rider
+- Mermaid extension (valgfritt - for å se database/dataflyt-diagrammer)
+- SSH-nøkkel for databasetilgang
 
+### Oppsett
+#### Prosjektet kan utvikles i:
 
-Naviger til prosjektmappen:
+- Visual Studio 2022
+- JetBrains Rider
 
-    cd Gruppe10KV 
+#### Installasjonstrinn:
+- Klon repositoriet
+    
+        git clone https://github.com/Kristiann96/Gruppe10KV.git
+        
+- Konfigurer connection strings i appsettings.json
+- Kjør EF migrasjoner for identity database
+- Start Docker container
+- Bygg og kjør applikasjonen
 
-Repositoriet er hovedsakelig avhengig av .NET og du kan bygge prosjektet ved hjelp av en IDE som Visual Studio.
-Sørg for at databasetilkoblinger og andre relevante innstillinger er korrekt konfigurert for ditt miljø.
+### Docker-konfigurasjon
+#### Prosjektet bruker Docker Compose for enkel oppstart:
+
+    services:
+      gruppe10kvprototype:
+        image: gruppe10kvprototype
+        build:
+          context: .
+          dockerfile: Gruppe10KVprototype/Dockerfile
+
+### Miljøvariabler
+#### Følgende variabler må konfigureres i appsettings.json:
+
+- MariaDbConnection_kartverket: Connection string til hoveddatabase
+- MariaDbConnection_login_server: Connection string til identity database
+
 
 ---
 <br><br>
