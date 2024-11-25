@@ -220,7 +220,7 @@
         form.addEventListener('input', function () {
             harUlagredeEndringer = true;
         });
-        
+
         document.getElementById('lagreTekstBtn').addEventListener('click', async function () {
             if (!form.checkValidity()) {
                 form.reportValidity();
@@ -232,7 +232,7 @@
                 const response = await fetch('@Url.Action("OppdatereInnmeldingDetaljer")', {
                     method: 'POST',
                     headers: {
-                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
                     },
                     body: formData
                 });
@@ -245,6 +245,7 @@
                     visStatusMelding(result.message || 'Kunne ikke lagre tekst', true);
                 }
             } catch (error) {
+                console.error('Error:', error); // Legg til denne for debugging
                 visStatusMelding('En feil oppstod', true);
             }
         });
