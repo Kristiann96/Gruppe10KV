@@ -26,9 +26,15 @@
                     {
                         <li><a class="nav-link" asp-controller="LoggInn" asp-action="VisLoggInnSide">Logg inn</a></li>
                     }
-                  
-                
-                            <li><a class="nav-link" asp-controller="LandingsSide" asp-action="LandingsSide">Hjem</a></li>
+
+                    @if (User.IsInRole("Saksbehandler"))
+                    {
+                        <a class="nav-link" asp-controller="LandingsSideSaksB" asp-action="LandingsSideSaksB">Hjem</a>
+                    }
+                    else
+                    {
+                        <a class="nav-link" asp-controller="LandingsSide" asp-action="LandingsSide">Hjem</a>
+                    }
                         
                     
                     <li class="dev-dropdown">
