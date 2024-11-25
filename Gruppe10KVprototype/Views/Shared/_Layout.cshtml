@@ -28,7 +28,17 @@
                     }
                   
                 
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        @if (User.IsInRole("Saksbehandler"))
+                        {
+                            <li><a class="nav-link" asp-controller="LandingsSideSaksB" asp-action="LandingsSideSaksB">Hjem</a></li>
+                        }
+                        else
+                        {
                             <li><a class="nav-link" asp-controller="LandingsSide" asp-action="LandingsSide">Hjem</a></li>
+                        }
+                    }
                         
                     
                     <li class="dev-dropdown">
