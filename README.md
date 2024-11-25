@@ -26,8 +26,8 @@ Denne README-filen fungerer som en rask guide for å forstå, sette opp og jobbe
 ---
 
 ## Oversikt
-Applikasjonen "Gruppe10KVprototype" er basert på et prosjekt fra Kartverket og har som mål å gjøre brukerrapportering enklere og håndtere ulik geodata. Systemet gir et brukervennlig grensesnitt for å melde inn feil sammen med geolokasjonsdata og sikrer effektiv håndtering av innmeldinger for saksbehandlere.
-Gruppens system introduserer en ny og kreativ løsning der innmeldere kan benytte seg av sporing via GPS som gjør det enklere å melde inn feil mens man er på tur og oppdager feil i kartet.
+Applikasjonen "Gruppe10KVprototype" er basert på et prosjekt fra Kartverket og har som mål å gjøre brukerrapportering enklere og håndtere ulik geodata. Systemet gir et brukervennlig grensesnitt for å melde inn feil sammen med geolokasjonsdata, og sikrer effektiv håndtering av innmeldinger for saksbehandlere.
+Gruppens system introduserer en ny og kreativ løsning der innmeldere kan benytte seg av sporing via GPS, som gjør det enklere å melde inn feil mens man er på tur og oppdager feil i kartet.
 
 ### Hva applikasjonen gjør
 
