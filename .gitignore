@@ -10,6 +10,12 @@
 *.userosscache
 *.sln.docstates
 
+
+
+# Secrets  =====Enable for deplayment===========
+#*.secrets.json
+
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
