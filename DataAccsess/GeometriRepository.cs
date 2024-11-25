@@ -18,8 +18,7 @@ namespace DataAccess
         {
             _dbConnection = dbConnection;
         }
-
-
+        
         public async Task<IEnumerable<Geometri>> GetAllGeometriAsync()
         {
             using var connection = _dbConnection.CreateConnection();
@@ -27,8 +26,7 @@ namespace DataAccess
                 "SELECT geometri_id AS GeometriId, innmelding_id AS InnmeldingId, ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri;";
             return await connection.QueryAsync<Geometri>(sql);
         }
-
-
+        
         public async Task<Geometri> GetGeometriByInnmeldingIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -42,11 +40,9 @@ namespace DataAccess
             using var connection = _dbConnection.CreateConnection();
             var sql = @"
         SELECT 
-            -- Geometri fields
             g.geometri_id AS GeometriId, 
             g.innmelding_id AS InnmeldingId, 
             ST_AsGeoJSON(g.geometri_data) AS GeometriGeoJson,
-            -- Innmelding fields
             i.innmelding_id,
             i.tittel AS Tittel,
             i.status AS Status
@@ -83,7 +79,6 @@ namespace DataAccess
 
                 var rowsAffected = await connection.ExecuteAsync(sql, parameters, transaction);
 
-                // Hvis ingen rader ble påvirket, noe gikk galt
                 if (rowsAffected == 0)
                 {
                     throw new KeyNotFoundException($"Ingen geometri funnet for innmelding_id {innmeldingId}");
@@ -107,9 +102,6 @@ namespace DataAccess
             return await connection.QuerySingleOrDefaultAsync<Geometri>(sql, new { InnmeldingId = innmeldingId });
         }
     }
-
-
-
 }
 
 

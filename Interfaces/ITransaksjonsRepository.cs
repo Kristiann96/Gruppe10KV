@@ -29,10 +29,7 @@ namespace Interface
             string etternavn,
             string telefonnummer,
             string epost);
-
-        //fallback ved feil ved opprettelse av registert innmelder
-        Task<bool> SlettPersonOgInnmelder(int personId);
-
+        
         //innmelder sletter egen innmelding
         Task<bool> SlettInnmeldingMedTilhorendeDataAsync(int innmeldingId);
         

@@ -25,8 +25,7 @@ namespace Interface
         Task<bool> OppdatereEnumSaksBAsync(int innmeldingId, InnmeldingModel model);
         Task<bool> OppdaterSaksbehandler(int innmeldingId, int? saksbehandlerId);
         Task<bool> OppdaterInnmelderType(int innmelderId, InnmeldingModel model);
-        //setter ny tittel og beskrivelse
-        Task<bool> OppdatereInnmeldingAsync(InnmeldingModel innmelding);
+        Task<bool> OppdatereTittelOgBeskrivelsePaaInnmeldingAsync(InnmeldingModel innmelding);
         Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(string userEmail);
     }
 }

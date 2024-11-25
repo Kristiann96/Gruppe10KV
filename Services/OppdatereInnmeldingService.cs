@@ -61,7 +61,7 @@ namespace Services
             };
 
             await _innmeldingLogic.ValiderInnmeldingData(innmelding);
-            return await _innmeldingRepository.OppdatereInnmeldingAsync(innmelding);
+            return await _innmeldingRepository.OppdatereTittelOgBeskrivelsePaaInnmeldingAsync(innmelding);
         }
 
         public async Task<bool> OppdatereGeometriAsync(int innmeldingId, string geometriGeoJson)

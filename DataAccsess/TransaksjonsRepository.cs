@@ -12,7 +12,6 @@ using Models.Models;
 
 namespace DataAccess
 {
-
     public class TransaksjonsRepository : ITransaksjonsRepository
     {
         private readonly DapperDBConnection _dbConnection;
@@ -32,7 +31,6 @@ namespace DataAccess
 
             try
             {
-                // 1. Opprett gjesteinnmelder
                 var gjesteInnmelderSql = @"
                     INSERT INTO gjesteinnmelder (epost) 
                     VALUES (@Epost);
@@ -43,9 +41,7 @@ namespace DataAccess
                     new { Epost = gjesteEpost },
                     transaction);
 
-                // 2. Opprett innmelding
                 innmelding.GjestInnmelderId = gjestInnmelderId;
-
 
                 var innmeldingSql = @"
                     INSERT INTO innmelding (
@@ -68,7 +64,6 @@ namespace DataAccess
                     innmelding,
                     transaction);
 
-                // 3. Lagre geometri
                 geometri.InnmeldingId = innmeldingId;
                 var geometriSql = @"
                     INSERT INTO geometri (
@@ -105,7 +100,6 @@ namespace DataAccess
             using var connection = _dbConnection.CreateConnection();
             try
             {
-                // 1. Opprett Person
                 const string personSql = @"
                 INSERT INTO person (fornavn, etternavn, telefonnummer)
                 VALUES (@Fornavn, @Etternavn, @Telefonnummer);
@@ -114,12 +108,10 @@ namespace DataAccess
                 var personId = await connection.QuerySingleAsync<int>(personSql,
                     new { Fornavn = fornavn, Etternavn = etternavn, Telefonnummer = telefonnummer });
 
-                // 2. Opprett Innmelder
                 const string innmelderSql = @"
                 INSERT INTO innmelder (person_id, innmelder_id, epost)
                 VALUES (@PersonId, @InnmelderId, @Epost);";
 
-                // Hent neste innmelder_id fra sekvens
                 var innmelderId = await connection.QuerySingleAsync<int>(
                     "SELECT NEXTVAL(innmelder_id_seq)");
 
@@ -133,40 +125,7 @@ namespace DataAccess
                 return (false, 0);
 
             }
-
-
         }
-
-
-        public async Task<bool> SlettPersonOgInnmelder(int personId)
-        {
-            using var connection = _dbConnection.CreateConnection();
-            using var transaction = connection.BeginTransaction();
-
-            try
-            {
-                // Slett innmelder først (pga. fremmednøkkel)
-                await connection.ExecuteAsync(
-                    "DELETE FROM innmelder WHERE person_id = @PersonId",
-                    new { PersonId = personId },
-                    transaction);
-
-                // Så slett person
-                await connection.ExecuteAsync(
-                    "DELETE FROM person WHERE person_id = @PersonId",
-                    new { PersonId = personId },
-                    transaction);
-
-                transaction.Commit();
-                return true;
-            }
-            catch
-            {
-                transaction.Rollback();
-                return false;
-            }
-        }
-
 
         public async Task<bool> SlettInnmeldingMedTilhorendeDataAsync(int innmeldingId)
         {
@@ -233,7 +192,6 @@ namespace DataAccess
                     innmelding,
                     transaction);
 
-                // 3. Lagre geometri
                 geometri.InnmeldingId = innmeldingId;
                 var geometriSql = @"
                     INSERT INTO geometri (
