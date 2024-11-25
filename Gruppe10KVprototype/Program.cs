@@ -49,9 +49,7 @@ builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
 builder.Services.AddScoped<IVurderingRepository, VurderingRepository>();
 builder.Services.AddScoped<IEnumLogic, EnumLogic>();
 builder.Services.AddScoped<IDataSammenstillingSaksBRepository, DataSammenstillingSaksBRepository>();
-/*builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository>();*/
 builder.Services.AddScoped<ITransaksjonsRepository, TransaksjonsRepository>();
-builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
 builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
 
 //Registrering av services og interfaces
