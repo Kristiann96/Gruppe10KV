@@ -7,8 +7,6 @@ namespace Interface
     {
         Task<bool> ErGyldigSaksbehandlerEpost(string epost);
         Task<SaksbehandlerModel?> HentSaksbehandlerMedEpost(string epost);
-
-        //hente saksbehandler data når de er logget inn
         Task<SaksbehandlerModel?> HentSaksbehandler(int personId);
         Task<List<(SaksbehandlerModel, PersonModel)>> HentAlleSaksbehandlereMedPersonAsync();
     }

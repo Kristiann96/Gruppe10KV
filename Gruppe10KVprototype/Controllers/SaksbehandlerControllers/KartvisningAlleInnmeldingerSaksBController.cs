@@ -24,16 +24,13 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             _geometriRepository = geometriRepository;
             _kommuneAPILogic = kommuneAPILogic;
         }
-
         
         [HttpGet]
         public async Task<IActionResult> KartvisningAlleInnmeldingerSaksB()
         {
-            // Hent data fra repository og API
             IEnumerable<Geometri> geometriData = await _geometriRepository.GetAllGeometriAsync();
             var kommunerData = await _kommuneAPILogic.GetKommunerAsync();
 
-            // Opprett ViewModel og sett data
             var viewModel = new KartvisningAlleInnmeldingerSaksBViewModel
             {
                 GeometriData = geometriData,

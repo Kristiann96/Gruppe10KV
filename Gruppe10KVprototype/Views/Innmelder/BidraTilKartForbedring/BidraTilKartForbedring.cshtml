@@ -43,15 +43,12 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('map').style.pointerEvents = 'none';
         });
-
         
         document.getElementById('acceptBtn').addEventListener('click', function () {
             document.getElementById('welcomeModal').classList.add('hide');
             document.getElementById('map').style.pointerEvents = 'auto';
         });
-
-
-      
+        
         const map = MapConfig.initializeMap('map');
         const baseMaps = {};
         const overlayMaps = {
@@ -59,18 +56,15 @@
         };
         L.control.layers(baseMaps, overlayMaps).addTo(map);
         MapControls.initializeControls(map);
-
-       
+        
         let hoverTimer;
         let popupTimer;
         const vurdertGeometrier = new Set();
         let aktivVurdering = false;
         let isPopupOpen = false;
-
-     
+        
         const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
-
-       
+        
         function showMessage(message, isError = false) {
             const messageElement = document.getElementById('validationMessage');
             messageElement.textContent = message;
@@ -88,12 +82,12 @@
                 const center = bounds.getCenter();
 
                 const marker = L.circleMarker(center, {
-                    radius: 12,           // Større radius
-                    fillColor: '#fc03ec', // rosa fyll
-                    color: '##fcd7fa',     // lyserosa kant
-                    weight: 4,            // Tykkere kant
+                    radius: 12,           
+                    fillColor: '#fc03ec', 
+                    color: '##fcd7fa',     
+                    weight: 4,            
                     opacity: 1,
-                    fillOpacity: 0.1      // Mer solid farge
+                    fillOpacity: 0.1      
                 }).addTo(map);
 
                 return marker;
@@ -104,14 +98,12 @@
         function createPopupContent(data) {
             const container = document.createElement('div');
             container.className = 'popup-content';
-
             
             const title = document.createElement('div');
             title.className = 'popup-title';
             title.textContent = data.Tittel;
             container.appendChild(title);
-
-           
+            
             if (vurdertGeometrier.has(data.InnmeldingId)) {
                 const takkDiv = document.createElement('div');
                 takkDiv.className = 'takk-melding';
@@ -119,15 +111,12 @@
                 container.appendChild(takkDiv);
                 return container;
             }
-
-          
+            
             const buttonsDiv = document.createElement('div');
             buttonsDiv.className = 'popup-buttons';
-
             
             const kommentarDiv = document.createElement('div');
             kommentarDiv.className = 'kommentar-container';
-
             
             const bekreftBtn = document.createElement('button');
             bekreftBtn.className = 'popup-button bekreft-button';
@@ -140,7 +129,6 @@
             buttonsDiv.appendChild(bekreftBtn);
             buttonsDiv.appendChild(avkreftBtn);
             container.appendChild(buttonsDiv);
-
             
             const textarea = document.createElement('textarea');
             textarea.className = 'kommentar-textarea';
@@ -155,8 +143,7 @@
             container.appendChild(kommentarDiv);
 
             let valgtType = null;
-
-         
+            
             bekreftBtn.onclick = () => {
                 valgtType = 'bekreftelse';
                 aktivVurdering = true;
@@ -172,8 +159,7 @@
                 kommentarDiv.style.display = 'block';
                 clearTimeout(popupTimer);
             };
-
-          
+            
             sendBtn.onclick = async () => {
                 const kommentar = textarea.value.trim();
 
@@ -213,8 +199,7 @@
 
             return container;
         }
-
-     
+        
         geometriData.forEach(function (data) {
             try {
               
@@ -240,7 +225,6 @@
                     },
                     onEachFeature: function (feature, layer) {
                         let center;
-
                         
                         if (feature.geometry.type === 'Point') {
                             center = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
@@ -248,10 +232,8 @@
                             const bounds = layer.getBounds();
                             center = bounds.getCenter();
                         }
-
-                     
+                        
                         const marker = L.marker(center).addTo(map);
-
                         
                         const popup = L.popup({
                             closeButton: true,
@@ -314,14 +296,12 @@
                             }
                         };
 
-                        // Legg til hover events på både layer og markør
                         layer.on('mouseover', handleMouseOver);
                         layer.on('mouseout', handleMouseOut);
                         marker.on('mouseover', handleMouseOver);
                         marker.on('mouseout', handleMouseOut);
                     }
                 }).addTo(map);
-
                 
                 const popup = layer.getPopup();
                 if (popup) {
@@ -345,7 +325,6 @@
                         }
                     });
                 }
-
                 
                 if (geoJsonFeature.geometry.type !== 'Point') {
                     const circleMarker = addVisualIndicator(layer, geoJsonFeature.geometry.type);

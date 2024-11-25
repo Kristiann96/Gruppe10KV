@@ -12,8 +12,6 @@ namespace ViewModels
         [Required(ErrorMessage = "E-post må fylles ut")]
         [EmailAddress(ErrorMessage = "Ugyldig e-postformat")]
         public string Epost { get; set; }
-
-        // Hidden fields fra tidligere - smlet opp fra KartfeilMarkering - KartfeilSkjema (+bekreftelse)
         public string GeometriGeoJson { get; set; }
         public string Tittel { get; set; }
         public string Beskrivelse { get; set; }

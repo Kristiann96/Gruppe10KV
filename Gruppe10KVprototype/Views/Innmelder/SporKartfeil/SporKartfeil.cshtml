@@ -6,9 +6,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
     <link rel="stylesheet" href="~/css/pages/TemporaryCSS/SporKartFeil.css" />
-  
 }
-
 
 <div id="introModal" class="modal" style="display: flex;">
     <div class="modal-content">
@@ -27,7 +25,6 @@
     </div>
 </div>
 
-
 <div id="stopConfirmModal" class="modal">
     <div class="modal-content">
         <h2 class="modal-title">Avslutt sporing?</h2>
@@ -39,7 +36,6 @@
     </div>
 </div>
 
-
 <div id="resetConfirmModal" class="modal">
     <div class="modal-content">
         <h2 class="modal-title">Start på nytt?</h2>
@@ -50,7 +46,6 @@
         </div>
     </div>
 </div>
-
 
 <div id="map"></div>
 
@@ -89,12 +84,9 @@
         let trackingLine = null;
         let positionInterval = null;
         
-       
         let drawnItems = new L.FeatureGroup().addTo(map);
-
         
         MapControls.initializeControls(map);
-
         
         function startApp() {
             document.getElementById('introModal').style.display = 'none';
@@ -214,7 +206,6 @@
             
             hideStopConfirmModal();
         }
-
         
         document.getElementById('startTracking').addEventListener('click', () => {
             tracking = true;
@@ -222,7 +213,6 @@
             document.getElementById('statusIndicator').className = 'status-indicator tracking-active';
             document.getElementById('startTracking').style.display = 'none';
             document.getElementById('stopTracking').style.display = 'inline';
-            
             
             if ("geolocation" in navigator) {
                 
@@ -238,7 +228,6 @@
                         timeout: 5000
                     }
                 );
-
                 
                 positionInterval = setInterval(() => {
                     navigator.geolocation.getCurrentPosition(

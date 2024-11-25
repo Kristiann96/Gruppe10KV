@@ -22,7 +22,6 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
         
-        //Innhenting av data til "OppdatereInnmelding"
         public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -68,7 +67,6 @@ namespace DataAccess
             return await connection.QueryAsync<InnmeldingModel>(sql, new { @Epost = epost });
         }
 
-        //Henting for enummene
         private async Task<string> GetEnumValuesForColumnAsync(string tableName, string columnName)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -100,13 +98,11 @@ namespace DataAccess
 
         public async Task<string> GetKartTypeEnumValuesAsync() =>
             await GetEnumValuesForColumnAsync("innmelding", "kart_type");
-
-
-        //Todo: Flytt til eget repository (eller slette?)
+        
+        // Todo: Flytt til eget repository (eller slette?)
         public async Task<string> GetInnmelderTypeEnumValuesAsync() =>
             await GetEnumValuesForColumnAsync("innmelder", "innmelder_type");
 
-        //Oppdatering av enum
         public async Task<bool> OppdatereEnumSaksBAsync(int innmeldingId, InnmeldingModel model)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -140,6 +136,7 @@ namespace DataAccess
                 throw;
             }
         }
+        
         public async Task<bool> OppdaterSaksbehandler(int innmeldingId, int? saksbehandlerId)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -170,6 +167,7 @@ namespace DataAccess
                 throw;
             }
         }
+        
         public async Task<bool> OppdaterInnmelderType(int innmelderId, InnmeldingModel model)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -200,8 +198,7 @@ namespace DataAccess
             }
         }
         
-        //innmelder oppdaterer kun tittel og beskrivelse
-        public async Task<bool> OppdatereInnmeldingAsync(InnmeldingModel innmelding)
+        public async Task<bool> OppdatereTittelOgBeskrivelsePaaInnmeldingAsync(InnmeldingModel innmelding)
         {
             using var connection = _dbConnection.CreateConnection();
             using var transaction = await connection.BeginTransactionAsync();

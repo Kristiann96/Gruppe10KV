@@ -29,7 +29,6 @@ namespace Logic
                 .ToList();
         }
 
-        // Dette er den oppdaterte versjonen som erstatter den gamle ValidateEnumValueAsync
         private async Task<bool> ValidateEnumValueAsync(string value, Func<Task<string>> getEnumValuesFunc)
         {
             if (string.IsNullOrEmpty(value))
@@ -44,7 +43,6 @@ namespace Logic
             return validValues.Contains(dbFormat) || validValues.Contains(value.ToLower());
         }
 
-        // Nye konverteringsmetoder
         public string ConvertToDbFormat(string displayValue)
         {
             if (string.IsNullOrEmpty(displayValue))
@@ -63,7 +61,6 @@ namespace Logic
             return EnumFormatter.ToNormalText(dbValue);
         }
 
-        // Get formatted enum values
         public async Task<IEnumerable<string>> GetFormattedStatusEnumValuesAsync()
         {
             var rawEnumValues = await _innmeldingRepository.GetStatusEnumValuesAsync();
@@ -88,7 +85,6 @@ namespace Logic
             return ProcessRawEnumValues(rawEnumValues);
         }
 
-        // Validate enum values
         public async Task<bool> ValidateStatusValueAsync(string status)
         {
             return await ValidateEnumValueAsync(status, _innmeldingRepository.GetStatusEnumValuesAsync);

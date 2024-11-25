@@ -43,7 +43,6 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         }
 
         [HttpPost]
-       
         public async Task<IActionResult> LagreKnyttInnmeldingTilPerson(KnyttInnmeldingTilPersonViewModel model)
         {
             bool innlogget = !string.IsNullOrEmpty(User.Identity?.Name);

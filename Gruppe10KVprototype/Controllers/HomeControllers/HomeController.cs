@@ -16,26 +16,22 @@ namespace Gruppe10KVprototype.Controllers.HomeControllers
         {
             _logger = logger;
         }
-
         
-        
-            public IActionResult Index()
+        public IActionResult Index()
+        {
+            if (User.Identity?.IsAuthenticated == true)
             {
-                if (User.Identity?.IsAuthenticated == true)
+                if (User.IsInRole("Saksbehandler"))
                 {
-                    if (User.IsInRole("Saksbehandler"))
-                    {
-                        return RedirectToAction("LandingsSideSaksB", "LandingsSideSaksB");
-                    }
-
-                    return RedirectToAction("LandingsSide", "LandingsSide");
+                    return RedirectToAction("LandingsSideSaksB", "LandingsSideSaksB");
                 }
 
-                return View();
+                return RedirectToAction("LandingsSide", "LandingsSide");
             }
 
-        
-
+            return View();
+        }
+            
         public IActionResult Privacy()
         {
             return View();

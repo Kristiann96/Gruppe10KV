@@ -31,7 +31,6 @@ public class MineInnmeldingerController : Controller
         {
             var userEmail = User.Identity?.Name;
             
-            // Hent innmeldinger for den aktuelle innmelderen
             IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.HentInnmeldingerFraInnmelderIdAsync(userEmail);
 
             foreach (var innmelding in innmeldinger)
@@ -39,20 +38,16 @@ public class MineInnmeldingerController : Controller
                 innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
             }
 
-            // Sort innmeldinger based on sortColumn and sortOrder
             innmeldinger = SortInnmeldinger(innmeldinger, sortColumn, sortOrder);
 
-            // Calculate total pages
             int totalInnmeldinger = innmeldinger.Count();
             int totalPages = (int)Math.Ceiling(totalInnmeldinger / (double)pageSize);
 
-            // Get the innmeldinger for the current page
             var pagedInnmeldinger = innmeldinger
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-            // Create the ViewModel
             var viewModel = new MineInnmeldingerViewModel
             {
                 Innmeldinger = pagedInnmeldinger,
@@ -63,12 +58,10 @@ public class MineInnmeldingerController : Controller
                 CurrentSortOrder = sortOrder
             };
 
-        // Return the view with the ViewModel
         return View(viewModel);
         }
         catch (Exception)
         {
-            // Ved uventet feil, redirect til liste med generisk feilmelding
             TempData["ErrorMessage"] = "En feil oppstod ved henting av innmeldinger";
             return RedirectToAction("Error", "Home");
         }

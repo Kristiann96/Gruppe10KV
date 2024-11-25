@@ -24,7 +24,6 @@ public class KartfeilSkjemaController : Controller
     }
 
     [HttpPost]
-    
     public IActionResult GaaTilBekreftelse(KartfeilSkjemaViewModel model)
     {
         if (!ModelState.IsValid)

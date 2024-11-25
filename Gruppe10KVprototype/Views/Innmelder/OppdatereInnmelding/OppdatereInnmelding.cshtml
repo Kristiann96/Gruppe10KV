@@ -54,7 +54,6 @@
             </div>
         </div>
     </div>
-
    
     <div class="map-side">
         <div id="map"></div>
@@ -79,7 +78,6 @@
     </div>
 </div>
 
-
 <div id="slettModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -95,7 +93,6 @@
         </div>
     </div>
 </div>
-
 
 <div id="endringerModal" class="modal">
     <div class="modal-content">
@@ -120,13 +117,11 @@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
     
-   
     <script src="~/js/maps/config/mapConfig.js"></script>
     <script src="~/js/maps/config/drawConfig.js"></script>
     <script src="~/js/maps/services/wmsService.js"></script>
     <script src="~/js/maps/utils/mapControls.js"></script>
     <script src="~/js/config/timeoutConfig.js"></script>
-
     
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
@@ -135,25 +130,22 @@
         let geometriEndret = false;
 
         document.addEventListener('DOMContentLoaded', function() {
-   
-    document.getElementById('geometryEditInfo').style.display = 'block';
+            document.getElementById('geometryEditInfo').style.display = 'block';
             setTimeout(closeGeometryInfo, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_GEOMETRY_INFO_DISPLAY);
-});
+            });
 
-function closeGeometryInfo() {
-    const popup = document.getElementById('geometryEditInfo');
-    popup.style.opacity = '0';
-    setTimeout(() => {
-        popup.style.display = 'none';
-        popup.style.opacity = '1';
-    }, 300);
-}
-
-       
+        function closeGeometryInfo() {
+            const popup = document.getElementById('geometryEditInfo');
+            popup.style.opacity = '0';
+            setTimeout(() => {
+                popup.style.display = 'none';
+                popup.style.opacity = '1';
+            }, 300);
+        }
+        
         const map = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
         const drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
-
         
         const drawControl = new L.Control.Draw({
             edit: {
@@ -180,21 +172,20 @@ function closeGeometryInfo() {
         MapControls.initializeControls(map);
 
       
-   if ('@Model.GeometriGeoJson') {
-    try {
-        const geoJson = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
-        L.geoJSON(geoJson, {
-            onEachFeature: function (feature, layer) {
-                drawnItems.addLayer(layer);
+       if ('@Model.GeometriGeoJson') {
+        try {
+            const geoJson = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
+            L.geoJSON(geoJson, {
+                onEachFeature: function (feature, layer) {
+                    drawnItems.addLayer(layer);
+                }
+            });
+            map.fitBounds(drawnItems.getBounds());
+            } catch (error) {
+                console.error('Error loading geometry:', error);
+                }
             }
-        });
-        map.fitBounds(drawnItems.getBounds());
-    } catch (error) {
-        console.error('Error loading geometry:', error);
-    }
-        }
-
-       
+        
         map.on('draw:editstart', function (e) {
             document.getElementById('geometryEditInfo').style.display = 'block';
             setTimeout(() => {
@@ -206,8 +197,7 @@ function closeGeometryInfo() {
                 }, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_FADE_DURATION);
             }, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_EDIT_POPUP);
         });
-
-       
+        
         map.on('draw:edited', function (e) {
             const layers = e.layers;
             layers.eachLayer(function (layer) {
@@ -217,8 +207,7 @@ function closeGeometryInfo() {
                 geometriEndret = true;
             });
         });
-
-       
+        
         map.on('draw:deleted', function (e) {
             if (drawnItems.getLayers().length === 0) {
                 document.getElementById('GeometriGeoJson').value = '';
@@ -226,14 +215,12 @@ function closeGeometryInfo() {
                 geometriEndret = true;
             }
         });
-
-    
+        
         const form = document.getElementById('innmeldingForm');
         form.addEventListener('input', function () {
             harUlagredeEndringer = true;
         });
-
-       
+        
         document.getElementById('lagreTekstBtn').addEventListener('click', async function () {
             if (!form.checkValidity()) {
                 form.reportValidity();
@@ -261,7 +248,6 @@ function closeGeometryInfo() {
                 visStatusMelding('En feil oppstod', true);
             }
         });
-
         
         document.getElementById('lagreGeometriBtn').addEventListener('click', async function () {
             try {
@@ -299,15 +285,12 @@ function closeGeometryInfo() {
                 visStatusMelding('Kunne ikke lagre geometri: ' + error.message, true);
             }
         });
-
-       
+        
         function closeGeometryInfo() {
             document.getElementById('geometryEditInfo').style.display = 'none';
         }
-
         
         setTimeout(closeGeometryInfo, 10000);
-
         
         function visSlettModal() {
             document.getElementById('slettModal').style.display = 'block';
@@ -318,11 +301,11 @@ function closeGeometryInfo() {
         }
 
         async function slettInnmelding() {
-    try {
-        const response = await fetch('@Url.Action("SlettInnmelding", new { innmeldingId = Model.InnmeldingId })', {
-            method: 'POST',
-            headers: {
-                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+        try {
+            const response = await fetch('@Url.Action("SlettInnmelding", new { innmeldingId = Model.InnmeldingId })', {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
             }
         });
 
@@ -363,8 +346,7 @@ function lukkModalOgRedirect(url) {
 }
 
         document.getElementById('slettInnmeldingBtn').addEventListener('click', visSlettModal);
-
-       
+        
         window.addEventListener('beforeunload', function (e) {
             if (harUlagredeEndringer || geometriEndret) {
                 e.preventDefault();
@@ -384,8 +366,7 @@ function lukkModalOgRedirect(url) {
                 </div>
             `;
             document.body.appendChild(popup);
-
-           
+            
             setTimeout(() => {
                 popup.style.opacity = '0';
                 setTimeout(() => {

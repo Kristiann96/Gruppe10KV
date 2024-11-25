@@ -36,8 +36,7 @@
         <div class="map-content">
             <div id="map"></div>
         </div>
-
-
+        
         <div class="map-controls">
             <button onclick="toggleKommuneGrenser()" id="kommuneButton" class="map-button map-button-secondary">
                 Vis kommunegrenser
@@ -53,7 +52,6 @@
 </div>
 
 @section Scripts {
-       
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
         <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
@@ -63,15 +61,12 @@
             document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('map').style.pointerEvents = 'none';
             });
-
             
             document.getElementById('acceptBtn').addEventListener('click', function () {
             document.getElementById('welcomeModal').classList.add('hide');
             document.getElementById('map').style.pointerEvents = 'auto';
             });
         </script>
-        
-
         
         <script src="~/js/maps/config/mapConfig.js"></script>
         <script>
@@ -93,7 +88,6 @@
                     remove: true
                 }
             },
-
             
             initializeDrawControl: function (map) {
                 
@@ -136,8 +130,7 @@
                     infoPanel.style.display = 'none';
                 }
                         }
-
-         
+            
             document.addEventListener('DOMContentLoaded', function() {
                 const closeButton = document.querySelector('.close-button');
                 const hideForeverButton = document.querySelector('.hide-forever');
@@ -150,20 +143,15 @@
                     hideForeverButton.addEventListener('click', closePanel);
                 }
             });
-
-           
+            
             const map = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
-
-           
+            
             const drawnItems = DrawConfig.initializeDrawControl(map);
-
-          
+            
             MapControls.initializeControls(map);
-
-          
+            
             let kommuneGrenser = null;
-
-          
+            
             function toggleKommuneGrenser() {
                 if (kommuneGrenser) {
                     map.removeLayer(kommuneGrenser);
@@ -174,7 +162,6 @@
                     document.getElementById('kommuneButton').textContent = 'Skjul kommunegrenser';
                 }
             }
-
            
             map.on(L.Draw.Event.CREATED, function (event) {
                 drawnItems.clearLayers(); 
@@ -184,6 +171,5 @@
                 document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
                 document.getElementById('sendGeometri').disabled = false; 
             });
-            
         </script>
 }
