@@ -23,9 +23,5 @@ namespace ViewModels
         public string Beskrivelse { get; set; }
 
         public string GeometriGeoJson { get; set; }
-
-       
-
-
     }
 }

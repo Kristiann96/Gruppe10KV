@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"/>
-    <!--<link rel="stylesheet" href="~/css/pages/kart/map_view.css"/>-->
+   
     <link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartfeilMarkering.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 }
@@ -53,18 +53,18 @@
 </div>
 
 @section Scripts {
-        <!-- JavaScript biblioteker -->
+       
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
         <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
         <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
         <script>
-            // Disable map interaction when modal is shown
+           
             document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('map').style.pointerEvents = 'none';
             });
 
-            // Enable map interaction when modal is closed
+            
             document.getElementById('acceptBtn').addEventListener('click', function () {
             document.getElementById('welcomeModal').classList.add('hide');
             document.getElementById('map').style.pointerEvents = 'auto';
@@ -72,12 +72,12 @@
         </script>
         
 
-        <!-- Våre konfigurasjonsfiler -->
+        
         <script src="~/js/maps/config/mapConfig.js"></script>
         <script>
-                    // drawConfig.js
+                   
         const DrawConfig = {
-            // Konfigurasjon for tegne-verktøy
+            
             drawOptions: {
                 draw: {
                     polygon: true,
@@ -88,34 +88,34 @@
                     circlemarker: false
                 },
                 edit: {
-                    featureGroup: null, // Dette settes når vi initialiserer
+                    featureGroup: null, 
                     edit: true,
                     remove: true
                 }
             },
 
-            // Initialiser tegne-verktøy på et kart
+            
             initializeDrawControl: function (map) {
-                // Opprett en FeatureGroup for å lagre tegnede elementer
+                
                 const drawnItems = new L.FeatureGroup();
                 map.addLayer(drawnItems);
 
-                // Oppdater edit options med FeatureGroup
+                
                 this.drawOptions.edit.featureGroup = drawnItems;
 
-                // Opprett og legg til tegne-kontroll
+                
                 const drawControl = new L.Control.Draw(this.drawOptions);
                 map.addControl(drawControl);
 
-                // Håndter tegne-hendelser
+             
                 map.on(L.Draw.Event.CREATED, function (event) {
                     const layer = event.layer;
                     drawnItems.addLayer(layer);
 
-                    // Konverter til GeoJSON
+                   
                     const geoJsonData = layer.toGeoJSON();
 
-                    // Hvis det finnes et skjult felt, oppdater det
+                 
                     const hiddenField = document.getElementById('geoJsonHidden');
                     if (hiddenField) {
                         hiddenField.value = JSON.stringify(geoJsonData);
@@ -137,7 +137,7 @@
                 }
                         }
 
-            // Add event listeners when DOM is loaded
+         
             document.addEventListener('DOMContentLoaded', function() {
                 const closeButton = document.querySelector('.close-button');
                 const hideForeverButton = document.querySelector('.hide-forever');
@@ -151,19 +151,19 @@
                 }
             });
 
-            // Initialiser kartet
+           
             const map = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
 
-            // Initialiser tegning
+           
             const drawnItems = DrawConfig.initializeDrawControl(map);
 
-            // Initialiser søk og lokalisering
+          
             MapControls.initializeControls(map);
 
-            // Variable for å holde styr på kommunegrenselag
+          
             let kommuneGrenser = null;
 
-            // Funksjon for å toggle kommunegrenser
+          
             function toggleKommuneGrenser() {
                 if (kommuneGrenser) {
                     map.removeLayer(kommuneGrenser);
@@ -175,14 +175,14 @@
                 }
             }
 
-            // Håndter tegning og lagring av GeoJSON
+           
             map.on(L.Draw.Event.CREATED, function (event) {
-                drawnItems.clearLayers(); // Fjerner eksisterende tegning
+                drawnItems.clearLayers(); 
                 const layer = event.layer;
                 drawnItems.addLayer(layer);
                 const geoJsonData = layer.toGeoJSON();
                 document.getElementById('geoJsonHidden').value = JSON.stringify(geoJsonData);
-                document.getElementById('sendGeometri').disabled = false; // Aktiver knappen
+                document.getElementById('sendGeometri').disabled = false; 
             });
             
         </script>

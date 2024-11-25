@@ -27,9 +27,6 @@ namespace Interface
         Task<bool> OppdaterInnmelderType(int innmelderId, InnmeldingModel model);
         //setter ny tittel og beskrivelse
         Task<bool> OppdatereInnmeldingAsync(InnmeldingModel innmelding);
-
-
-
-
+        Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(string userEmail);
     }
 }

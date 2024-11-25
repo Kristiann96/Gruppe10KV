@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 }
 <div class="map-page-container">
-    <!-- Venstre side: Form -->
+   
     <div class="form-side">
         <div class="map-card">
             <div class="map-header">
@@ -55,12 +55,12 @@
         </div>
     </div>
 
-    <!-- Høyre side: Kart -->
+   
     <div class="map-side">
         <div id="map"></div>
     </div>
 </div>
-<!-- Geometri info popup -->
+
 <div class="info-popup" id="geometryEditInfo">
     <span class="info-popup-close" onclick="closeGeometryInfo()">&times;</span>
     <div class="info-popup-title">
@@ -79,7 +79,7 @@
     </div>
 </div>
 
-<!-- Modal for sletting -->
+
 <div id="slettModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -96,7 +96,7 @@
     </div>
 </div>
 
-<!-- Modal for ulagrede endringer -->
+
 <div id="endringerModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -114,20 +114,20 @@
 </div>
 
 @section Scripts {
-    <!-- JavaScript biblioteker -->
+   
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
     
-    <!-- Våre konfigurasjonsfiler -->
+   
     <script src="~/js/maps/config/mapConfig.js"></script>
     <script src="~/js/maps/config/drawConfig.js"></script>
     <script src="~/js/maps/services/wmsService.js"></script>
     <script src="~/js/maps/utils/mapControls.js"></script>
     <script src="~/js/config/timeoutConfig.js"></script>
 
-    <!-- Validering -->
+    
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
@@ -135,7 +135,7 @@
         let geometriEndret = false;
 
         document.addEventListener('DOMContentLoaded', function() {
-    // Vis popup automatisk ved lasting
+   
     document.getElementById('geometryEditInfo').style.display = 'block';
             setTimeout(closeGeometryInfo, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_GEOMETRY_INFO_DISPLAY);
 });
@@ -149,12 +149,12 @@ function closeGeometryInfo() {
     }, 300);
 }
 
-        // Initialisering av kart
+       
         const map = MapConfig.initializeMap('map', [62.1995, 6.1286], 15);
         const drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
 
-        // Konfigurer draw control
+        
         const drawControl = new L.Control.Draw({
             edit: {
                 featureGroup: drawnItems,
@@ -176,10 +176,10 @@ function closeGeometryInfo() {
         });
         map.addControl(drawControl);
 
-        // Initialiser søk og lokalisering
+       
         MapControls.initializeControls(map);
 
-        // Last eksisterende geometri
+      
    if ('@Model.GeometriGeoJson') {
     try {
         const geoJson = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
@@ -194,7 +194,7 @@ function closeGeometryInfo() {
     }
         }
 
-        // Vis popup når redigering starter
+       
         map.on('draw:editstart', function (e) {
             document.getElementById('geometryEditInfo').style.display = 'block';
             setTimeout(() => {
@@ -207,7 +207,7 @@ function closeGeometryInfo() {
             }, TIMEOUT_CONFIG.OPPDATERE_INNMELDING_EDIT_POPUP);
         });
 
-        // Håndter ferdig redigering
+       
         map.on('draw:edited', function (e) {
             const layers = e.layers;
             layers.eachLayer(function (layer) {
@@ -218,7 +218,7 @@ function closeGeometryInfo() {
             });
         });
 
-        // Håndter sletting
+       
         map.on('draw:deleted', function (e) {
             if (drawnItems.getLayers().length === 0) {
                 document.getElementById('GeometriGeoJson').value = '';
@@ -227,13 +227,13 @@ function closeGeometryInfo() {
             }
         });
 
-    // Form endringer
+    
         const form = document.getElementById('innmeldingForm');
         form.addEventListener('input', function () {
             harUlagredeEndringer = true;
         });
 
-        // Lagre tekst
+       
         document.getElementById('lagreTekstBtn').addEventListener('click', async function () {
             if (!form.checkValidity()) {
                 form.reportValidity();
@@ -262,7 +262,7 @@ function closeGeometryInfo() {
             }
         });
 
-        // Lagre geometri
+        
         document.getElementById('lagreGeometriBtn').addEventListener('click', async function () {
             try {
                 const geometriJson = document.getElementById('GeometriGeoJson').value;
@@ -300,15 +300,15 @@ function closeGeometryInfo() {
             }
         });
 
-        // Popup-håndtering
+       
         function closeGeometryInfo() {
             document.getElementById('geometryEditInfo').style.display = 'none';
         }
 
-        // Skjul popup etter 10 sekunder
+        
         setTimeout(closeGeometryInfo, 10000);
 
-        // Slett-dialog
+        
         function visSlettModal() {
             document.getElementById('slettModal').style.display = 'block';
         }
@@ -364,7 +364,7 @@ function lukkModalOgRedirect(url) {
 
         document.getElementById('slettInnmeldingBtn').addEventListener('click', visSlettModal);
 
-        // Håndtere ulagrede endringer
+       
         window.addEventListener('beforeunload', function (e) {
             if (harUlagredeEndringer || geometriEndret) {
                 e.preventDefault();
@@ -385,7 +385,7 @@ function lukkModalOgRedirect(url) {
             `;
             document.body.appendChild(popup);
 
-            // Fjern popup etter 3 sekunder
+           
             setTimeout(() => {
                 popup.style.opacity = '0';
                 setTimeout(() => {

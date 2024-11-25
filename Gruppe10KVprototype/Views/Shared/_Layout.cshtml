@@ -17,8 +17,20 @@
 
             <div id="navbar-menu">
                 <ul class="navbarlist">
-                    <li><a class="nav-link" asp-controller="LandingsSide" asp-action="LandingsSide">Hjem</a></li>
-                    <li><a class="nav-link" asp-controller="LoggInn" asp-action="VisLoggInnSide">Logg inn</a></li>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li><span class="nav-link">@User.Identity.Name</span></li>
+                        <li><a class="nav-link" asp-controller="LoggInn" asp-action="LoggUt">Logg ut</a></li>
+                    }
+                    else
+                    {
+                        <li><a class="nav-link" asp-controller="LoggInn" asp-action="VisLoggInnSide">Logg inn</a></li>
+                    }
+                  
+                
+                            <li><a class="nav-link" asp-controller="LandingsSide" asp-action="LandingsSide">Hjem</a></li>
+                        
+                    
                     <li class="dev-dropdown">
                         <button class="dev-button">Utvikling</button>
 
@@ -29,7 +41,7 @@
                             <a href="@Url.Action("LandingsSideSaksB", "LandingsSideSaksB")">Landingsside</a>
                             <a href="@Url.Action("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB")">Oversikt alle innmeldinger</a>
                             <a href="@Url.Action("KartvisningAlleInnmeldingerSaksB", "KartvisningAlleInnmeldingerSaksB")">Kartvisning</a>
-                            <a href="@Url.Action("LoggInnSaksB", "LogginnSaksB")">LoggInn</a>
+                          
 
                             <div class="dropdown-section">
                                 <strong>Innmelder</strong>
@@ -39,7 +51,6 @@
                             <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")">Mine Innmeldinger</a>
                             <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartForbedring")">Bidra til kartforbedringer</a>
                             <a href="@Url.Action("SporKartfeil", "SporKartfeil")">GPS for feilmarkering</a>
-                            <a href="@Url.Action("Index", "Home")">HJEM/MELD INN FEIL</a>
                         </div>
                     </li>
                 </ul>

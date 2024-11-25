@@ -12,146 +12,170 @@
 
 </head>
 <body>
-    <div class="container">
-        <div class="info-panel">
-            @if (Model?.InnmeldingModel != null)
-            {
-                <h2>@Model.InnmeldingModel.Tittel</h2>
-                <form asp-action="OppdateringAvInnmeldingSaksB" asp-route-id="@Model.InnmeldingModel.InnmeldingId" method="post">
-                    <div class="status-info">
-                        <div class="form-group mb-3">
-                            <label for="statusDropdown">Status:</label>
-                            <select id="statusDropdown" class="form-control" asp-for="InnmeldingModel.Status" asp-items="Model.StatusOptions">
-                                <option value="">Velg status</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="prioritetDropdown">Prioritet:</label>
-                            <select id="prioritetDropdown" class="form-control" asp-for="InnmeldingModel.Prioritet" asp-items="Model.PrioritetOptions">
-                                <option value="">Velg prioritet</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="kartTypeDropdown">Kart Type:</label>
-                            <select id="kartTypeDropdown" class="form-control" asp-for="InnmeldingModel.KartType" asp-items="Model.KartTypeOptions">
-                                <option value="">Velg kart type</option>
-                            </select>
-                        </div>
-
-                        <p>Sist endret: @Model.InnmeldingModel.SisteEndring.ToString("dd.MM.yyyy HH:mm")</p>
-
-                        @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
-                        {
-                            <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
-                        }
-
-                        <div class="form-group mt-4">
-                            <button type="submit" id="saveButton" class="btn btn-primary">Lagre endringer</button>
-                        </div>
+<div class="container">
+    <div class="info-panel">
+        @if (Model?.Tittel != null)
+        {
+            <h2>@Model.Tittel</h2>
+            <form asp-action="OppdateringAvInnmeldingSaksB" asp-route-id="@Model.InnmeldingId" method="post">
+                <div class="status-info">
+                    <div class="form-group mb-3">
+                        <label for="statusDropdown">Status:</label>
+                        <select id="statusDropdown" 
+                                class="form-control" 
+                                name="Status" 
+                                asp-for="Status" 
+                                asp-items="Model.StatusOptions">
+                            <option value="">Velg status</option>
+                        </select>
                     </div>
-                </form>
-                <div class="description">
-                    <h3>Beskrivelse</h3>
-                    <p>@Model.InnmeldingModel.Beskrivelse</p>
-                </div>
-                <div class="reporter-info">
-                    <h3>Innmelder</h3>
-                    @if (Model.InnmelderModel != null && Model.PersonModel != null)
-                    {
-                        <form asp-action="OppdaterInnmelderType" method="post">
-                            <input type="hidden" name="innmelderId" value="@Model.InnmelderModel.InnmelderId" />
-                            <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId" />
-                            <div class="form-group mb-3">
-                                <label for="innmelderTypeDropdown">Velg innmeldertype:</label>
-                                <select id="innmelderTypeDropdown"
-                                        name="innmelderType"
-                                        class="form-control"
-                                        asp-items="Model.InnmelderTypeOptions">
-                                    <option value="">Velg innmeldertype</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-3">Lagre innmeldertype</button>
-                        </form>
-                        <p><strong>Type:</strong> @Model.InnmelderModel.InnmelderType</p>
-                        <p><strong>Navn:</strong> @Model.PersonModel.Fornavn @Model.PersonModel.Etternavn</p>
-                        <p><strong>Telefon:</strong> @Model.PersonModel.Telefonnummer</p>
-                    }
-                    else if (Model.InnmeldingModel.GjestInnmelderId.HasValue)
-                    {
-                        <p>Gjesteinnmelder</p>
-                    }
-                    else
-                    {
-                        <p>Ingen innmelder informasjon tilgjengelig</p>
-                    }
-                </div>
 
-                <div class="handler-info">
-                    <h3>Saksbehandler</h3>
-                    <form asp-action="LagreSaksbehandler" method="post">
-                        <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId" />
+                    <div class="form-group mb-3">
+                        <label for="prioritetDropdown">Prioritet:</label>
+                        <select id="prioritetDropdown" 
+                                class="form-control" 
+                                name="Prioritet" 
+                                asp-for="Prioritet" 
+                                asp-items="Model.PrioritetOptions">
+                            <option value="">Velg prioritet</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="kartTypeDropdown">Kart Type:</label>
+                        <select id="kartTypeDropdown" 
+                                class="form-control" 
+                                name="KartType" 
+                                asp-for="KartType" 
+                                asp-items="Model.KartTypeOptions">
+                            <option value="">Velg kart type</option>
+                        </select>
+                    </div>
+                    <div class="form-group mt-4">
+                        <button type="submit" id="saveButton" class="btn btn-primary">Lagre endringer</button>
+                    </div>
+                </div>
+            </form>
+            
+
+            <div class="description">
+                <h3>Beskrivelse</h3>
+                <p>@Model.Beskrivelse</p>
+            </div>
+            <div class="reporter-info">
+                <h3>Innmelder</h3>
+                @if (!string.IsNullOrEmpty(Model.InnmelderType) && !string.IsNullOrEmpty(Model.Fornavn))
+                {
+                    <form asp-action="OppdaterInnmelderType" method="post">
+                        <input type="hidden" name="innmelderId" value="@Model.InnmelderId" />
+                        <input type="hidden" name="innmeldingId" value="@Model.InnmeldingId" />
                         <div class="form-group mb-3">
-                            <label for="saksbehandlerDropdown">Velg saksbehandler:</label>
-                            <select id="saksbehandlerDropdown"
-                                    name="saksbehandlerId"
+                            <label for="innmelderTypeDropdown">Velg innmeldertype:</label>
+                            <select id="innmelderTypeDropdown"
+                                    name="innmelderType"
                                     class="form-control"
-                                    asp-items="Model.ValgbareSaksbehandlere">
-                                <option value="">Velg saksbehandler</option>
+                                    asp-items="Model.InnmelderTypeOptions">
+                                <option value="">Velg innmeldertype</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Lagre</button>
+                        <button type="submit" class="btn btn-primary mb-3">Lagre innmeldertype</button>
                     </form>
+                    <p><strong>Type:</strong> @Model.InnmelderType</p>
+                    <p><strong>Navn:</strong> @Model.Fornavn @Model.Etternavn</p>
+                    <p><strong>Telefon:</strong> @Model.Telefonnummer</p>
+                }
+                else if (Model.GjestInnmelderId > 0)
+                {
+                    <p><strong>GjesteinnmelderID:</strong> @Model.GjestInnmelderId</p>
+                }
+                else
+                {
+                    <p>Ingen innmelder informasjon tilgjengelig</p>
+                }
+            </div>
+
+            <div class="handler-info">
+                <h3>Saksbehandler</h3>
+                <form asp-action="LagreSaksbehandler" method="post">
+                    <input type="hidden" name="innmeldingId" value="@Model.InnmeldingId" />
+                    <div class="form-group mb-3">
+                        <label for="saksbehandlerDropdown">Velg saksbehandler:</label>
+                        <select id="saksbehandlerDropdown"
+                                name="saksbehandlerId"
+                                class="form-control"
+                                asp-items="Model.ValgbareSaksbehandlere">
+                            <option value="">Velg saksbehandler</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lagre</button>
+                </form>
                 
 
-                @if (Model.SaksbehandlerModel != null)
-                    {
-                        <div class="saksbehandlerInformasjon">
-                            <p><strong>Stilling:</strong> @Model.SaksbehandlerModel.Stilling</p>
-                            <p><strong>E-post:</strong> @Model.SaksbehandlerModel.Jobbepost</p>
-                            <p><strong>Telefon:</strong> @Model.SaksbehandlerModel.Jobbtelefon</p>
-                        </div>
-                    }
-                    else
-                    {
-                        <p>Ingen Saksbehandler Angit</p>
-                    }
-                </div>
-            }
-            else
-            {
-                <p>Ingen innmelding funnet</p>
-            }
-        </div>
-
-        <div class="right-column">
-            <div id="map" style="height: 400px; margin-bottom: 2rem;"></div>
-            <div class="chat-section">
-                <div class="chat-header">
-                    <div class="chat-user-info">
-                        <span class="chat-user-name">
-                            @(Model?.PersonModel != null ? $"{Model.PersonModel.Fornavn} {Model.PersonModel.Etternavn}" : "Gjesteinnmelder")
-                        </span>
+                @if (Model.SaksbehandlerStilling!= null)
+                {
+                    <div class="saksbehandlerInformasjon">
+                        <p><strong>Stilling:</strong> @Model.SaksbehandlerStilling</p>
+                        <p><strong>E-post:</strong> @Model.SaksbehandlerJobbepost</p>
+                        <p><strong>Telefon:</strong> @Model.SaksbehandlerJobbtelefon</p>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <p>Ingen Saksbehandler Angit</p>
+                }
+            </div>
+        }
+        else
+        {
+            <p>Ingen innmelding funnet</p>
+        }
+    </div>
 
-                <div class="chat-messages" id="chatMessages"></div>
-
-                <div class="chat-input-container">
-                    <form id="chatForm" class="chat-form">
-                        <input type="text"
-                               id="messageInput"
-                               placeholder="Skriv en melding..."
-                               class="chat-input"
-                               autocomplete="off" />
-                        <button type="submit" class="chat-send-button">Send</button>
-                    </form>
+    <div class="right-column">
+        <div id="map" style="height: 400px; margin-bottom: 2rem;"></div>
+        <div class="chat-section">
+            <div class="chat-header">
+                <div class="chat-user-info">
+                    <span class="chat-user-name">
+                        @((!string.IsNullOrEmpty(Model.Fornavn)) 
+                            ? $"{Model.Fornavn} {Model.Etternavn}" 
+                            : (Model.GjestInnmelderId > 0 ? $"Gjest {Model.GjestInnmelderId}" : "Ukjent"))
+                    </span>
                 </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages"></div>
+
+            <div class="chat-input-container">
+                <form id="chatForm" class="chat-form">
+                    <input type="text"
+                           id="messageInput"
+                           placeholder="Skriv en melding..."
+                           class="chat-input"
+                           autocomplete="off" />
+                    <button type="submit" class="chat-send-button">Send</button>
+                </form>
             </div>
         </div>
     </div>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="popup-message success" id="successPopup">
+        <span class="popup-text">@TempData["SuccessMessage"]</span>
+        <button class="popup-close" onclick="closePopup('successPopup')">&times;</button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="popup-message error" id="errorPopup">
+        <span class="popup-text">@TempData["ErrorMessage"]</span>
+        <button class="popup-close" onclick="closePopup('errorPopup')">&times;</button>
+    </div>
+}
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="~/js/maps/config/mapConfig.js"></script>
     <script src="~/js/maps/utils/mapControls.js"></script>
@@ -159,46 +183,42 @@
     <script>
         const map = MapConfig.initializeMap('map');
         MapControls.initializeSearch(map);
-        @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
+        @if (Model?.GeometriGeoJson != null)
         {
             <text>
-                    const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
+                    const geoJsonFeature = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
                     const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
                     map.fitBounds(geoJsonLayer.getBounds());
             </text>
         }
     </script>
-    <!-- Form handling script -->
-    <script>
-            // Error handling
-        @if (TempData["ErrorMessage"] != null)
-        {
-            <text>
-                    alert('@TempData["ErrorMessage"]');
-            </text>
+   
+<script>
+    function closePopup(id) {
+        const popup = document.getElementById(id);
+        if (popup) {
+            popup.classList.add('fade-out');
+            setTimeout(() => {
+                popup.remove();
+            }, 300);
         }
-            // Form submit handling
-            document.querySelector('form[asp-action="OppdateringAvInnmeldingSaksB"]').addEventListener('submit', function () {
-                // Success handling
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <text>
-                            const button = document.getElementById('saveButton');
-                            button.textContent = 'Lagret!';
-                            button.classList.remove('btn-primary');
-                            button.classList.add('btn-success');
+    }
 
-                        // Reset after 5 seconds
-                        setTimeout(() => {
-                                button.textContent = 'Lagre endringer';
-                            button.classList.remove('btn-success');
-                            button.classList.add('btn-primary');
-                            button.disabled = false;
-                        }, 5000);
-            </text>
-        }
+    document.addEventListener('DOMContentLoaded', () => {
+        const popups = document.querySelectorAll('.popup-message');
+        popups.forEach(popup => {
+            setTimeout(() => {
+                if (popup) {
+                    popup.classList.add('fade-out');
+                    setTimeout(() => {
+                        popup.remove();
+                    }, 300);
+                }
+            }, 5000);
         });
-    </script>
+    });
+</script>
+    
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -218,8 +238,9 @@
                         dropdown.add(option);
                     });
                 })
-                .catch(error => console.error('Feil ved henting av saksbehandlere:', error));
+                
         });
     </script>
+
     </body>
 </html>

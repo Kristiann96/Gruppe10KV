@@ -25,7 +25,6 @@ namespace DataAccess
                 im.innmelding_id AS InnmeldingId, 
                 im.tittel AS Tittel,
                 im.beskrivelse AS Beskrivelse,
-                im.siste_endring AS SisteEndring,
                 im.status AS Status,
                 im.prioritet AS Prioritet,
                 im.kart_type AS KartType,
@@ -36,9 +35,11 @@ namespace DataAccess
                 i.innmelder_id AS InnmelderId,
                 i.innmelder_type AS InnmelderType,
                 s.saksbehandler_id AS SaksbehandlerId,
-                s.stilling AS Stilling,
-                s.jobbepost AS Jobbepost,
-                s.jobbtelefon AS Jobbtelefon,
+                s.stilling AS SaksbehadlderStilling,
+                s.jobbepost AS SaksbehandlerJobbepost,
+                s.jobbtelefon AS SaksbehandlerJobbtelefon,
+                -- Gjest fields
+
                 g.gjest_innmelder_id AS GjestInnmelderId
             FROM innmelding im
             LEFT JOIN innmelder i ON im.innmelder_id = i.innmelder_id
@@ -58,10 +59,13 @@ namespace DataAccess
 
             return result.FirstOrDefault();
         }
-        
-        public async Task<(IEnumerable<(InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)> Data, int TotalPages)> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm)
+
+        public async
+            Task<(IEnumerable<(InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)> Data, int
+                TotalPages)> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm)
         {
             await using var connection = _dbConnection.CreateConnection();
+
 
             var countSql = @"
                 SELECT COUNT(*)
@@ -75,9 +79,12 @@ namespace DataAccess
                 OR i.epost LIKE @SearchTerm
                 OR gi.epost LIKE @SearchTerm";
 
-            var totalItems = await connection.ExecuteScalarAsync<int>(countSql, new { SearchTerm = "%" + searchTerm + "%" });
+            var totalItems =
+                await connection.ExecuteScalarAsync<int>(countSql, new { SearchTerm = "%" + searchTerm + "%" });
+
 
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
 
             var dataSql = @"
                 SELECT
@@ -118,6 +125,7 @@ namespace DataAccess
                 PageSize = pageSize,
                 SearchTerm = "%" + searchTerm + "%"
             };
+
             
             var result = await connection.QueryAsync<InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel,
                 (InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)>(
@@ -140,9 +148,14 @@ namespace DataAccess
                 splitOn: "PersonId,GeometriId,GjestInnmelderId,InnmelderId"
             );
 
+n
             var resultList = result.ToList();
 
             return (resultList, totalPages);
         }
+
+
+
     }
 }
+

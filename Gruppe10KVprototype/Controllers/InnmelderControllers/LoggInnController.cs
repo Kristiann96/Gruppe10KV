@@ -7,6 +7,7 @@ using ViewModels;
 
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
+[AutoValidateAntiforgeryToken]
 public class LoggInnController : Controller
 
 {
@@ -20,18 +21,29 @@ public class LoggInnController : Controller
 
     [HttpPost]
     [AllowAnonymous]
-    [ValidateAntiForgeryToken]
+    
     public async Task<IActionResult> LoggInn(LoggInnViewModel model)
     {
         if (!ModelState.IsValid)
         {
             return View();
         }
-        
+
         var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
         if (result.Succeeded)
         {
+            
+            var user = await _signInManager.UserManager.FindByEmailAsync(model.Email);
+           
+            var isSaksbehandler = await _signInManager.UserManager.IsInRoleAsync(user, "Saksbehandler");
+
             _logger.LogInformation(1, "User logged in.");
+
+            // Redirect basert på rolle
+            if (isSaksbehandler)
+            {
+                return RedirectToAction("LandingsSideSaksB", "LandingsSideSaksB");
+            }
             return RedirectToAction("LandingsSide", "LandingsSide");
         }
         else
@@ -40,14 +52,14 @@ public class LoggInnController : Controller
             return View("LoggInn");
         }
     }
-    
-    public IActionResult MidlertidigBypass()
-    {
-        return RedirectToAction("LandingsSide", "LandingsSide");
-    }
     public IActionResult VisLoggInnSide()
     {
         return View("LoggInn");
+    }
+    public async Task<IActionResult> LoggUt()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
     }
 }
 

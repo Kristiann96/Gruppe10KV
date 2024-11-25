@@ -24,6 +24,7 @@ namespace Gruppe10KVprototype.Tests.Controllers
         }
  
         [TestMethod]
+        [Description("Tester vellykket henting av innmelding for oppdatering")]
         public async Task OppdatereInnmelding_ValidId_ReturnsViewWithModel()
         {
             // Arrange

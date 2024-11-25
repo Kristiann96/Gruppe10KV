@@ -1,7 +1,7 @@
 # Gruppe10KVprototype
 
 Velkommen til Gruppe10's Kartverket prototype! 
-Denne README-filen fungerer som en rask guide for å forstå, sette opp og jobbe med koden i dette repositoriet.
+Denne README-filen fungerer som en rask guide for å forstå, sette opp og jobbe med koden i dette repositoriet. For mer detaljer, se vår [Wiki](https://github.com/Kristiann96/Gruppe10KV/wiki/Gruppe10KVprototype-%E2%80%90-Wiki).
 
 ---
 
@@ -138,8 +138,15 @@ Under er en oversikt over de viktigste komponentene i gruppens system og en kort
 | **ServicesInterfaces**  | Definerer grensesnittene for "Services".                                           |
 | **ViewModels**          | Inneholder view-modeller som brukes for å presentere data i brukergrensesnittet.                   |
 
+
+### Systemets arkitektur illustrert:
+---
+
+<img src="https://github.com/user-attachments/assets/942c76c8-428e-4a02-aedd-b03daae84d45" alt="Eksempelbilde 11" width="600"/>
+
 ---
 <br><br>
+
 
 ## Teknologier brukt:
 
@@ -149,6 +156,7 @@ Under er en oversikt over de viktigste komponentene i gruppens system og en kort
 - MySQL/MariaDB: Database for lagring og spørring av bruker- og geodata.
 - Leaflet.js: JavaScript-bibliotek for interaktive kart.
 - Kartverket API: For kartdata og geolokasjonstjenester.
+- Entity Framework & Identity: For autorisasjon og autentisering.
 
 ### Hvorfor vi brukte disse teknologiene
 
@@ -156,6 +164,7 @@ Under er en oversikt over de viktigste komponentene i gruppens system og en kort
 - **Dapper ORM:** Brukt for effektiv databaseinteraksjon med MySQL/MariaDB, gir en lett og fleksibel tilnærming til spørringsutføring.
 - **MySQL/MariaDB:** Valgt som databasesystem på grunn av skalerbarhet og støtte.
 - **Kartverket API & Leaflet.js:** Integrert for nøyaktig kartlegging og visualisering av geodata, noe som gir brukerne et sanntidsbilde av lokasjoner på et interaktivt kart.
+- **Entity Framework ORM & Identity:** Brukt for autorisasjon og autentisering grunnet automatisk integrasjon mellom identitet og Entity Framework.
 
 ---
 

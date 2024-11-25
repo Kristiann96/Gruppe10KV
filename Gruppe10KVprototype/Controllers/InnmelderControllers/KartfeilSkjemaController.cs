@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+
+[AutoValidateAntiforgeryToken]
 public class KartfeilSkjemaController : Controller
+
 {
     public IActionResult KartfeilSkjema(string geoJson)
     {
@@ -14,14 +17,14 @@ public class KartfeilSkjemaController : Controller
             GeometriGeoJson = geoJson,
             Tittel = "",
             Beskrivelse = "",
-            ErNodEtatKritisk = false // For prioritet enum
+            ErNodEtatKritisk = false 
         };
 
         return View(viewModel);
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+    
     public IActionResult GaaTilBekreftelse(KartfeilSkjemaViewModel model)
     {
         if (!ModelState.IsValid)
@@ -31,6 +34,6 @@ public class KartfeilSkjemaController : Controller
 
         model.Prioritet = model.ErNodEtatKritisk ? "høy" : "ikke_vurdert";
 
-        return View("KartfeilSkjemaBekreftelse", model);
+        return View("KartfeilSkjema", model);
     }
 }

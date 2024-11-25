@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
     <link rel="stylesheet" href="~/css/pages/TemporaryCSS/SporKartFeil.css" />
-    <!-- Her inkluderes CSS fra forrige artifact -->
+  
 }
 
-<!-- Intro Modal -->
+
 <div id="introModal" class="modal" style="display: flex;">
     <div class="modal-content">
         <h2 class="modal-title">Velkommen til Sporingsverktøyet</h2>
@@ -19,7 +19,7 @@
                 <li>Starte GPS-sporing av din rute</li>
                 <li>Se ruten bli tegnet mens du beveger deg</li>
                 <li>Avslutte sporingen når du er ferdig</li>
-                <li>Sende inn ruten som en kartfeil</li>
+                <li>Sende inn ruten som en kartfeil markering</li>
             </ul>
             <p>Trykk på "Start sporing" når du er klar til å begynne.</p>
         </div>
@@ -27,7 +27,7 @@
     </div>
 </div>
 
-<!-- Confirmation Modal for stopping tracking -->
+
 <div id="stopConfirmModal" class="modal">
     <div class="modal-content">
         <h2 class="modal-title">Avslutt sporing?</h2>
@@ -39,7 +39,7 @@
     </div>
 </div>
 
-<!-- Reset Confirmation Modal -->
+
 <div id="resetConfirmModal" class="modal">
     <div class="modal-content">
         <h2 class="modal-title">Start på nytt?</h2>
@@ -51,7 +51,7 @@
     </div>
 </div>
 
-<!-- Main content -->
+
 <div id="map"></div>
 
 <div id="statusIndicator" class="status-indicator" style="display: none;">
@@ -69,13 +69,13 @@
 </div>
 
 @section Scripts {
-    <!-- JavaScript biblioteker -->
+   
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
 
-    <!-- Våre konfigurasjonsfiler -->
+   
     <script src="~/js/maps/config/mapConfig.js"></script>
     <script src="~/js/maps/config/drawConfig.js"></script>
     <script src="~/js/maps/services/wmsService.js"></script>
@@ -89,13 +89,13 @@
         let trackingLine = null;
         let positionInterval = null;
         
-        // Opprett en featureGroup for å håndtere sporingsdata
+       
         let drawnItems = new L.FeatureGroup().addTo(map);
 
-        // Initialiser kontroller
+        
         MapControls.initializeControls(map);
 
-        // Modal handling functions
+        
         function startApp() {
             document.getElementById('introModal').style.display = 'none';
             document.getElementById('statusIndicator').style.display = 'block';
@@ -186,14 +186,14 @@
             }
 
             if (trackingData.length > 1) {
-                // Opprett et Leaflet layer fra sporingsdata
+               
                 const coordinates = trackingData.map(pos => [pos.lat, pos.lng]);
                 const trackingLayer = L.polyline(coordinates, {
                     color: 'blue',
                     weight: 3
                 }).addTo(drawnItems);
 
-                // Konverter layer til GeoJSON
+                
                 const geoJsonData = trackingLayer.toGeoJSON();
                 console.log('Generated GeoJSON:', geoJsonData);
 
@@ -215,7 +215,7 @@
             hideStopConfirmModal();
         }
 
-        // Event listeners
+        
         document.getElementById('startTracking').addEventListener('click', () => {
             tracking = true;
             document.getElementById('statusIndicator').textContent = 'Sporing aktiv';
@@ -223,9 +223,9 @@
             document.getElementById('startTracking').style.display = 'none';
             document.getElementById('stopTracking').style.display = 'inline';
             
-            // Start posisjonssporing
+            
             if ("geolocation" in navigator) {
-                // Initielt posisjonskall
+                
                 navigator.geolocation.getCurrentPosition(
                     updatePosition,
                     error => {
@@ -239,7 +239,7 @@
                     }
                 );
 
-                // Start regelmessig sporing
+                
                 positionInterval = setInterval(() => {
                     navigator.geolocation.getCurrentPosition(
                         updatePosition,
@@ -249,7 +249,7 @@
                             timeout: 5000
                         }
                     );
-                }, 3000); // Oppdater hvert 3. sekund
+                }, 3000); 
             }
         });
 

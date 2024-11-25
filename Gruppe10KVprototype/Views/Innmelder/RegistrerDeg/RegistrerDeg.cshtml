@@ -63,7 +63,7 @@
         </form>
 
         <div class="innlogging-seksjon">
-            <a asp-controller="LoggInn" asp-action="LoggInn" class="innlogging-lenke">
+            <a asp-controller="LoggInn" asp-action="VisLoggInnSide" class="innlogging-lenke">
                 Har du allerede en bruker? Logg inn her
             </a>
         </div>
@@ -94,7 +94,7 @@
                                 timerProgressBar: true,
                                 iconColor: '#1a833b',
                                 didOpen: () => {
-                                    // Start timer for redirect
+                                   
                                     setTimeout(() => {
                                         window.location.href = response.redirectUrl;
                                     }, 2700);

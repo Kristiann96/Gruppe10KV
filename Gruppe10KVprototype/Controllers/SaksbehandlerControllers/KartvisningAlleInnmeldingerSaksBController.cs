@@ -6,10 +6,14 @@ using ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LogicInterfaces;
+using AuthInterface;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
 {
+    [Authorize(Roles = UserRoles.Saksbehandler)]
+    [AutoValidateAntiforgeryToken]
     public class KartvisningAlleInnmeldingerSaksBController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;
@@ -21,7 +25,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             _kommuneAPILogic = kommuneAPILogic;
         }
 
-        // Henter alle geometriobjekter og kommunedata fra Kartverket og sender dem til viewet
+        
         [HttpGet]
         public async Task<IActionResult> KartvisningAlleInnmeldingerSaksB()
         {
@@ -47,7 +51,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             TempData["Kommunenummer"] = kommune.Kommunenummer;
             TempData["Kommunenavn"] = kommune.Kommunenavn;
 
-            return RedirectToAction("KartvisningEnInnmeldingSaksB", "KartvisningEnInnmeldingSaksB", new { innmeldingId });
+            return RedirectToAction("KartvisningEnEllerFlereInnmeldingSaksB", "KartvisningEnEllerFlereInnmeldingSaksB", new { innmeldingId });
         }
     }
 }

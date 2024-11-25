@@ -5,6 +5,7 @@ namespace ViewModels
 {
     public class MineInnmeldingerViewModel
     {
+        public IEnumerable<InnmelderModel> InnmelderId { get; set; }
         public IEnumerable<InnmeldingModel> Innmeldinger { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

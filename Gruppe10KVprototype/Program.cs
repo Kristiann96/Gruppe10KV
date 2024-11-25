@@ -20,6 +20,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+builder.Services.AddAntiforgery(options => {
+    options.HeaderName = "X-CSRF-TOKEN";
+});
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
@@ -40,13 +49,14 @@ builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
 builder.Services.AddScoped<IVurderingRepository, VurderingRepository>();
 builder.Services.AddScoped<IEnumLogic, EnumLogic>();
 builder.Services.AddScoped<IDataSammenstillingSaksBRepository, DataSammenstillingSaksBRepository>();
-builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository>();
+/*builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository>();*/
 builder.Services.AddScoped<ITransaksjonsRepository, TransaksjonsRepository>();
 builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
 builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
 
 //Registrering av services og interfaces
 builder.Services.AddScoped<IOppdatereInnmeldingService, OppdatereInnmeldingService>();
+
 
 
 //og logic og logicinterfaces
@@ -113,6 +123,7 @@ app.UseRouting();
 // Riktig rekkefølge for auth middleware
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseAntiforgery();
 app.UseStatusCodePages();
 
 // Routing

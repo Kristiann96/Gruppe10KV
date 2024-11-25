@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Sources;
 using Dapper;
 using Interface;
 using Models.Entities;
@@ -22,7 +23,7 @@ namespace DataAccess
         }
 
         public async Task<bool> LagreKomplettInnmeldingAsync(
-            string gjesteEpost,
+            string? gjesteEpost,
             InnmeldingModel innmelding,
             Geometri geometri)
         {
@@ -191,8 +192,73 @@ namespace DataAccess
                 throw;
             }
         }
+
+        public async Task<bool> LagreKomplettInnmeldingInnloggetAsync(
+            string? epost,
+            InnmeldingModel innmelding,
+            Geometri geometri)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = await connection.BeginTransactionAsync();
+
+            try
+            {
+                var innmelderIdSql = @"
+                    SELECT innmelder_id FROM innmelder WHERE epost = @Epost";
+
+                var innmelderId = await connection.QuerySingleAsync<int>(
+                    innmelderIdSql,
+                    new { epost },
+                    transaction);
+
+                innmelding.InnmelderId = innmelderId;
+
+                var innmeldingSql = @"
+                    INSERT INTO innmelding (
+                        innmelder_id, 
+                        tittel, 
+                        beskrivelse,
+                        prioritet
+                      
+                    ) VALUES (
+                        @InnmelderId,
+                        @Tittel,
+                        @Beskrivelse,
+                        @Prioritet
+                    );
+                    SELECT LAST_INSERT_ID();";
+
+                var innmeldingId = await connection.ExecuteScalarAsync<int>(
+                    innmeldingSql,
+                    innmelding,
+                    transaction);
+
+                // 3. Lagre geometri
+                geometri.InnmeldingId = innmeldingId;
+                var geometriSql = @"
+                    INSERT INTO geometri (
+                        innmelding_id,
+                        geometri_data
+                    ) VALUES (
+                        @InnmeldingId,
+                        ST_GeomFromGeoJSON(@GeometriGeoJson)
+                    );";
+
+                await connection.ExecuteAsync(
+                    geometriSql,
+                    geometri,
+                    transaction);
+
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw new ForretningsRegelExceptionModel(
+                    "Kunne ikke lagre innmeldingen: " + ex.Message,
+                    ex);
+            }
+        }
     }
 }
-
-
-

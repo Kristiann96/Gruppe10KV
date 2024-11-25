@@ -1,4 +1,4 @@
-﻿@model ViewModels.KartvisningEnInnmeldingSaksBViewModel
+﻿@model ViewModels.KartvisningEnEllerFlereInnmeldingSaksBViewModel
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartvisningEnInnmeldingSaksB.css" />
+    <link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartvisningEnEllerFlereInnmeldingSaksB.css" />
 </head>
 <body>
 <div class="container">
@@ -28,7 +28,7 @@
                 <div class="status-info">
                     <p>Status: <span class="badge">@innmelding.Innmelding.Status</span></p>
                     <p>Prioritet: <span class="badge">@innmelding.Innmelding.Prioritet</span></p>
-                    <p>Sist endret: @innmelding.FormaterSisteEndring</p>
+                    
                     <p>KartType: <span class="badge">@innmelding.Innmelding.KartType</span></p>
 
                     @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)

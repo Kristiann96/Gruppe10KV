@@ -20,8 +20,6 @@ namespace DataAccess
         }
 
 
-        // Hent alle geometriobjekter for kartvisning KartvisningAlleInnmeldingerSaksB
-
         public async Task<IEnumerable<Geometri>> GetAllGeometriAsync()
         {
             using var connection = _dbConnection.CreateConnection();
@@ -30,7 +28,7 @@ namespace DataAccess
             return await connection.QueryAsync<Geometri>(sql);
         }
 
-        // Hent spesifikk geometri basert på innmelding_id  KartvisningEnInnmeldingSaksB
+
         public async Task<Geometri> GetGeometriByInnmeldingIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -64,7 +62,7 @@ namespace DataAccess
 
             return result;
         }
-        //innmelder oppdaterer kun geoJson
+
         public async Task<bool> OppdatereGeometriAsync(int innmeldingId, string geometriGeoJson)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -100,7 +98,17 @@ namespace DataAccess
                 throw;
             }
         }
+
+        public async Task<Geometri> GetForBehandleInnmedingAsync(int innmeldingId)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql =
+                "SELECT ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri WHERE innmelding_id = @InnmeldingId";
+            return await connection.QuerySingleOrDefaultAsync<Geometri>(sql, new { InnmeldingId = innmeldingId });
+        }
     }
+
+
 
 }
 

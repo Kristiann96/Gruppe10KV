@@ -5,7 +5,9 @@ using System.Text.Json;
 using LogicInterfaces;
 using Models.Models;
 
+[AutoValidateAntiforgeryToken]
 public class KartfeilMarkeringController : Controller
+
 {
     private readonly IGeometriRepository _geometriRepository;
     private readonly IKommuneAPILogic _kommuneAPILogic;
@@ -32,7 +34,7 @@ public class KartfeilMarkeringController : Controller
             return BadRequest("Ingen geometri er tegnet på kartet");
         }
 
-        // Validerer at det er gyldig GeoJSON
+       
         try
         {
             JsonDocument.Parse(geometri.GeometriGeoJson);
