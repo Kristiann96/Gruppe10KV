@@ -81,13 +81,11 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                     Prioritet = innmelding.Prioritet,
                     KartType = innmelding.KartType,
 
-                    // Map innmelder info hvis tilgjengelig
                     Fornavn = person?.Fornavn,
                     Etternavn = person?.Etternavn,
                     Telefonnummer = person?.Telefonnummer,
                     InnmelderType = innmelder?.InnmelderType,
 
-                    // Map saksbehandler info hvis tilgjengelig
                     SaksbehandlerStilling = saksbehandler?.Stilling,
                     SaksbehandlerJobbepost = saksbehandler?.Jobbepost,
                     SaksbehandlerJobbtelefon = saksbehandler?.Jobbtelefon,
@@ -186,8 +184,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                 return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id });
             }
         }
-
-
+        
         [HttpPost]
         public async Task<IActionResult> LagreSaksbehandler(int innmeldingId, int? saksbehandlerId)
         {
