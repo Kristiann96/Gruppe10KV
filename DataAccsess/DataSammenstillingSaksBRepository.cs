@@ -38,8 +38,6 @@ namespace DataAccess
                 s.stilling AS SaksbehadlderStilling,
                 s.jobbepost AS SaksbehandlerJobbepost,
                 s.jobbtelefon AS SaksbehandlerJobbtelefon,
-                -- Gjest fields
-
                 g.gjest_innmelder_id AS GjestInnmelderId
             FROM innmelding im
             LEFT JOIN innmelder i ON im.innmelder_id = i.innmelder_id
@@ -65,8 +63,7 @@ namespace DataAccess
                 TotalPages)> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber, int pageSize, string searchTerm)
         {
             await using var connection = _dbConnection.CreateConnection();
-
-
+            
             var countSql = @"
                 SELECT COUNT(*)
                 FROM innmelding im
@@ -81,11 +78,9 @@ namespace DataAccess
 
             var totalItems =
                 await connection.ExecuteScalarAsync<int>(countSql, new { SearchTerm = "%" + searchTerm + "%" });
-
-
+            
             var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-
+            
             var dataSql = @"
                 SELECT
                     im.innmelding_id AS InnmeldingId,
@@ -125,7 +120,6 @@ namespace DataAccess
                 PageSize = pageSize,
                 SearchTerm = "%" + searchTerm + "%"
             };
-
             
             var result = await connection.QueryAsync<InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel,
                 (InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)>(
