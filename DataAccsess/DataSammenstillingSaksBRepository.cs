@@ -5,7 +5,6 @@ using Models.Entities;
 using Interfaces;
 using Models.Models;
 
-//brukes for spørringer som sammenstiller flere tabeller
 namespace DataAccess
 {
     public class DataSammenstillingSaksBRepository : IDataSammenstillingSaksBRepository
@@ -23,27 +22,24 @@ namespace DataAccess
             using var connection = _dbConnection.CreateConnection();
             var sql = @"
             SELECT 
-                -- Innmelding fields
                 im.innmelding_id AS InnmeldingId, 
                 im.tittel AS Tittel,
                 im.beskrivelse AS Beskrivelse,
                 im.status AS Status,
                 im.prioritet AS Prioritet,
                 im.kart_type AS KartType,
-                -- Person fields
                 p.person_id AS PersonId,
                 p.fornavn AS Fornavn,
                 p.etternavn AS Etternavn,
                 p.telefonnummer AS Telefonnummer,
-                -- Innmelder fields
                 i.innmelder_id AS InnmelderId,
                 i.innmelder_type AS InnmelderType,
-                -- Saksbehandler fields
                 s.saksbehandler_id AS SaksbehandlerId,
                 s.stilling AS SaksbehadlderStilling,
                 s.jobbepost AS SaksbehandlerJobbepost,
                 s.jobbtelefon AS SaksbehandlerJobbtelefon,
                 -- Gjest fields
+
                 g.gjest_innmelder_id AS GjestInnmelderId
             FROM innmelding im
             LEFT JOIN innmelder i ON im.innmelder_id = i.innmelder_id
@@ -92,39 +88,23 @@ namespace DataAccess
 
             var dataSql = @"
                 SELECT
-                    -- Innmelding fields
                     im.innmelding_id AS InnmeldingId,
                     im.tittel AS Tittel,
                     im.beskrivelse AS Beskrivelse,
-                    im.innmeldingstidspunkt AS Innmeldingstidspunkt,
                     im.siste_endring AS SisteEndring,
                     im.status AS Status,
                     im.prioritet AS Prioritet,
-                    im.kart_type AS KartType,
-                    im.innmelder_id,
-                    im.saksbehandler_id,
-                    im.gjest_innmelder_id,
-
-                    -- Person fields
                     p.person_id AS PersonId,
                     p.fornavn AS Fornavn,
                     p.etternavn AS Etternavn,
-                    p.telefonnummer AS Telefonnummer,
-
-                    -- Geometri fields
                     g.geometri_id AS GeometriId,
                     g.innmelding_id AS InnmeldingId,
                     ST_AsText(g.geometri_data) AS GeometriGeoJson,
-
-                    -- Gjesteinnmelder fields
                     COALESCE(gi.gjest_innmelder_id, 0) AS GjestInnmelderId,
                     COALESCE(gi.epost, '') AS Epost,
-
-                    -- Innmelder fields
                     COALESCE(i.innmelder_id, 0) AS InnmelderId,
                     COALESCE(i.person_id, 0) AS PersonId,
-                    COALESCE(i.epost, '') AS Epost,
-                    COALESCE(i.innmelder_type, '') AS InnmelderType
+                    COALESCE(i.epost, '') AS Epost
                 FROM innmelding im
                 LEFT JOIN innmelder i ON im.innmelder_id = i.innmelder_id
                 LEFT JOIN person p ON i.person_id = p.person_id
@@ -146,39 +126,29 @@ namespace DataAccess
                 SearchTerm = "%" + searchTerm + "%"
             };
 
-
-
-            var result = await connection
-                .QueryAsync<InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel,
-                    (InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)>(
-                    dataSql,
-                    (innmelding, person, geometri, gjesteinnmelder, innmelder) =>
+            
+            var result = await connection.QueryAsync<InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel,
+                (InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)>(
+                dataSql,
+                (innmelding, person, geometri, gjesteinnmelder, innmelder) =>
+                {
+                    if (gjesteinnmelder != null)
                     {
+                        gjesteinnmelder.Epost = string.IsNullOrEmpty(gjesteinnmelder.Epost) ? "N/A" : gjesteinnmelder.Epost;
+                    }
 
-                        if (gjesteinnmelder != null)
-                        {
-                            Console.WriteLine($"GjesteinnmelderEmail before: {gjesteinnmelder.Epost}");
-                            gjesteinnmelder.Epost = string.IsNullOrEmpty(gjesteinnmelder.Epost)
-                                ? "N/A"
-                                : gjesteinnmelder.Epost;
-                            Console.WriteLine($"GjesteinnmelderEmail after: {gjesteinnmelder.Epost}");
-                        }
+                    if (innmelder != null)
+                    {
+                        innmelder.Epost = string.IsNullOrEmpty(innmelder.Epost) ? "N/A" : innmelder.Epost;
+                    }
 
+                    return (innmelding, person, geometri, gjesteinnmelder, innmelder);
+                },
+                parameters,
+                splitOn: "PersonId,GeometriId,GjestInnmelderId,InnmelderId"
+            );
 
-                        if (innmelder != null)
-                        {
-                            Console.WriteLine($"InnmelderEmail before: {innmelder.Epost}");
-                            innmelder.Epost = string.IsNullOrEmpty(innmelder.Epost) ? "N/A" : innmelder.Epost;
-                            Console.WriteLine($"InnmelderEmail after: {innmelder.Epost}");
-                        }
-
-                        return (innmelding, person, geometri, gjesteinnmelder, innmelder);
-                    },
-                    parameters,
-                    splitOn: "PersonId,GeometriId,GjestInnmelderId,InnmelderId"
-                );
-
-
+n
             var resultList = result.ToList();
 
             return (resultList, totalPages);

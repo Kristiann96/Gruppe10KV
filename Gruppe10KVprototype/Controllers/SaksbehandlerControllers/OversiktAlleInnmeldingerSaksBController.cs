@@ -71,7 +71,7 @@ public class OversiktAlleInnmeldingerSaksBController : Controller
             KommuneData = kommuneData
         };
 
-        return View("OversiktAlleInnmeldingerSaksB", viewModel);
+        return View(viewModel);
     }
 
     private async Task<string> GetKommuneFraInnmelding(int innmeldingId)

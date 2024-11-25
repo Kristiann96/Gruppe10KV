@@ -21,9 +21,7 @@ namespace DataAccess
         {
             _dbConnection = dbConnection;
         }
-
-
-
+        
         //Innhenting av data til "OppdatereInnmelding"
         public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate)
         {
@@ -38,53 +36,6 @@ namespace DataAccess
 
             return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingIdUpdate });
         }
-
-
-        /* Ørjan */
-        public async Task<IEnumerable<InnmeldingModel>> GetOversiktAlleInnmeldingerSaksBAsync(int pageNumber,
-            int pageSize, string searchTerm)
-        {
-            using var connection = _dbConnection.CreateConnection();
-
-            var sql = @"SELECT innmelding_id AS InnmeldingId,
-                            innmelder_id AS InnmelderId,
-                            tittel AS Tittel,
-                            status AS Status,
-                            siste_endring AS SisteEndring,
-                            prioritet AS Prioritet
-                        FROM innmelding
-                        WHERE tittel LIKE @SearchTerm
-                        ORDER BY innmelding_id
-                        LIMIT @PageSize OFFSET @Offset";
-
-            var parameters = new
-            {
-                Offset = (pageNumber - 1) * pageSize,
-                PageSize = pageSize,
-                SearchTerm = "%" + searchTerm + "%"
-            };
-
-            return await connection.QueryAsync<InnmeldingModel>(sql, parameters);
-        }
-
-        public async Task<int> GetTotalInnmeldingerTellerSaksBAsync(string searchTerm)
-        {
-            using var connection = _dbConnection.CreateConnection();
-
-            var sql = @"SELECT COUNT(*)
-                        FROM innmelding
-                        WHERE tittel LIKE @SearchTerm";
-
-            var parameters = new
-            {
-                SearchTerm = "%" + searchTerm + "%"
-            };
-
-            return await connection.ExecuteScalarAsync<int>(sql, parameters);
-
-        }
-
-        /* Ørjan over */
 
         public async Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(int innmelderId)
         {
@@ -118,7 +69,6 @@ namespace DataAccess
         }
 
         //Henting for enummene
-
         private async Task<string> GetEnumValuesForColumnAsync(string tableName, string columnName)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -249,6 +199,7 @@ namespace DataAccess
                 throw;
             }
         }
+        
         //innmelder oppdaterer kun tittel og beskrivelse
         public async Task<bool> OppdatereInnmeldingAsync(InnmeldingModel innmelding)
         {
@@ -282,8 +233,6 @@ namespace DataAccess
                 throw;
             }
         }
-
-
     }
 }
 
