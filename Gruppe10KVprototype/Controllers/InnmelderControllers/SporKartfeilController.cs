@@ -6,6 +6,7 @@ using System.Text.Json;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
+    [AutoValidateAntiforgeryToken]
     public class SporKartfeilController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;

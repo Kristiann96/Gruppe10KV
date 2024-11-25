@@ -9,6 +9,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
 
     [Authorize(Roles = UserRoles.Innmelder)]
+    [AutoValidateAntiforgeryToken]
     public class OppdatereInnmeldingController : Controller
     {
         private readonly IOppdatereInnmeldingService _innmeldingService;
@@ -32,7 +33,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                 TempData["ErrorMessage"] = "Innmelding ikke funnet";
                 return RedirectToAction("MineInnmeldinger", "MineInnmeldinger");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Ved uventet feil, redirect til liste med generisk feilmelding
                 TempData["ErrorMessage"] = "En feil oppstod ved henting av innmelding";

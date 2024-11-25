@@ -8,7 +8,9 @@ using Models.Entities;
 using ViewModels;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
+
 [Authorize(Roles = UserRoles.Innmelder)]
+[AutoValidateAntiforgeryToken]
 public class MineInnmeldingerController : Controller
 {
     private readonly IInnmeldingRepository _innmeldingRepository;
@@ -64,7 +66,7 @@ public class MineInnmeldingerController : Controller
         // Return the view with the ViewModel
         return View(viewModel);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Ved uventet feil, redirect til liste med generisk feilmelding
             TempData["ErrorMessage"] = "En feil oppstod ved henting av innmeldinger";

@@ -10,7 +10,9 @@ using ViewModels;
 
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
+
 {
+    [AutoValidateAntiforgeryToken]
     public class KnyttInnmeldingTilPersonController : Controller
     {
         private readonly IInnmeldingLogic _innmeldingLogic;
@@ -41,7 +43,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       
         public async Task<IActionResult> LagreKnyttInnmeldingTilPerson(KnyttInnmeldingTilPersonViewModel model)
         {
             bool innlogget = !string.IsNullOrEmpty(User.Identity?.Name);

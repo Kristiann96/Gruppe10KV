@@ -185,48 +185,6 @@ namespace DataAccess
         }
 
 
-        public async Task<(InnmeldingModel, PersonModel?, InnmelderModel?, SaksbehandlerModel?)>
-            ForBehandlingAvInnmeldingAsync(int innmeldingId)
-        {
-            using var connection = _dbConnection.CreateConnection();
-            var sql = @"
-        SELECT 
-            -- Innmelding fields
-            i.tittel AS Tittel,
-            i.beskrivelse AS Beskrivelse,
-            -- Person fields
-            p.fornavn AS Fornavn,
-            p.etternavn AS Etternavn,
-            p.telefonnummer AS Telefonnummer,
-            -- Innmelder fields
-            im.innmelder_id AS InnmelderId,
-            im.innmelder_type AS InnmelderType,
-            -- Saksbehandler fields
-            sb.stilling AS Stilling,
-            sb.jobbepost AS Jobbepost,
-            sb.jobbtelefon AS Jobbtelefon
-            -- Gjest fields
-            g.gjest_innmelder_id AS GjestInnmelderId
-        FROM innmelding i
-        LEFT JOIN innmelder im ON i.innmelder_id = im.innmelder_id
-        LEFT JOIN person p ON im.person_id = p.person_id
-        LEFT JOIN saksbehandler sb ON i.saksbehandler_id = sb.saksbehandler_id
-        LEFT JOIN gjesteinnmelder g ON i.gjest_innmelder_id = g.gjest_innmelder_id
-        WHERE i.innmelding_id = @InnmeldingId";
-
-            var result = await connection.QueryAsync<InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel,
-                (InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel)>(
-                sql,
-                (innmelding, person, innmelder, saksbehandler) =>
-                {
-                    return (innmelding, person, innmelder, saksbehandler);
-                },
-                new { InnmeldingId = innmeldingId },
-                splitOn: "Fornavn,InnmelderId,Stilling");
-
-            return result.FirstOrDefault();
-        }
-
 
     }
 }

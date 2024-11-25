@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ViewModels;
 
 [Authorize(Roles = UserRoles.Saksbehandler)]
+[AutoValidateAntiforgeryToken]
 public class OversiktAlleInnmeldingerSaksBController : Controller
 {
     private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
