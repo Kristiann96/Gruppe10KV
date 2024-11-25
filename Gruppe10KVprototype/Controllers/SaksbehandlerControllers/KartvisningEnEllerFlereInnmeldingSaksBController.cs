@@ -1,12 +1,14 @@
-﻿using Interface;
+﻿using AuthInterface;
+using Interface;
 using Interfaces;
 using LogicInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Models.Models;
 using ViewModels;
 
-
+[Authorize(Roles = UserRoles.Saksbehandler)]
 public class KartvisningEnEllerFlereInnmeldingSaksBController : Controller
 {
     private readonly IGeometriRepository _geometriRepository;
@@ -25,7 +27,7 @@ public class KartvisningEnEllerFlereInnmeldingSaksBController : Controller
         _enumLogic = enumLogic;
         _vurderingRepository = vurderingRepository;
     }
-
+   
     [HttpGet]
     public async Task<IActionResult> KartvisningEnEllerFlereInnmeldingSaksB(int? innmeldingId, string innmeldingIds)
     {

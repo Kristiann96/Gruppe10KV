@@ -14,17 +14,17 @@
 <body>
 <div class="container">
     <div class="info-panel">
-        @if (Model?.InnmeldingModel != null)
+        @if (Model?.Tittel != null)
         {
-            <h2>@Model.InnmeldingModel.Tittel</h2>
-            <form asp-action="OppdateringAvInnmeldingSaksB" asp-route-id="@Model.InnmeldingModel.InnmeldingId" method="post">
+            <h2>@Model.Tittel</h2>
+            <form asp-action="OppdateringAvInnmeldingSaksB" asp-route-id="@Model.InnmeldingId" method="post">
                 <div class="status-info">
                     <div class="form-group mb-3">
                         <label for="statusDropdown">Status:</label>
                         <select id="statusDropdown" 
                                 class="form-control" 
-                                name="InnmeldingModel.Status" 
-                                asp-for="InnmeldingModel.Status" 
+                                name="Status" 
+                                asp-for="Status" 
                                 asp-items="Model.StatusOptions">
                             <option value="">Velg status</option>
                         </select>
@@ -34,18 +34,19 @@
                         <label for="prioritetDropdown">Prioritet:</label>
                         <select id="prioritetDropdown" 
                                 class="form-control" 
-                                name="InnmeldingModel.Prioritet" 
-                                asp-for="InnmeldingModel.Prioritet" 
+                                name="Prioritet" 
+                                asp-for="Prioritet" 
                                 asp-items="Model.PrioritetOptions">
                             <option value="">Velg prioritet</option>
                         </select>
                     </div>
-                         <div class="form-group mb-3">
+
+                    <div class="form-group mb-3">
                         <label for="kartTypeDropdown">Kart Type:</label>
                         <select id="kartTypeDropdown" 
                                 class="form-control" 
-                                name="InnmeldingModel.KartType" 
-                                asp-for="InnmeldingModel.KartType" 
+                                name="KartType" 
+                                asp-for="KartType" 
                                 asp-items="Model.KartTypeOptions">
                             <option value="">Velg kart type</option>
                         </select>
@@ -55,18 +56,19 @@
                     </div>
                 </div>
             </form>
+            
 
             <div class="description">
                 <h3>Beskrivelse</h3>
-                <p>@Model.InnmeldingModel.Beskrivelse</p>
+                <p>@Model.Beskrivelse</p>
             </div>
             <div class="reporter-info">
                 <h3>Innmelder</h3>
-                @if (Model.InnmelderModel != null && Model.PersonModel != null)
+                @if (!string.IsNullOrEmpty(Model.InnmelderType) && !string.IsNullOrEmpty(Model.Fornavn))
                 {
                     <form asp-action="OppdaterInnmelderType" method="post">
-                        <input type="hidden" name="innmelderId" value="@Model.InnmelderModel.InnmelderId" />
-                        <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId" />
+                        <input type="hidden" name="innmelderId" value="@Model.InnmelderId" />
+                        <input type="hidden" name="innmeldingId" value="@Model.InnmeldingId" />
                         <div class="form-group mb-3">
                             <label for="innmelderTypeDropdown">Velg innmeldertype:</label>
                             <select id="innmelderTypeDropdown"
@@ -78,13 +80,13 @@
                         </div>
                         <button type="submit" class="btn btn-primary mb-3">Lagre innmeldertype</button>
                     </form>
-                    <p><strong>Type:</strong> @Model.InnmelderModel.InnmelderType</p>
-                    <p><strong>Navn:</strong> @Model.PersonModel.Fornavn @Model.PersonModel.Etternavn</p>
-                    <p><strong>Telefon:</strong> @Model.PersonModel.Telefonnummer</p>
+                    <p><strong>Type:</strong> @Model.InnmelderType</p>
+                    <p><strong>Navn:</strong> @Model.Fornavn @Model.Etternavn</p>
+                    <p><strong>Telefon:</strong> @Model.Telefonnummer</p>
                 }
-                else if (Model.InnmeldingModel.GjestInnmelderId.HasValue)
+                else if (Model.GjestInnmelderId > 0)
                 {
-                    <p>Gjesteinnmelder</p>
+                    <p><strong>GjesteinnmelderID:</strong> @Model.GjestInnmelderId</p>
                 }
                 else
                 {
@@ -95,7 +97,7 @@
             <div class="handler-info">
                 <h3>Saksbehandler</h3>
                 <form asp-action="LagreSaksbehandler" method="post">
-                    <input type="hidden" name="innmeldingId" value="@Model.InnmeldingModel.InnmeldingId" />
+                    <input type="hidden" name="innmeldingId" value="@Model.InnmeldingId" />
                     <div class="form-group mb-3">
                         <label for="saksbehandlerDropdown">Velg saksbehandler:</label>
                         <select id="saksbehandlerDropdown"
@@ -109,12 +111,12 @@
                 </form>
                 
 
-                @if (Model.SaksbehandlerModel != null)
+                @if (Model.SaksbehandlerStilling!= null)
                 {
                     <div class="saksbehandlerInformasjon">
-                        <p><strong>Stilling:</strong> @Model.SaksbehandlerModel.Stilling</p>
-                        <p><strong>E-post:</strong> @Model.SaksbehandlerModel.Jobbepost</p>
-                        <p><strong>Telefon:</strong> @Model.SaksbehandlerModel.Jobbtelefon</p>
+                        <p><strong>Stilling:</strong> @Model.SaksbehandlerStilling</p>
+                        <p><strong>E-post:</strong> @Model.SaksbehandlerJobbepost</p>
+                        <p><strong>Telefon:</strong> @Model.SaksbehandlerJobbtelefon</p>
                     </div>
                 }
                 else
@@ -135,7 +137,9 @@
             <div class="chat-header">
                 <div class="chat-user-info">
                     <span class="chat-user-name">
-                        @(Model?.PersonModel != null ? $"{Model.PersonModel.Fornavn} {Model.PersonModel.Etternavn}" : "Gjesteinnmelder")
+                        @((!string.IsNullOrEmpty(Model.Fornavn)) 
+                            ? $"{Model.Fornavn} {Model.Etternavn}" 
+                            : (Model.GjestInnmelderId > 0 ? $"Gjest {Model.GjestInnmelderId}" : "Ukjent"))
                     </span>
                 </div>
             </div>
@@ -179,10 +183,10 @@
     <script>
         const map = MapConfig.initializeMap('map');
         MapControls.initializeSearch(map);
-        @if (Model?.Geometri != null && !string.IsNullOrEmpty(Model.Geometri.GeometriGeoJson))
+        @if (Model?.GeometriGeoJson != null)
         {
             <text>
-                    const geoJsonFeature = JSON.parse('@Html.Raw(Model.Geometri.GeometriGeoJson)');
+                    const geoJsonFeature = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
                     const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
                     map.fitBounds(geoJsonLayer.getBounds());
             </text>
