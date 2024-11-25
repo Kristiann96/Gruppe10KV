@@ -7,6 +7,7 @@ using System.Transactions;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
+    [AutoValidateAntiforgeryToken]
     public class RegistrerDegController : Controller
     {
         private readonly ITransaksjonsRepository _transaksjonsRepository;
@@ -42,14 +43,12 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 
             try
             {
-                // 1. Sjekk om epost allerede er registrert i Identity
                 if (await _authService.DoesEmailExistAsync(model.Email))
                 {
                     ModelState.AddModelError(string.Empty, "Denne e-postadressen er allerede registrert.");
                     return View("RegistrerDeg", model);
                 }
 
-                // 2. Opprett person og innmelder i Dapper-databasen
                 var (success, personId) = await _transaksjonsRepository.OpprettPersonOgInnmelder(
                     model.Fornavn,
                     model.Etternavn,
@@ -62,7 +61,6 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                     return View("RegistrerDeg", model);
                 }
 
-                // 3. Opprett Identity-bruker
                 var identityResult = await _authService.RegisterInnmelderAsync(
                     model.Email,
                     model.Password,
@@ -79,7 +77,6 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                     return View("RegistrerDeg", model);
                 }
 
-                // Alt gikk bra - returner JSON respons
                 return Json(new
                 {
                     success = true,

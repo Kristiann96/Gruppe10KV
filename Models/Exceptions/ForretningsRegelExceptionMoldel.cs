@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace Models.Exceptions
 {
-    
         public class ForretningsRegelExceptionModel : Exception
         {
             public ForretningsRegelExceptionModel() : base() { }
@@ -16,5 +15,4 @@ namespace Models.Exceptions
             public ForretningsRegelExceptionModel(string message, Exception innerException)
                 : base(message, innerException) { }
         }
-    
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-//representerer entitet på db, og er derfor beholdt for å speile databasen - ikke brukt i kode
 namespace Models.Entities
 {
         public class Tilbakemelding
@@ -16,7 +15,6 @@ namespace Models.Entities
             public int InnmeldingId { get; set; }
             public int SaksbehandlerId { get; set; }
 
-            //andre felt
             public DateTime Dato { get; set; } = DateTime.Now;  // Setter nåværende tidspunkt som standard
             public string Innhold { get; set; } = null!;        // NOT NULL, representerer tekstinnholdet i tilbakemeldingen
         }

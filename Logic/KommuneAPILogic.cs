@@ -56,14 +56,12 @@ public class KommuneAPILogic : IKommuneAPILogic
             if (geometri == null || string.IsNullOrEmpty(geometri.GeometriGeoJson))
                 return "Ikke tilgjengelig";
 
-            // Parse GeoJSON to get coordinates
             var geoJsonDoc = JsonDocument.Parse(geometri.GeometriGeoJson);
             var coordinates = GetFirstCoordinate(geoJsonDoc.RootElement);
 
             if (coordinates == null)
                 return "Ikke tilgjengelig";
 
-            // Use /punkt endpoint with coordinates
             string formattedUrl = string.Format(
                 System.Globalization.CultureInfo.InvariantCulture,
                 "https://api.kartverket.no/kommuneinfo/v1/punkt?nord={0:F6}&ost={1:F6}&koordsys=4258",
@@ -107,7 +105,6 @@ public class KommuneAPILogic : IKommuneAPILogic
                     coordinates = element.GetProperty("coordinates");
                 }
 
-                // Håndter forskjellige geometrityper
                 switch (typeProperty.GetString())
                 {
                     case "Point":

@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using ViewModels;
 
-namespace Gruppe10KVprototype.Tests.Controllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class KartfeilSkjemaBekreftelseControllerTester

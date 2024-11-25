@@ -62,7 +62,7 @@ namespace Services.UnitTests
 
             // Verifiserer at repository-metoden aldri blir kalt
             _mockInnmeldingRepo.Verify(
-                x => x.OppdatereInnmeldingAsync(It.IsAny<InnmeldingModel>()), 
+                x => x.OppdatereTittelOgBeskrivelsePaaInnmeldingAsync(It.IsAny<InnmeldingModel>()), 
                 Times.Never()
             );
 

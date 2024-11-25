@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ViewModels;
 
 [Authorize(Roles = UserRoles.Saksbehandler)]
+[AutoValidateAntiforgeryToken]
 public class OversiktAlleInnmeldingerSaksBController : Controller
 {
     private readonly IDataSammenstillingSaksBRepository _dataSammenstillingSaksBRepository;
@@ -70,7 +71,7 @@ public class OversiktAlleInnmeldingerSaksBController : Controller
             KommuneData = kommuneData
         };
 
-        return View("OversiktAlleInnmeldingerSaksB", viewModel);
+        return View(viewModel);
     }
 
     private async Task<string> GetKommuneFraInnmelding(int innmeldingId)

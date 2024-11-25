@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace Models.Models
 {
-    
-    
         public class Geometri
         {
             public int GeometriId { get; set; }

@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using ViewModels;
 using System.Threading.Tasks;
 using Models.Entities;
-using Models.Models;
 using AuthInterface;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
     [Authorize(Roles = UserRoles.Innmelder)]
+    [AutoValidateAntiforgeryToken]
     public class BidraTilKartForbedringController : Controller
     {
         private readonly IGeometriRepository _geometriRepository;
@@ -47,7 +47,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
             try
             {
                 await _vurderingRepository.LeggTilVurderingAsync(vurdering);
-                return Json(new JsonResponseModel() { Success = true, Message = "Takk for ditt bidrag!" });
+                return Json(new  { success = true, Message = "Takk for ditt bidrag!" });
 
             }
             catch

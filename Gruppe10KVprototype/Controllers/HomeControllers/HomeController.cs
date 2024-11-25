@@ -3,33 +3,50 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ViewModels.HomeViewModels;
 
-namespace Gruppe10KVprototype.Controllers.HomeControllers;
-public class HomeController : Controller
+namespace Gruppe10KVprototype.Controllers.HomeControllers
 {
-    private readonly ILogger<HomeController> _logger;
+    [AllowAnonymous]
+    [AutoValidateAntiforgeryToken]
+    public class HomeController : Controller
+    {
 
-    public HomeController(ILogger<HomeController> logger)
-    {
-        _logger = logger;
-    }
+        private readonly ILogger<HomeController> _logger;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        var errorMessage = TempData["ErrorMessage"] as string;
-        return View(new ErrorViewModel
+        public HomeController(ILogger<HomeController> logger)
         {
-            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-            Message = errorMessage
-        });
+            _logger = logger;
+        }
+        
+        public IActionResult Index()
+        {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                if (User.IsInRole("Saksbehandler"))
+                {
+                    return RedirectToAction("LandingsSideSaksB", "LandingsSideSaksB");
+                }
+
+                return RedirectToAction("LandingsSide", "LandingsSide");
+            }
+
+            return View();
+        }
+            
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            var errorMessage = TempData["ErrorMessage"] as string;
+            return View(new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                Message = errorMessage
+            });
+        }
     }
-}
+}       
+    

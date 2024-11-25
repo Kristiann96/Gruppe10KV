@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
+
+[AutoValidateAntiforgeryToken]
 public class KartfeilSkjemaController : Controller
+
 {
     public IActionResult KartfeilSkjema(string geoJson)
     {
@@ -21,7 +24,6 @@ public class KartfeilSkjemaController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
     public IActionResult GaaTilBekreftelse(KartfeilSkjemaViewModel model)
     {
         if (!ModelState.IsValid)

@@ -7,6 +7,7 @@ using ViewModels;
 
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers;
+[AutoValidateAntiforgeryToken]
 public class LoggInnController : Controller
 
 {
@@ -20,7 +21,6 @@ public class LoggInnController : Controller
 
     [HttpPost]
     [AllowAnonymous]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> LoggInn(LoggInnViewModel model)
     {
         if (!ModelState.IsValid)
@@ -38,7 +38,6 @@ public class LoggInnController : Controller
 
             _logger.LogInformation(1, "User logged in.");
 
-            // Redirect basert på rolle
             if (isSaksbehandler)
             {
                 return RedirectToAction("LandingsSideSaksB", "LandingsSideSaksB");

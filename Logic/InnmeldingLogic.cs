@@ -35,10 +35,8 @@ namespace Logic
                 throw new ForretningsRegelExceptionModel("Ugyldig epost-format");
             }
 
-            // Validere innmeldingsdata
             await ValiderInnmeldingData(innmelding);
 
-            // Validere geometri
             await ValidereGeometriData(geometri);
 
             try
@@ -168,7 +166,6 @@ namespace Logic
             {
                 if (coordinates[0].ValueKind == JsonValueKind.Number)
                 {
-                    // Dette er et enkelt koordinatpar [lon, lat]
                     var lon = coordinates[0].GetDouble();
                     var lat = coordinates[1].GetDouble();
 
@@ -183,7 +180,6 @@ namespace Logic
                 }
                 else
                 {
-                    // Rekursivt sjekk alle underkoordinater
                     foreach (var coord in coordinates.EnumerateArray())
                     {
                         ValidereKoordinaterRekursivt(coord);

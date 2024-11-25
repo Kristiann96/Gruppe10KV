@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace Models.Entities
 {
-    
-    
         public class GjesteinnmelderModel
         {
             // Primærnøkkel
@@ -16,6 +14,4 @@ namespace Models.Entities
             // Epost for gjesteinnmelder, unik og NOT NULL
             public string Epost { get; set; } = null!;  // NOT NULL og unik
         }
-
-    
 }

@@ -60,13 +60,10 @@
             </div>
         </div>
     </div>
-
-   
     <div class="map-side">
         <div id="miniMap" class="map-mini"></div>
     </div>
 </div>
-
 
 <div id="bildeDialog" class="modal">
     <div class="modal-content">
@@ -87,22 +84,19 @@
 @section Scripts {
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
     
     <script src="~/js/maps/config/mapConfig.js"></script>
 
     <script>
         
         const miniMap = MapConfig.initializeMap('miniMap', [62.1995, 6.1286], 15);
-
         
         const geoJson = @Html.Raw(Json.Serialize(Model.GeometriGeoJson));
         if (geoJson) {
             const geoJsonLayer = L.geoJSON(JSON.parse(geoJson)).addTo(miniMap);
             miniMap.fitBounds(geoJsonLayer.getBounds());
         }
-
-      
+        
         function visBildeDialog() {
             document.getElementById('bildeDialog').style.display = 'block';
             document.getElementById('bildeFunksjonalitet').checked = false;
@@ -111,7 +105,6 @@
         function lukkDialog() {
             document.getElementById('bildeDialog').style.display = 'none';
         }
-
         
         window.onclick = function (event) {
             if (event.target == document.getElementById('bildeDialog')) {
@@ -120,11 +113,11 @@
         }
 
        function showUploadAlert() {
-    const checkbox = document.getElementById('bildeFunksjonalitet');
-    if (checkbox.checked) {
-        document.getElementById('bildeDialog').style.display = 'block';
-        checkbox.checked = false; // Unchecks the checkbox
-    }
+            const checkbox = document.getElementById('bildeFunksjonalitet');
+            if (checkbox.checked) {
+                document.getElementById('bildeDialog').style.display = 'block';
+                checkbox.checked = false; 
+            }
         }
     </script>
 }

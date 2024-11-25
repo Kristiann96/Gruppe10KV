@@ -1,15 +1,18 @@
 ﻿@model ViewModels.KartvisningEnEllerFlereInnmeldingSaksBViewModel
+
 <!DOCTYPE html>
 <html lang="no">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Innmelding Detaljer</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartvisningEnEllerFlereInnmeldingSaksB.css" />
+    <link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartvisningEnEllerFlereInnmeldingSaksB.css"/>
 </head>
+
 <body>
 <div class="container">
     @foreach (var innmelding in Model.AlleInnmeldinger)
@@ -28,7 +31,7 @@
                 <div class="status-info">
                     <p>Status: <span class="badge">@innmelding.Innmelding.Status</span></p>
                     <p>Prioritet: <span class="badge">@innmelding.Innmelding.Prioritet</span></p>
-                    
+
                     <p>KartType: <span class="badge">@innmelding.Innmelding.KartType</span></p>
 
                     @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
@@ -45,7 +48,7 @@
                     else
                     {
                         <p>
-                            <i class="fa-regular fa-handshake" style="color: #00509c;font-size: 1.7em"></i> Bekreftelser: @innmelding.AntallBekreftelser 
+                            <i class="fa-regular fa-handshake" style="color: #00509c;font-size: 1.7em"></i> Bekreftelser: @innmelding.AntallBekreftelser
                             Avkreftelser: @innmelding.AntallAvkreftelser
                             @if (innmelding.Kommentarer?.Any() == true)
                             {
@@ -84,7 +87,6 @@
                 <div class="innmelding-map" id="map-@innmelding.Innmelding.InnmeldingId"></div>
             </div>
 
-            <!-- Separate popup for each card -->
             <div id="kommentarPopup-@innmelding.Innmelding.InnmeldingId" class="popup-container">
                 <div class="popup-content">
                     <span class="close-popup" onclick="lukkKommentarer(@innmelding.Innmelding.InnmeldingId)">&times;</span>
@@ -101,11 +103,9 @@
     }
 </div>
 
-<!-- JavaScript biblioteker -->
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
-<!-- Våre konfigurasjonsfiler -->
 <script src="~/js/maps/config/mapConfig.js"></script>
 <script src="~/js/maps/utils/mapControls.js"></script>
 
@@ -120,7 +120,6 @@
         popup.style.display = 'none';
     }
 
-    // Lukk popup hvis man klikker utenfor
     window.onclick = function(event) {
         if (event.target.classList.contains('popup-container')) {
             event.target.style.display = 'none';
@@ -129,7 +128,6 @@
 </script>
 
 <script>
-    // Initialiser hvert kart med sin egen geometri
     @foreach (var innmelding in Model.AlleInnmeldinger)
     {
         <text>
@@ -140,7 +138,6 @@
                 const geoJsonFeature = JSON.parse('@Html.Raw(innmelding.Geometri.GeometriGeoJson)');
                 const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map_@(innmelding.Innmelding.InnmeldingId));
                 
-                // Zoom til denne geometrien
                 map_@(innmelding.Innmelding.InnmeldingId).fitBounds(geoJsonLayer.getBounds(), {
                     padding: [20, 20]
                 });
