@@ -1,8 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Models.Entities;
 using Models.Models;
 using Models.Exceptions;
@@ -31,6 +27,7 @@ namespace Logic.Tests
         }
 
         #region ValidereOgLagreNyInnmelding Tests
+
         [TestMethod]
         [Description("Tester vellykket lagring av ny innmelding for innlogget bruker")]
         public async Task ValidereOgLagreNyInnmelding_InnloggetBruker_LagresSuksessfullt()
@@ -93,10 +90,10 @@ namespace Logic.Tests
 
             if (shouldBeValid)
             {
-                var setupMethod = erLoggetInn ?
-                    _transaksjonsRepositoryMock.Setup(x => x.LagreKomplettInnmeldingInnloggetAsync(
-                        It.IsAny<string>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>())) :
-                    _transaksjonsRepositoryMock.Setup(x => x.LagreKomplettInnmeldingAsync(
+                var setupMethod = erLoggetInn
+                    ? _transaksjonsRepositoryMock.Setup(x => x.LagreKomplettInnmeldingInnloggetAsync(
+                        It.IsAny<string>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>()))
+                    : _transaksjonsRepositoryMock.Setup(x => x.LagreKomplettInnmeldingAsync(
                         It.IsAny<string>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>()));
 
                 setupMethod.ReturnsAsync(true);
@@ -120,6 +117,7 @@ namespace Logic.Tests
         #endregion
 
         #region ValiderInnmeldingData Tests
+
         [TestMethod]
         [Description("Tester validering av innmelding tittel")]
         [DataRow("", DisplayName = "Tom tittel")]
@@ -152,9 +150,11 @@ namespace Logic.Tests
 
             Assert.AreEqual("Tittel kan ikke være lengre enn 100 tegn", exception.Message);
         }
+
         #endregion
 
         #region ValidereGeometriData Tests
+
         [TestMethod]
         [Description("Tester validering av geometri med ugyldige koordinater")]
         public async Task ValidereGeometriDataForOppdatering_UgyldigeKoordinater_KasterException()
@@ -186,9 +186,11 @@ namespace Logic.Tests
 
             Assert.AreEqual("Ugyldig geometriformat. Vennligst prøv igjen.", exception.Message);
         }
+
         #endregion
 
         #region Helper Methods
+
         private InnmeldingModel CreateValidInnmelding()
         {
             return new InnmeldingModel
@@ -211,6 +213,7 @@ namespace Logic.Tests
                 InnmeldingId = TEST_INNMELDING_ID
             };
         }
+
         #endregion
     }
 }
