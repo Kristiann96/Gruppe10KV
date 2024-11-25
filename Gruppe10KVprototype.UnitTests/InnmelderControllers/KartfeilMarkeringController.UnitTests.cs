@@ -3,6 +3,7 @@ using Moq;
 using Models.Models;
 using Interface;
 using LogicInterfaces;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Controller.UnitTests
 {

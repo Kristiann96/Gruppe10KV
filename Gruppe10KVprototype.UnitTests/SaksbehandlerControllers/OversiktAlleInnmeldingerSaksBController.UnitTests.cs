@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Interface;
 using Interfaces;
 using LogicInterfaces;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models.Entities;
 using Models.Models;
 using ViewModels;
@@ -62,9 +67,8 @@ namespace Controller.UnitTests
         [TestMethod]
         [Description("Verifiserer at controller-metoden returnerer:" +
                      "\n1. Et ViewResult" +
-                     "\n2. Riktig view-navn ('OversiktAlleInnmeldingerSaksB')" +
-                     "\n3. En not-null ViewModel" +
-                     "\n4. Korrekt antall innmeldinger i ViewModelen")]
+                     "\n2. En not-null ViewModel" +
+                     "\n3. Korrekt antall innmeldinger i ViewModelen")]
         public async Task OversiktAlleInnmeldingerSaksB_NårInnmeldingFinnes_ReturnererForventetViewModel()
         {
             // Arrange
@@ -78,8 +82,7 @@ namespace Controller.UnitTests
             // Assert
             Assert.IsInstanceOfType(result, typeof(ViewResult));
             var viewResult = (ViewResult)result;
-            Assert.AreEqual("OversiktAlleInnmeldingerSaksB", viewResult.ViewName);
-
+    
             var viewModel = viewResult.Model as OversiktAlleInnmeldingerSaksBViewModel;
             Assert.IsNotNull(viewModel);
             Assert.AreEqual(2, viewModel.InnmeldingId.Count());

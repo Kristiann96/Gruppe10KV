@@ -33,26 +33,32 @@ Gruppens system introduserer en ny og kreativ løsning der innmeldere kan benytt
 #### 2. Benytt "Meld inn kartfeil med tegneverktøy" for å melde inn feil i kartet med en gang. Benytt "Bruk GPS for å markere kartfeil" for å ta i bruk sporingstjenesten og melde inn feil ute på tur.
 ---
 
-<img src="https://github.com/user-attachments/assets/98889096-caa8-460c-9159-b60e92cd48f9" alt="Eksempelbilde 1" width="600"/>
+<img src="https://github.com/user-attachments/assets/98889096-caa8-460c-9159-b60e92cd48f9" alt="hjemmeside" width="600"/>
 
 ---
 #### 3. Fyll inn nødvendig informasjon og trykk "Bekreft" for å melde inn feil i kartet.
 ---
 
-<img src="https://github.com/user-attachments/assets/35cf98e4-6c81-429f-b8e8-2ab304baf5f9" alt="Eksempelbilde 2" width="600"/>
-<img src="https://github.com/user-attachments/assets/d0b8a568-eafb-445f-a890-c178630bdeeb" alt="Eksempelbilde 3" width="600"/>
+<img src="https://github.com/user-attachments/assets/35cf98e4-6c81-429f-b8e8-2ab304baf5f9" alt="innmelding1" width="600"/>
+<img src="https://github.com/user-attachments/assets/d0b8a568-eafb-445f-a890-c178630bdeeb" alt="innmelding2" width="600"/>
 
 ---
 #### 4. Opprett bruker eller logg inn dersom du vil motta oppdateringer på din sak. Legg igjen din e-post som gjesteinnmelder om du ikke vil opprette bruker. Oppretter man ikke bruker vil saken knyttes til innmelders e-post.
 ---
 
-<img src="https://github.com/user-attachments/assets/81a3ca90-3556-4c19-b021-ff50e4724826" alt="Eksempelbilde 4" width="600"/>
+<img src="https://github.com/user-attachments/assets/81a3ca90-3556-4c19-b021-ff50e4724826" alt="opprettBruker" width="600"/>
 
 ---
 #### 5. Oppretter man bruker kan man følge status på innmelding under "Mine Innmeldinger".
 ---
 
-<img src="https://github.com/user-attachments/assets/01953ab8-ba13-4c30-90a0-d4b95ee1022f" alt="Eksempelbilde 5" width="600"/>
+<img src="https://github.com/user-attachments/assets/01953ab8-ba13-4c30-90a0-d4b95ee1022f" alt="mineInnmeldinger" width="600"/>
+
+---
+#### 6. Man kan bidra til kartforbedring ved å bekrefte eller avkrefte en anonym brukers innmelding og legge ved kommentar.
+---
+<img src="https://github.com/user-attachments/assets/7356fe07-ede5-4053-9f3b-56fbe635ac54" alt="forbedreKart1" width="600"/>
+<img src="https://github.com/user-attachments/assets/a47a56a8-a328-4950-a1df-7a2b77127668" alt="forbedreKart2" width="600"/>
 
 ---
 <br></br>
@@ -61,7 +67,7 @@ Gruppens system introduserer en ny og kreativ løsning der innmeldere kan benytt
 1. Logg inn med saksbehandlerkonto.
 ---
 
-<img src="https://github.com/user-attachments/assets/298cbd29-ae28-4fc0-9485-76dbc14d8a5e" alt="Eksempelbilde 6" width="600"/>
+<img src="https://github.com/user-attachments/assets/298cbd29-ae28-4fc0-9485-76dbc14d8a5e" alt="saksbehandlerInnlogging" width="600"/>
 
 ---
 2. Gå til "Innmeldingsoversikt" for å se en liste over alle innmeldinger. Gå til "Kart over innmeldinger" for å se alle innmeldinger på kartet. På "Kart over innmeldinger" kan man også markere et område for å få alle innmeldte saker i markert område som vist nedenfor.
@@ -69,40 +75,69 @@ Gruppens system introduserer en ny og kreativ løsning der innmeldere kan benytt
 
 Innmeldingsoversikt:
 
-<img src="https://github.com/user-attachments/assets/0aa5467f-f57d-4994-b355-2c775d2480d8" alt="Eksempelbilde 7" width="600"/>
+<img src="https://github.com/user-attachments/assets/0aa5467f-f57d-4994-b355-2c775d2480d8" alt="innmeldingOversikt" width="600"/>
 
 ---
 Kart over innmeldinger:
 
-<img src="https://github.com/user-attachments/assets/e129e070-ad2f-466f-8e13-522adc698b22" alt="Eksempelbilde 8" width="600"/>
+<img src="https://github.com/user-attachments/assets/e129e070-ad2f-466f-8e13-522adc698b22" alt="innmeldingKart" width="600"/>
 
 ---
 Markerte innmeldinger på kart:
 
-<img src="https://github.com/user-attachments/assets/c30c4b6b-8810-4374-ba37-ecc0889a695d" alt="Eksempelbilde 9" width="600"/>
+<img src="https://github.com/user-attachments/assets/c30c4b6b-8810-4374-ba37-ecc0889a695d" alt="markerteInnmeldinger" width="600"/>
 
 ---
 3. Velg en innmelding for å gi vurdering eller oppdatere status.
 ---
 
-<img src="https://github.com/user-attachments/assets/b6d08f1f-c602-4ce4-b6fa-17e452bb215b" alt="Eksempelbilde 10" width="600"/>
+<img src="https://github.com/user-attachments/assets/b6d08f1f-c602-4ce4-b6fa-17e452bb215b" alt="enkeltInnmeldingSaksB" width="600"/>
 
 ---
 <br><br>
 
 ## Oppsettsinstruksjoner
 
-Klon repositoriet:
+### Forutsetninger:
 
-    git clone https://github.com/Kristiann96/Gruppe10KV.git
+- .NET 8.0 SDK
+- Docker Desktop
+- Visual Studio 2022 eller JetBrains Rider
+- Mermaid extension (valgfritt - for å se database/dataflyt-diagrammer)
+- SSH-nøkkel for databasetilgang
 
+### Oppsett
+#### Prosjektet kan utvikles i:
 
-Naviger til prosjektmappen:
+- Visual Studio 2022
+- JetBrains Rider
 
-    cd Gruppe10KV 
+#### Installasjonstrinn:
+- Klon repositoriet
+    
+        git clone https://github.com/Kristiann96/Gruppe10KV.git
+        
+- Konfigurer connection strings i appsettings.json
+- Kjør EF migrasjoner for identity database
+- Start Docker container
+- Bygg og kjør applikasjonen
 
-Repositoriet er hovedsakelig avhengig av .NET og du kan bygge prosjektet ved hjelp av en IDE som Visual Studio.
-Sørg for at databasetilkoblinger og andre relevante innstillinger er korrekt konfigurert for ditt miljø.
+### Docker-konfigurasjon
+#### Prosjektet bruker Docker Compose for enkel oppstart:
+
+    services:
+      gruppe10kvprototype:
+        image: gruppe10kvprototype
+        build:
+          context: .
+          dockerfile: Gruppe10KVprototype/Dockerfile
+
+### Miljøvariabler
+#### Følgende variabler må konfigureres i appsettings.json:
+
+- MariaDbConnection_kartverket: Connection string til hoveddatabase
+- MariaDbConnection_login_server: Connection string til identity database
+
 
 ---
 <br><br>

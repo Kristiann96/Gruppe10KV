@@ -1,3 +1,4 @@
+using System;
 using LogicInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -8,6 +9,8 @@ using ViewModels;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Controller.UnitTests
 {

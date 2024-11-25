@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Controller.UnitTests
 {
