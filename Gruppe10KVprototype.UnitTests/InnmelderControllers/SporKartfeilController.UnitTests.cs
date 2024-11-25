@@ -4,6 +4,7 @@ using Interface;
 using LogicInterfaces;
 using Models.Models;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Controller.UnitTests
 {

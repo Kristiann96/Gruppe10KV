@@ -1,4 +1,7 @@
-﻿using Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Gruppe10KVprototype.Controllers.SaksbehandlerControllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
@@ -6,6 +9,7 @@ using LogicInterfaces;
 using Models.Models;
 using ViewModels;
 using Interface;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Controller.UnitTests
 {
@@ -97,8 +101,8 @@ namespace Controller.UnitTests
             Assert.IsInstanceOfType(actionResult, typeof(RedirectToActionResult));
 
             var redirectResult = (RedirectToActionResult)actionResult;
-            Assert.AreEqual("KartvisningEnInnmeldingSaksB", redirectResult.ActionName);
-            Assert.AreEqual("KartvisningEnInnmeldingSaksB", redirectResult.ControllerName);
+            Assert.AreEqual("KartvisningEnEllerFlereInnmeldingSaksB", redirectResult.ActionName);
+            Assert.AreEqual("KartvisningEnEllerFlereInnmeldingSaksB", redirectResult.ControllerName);
 
             // Verify TempData was set correctly
             _tempDataMock.VerifySet(td => td["Kommunenummer"] = "0301");
