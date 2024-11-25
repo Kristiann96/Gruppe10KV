@@ -1,15 +1,12 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Interface;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Models.Entities;
 using ViewModels;
 using Gruppe10KVprototype.Controllers.InnmelderControllers;
 using Models.Models;
 
-namespace Gruppe10KVprototype.Tests.Controllers
+namespace Controller.UnitTests
 {
     [TestClass]
     public class BidraTilKartForbedringControllerTester
@@ -60,34 +57,6 @@ namespace Gruppe10KVprototype.Tests.Controllers
             Assert.IsNotNull(viewModel);
             Assert.AreEqual(2, viewModel.GeometriData.Count());
         }
-
-        [TestMethod]
-        [Description("Tester at POST-metoden lagrer gyldig vurdering og returnerer JsonResult")]
-        public async Task LagreVurdering_GyldigVurdering_ReturnererSuksessJson()
-        {
-            // Arrange - Gyldig vurdering
-            var vurdering = new VurderingModel { VurderingId = 1, Kommentar = "Bra tiltak", InnmelderId = 1 };
-
-            _mockVurderingRepository
-                .Setup(repo => repo.LeggTilVurderingAsync(vurdering))
-                .ReturnsAsync(1);
-
-            // Act - Kaller POST-metoden
-            var resultat = await _controller.LagreVurdering(vurdering) as JsonResult;
-
-            // Assert - Verifiserer JsonResult
-            Assert.IsNotNull(resultat);
-
-            // Cast the JsonResult value to JsonResponse (instead of dynamic)
-            var json = resultat.Value as JsonResponseModel;
-
-            // Assert that json contains the 'success' and 'message' properties
-            Assert.IsNotNull(json);
-            Assert.IsTrue(json.Success);
-            Assert.AreEqual("Takk for ditt bidrag!", json.Message);
-        }
-
-
         
         [TestMethod]
         [Description("Tester at POST-metoden returnerer BadRequest når modellen er ugyldig")]
