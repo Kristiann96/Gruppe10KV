@@ -4,6 +4,8 @@
     Layout = "_Layout";
 }
 
+@Html.AntiForgeryToken()
+
 @section Styles {
     <!-- Basis kart-styling - IKKE ENDRE -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -159,7 +161,7 @@
                 kommentarDiv.style.display = 'block';
                 clearTimeout(popupTimer);
             };
-            
+
             sendBtn.onclick = async () => {
                 const kommentar = textarea.value.trim();
 
@@ -168,6 +170,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
                         },
                         body: JSON.stringify({
                             innmeldingId: data.InnmeldingId,
@@ -177,22 +180,28 @@
                     });
 
                     if (response.ok) {
-                        vurdertGeometrier.add(data.InnmeldingId);
-                        aktivVurdering = false;
-                        kommentarDiv.style.display = 'none';
+                        const result = await response.json();
+                        if (result.success) {
+                            vurdertGeometrier.add(data.InnmeldingId);
+                            aktivVurdering = false;
+                            kommentarDiv.style.display = 'none';
 
-                        const takkDiv = document.createElement('div');
-                        takkDiv.className = 'takk-melding';
-                        takkDiv.textContent = 'Takk for din vurdering!';
-                        container.innerHTML = '';
-                        container.appendChild(title);
-                        container.appendChild(takkDiv);
+                            const takkDiv = document.createElement('div');
+                            takkDiv.className = 'takk-melding';
+                            takkDiv.textContent = 'Takk for din vurdering!';
+                            container.innerHTML = '';
+                            container.appendChild(title);
+                            container.appendChild(takkDiv);
 
-                        showMessage('Takk for ditt bidrag!');
+                            showMessage('Takk for ditt bidrag!');
+                        } else {
+                            showMessage(result.message || 'Det oppstod en feil ved lagring av vurderingen.', true);
+                        }
                     } else {
                         showMessage('Det oppstod en feil ved lagring av vurderingen.', true);
                     }
                 } catch (error) {
+                    console.error('Error:', error); // For debugging
                     showMessage('Det oppstod en feil ved sending av vurderingen.', true);
                 }
             };
