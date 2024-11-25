@@ -8,9 +8,18 @@ Denne README-filen fungerer som en rask guide for å forstå, sette opp og jobbe
 ## Innholdsfortegnelse
 
 - [Oversikt](#oversikt)
+- [Eksempler på Bruk](#eksempler-på-bruk)
+    - [For innmeldere](#for-innmeldere)
+    - [For saksbehandlere](#for-saksbehandlere)
 - [Oppsettsinstruksjoner](#oppsettsinstruksjoner)
+    - [Forutsetninger](#forutsetninger)
+    - [Oppsett](#oppsett)
+    - [Docker-konfigurasjon](#docker-konfigurasjon)
+    - [Miljøvariabler](#miljøvariabler)
 - [Struktur](#struktur)
+    - [Systemets arkitektur illustrert](#systemets-arkitektur-illustrert)
 - [Teknologier brukt](#teknologier-brukt)
+    - [Hvorfor vi brukte disse teknologiene](#hvorfor-vi-brukte-disse-teknologiene)
 - [Samarbeidspartnere](#samarbeidspartnere)
 - [Lisens](#lisens)
 
@@ -27,7 +36,7 @@ Gruppens system introduserer en ny og kreativ løsning der innmeldere kan benytt
 - **Datakompilering:** Systemet gir en detaljert oversikt over forskjellige geodata og brukerinnsendte data.
 - **Autentisering og brukeradministrasjon:** Inkluderer et autentiseringssystem for ulike brukertyper, som gjester og registrerte brukere.
 
-## Eksempler på Bruk
+## Eksempler på bruk
 ### For innmeldere:
 #### 1. Gå til nettsiden.
 #### 2. Benytt "Meld inn kartfeil med tegneverktøy" for å melde inn feil i kartet med en gang. Benytt "Bruk GPS for å markere kartfeil" for å ta i bruk sporingstjenesten og melde inn feil ute på tur.
@@ -63,32 +72,32 @@ Gruppens system introduserer en ny og kreativ løsning der innmeldere kan benytt
 ---
 <br></br>
 
-### For Saksbehandlere:
-1. Logg inn med saksbehandlerkonto.
+### For saksbehandlere:
+#### 1. Logg inn med saksbehandlerkonto.
 ---
 
 <img src="https://github.com/user-attachments/assets/298cbd29-ae28-4fc0-9485-76dbc14d8a5e" alt="saksbehandlerInnlogging" width="600"/>
 
 ---
-2. Gå til "Innmeldingsoversikt" for å se en liste over alle innmeldinger. Gå til "Kart over innmeldinger" for å se alle innmeldinger på kartet. På "Kart over innmeldinger" kan man også markere et område for å få alle innmeldte saker i markert område som vist nedenfor.
+#### 2. Gå til "Innmeldingsoversikt" for å se en liste over alle innmeldinger. Gå til "Kart over innmeldinger" for å se alle innmeldinger på kartet. På "Kart over innmeldinger" kan man også markere et område for å få alle innmeldte saker i markert område som vist nedenfor.
 ---
 
-Innmeldingsoversikt:
+#### Innmeldingsoversikt:
 
 <img src="https://github.com/user-attachments/assets/0aa5467f-f57d-4994-b355-2c775d2480d8" alt="innmeldingOversikt" width="600"/>
 
 ---
-Kart over innmeldinger:
+#### Kart over innmeldinger:
 
 <img src="https://github.com/user-attachments/assets/e129e070-ad2f-466f-8e13-522adc698b22" alt="innmeldingKart" width="600"/>
 
 ---
-Markerte innmeldinger på kart:
+#### Markerte innmeldinger på kart:
 
 <img src="https://github.com/user-attachments/assets/c30c4b6b-8810-4374-ba37-ecc0889a695d" alt="markerteInnmeldinger" width="600"/>
 
 ---
-3. Velg en innmelding for å gi vurdering eller oppdatere status.
+#### 3. Velg en innmelding for å gi vurdering eller oppdatere status.
 ---
 
 <img src="https://github.com/user-attachments/assets/b6d08f1f-c602-4ce4-b6fa-17e452bb215b" alt="enkeltInnmeldingSaksB" width="600"/>
