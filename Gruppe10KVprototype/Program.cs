@@ -54,11 +54,11 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
-
+/*
 builder.Services.AddAntiforgery(options => {
     options.HeaderName = "X-CSRF-TOKEN";
 });
-
+*/
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
