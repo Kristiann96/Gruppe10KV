@@ -36,20 +36,6 @@ namespace DataAccess
             return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingIdUpdate });
         }
 
-        public async Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(int innmelderId)
-        {
-            using var connection = _dbConnection.CreateConnection();
-
-            var sql = @"SELECT innmelding_id AS InnmeldingId,
-                       tittel AS Tittel,
-                       status AS Status,
-                       siste_endring AS SisteEndring,
-                       innmelder_id AS InnmelderId
-                FROM innmelding
-                WHERE innmelder_id = @InnmelderId";
-
-            return await connection.QueryAsync<InnmeldingModel>(sql, new { InnmelderId = innmelderId });
-        }
 
         public async Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(string epost)
         {

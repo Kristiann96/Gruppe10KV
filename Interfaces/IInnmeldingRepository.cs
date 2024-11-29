@@ -8,7 +8,6 @@ namespace Interface
     public interface IInnmeldingRepository
     {
         Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate);
-        Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(int innmeldingID);
         Task<string> GetStatusEnumValuesAsync();
         Task<string> GetPrioritetEnumValuesAsync();
         Task<string> GetKartTypeEnumValuesAsync();

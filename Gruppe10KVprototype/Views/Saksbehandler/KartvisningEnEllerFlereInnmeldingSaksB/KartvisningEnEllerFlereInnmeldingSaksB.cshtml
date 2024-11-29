@@ -34,10 +34,6 @@
 
                     <p>KartType: <span class="badge">@innmelding.Innmelding.KartType</span></p>
 
-                    @if (TempData["Kommunenavn"] != null && TempData["Kommunenummer"] != null)
-                    {
-                        <p>Kommune: <span class="badge">@TempData["Kommunenavn"] (@TempData["Kommunenummer"])</span></p>
-                    }
                 </div>
 
                 <div class="vurderinger-info">
@@ -78,7 +74,7 @@
                     <div class="handler-info">
                         <h3>Saksbehandler</h3>
                         <p>@innmelding.SaksbehandlerNavn</p>
-                        <p>Stilling: @innmelding.Saksbehandler.Stilling</p>
+                        
                     </div>
                 }
             </div>

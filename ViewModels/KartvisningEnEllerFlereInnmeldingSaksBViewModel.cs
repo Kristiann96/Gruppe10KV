@@ -14,6 +14,7 @@ namespace ViewModels
         public PersonModel Person { get; set; }
         public InnmelderModel Innmelder { get; set; }
         public SaksbehandlerModel Saksbehandler { get; set; }
+        public string SaksbehandlerStilling { get; set; } = null!;
         public Geometri Geometri { get; set; }
         public int AntallBekreftelser { get; set; }
         public int AntallAvkreftelser { get; set; }
