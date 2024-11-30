@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Models.Entities;
 using Interface;
+using System.Security.Claims;
 
 
 namespace DataAccess
@@ -21,7 +22,7 @@ namespace DataAccess
         {
             _dbConnection = dbConnection;
         }
-        
+
         public async Task<IEnumerable<InnmeldingModel>> GetInnmeldingAsync(int innmeldingIdUpdate)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -37,21 +38,26 @@ namespace DataAccess
         }
 
 
-        public async Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraInnmelderIdAsync(string epost)
+        public async Task<IEnumerable<InnmeldingModel>> HentInnmeldingerFraBrukerAsync(ClaimsPrincipal bruker)
         {
+            var epost = bruker?.Identity?.Name;
+            if (string.IsNullOrEmpty(epost))
+                throw new InvalidOperationException("Brukerens e-post er ikke tilgjengelig.");
+
             using var connection = _dbConnection.CreateConnection();
 
             var sql = @"SELECT innmelding_id AS InnmeldingId,
                        tittel AS Tittel,
                        status AS Status,
                        siste_endring AS SisteEndring,
-                       ig.innmelder_id AS InnmelderId                       
+                       ig.innmelder_id AS InnmelderId
                 FROM innmelding ig
                 JOIN innmelder ir ON ig.innmelder_id = ir.innmelder_id
                 WHERE ir.epost = @Epost";
 
-            return await connection.QueryAsync<InnmeldingModel>(sql, new { @Epost = epost });
+            return await connection.QueryAsync<InnmeldingModel>(sql, new { Epost = epost });
         }
+
 
         private async Task<string> GetEnumValuesForColumnAsync(string tableName, string columnName)
         {
@@ -84,8 +90,8 @@ namespace DataAccess
 
         public async Task<string> GetKartTypeEnumValuesAsync() =>
             await GetEnumValuesForColumnAsync("innmelding", "kart_type");
-        
-        // Todo: Flytt til eget repository (eller slette?)
+
+        // Todo: Flytt til eget repository
         public async Task<string> GetInnmelderTypeEnumValuesAsync() =>
             await GetEnumValuesForColumnAsync("innmelder", "innmelder_type");
 
@@ -122,7 +128,7 @@ namespace DataAccess
                 throw;
             }
         }
-        
+
         public async Task<bool> OppdaterSaksbehandler(int innmeldingId, int? saksbehandlerId)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -153,7 +159,7 @@ namespace DataAccess
                 throw;
             }
         }
-        
+
         public async Task<bool> OppdaterInnmelderType(int innmelderId, InnmeldingModel model)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -183,7 +189,7 @@ namespace DataAccess
                 throw;
             }
         }
-        
+
         public async Task<bool> OppdatereTittelOgBeskrivelsePaaInnmeldingAsync(InnmeldingModel innmelding)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -216,6 +222,27 @@ namespace DataAccess
                 throw;
             }
         }
+
+
+        public async Task<InnmeldingModel> HentInnmeldingOppsummeringAsync(int innmeldingId)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            var sql = @"
+            SELECT 
+                innmelding_id AS InnmeldingId,
+                tittel AS Tittel, 
+                status AS Status, 
+                prioritet AS Prioritet,
+                kart_type AS KartType
+            FROM innmelding
+            WHERE innmelding_id = @innmeldingId";
+
+            return await connection.QuerySingleOrDefaultAsync<InnmeldingModel>(sql, new { InnmeldingId = innmeldingId });
+        }
     }
+
+
+
+
 }
 

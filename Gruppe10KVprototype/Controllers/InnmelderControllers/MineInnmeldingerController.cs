@@ -27,10 +27,10 @@ public class MineInnmeldingerController : Controller
     {
         try
         {
-            var userEmail = User.Identity?.Name;
-            
-            IEnumerable<InnmeldingModel> innmeldinger = await _innmeldingRepository.HentInnmeldingerFraInnmelderIdAsync(userEmail);
+           
+            var innmeldinger = await _innmeldingRepository.HentInnmeldingerFraBrukerAsync(User);
 
+           
             foreach (var innmelding in innmeldinger)
             {
                 innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);

@@ -5,23 +5,35 @@ namespace ViewModels
 {
     public class KartvisningEnEllerFlereInnmeldingSaksBViewModel
     {
-        public List<InnmeldingMedDetaljerViewModel> AlleInnmeldinger { get; set; } = new();
+        public List<InnmeldingOversiktViewModel> AlleInnmeldinger { get; set; } = new();
     }
-    
-    public class InnmeldingMedDetaljerViewModel
+
+    public class InnmeldingOversiktViewModel
     {
-        public InnmeldingModel Innmelding { get; set; }
-        public PersonModel Person { get; set; }
-        public InnmelderModel Innmelder { get; set; }
-        public SaksbehandlerModel Saksbehandler { get; set; }
-        public string SaksbehandlerStilling { get; set; } = null!;
-        public Geometri Geometri { get; set; }
+        public int InnmeldingId { get; set; }
+        public string Tittel { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string Prioritet { get; set; } = string.Empty;
+        public string KartType { get; set; } = string.Empty;
+        public string InnmelderType { get; set; } = string.Empty;
+        public string? SaksbehandlerFornavn { get; set; }
+        public string? SaksbehandlerEtternavn { get; set; }
+
+        public GeometriInfo Geometri { get; set; } = new();
+
         public int AntallBekreftelser { get; set; }
         public int AntallAvkreftelser { get; set; }
-        public IEnumerable<string> Kommentarer { get; set; }
-        
-        public string SaksbehandlerNavn => Person != null
-            ? $"{Person.Fornavn} {Person.Etternavn}"
-            : "Ikke tildelt";
+        public List<string> Kommentarer { get; set; } = new();
+
+        public string SaksbehandlerNavn =>
+            string.IsNullOrEmpty(SaksbehandlerFornavn)
+                ? "Ikke tildelt"
+                : $"{SaksbehandlerFornavn} {SaksbehandlerEtternavn}";
+
+    }
+
+    public class GeometriInfo
+    {
+        public string GeoJson { get; set; } = string.Empty;
     }
 }

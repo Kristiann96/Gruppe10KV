@@ -2,7 +2,6 @@
 
 <!DOCTYPE html>
 <html lang="no">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,24 +16,20 @@
 <div class="container">
     @foreach (var innmelding in Model.AlleInnmeldinger)
     {
-        <div class="innmelding-card" data-innmelding-id="@innmelding.Innmelding.InnmeldingId">
+        <div class="innmelding-card" data-innmelding-id="@innmelding.InnmeldingId">
             <div class="innmelding-info">
                 <div class="title-container">
-                    <h2>@innmelding.Innmelding.Tittel</h2>
-                    <a href="@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB",
-                                 new { id = innmelding.Innmelding.InnmeldingId })"
-                       class="vis-detaljer">
-                        Vis detaljer →
-                    </a>
+                    <h2>@innmelding.Tittel</h2>
+                    <a href="@Url.Action("BehandleInnmeldingSaksB", "BehandleInnmeldingSaksB", new { id = innmelding.InnmeldingId })" 
+                       class="vis-detaljer">Vis detaljer →</a>
                 </div>
 
                 <div class="status-info">
-                    <p>Status: <span class="badge">@innmelding.Innmelding.Status</span></p>
-                    <p>Prioritet: <span class="badge">@innmelding.Innmelding.Prioritet</span></p>
-
-                    <p>KartType: <span class="badge">@innmelding.Innmelding.KartType</span></p>
-
+                    <p>Status: <span class="badge">@innmelding.Status</span></p>
+                    <p>Prioritet: <span class="badge">@innmelding.Prioritet</span></p>
+                    <p>KartType: <span class="badge">@innmelding.KartType</span></p>
                 </div>
+              
 
                 <div class="vurderinger-info">
                     @if (innmelding.AntallBekreftelser == 0 && innmelding.AntallAvkreftelser == 0)
@@ -44,12 +39,12 @@
                     else
                     {
                         <p>
-                            <i class="fa-regular fa-handshake" style="color: #00509c;font-size: 1.7em"></i> Bekreftelser: @innmelding.AntallBekreftelser
+                            <i class="fa-regular fa-handshake" style="color: #00509c;font-size: 1.7em"></i>
+                            Bekreftelser: @innmelding.AntallBekreftelser
                             Avkreftelser: @innmelding.AntallAvkreftelser
-                            @if (innmelding.Kommentarer?.Any() == true)
+                            @if (innmelding.Kommentarer.Any())
                             {
-                                <span class="vis-kommentarer"
-                                      onclick="visKommentarer(@innmelding.Innmelding.InnmeldingId)">
+                                <span class="vis-kommentarer" onclick="visKommentarer(@innmelding.InnmeldingId)">
                                     Klikk for å se kommentarer
                                 </span>
                             }
@@ -59,36 +54,25 @@
 
                 <div class="reporter-info">
                     <h3>Innmelder</h3>
-                    @if (innmelding.Innmelder != null)
-                    {
-                        <p>Type: @innmelding.Innmelder.InnmelderType</p>
-                    }
-                    else
-                    {
-                        <p>Gjesteinnmelder</p>
-                    }
+                    <p>Type: @innmelding.InnmelderType</p>
                 </div>
 
-                @if (innmelding.Saksbehandler != null)
-                {
-                    <div class="handler-info">
-                        <h3>Saksbehandler</h3>
-                        <p>@innmelding.SaksbehandlerNavn</p>
-                        
-                    </div>
-                }
+                <div class="handler-info">
+                    <h3>Saksbehandler</h3>
+                    <p>@innmelding.SaksbehandlerNavn</p>
+                </div>
             </div>
 
             <div class="innmelding-map-container">
-                <div class="innmelding-map" id="map-@innmelding.Innmelding.InnmeldingId"></div>
+                <div class="innmelding-map" id="map-@innmelding.InnmeldingId"></div>
             </div>
 
-            <div id="kommentarPopup-@innmelding.Innmelding.InnmeldingId" class="popup-container">
+            <div id="kommentarPopup-@innmelding.InnmeldingId" class="popup-container">
                 <div class="popup-content">
-                    <span class="close-popup" onclick="lukkKommentarer(@innmelding.Innmelding.InnmeldingId)">&times;</span>
+                    <span class="close-popup" onclick="lukkKommentarer(@innmelding.InnmeldingId)">&times;</span>
                     <h3>Kommentarer</h3>
-                    <div id="kommentarListe-@innmelding.Innmelding.InnmeldingId">
-                        @foreach (var kommentar in innmelding.Kommentarer ?? Enumerable.Empty<string>())
+                    <div id="kommentarListe-@innmelding.InnmeldingId">
+                        @foreach (var kommentar in innmelding.Kommentarer)
                         {
                             <p>@Html.Raw(kommentar)</p>
                         }
@@ -99,50 +83,51 @@
     }
 </div>
 
+
+
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
 <script src="~/js/maps/config/mapConfig.js"></script>
 <script src="~/js/maps/utils/mapControls.js"></script>
 
 <script>
-    function visKommentarer(innmeldingId) {
-        const popup = document.getElementById(`kommentarPopup-${innmeldingId}`);
-        popup.style.display = 'block';
-    }
+   function visKommentarer(innmeldingId) {
+       const popup = document.getElementById(`kommentarPopup-${innmeldingId}`);
+       popup.style.display = 'block';
+   }
 
-    function lukkKommentarer(innmeldingId) {
-        const popup = document.getElementById(`kommentarPopup-${innmeldingId}`);
-        popup.style.display = 'none';
-    }
+   function lukkKommentarer(innmeldingId) {
+       const popup = document.getElementById(`kommentarPopup-${innmeldingId}`);
+       popup.style.display = 'none';
+   }
 
-    window.onclick = function(event) {
-        if (event.target.classList.contains('popup-container')) {
-            event.target.style.display = 'none';
-        }
-    }
-</script>
+   window.onclick = function(event) {
+       if (event.target.classList.contains('popup-container')) {
+           event.target.style.display = 'none';
+       }
+   }
 
-<script>
-    @foreach (var innmelding in Model.AlleInnmeldinger)
-    {
-        <text>
-        (function() {
-            const map_@(innmelding.Innmelding.InnmeldingId) = MapConfig.initializeMap('map-@innmelding.Innmelding.InnmeldingId');
-            
-            try {
-                const geoJsonFeature = JSON.parse('@Html.Raw(innmelding.Geometri.GeometriGeoJson)');
-                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map_@(innmelding.Innmelding.InnmeldingId));
-                
-                map_@(innmelding.Innmelding.InnmeldingId).fitBounds(geoJsonLayer.getBounds(), {
-                    padding: [20, 20]
-                });
-            } catch (e) {
-                console.error('Feil ved parsing av geometri:', e);
-            }
-        })();
-        </text>
-    }
+   document.addEventListener('DOMContentLoaded', function() {
+       @foreach (var innmelding in Model.AlleInnmeldinger)
+       {
+           <text>
+           (function() {
+               const mapId = 'map-@innmelding.InnmeldingId';
+               const map = MapConfig.initializeMap(mapId);
+               
+               try {
+                   const geoJsonFeature = JSON.parse('@Html.Raw(innmelding.Geometri.GeoJson)');
+                   const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
+                   map.fitBounds(geoJsonLayer.getBounds(), {
+                       padding: [20, 20]
+                   });
+               } catch (e) {
+                   console.error('Feil ved parsing av geometri:', e);
+               }
+           })();
+           </text>
+       }
+   });
 </script>
 </body>
 </html>
