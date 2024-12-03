@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Collections;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Entities;
 using Models.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ViewModels;
 
@@ -16,20 +18,18 @@ public class BehandleInnmeldingSaksBViewModel
     public string Fornavn { get; set; } = null!;
     public string Etternavn { get; set; } = null!;
     public string Telefonnummer { get; set; } = null!;
-    public int InnmelderId { get; set; }
+    public int? InnmelderId { get; set; }
     public string InnmelderType { get; set; } = null!;
-    public string SaksbehandlerStilling { get; set; } = null!;
-    public string SaksbehandlerJobbepost { get; set; } = null!;
-    public string SaksbehandlerJobbtelefon { get; set; } = null!;
-    public int GjestInnmelderId { get; set; } 
+    public string DisplayInnmelderType { get; set; }
+    public int? SaksbehandlerId { get; set; }
+    public string Stilling { get; set; } = null!;
+    public string Jobbepost { get; set; } = null!;
+    public string Jobbtelefon { get; set; } = null!;
+    public int? GjestInnmelderId { get; set; }
     public string GeometriGeoJson { get; set; }
-    public List<SelectListItem> StatusOptions { get; set; }
-    public List<SelectListItem> PrioritetOptions { get; set; }
-    public List<SelectListItem> KartTypeOptions { get; set; }
     public int? ValgtSaksbehandlerId { get; set; }
-    public List<SelectListItem> InnmelderTypeOptions { get; set; }
     public List<(SaksbehandlerModel, PersonModel)> SaksbehandlereMedPerson { get; set; }
-    
+
     public IEnumerable<SelectListItem> ValgbareSaksbehandlere
     {
         get
@@ -46,6 +46,21 @@ public class BehandleInnmeldingSaksBViewModel
                 });
         }
     }
+
+    public class ViewEnumOption
+    {
+        public string Value { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+    }
+
+    public IEnumerable<ViewEnumOption> StatusEnums { get; set; } = new List<ViewEnumOption>();
+    public IEnumerable<ViewEnumOption> PrioritetEnums { get; set; } = new List<ViewEnumOption>();
+    public IEnumerable<ViewEnumOption> KartTypeEnums { get; set; } = new List<ViewEnumOption>();
+    public IEnumerable<ViewEnumOption> InnmelderTypeEnums { get; set; } = new List<ViewEnumOption>();
 }
+
+
+
+
 
 

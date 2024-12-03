@@ -159,7 +159,7 @@ namespace DataAccess
                 throw;
             }
         }
-
+        //TODO - burde også være i eget repo
         public async Task<bool> OppdaterInnmelderType(int innmelderId, InnmeldingModel model)
         {
             using var connection = _dbConnection.CreateConnection();

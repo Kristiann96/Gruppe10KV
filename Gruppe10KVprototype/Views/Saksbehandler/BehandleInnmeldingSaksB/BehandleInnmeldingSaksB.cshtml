@@ -1,145 +1,168 @@
+
 @model ViewModels.BehandleInnmeldingSaksBViewModel
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innmelding Detaljer</title>
+
+@{
+    ViewData["Title"] = "Behandle innmelding";
+    Layout = "_Layout";
+}
+
+@section Styles {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="~/css/pages/diverse/chat_demo.css" />
     <link rel="stylesheet" href="~/css/pages/TemporaryCSS/BehandleInnmeldingSaksB.css" />
+}
 
-</head>
-<body>
 <div class="container">
     <div class="info-panel">
         @if (Model?.Tittel != null)
         {
             <h2>@Model.Tittel</h2>
-            <form asp-action="OppdateringAvInnmeldingSaksB" asp-route-id="@Model.InnmeldingId" method="post">
-                <div class="status-info">
-                    <div class="form-group mb-3">
-                        <label for="statusDropdown">Status:</label>
-                        <select id="statusDropdown" 
-                                class="form-control" 
-                                name="Status" 
-                                asp-for="Status" 
-                                asp-items="Model.StatusOptions">
-                            <option value="">Velg status</option>
+
+            <!-- Status Section -->
+            <div class="status-section">
+                <form id="statusForm" method="post" data-innmelding-id="@Model.InnmeldingId">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.InnmeldingId" />
+                    
+                    <div class="form-group">
+                        <label for="Status">Status</label>
+                        <select class="form-control" id="Status" name="Status">
+                            @foreach (var enumOption in Model.StatusEnums)
+                            {
+                                <option value="@enumOption.Value" selected="@(enumOption.Value == Model.Status)">
+                                    @enumOption.DisplayName
+                                </option>
+                            }
                         </select>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="prioritetDropdown">Prioritet:</label>
-                        <select id="prioritetDropdown" 
-                                class="form-control" 
-                                name="Prioritet" 
-                                asp-for="Prioritet" 
-                                asp-items="Model.PrioritetOptions">
-                            <option value="">Velg prioritet</option>
+                    <div class="form-group">
+                        <label for="Prioritet">Prioritet</label>
+                        <select class="form-control" id="Prioritet" name="Prioritet">
+                            @foreach (var enumOption in Model.PrioritetEnums)
+                            {
+                                <option value="@enumOption.Value" selected="@(enumOption.Value == Model.Prioritet)">
+                                    @enumOption.DisplayName
+                                </option>
+                            }
                         </select>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="kartTypeDropdown">Kart Type:</label>
-                        <select id="kartTypeDropdown" 
-                                class="form-control" 
-                                name="KartType" 
-                                asp-for="KartType" 
-                                asp-items="Model.KartTypeOptions">
-                            <option value="">Velg kart type</option>
+                    <div class="form-group">
+                        <label for="KartType">Karttype</label>
+                        <select class="form-control" id="KartType" name="KartType">
+                            @foreach (var enumOption in Model.KartTypeEnums)
+                            {
+                                <option value="@enumOption.Value" selected="@(enumOption.Value == Model.KartType)">
+                                    @enumOption.DisplayName
+                                </option>
+                            }
                         </select>
                     </div>
-                    <div class="form-group mt-4">
-                        <button type="submit" id="saveButton" class="btn btn-primary">Lagre endringer</button>
-                    </div>
-                </div>
-            </form>
-            
+                    <button type="submit" class="btn btn-primary">Lagre endringer</button>
+                </form>
+            </div>
 
+            <!-- Description Section -->
             <div class="description">
                 <h3>Beskrivelse</h3>
                 <p>@Model.Beskrivelse</p>
             </div>
-            <div class="reporter-info">
-                <h3>Innmelder</h3>
-                @if (!string.IsNullOrEmpty(Model.InnmelderType) && !string.IsNullOrEmpty(Model.Fornavn))
-                {
-                    <form asp-action="OppdaterInnmelderType" method="post">
-                        <input type="hidden" name="innmelderId" value="@Model.InnmelderId" />
-                        <input type="hidden" name="innmeldingId" value="@Model.InnmeldingId" />
-                        <div class="form-group mb-3">
-                            <label for="innmelderTypeDropdown">Velg innmeldertype:</label>
-                            <select id="innmelderTypeDropdown"
-                                    name="innmelderType"
-                                    class="form-control"
-                                    asp-items="Model.InnmelderTypeOptions">
-                                <option value="">Velg innmeldertype</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary mb-3">Lagre innmeldertype</button>
-                    </form>
-                    <p><strong>Type:</strong> @Model.InnmelderType</p>
-                    <p><strong>Navn:</strong> @Model.Fornavn @Model.Etternavn</p>
-                    <p><strong>Telefon:</strong> @Model.Telefonnummer</p>
-                }
-                else if (Model.GjestInnmelderId > 0)
-                {
-                    <p><strong>GjesteinnmelderID:</strong> @Model.GjestInnmelderId</p>
-                }
-                else
-                {
-                    <p>Ingen innmelder informasjon tilgjengelig</p>
-                }
-            </div>
 
-            <div class="handler-info">
-                <h3>Saksbehandler</h3>
-                <form asp-action="LagreSaksbehandler" method="post">
+            <!-- Innmelder Info Section -->
+            <div class="reporter-info">
+                <h3>Innmelder informasjon</h3>
+                <form id="innmelderTypeForm" method="post" data-innmelder-id="@Model.InnmelderId">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="innmelderId" value="@Model.InnmelderId" />
                     <input type="hidden" name="innmeldingId" value="@Model.InnmeldingId" />
-                    <div class="form-group mb-3">
-                        <label for="saksbehandlerDropdown">Velg saksbehandler:</label>
-                        <select id="saksbehandlerDropdown"
-                                name="saksbehandlerId"
-                                class="form-control"
-                                asp-items="Model.ValgbareSaksbehandlere">
-                            <option value="">Velg saksbehandler</option>
+
+                    <div class="form-group">
+                        <label for="InnmelderType">Type innmelder</label>
+                        <select class="form-control" id="InnmelderType" name="InnmelderType">
+                            @foreach (var enumOption in Model.InnmelderTypeEnums)
+                            {
+                                <option value="@enumOption.Value" selected="@(enumOption.Value == Model.InnmelderType)">
+                                    @enumOption.DisplayName
+                                </option>
+                            }
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Lagre</button>
+                    <button type="submit" class="btn btn-primary" @(Model.GjestInnmelderId > 0 ? "disabled" : "")>
+                        Oppdater innmeldertype
+                    </button>
                 </form>
-                
-
-                @if (Model.SaksbehandlerStilling!= null)
+                @if (Model.GjestInnmelderId > 0)
                 {
-                    <div class="saksbehandlerInformasjon">
-                        <p><strong>Stilling:</strong> @Model.SaksbehandlerStilling</p>
-                        <p><strong>E-post:</strong> @Model.SaksbehandlerJobbepost</p>
-                        <p><strong>Telefon:</strong> @Model.SaksbehandlerJobbtelefon</p>
+                    <p><strong>Gjesteinnmelder ID:</strong> @Model.GjestInnmelderId</p>
+                }
+                else
+                {
+                    <div class="innmelder-details">
+                        <p><strong>Type:</strong> @Model.DisplayInnmelderType</p>
+                        <p><strong>Navn:</strong> @Model.Fornavn @Model.Etternavn</p>
+                        <p><strong>Telefon:</strong> @Model.Telefonnummer</p>
+                    </div>
+                }
+            </div>
+        }
+
+            <!-- Saksbehandler Section -->
+            <div class="saksbehandlerInformasjon">
+                <h3>Saksbehandler</h3>
+                <form id="saksbehandlerForm" method="post" data-innmelding-id="@Model.InnmeldingId">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="innmeldingId" value="@Model.InnmeldingId" />
+                    
+                    <div class="form-group">
+                        <select class="form-control" id="saksbehandlerId" name="saksbehandlerId">
+                            <option value="">Velg saksbehandler</option>
+                            @foreach (var item in Model.ValgbareSaksbehandlere)
+                            {
+                                <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lagre saksbehandler</button>
+                </form>
+
+                @if (Model.SaksbehandlerId != 0)
+                {
+                    <div class="saksbehandlerDetaljer">
+                        <p><strong>Stilling:</strong> @Model.Stilling</p>
+                        <p><strong>E-post:</strong> @Model.Jobbepost</p>
+                        <p><strong>Telefon:</strong> @Model.Jobbtelefon</p>
                     </div>
                 }
                 else
                 {
-                    <p>Ingen Saksbehandler Angit</p>
+                    <p>Ingen saksbehandler angitt</p>
                 }
             </div>
-        }
-        else
-        {
-            <p>Ingen innmelding funnet</p>
-        }
-    </div>
+       
+        
 
+    <!-- Feedback Message Container -->
+    <div id="feedbackMessage" class="alert" style="display: none;">
+        <span id="feedbackText"></span>
+    </div>
+</div>
+
+
+<!-- Map and Chat Container -->
     <div class="right-column">
+        <!-- Map Section -->
         <div id="map" style="height: 400px; margin-bottom: 2rem;"></div>
+
+        <!-- Chat Section -->
         <div class="chat-section">
             <div class="chat-header">
                 <div class="chat-user-info">
                     <span class="chat-user-name">
-                        @((!string.IsNullOrEmpty(Model.Fornavn)) 
-                            ? $"{Model.Fornavn} {Model.Etternavn}" 
-                            : (Model.GjestInnmelderId > 0 ? $"Gjest {Model.GjestInnmelderId}" : "Ukjent"))
+                        @((!string.IsNullOrEmpty(Model.Fornavn))
+                        ? $"{Model.Fornavn} {Model.Etternavn}"
+                        : (Model.GjestInnmelderId > 0 ? $"Gjest {Model.GjestInnmelderId}" : "Ukjent"))
                     </span>
                 </div>
             </div>
@@ -158,8 +181,9 @@
             </div>
         </div>
     </div>
-</div>
-@if (TempData["SuccessMessage"] != null)
+
+    <!-- Popup Messages -->
+    @if (TempData["SuccessMessage"] != null)
 {
     <div class="popup-message success" id="successPopup">
         <span class="popup-text">@TempData["SuccessMessage"]</span>
@@ -167,79 +191,184 @@
     </div>
 }
 
-@if (TempData["ErrorMessage"] != null)
+    @if (TempData["ErrorMessage"] != null)
 {
     <div class="popup-message error" id="errorPopup">
         <span class="popup-text">@TempData["ErrorMessage"]</span>
         <button class="popup-close" onclick="closePopup('errorPopup')">&times;</button>
     </div>
 }
-
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Core Scripts -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="~/js/maps/config/mapConfig.js"></script>
     <script src="~/js/maps/utils/mapControls.js"></script>
     <script src="~/js/chat_demo.js" asp-append-version="true"></script>
+
+    <!-- Map Initialization Script -->
     <script>
         const map = MapConfig.initializeMap('map');
         MapControls.initializeSearch(map);
         @if (Model?.GeometriGeoJson != null)
-        {
+{
             <text>
-                    const geoJsonFeature = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
-                    const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
-                    map.fitBounds(geoJsonLayer.getBounds());
+                const geoJsonFeature = JSON.parse('@Html.Raw(Model.GeometriGeoJson)');
+                const geoJsonLayer = L.geoJSON(geoJsonFeature).addTo(map);
+                map.fitBounds(geoJsonLayer.getBounds());
             </text>
-        }
+}
     </script>
-   
-<script>
-    function closePopup(id) {
-        const popup = document.getElementById(id);
-        if (popup) {
-            popup.classList.add('fade-out');
-            setTimeout(() => {
-                popup.remove();
-            }, 300);
-        }
-    }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const popups = document.querySelectorAll('.popup-message');
-        popups.forEach(popup => {
-            setTimeout(() => {
+    <!-- Popup Handling Script -->
+    <script>
+            function closePopup(id) {
+                const popup = document.getElementById(id);
                 if (popup) {
                     popup.classList.add('fade-out');
-                    setTimeout(() => {
-                        popup.remove();
-                    }, 300);
+                    setTimeout(() => popup.remove(), 300);
                 }
-            }, 5000);
-        });
-    });
-</script>
-    
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentSaksbehandlerId = '@Model.ValgtSaksbehandlerId';
-            const dropdown = document.getElementById('saksbehandlerDropdown');
+            }
 
-            fetch('/BehandleInnmeldingSaksB/HentSaksbehandlere')
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(item => {
-                        const option = new Option(
-                            item.Text, 
-                            item.Value, 
-                            item.Value === currentSaksbehandlerId,
-                            item.Value === currentSaksbehandlerId
-                        );
-                        dropdown.add(option);
-                    });
-                })
-                
+        document.addEventListener('DOMContentLoaded', () => {
+            const popups = document.querySelectorAll('.popup-message');
+            popups.forEach(popup => {
+                setTimeout(() => {
+                    if (popup) {
+                        popup.classList.add('fade-out');
+                        setTimeout(() => popup.remove(), 300);
+                    }
+                }, 5000);
+            });
         });
     </script>
-    </body>
-</html>
+
+    <!-- AJAX Form Handling Script -->
+    @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // CSRF Setup
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        // Status Form Handler
+        document.getElementById('statusForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            try {
+                const response = await fetch('/BehandleInnmeldingSaksB/OppdateringAvInnmeldingSaksB', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText);
+                }
+
+                const result = await response.json();
+                if (result.success) {
+                    visStatusMelding('Status oppdatert');
+                } else {
+                    visStatusMelding(result.message || 'Kunne ikke oppdatere status', true);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                visStatusMelding('En feil oppstod ved oppdatering av status', true);
+            }
+        });
+
+        // Innmelder Type Form Handler
+        document.getElementById('innmelderTypeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            console.log('FormData innhold:');
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+    
+    try {
+                const response = await fetch('/BehandleInnmeldingSaksB/OppdaterInnmelderType', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText);
+                }
+
+                const result = await response.json();
+                if (result.success) {
+                    visStatusMelding('Innmeldertype oppdatert');
+                } else {
+                    visStatusMelding(result.message || 'Kunne ikke oppdatere innmeldertype', true);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                visStatusMelding('En feil oppstod ved oppdatering av innmeldertype', true);
+            }
+        });
+
+        // Saksbehandler Form Handler
+        document.getElementById('saksbehandlerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            try {
+                const response = await fetch('/BehandleInnmeldingSaksB/LagreSaksbehandler', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText);
+                }
+
+                const result = await response.json();
+                if (result.success) {
+                    visStatusMelding('Saksbehandler oppdatert');
+                    // Oppdater visningen av saksbehandlerdetaljer
+                    location.reload();
+                } else {
+                    visStatusMelding(result.message || 'Kunne ikke oppdatere saksbehandler', true);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                visStatusMelding('En feil oppstod ved oppdatering av saksbehandler', true);
+            }
+        });
+
+        // Status Message Handler
+        function visStatusMelding(melding, erFeil = false) {
+            const popup = document.createElement('div');
+            popup.className = 'status-popup' + (erFeil ? ' error' : ' success');
+            popup.style.display = 'block';
+            popup.style.opacity = '1';
+            popup.innerHTML = `
+                <div class="status-content">
+                    <i class="fas ${erFeil ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+                    <span>${melding}</span>
+                </div>
+            `;
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                popup.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(popup);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+}
