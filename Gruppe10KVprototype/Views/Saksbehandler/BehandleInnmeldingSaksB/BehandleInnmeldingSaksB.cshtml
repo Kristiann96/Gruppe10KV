@@ -349,26 +349,30 @@
             }
         });
 
-        // Status Message Handler
+    // Status Message Handler
         function visStatusMelding(melding, erFeil = false) {
-            const popup = document.createElement('div');
-            popup.className = 'status-popup' + (erFeil ? ' error' : ' success');
-            popup.style.display = 'block';
-            popup.style.opacity = '1';
-            popup.innerHTML = `
-                <div class="status-content">
-                    <i class="fas ${erFeil ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
-                    <span>${melding}</span>
-                </div>
-            `;
-            document.body.appendChild(popup);
-            
-            setTimeout(() => {
-                popup.style.opacity = '0';
-                setTimeout(() => {
-                    document.body.removeChild(popup);
-                }, 300);
-            }, 3000);
-        }
+    const popup = document.createElement('div');
+    popup.className = `popup-message ${erFeil ? 'error' : 'success'}`;
+    popup.id = 'statusPopup';
+    
+    const messageText = document.createElement('span');
+    messageText.className = 'popup-text';
+    messageText.textContent = melding;
+    
+    const closeButton = document.createElement('button');
+    closeButton.className = 'popup-close';
+    closeButton.innerHTML = '&times;';
+    closeButton.onclick = function() {
+        closePopup('statusPopup');
+    };
+    
+    popup.appendChild(messageText);
+    popup.appendChild(closeButton);
+    document.body.appendChild(popup);
+    
+    setTimeout(() => {
+        closePopup('statusPopup');
+    }, 5000);
+}
     </script>
 }
