@@ -16,6 +16,12 @@ classDiagram
         -stilling
     }
 
+      class Vurdering {
+        -dato
+        -innhold
+        -vurderingstype
+    }
+
     class GjesteInnmelder {
         -epost
     }
@@ -39,12 +45,6 @@ classDiagram
         -innhold
     }
 
-     class Vurdering {
-        -dato
-        -innhold
-        -vurderingstype
-    }
-
     Person <|-- Innmelder
     Person <|-- Saksbehandler
     Innmelder "1" -- "*" Innmelding : lager
@@ -53,5 +53,5 @@ classDiagram
     Innmelding "1" -- "*" Geometri : har
     Innmelding "1" -- "*" Tilbakemelding : mottar
     Saksbehandler "1" -- "*" Tilbakemelding : skriver
-    Vurdering "1" -- "*" Innmelding : mottar
-    Vurdering "1" -- "*" Innmelder : skriver
+    Vurdering "*" -- "1" Innmelding : mottar
+    Vurdering "*" -- "1" Innmelder : skriver
