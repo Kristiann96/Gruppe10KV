@@ -15,30 +15,18 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
 
-        public async Task<int> OpprettGjesteinnmelderAsync(GjesteinnmelderModel gjesteinnmelder)
+        public async Task<int> HentGjesteinnmelderIdAsync(string? gjesteinnmelderEpost)
         {
             using var connection = _dbConnection.CreateConnection();
-            using var transaction = connection.BeginTransaction();
 
-            try
-            {
-                var sql = @"
-                INSERT INTO gjesteinnmelder (epost) 
-                VALUES (@Epost);
-                SELECT LAST_INSERT_ID();";
+            var sql = @"
+            SELECT gjesteinnmelder_id as gjesteinnmelderId  FROM gjesteinnmelder
+            WHERE gjesteinnmelder_epost = @gjesteinnmelderEpost;";
 
-                var id = await connection.QuerySingleAsync<int>(sql,
-                    new { Epost = gjesteinnmelder.Epost },
-                    transaction);
+            var gjesteinnmelderId = await connection.QuerySingleOrDefaultAsync<int>(sql,
+                new { gjesteinnmelderEpost = gjesteinnmelderEpost });
 
-                await transaction.CommitAsync();
-                return id;
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            return gjesteinnmelderId;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace DataAccess
         }
 
         public async Task<bool> LagreKomplettInnmeldingAsync(
-            string? gjesteEpost,
+            int? gjestInnmelderId,
             InnmeldingModel innmelding,
             Geometri geometri)
         {
@@ -31,15 +31,6 @@ namespace DataAccess
 
             try
             {
-                var gjesteInnmelderSql = @"
-                    INSERT INTO gjesteinnmelder (epost) 
-                    VALUES (@Epost);
-                    SELECT LAST_INSERT_ID();";
-
-                var gjestInnmelderId = await connection.ExecuteScalarAsync<int>(
-                    gjesteInnmelderSql,
-                    new { Epost = gjesteEpost },
-                    transaction);
 
                 innmelding.GjestInnmelderId = gjestInnmelderId;
 
@@ -88,6 +79,37 @@ namespace DataAccess
                 throw new ForretningsRegelExceptionModel(
                     "Kunne ikke lagre innmeldingen: " + ex.Message,
                     ex);
+            }
+        }
+
+        public void LagreKomplettInnmeldingAsync(string epost, InnmeldingModel innmelding, Geometri geometri)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> OpprettGjesteinnmelderAsync(string epost)
+        {
+            using var connection = _dbConnection.CreateConnection();
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                var sql = @"
+                INSERT INTO gjesteinnmelder (epost) 
+                VALUES (@Epost);
+                SELECT LAST_INSERT_ID();";
+
+                var id = await connection.QuerySingleAsync<int>(sql,
+                    new { Epost = epost },
+                    transaction);
+
+                await transaction.CommitAsync();
+                return id;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
             }
         }
 

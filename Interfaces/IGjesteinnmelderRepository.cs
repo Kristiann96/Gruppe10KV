@@ -5,6 +5,6 @@ namespace Interface
 {
     public interface IGjesteinnmelderRepository
     {
-        Task<int> OpprettGjesteinnmelderAsync(GjesteinnmelderModel gjesteinnmelder);
+        Task<int> HentGjesteinnmelderIdAsync(string? gjesteinnmelderEpost);
     }
 }

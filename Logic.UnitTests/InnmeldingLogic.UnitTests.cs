@@ -62,7 +62,7 @@ namespace Logic.UnitTests
             var erLoggetInn = false;
 
             _transaksjonsRepositoryMock.Setup(x => x.LagreKomplettInnmeldingAsync(
-                    It.IsAny<string>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>()))
+                    It.IsAny<int>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>()))
                 .ReturnsAsync(true);
 
             // Act

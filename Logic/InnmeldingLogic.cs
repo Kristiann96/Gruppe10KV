@@ -16,12 +16,14 @@ namespace Logic
         private const double NORGE_MAX_LON = 32.0;
 
         private readonly ITransaksjonsRepository _transaksjonsRepository;
+        private readonly IGjesteinnmelderRepository _gjesteinnmelderRepository;
         private readonly IGeometriRepository _geometriRepository;
 
-        public InnmeldingLogic(ITransaksjonsRepository transaksjonsRepository, IGeometriRepository geometriRepository)
+        public InnmeldingLogic(ITransaksjonsRepository transaksjonsRepository, IGeometriRepository geometriRepository, IGjesteinnmelderRepository gjesteinnmelderRepository)
         {
             _transaksjonsRepository = transaksjonsRepository;
             _geometriRepository = geometriRepository;
+            _gjesteinnmelderRepository = gjesteinnmelderRepository;
         }
 
         public async Task<bool> ValidereOgLagreNyInnmelding(
@@ -30,10 +32,6 @@ namespace Logic
             string? epost,
             bool erLoggetInn)
         {
-            if (!ErGyldigEpost(epost))
-            {
-                throw new ForretningsRegelExceptionModel("Ugyldig epost-format");
-            }
 
             await ValiderInnmeldingData(innmelding);
 
@@ -41,6 +39,18 @@ namespace Logic
 
             try
             {
+                if (!ErGyldigEpost(epost))
+                {
+                    throw new ForretningsRegelExceptionModel("Ugyldig epost-format");
+                }
+
+                int? gjesteinnmelderId = await _gjesteinnmelderRepository.HentGjesteinnmelderIdAsync(epost);
+
+                if (!gjesteinnmelderId.HasValue)
+                {
+                    gjesteinnmelderId = await _transaksjonsRepository.OpprettGjesteinnmelderAsync(epost);
+                }
+
                 if (erLoggetInn)
                 {
                     return await _transaksjonsRepository.LagreKomplettInnmeldingInnloggetAsync(
@@ -51,7 +61,7 @@ namespace Logic
                 }
 
                 return await _transaksjonsRepository.LagreKomplettInnmeldingAsync(
-                    epost,
+                    gjesteinnmelderId.Value,
                     innmelding,
                     geometri);
             }

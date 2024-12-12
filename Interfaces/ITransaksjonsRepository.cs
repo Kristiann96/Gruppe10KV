@@ -11,15 +11,22 @@ namespace Interface
     public interface ITransaksjonsRepository
     {
         Task<bool> LagreKomplettInnmeldingAsync(
-            string? gjesteEpost,
+            int? gjestInnmelderId,
             InnmeldingModel innmelding,
             Geometri geometri);
-        
+
+        void LagreKomplettInnmeldingAsync(
+            string epost, 
+            InnmeldingModel innmelding, 
+            Geometri geometri);
+
         public Task<bool> LagreKomplettInnmeldingInnloggetAsync(
             string? epost,
             InnmeldingModel innmelding,
             Geometri geometri);
-        
+        Task<int> OpprettGjesteinnmelderAsync(string epost);
+
+
         Task<(bool success, int personId)> OpprettPersonOgInnmelder(
             string fornavn,
             string etternavn,
