@@ -1,100 +1,44 @@
 ﻿using AuthInterface;
-using Interface;
-using Interfaces;
-using LogicInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.Entities;
-using Models.Models;
-using ViewModels;
+using ServicesInterfaces;
 
 [Authorize(Roles = UserRoles.Saksbehandler)]
 [AutoValidateAntiforgeryToken]
 public class KartvisningEnEllerFlereInnmeldingSaksBController : Controller
 {
-    private readonly IGeometriRepository _geometriRepository;
-    private readonly IDataSammenstillingSaksBRepository _dataSammenstillingsRepo;
-    private readonly IEnumLogic _enumLogic;
-    private readonly IVurderingRepository _vurderingRepository;
+    private readonly IKartvisningEnEllerFlereInnmeldingSaksBService _kartvisningService;
 
     public KartvisningEnEllerFlereInnmeldingSaksBController(
-        IGeometriRepository geometriRepository,
-        IDataSammenstillingSaksBRepository dataSammenstillingsRepo,
-        IEnumLogic enumLogic,
-        IVurderingRepository vurderingRepository)
+        IKartvisningEnEllerFlereInnmeldingSaksBService kartvisningService)
     {
-        _geometriRepository = geometriRepository;
-        _dataSammenstillingsRepo = dataSammenstillingsRepo;
-        _enumLogic = enumLogic;
-        _vurderingRepository = vurderingRepository;
+        _kartvisningService = kartvisningService;
     }
-   
+
     [HttpGet]
     public async Task<IActionResult> KartvisningEnEllerFlereInnmeldingSaksB(int? innmeldingId, string innmeldingIds)
     {
-        var viewModel = new KartvisningEnEllerFlereInnmeldingSaksBViewModel();
-
-        async Task<InnmeldingMedDetaljerViewModel> HentInnmeldingMedVurderinger(int id)
-        {
-            var (innmelding, person, innmelder, saksbehandler) =
-                await _dataSammenstillingsRepo.GetInnmeldingMedDetaljerAsync(id);
-            var geometriData = await _geometriRepository.GetGeometriByInnmeldingIdAsync(id);
-
-            if (innmelding == null) return null;
-
-            
-            innmelding.Status = _enumLogic.ConvertToDisplayFormat(innmelding.Status);
-            innmelding.Prioritet = _enumLogic.ConvertToDisplayFormat(innmelding.Prioritet);
-            innmelding.KartType = _enumLogic.ConvertToDisplayFormat(innmelding.KartType);
-            if (innmelder != null)
-            {
-                innmelder.InnmelderType = _enumLogic.ConvertToDisplayFormat(innmelder.InnmelderType);
-            }
-
-            
-            var (antallBekreftelser, antallAvkreftelser) =
-                await _vurderingRepository.HentAntallVurderingerAsync(id);
-            var kommentarer = await _vurderingRepository.HentKommentarerForInnmeldingAsync(id);
-
-            return new InnmeldingMedDetaljerViewModel
-            {
-                Innmelding = innmelding,
-                Person = person,
-                Innmelder = innmelder,
-                Saksbehandler = saksbehandler,
-                Geometri = geometriData,
-                AntallBekreftelser = antallBekreftelser,
-                AntallAvkreftelser = antallAvkreftelser,
-                Kommentarer = kommentarer
-            };
-        }
-
         if (innmeldingId.HasValue)
         {
-            var innmeldingDetaljer = await HentInnmeldingMedVurderinger(innmeldingId.Value);
-            if (innmeldingDetaljer != null)
+            var viewModel = await _kartvisningService.HentKartvisningForEnkeltInnmeldingAsync(innmeldingId.Value);
+            if (!viewModel.AlleInnmeldinger.Any())
             {
-                viewModel.AlleInnmeldinger.Add(innmeldingDetaljer);
+                return NotFound("Ingen innmelding funnet");
             }
+            return View(viewModel);
         }
-        else if (!string.IsNullOrEmpty(innmeldingIds))
+
+        if (!string.IsNullOrEmpty(innmeldingIds))
         {
             var idListe = innmeldingIds.Split(',').Select(int.Parse);
-            foreach (var id in idListe)
+            var viewModel = await _kartvisningService.HentKartvisningForFlereInnmeldingerAsync(idListe);
+            if (!viewModel.AlleInnmeldinger.Any())
             {
-                var innmeldingDetaljer = await HentInnmeldingMedVurderinger(id);
-                if (innmeldingDetaljer != null)
-                {
-                    viewModel.AlleInnmeldinger.Add(innmeldingDetaljer);
-                }
+                return NotFound("Ingen innmeldinger funnet");
             }
+            return View(viewModel);
         }
 
-        if (!viewModel.AlleInnmeldinger.Any())
-        {
-            return NotFound("Ingen innmeldinger funnet");
-        }
-
-        return View(viewModel);
+        return NotFound("Ingen innmeldinger spesifisert");
     }
 }

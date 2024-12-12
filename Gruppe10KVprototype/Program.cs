@@ -70,23 +70,24 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/Map/{1}/{0}.cshtml");
     });
 
-// Register DapperDBConnectionDummy as a service
+// Register DapperDBConnection as a service
 builder.Services.AddScoped<DapperDBConnection>();
 
-// Registrering av repos og interfaces, og logic og logicinterfaces
+// Registrering av repos og interfaces
 builder.Services.AddScoped<IGeometriRepository, GeometriRepository>();
 builder.Services.AddHttpClient<IKommuneAPILogic, KommuneAPILogic>();
 builder.Services.AddScoped<IInnmeldingRepository, InnmeldingRepository>();
 builder.Services.AddScoped<IVurderingRepository, VurderingRepository>();
-builder.Services.AddScoped<IEnumLogic, EnumLogic>();
 builder.Services.AddScoped<IDataSammenstillingSaksBRepository, DataSammenstillingSaksBRepository>();
 builder.Services.AddScoped<IGjesteinnmelderRepository, GjesteinnmelderRepository>();
 builder.Services.AddScoped<ITransaksjonsRepository, TransaksjonsRepository>();
-builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
 builder.Services.AddScoped<ISaksbehandlerRepository, SaksbehandlerRepository>();
+builder.Services.AddScoped<IInnmelderRepository, InnmelderRepository>();
+builder.Services.AddScoped<IEnumLogic, EnumLogic>();
 
 // Registrering av services og interfaces
 builder.Services.AddScoped<IOppdatereInnmeldingService, OppdatereInnmeldingService>();
+builder.Services.AddScoped<IKartvisningEnEllerFlereInnmeldingSaksBService, KartvisningEnEllerFlereInnmeldingSaksBService>();
 
 // og logic og logicinterfaces
 builder.Services.AddScoped<IInnmeldingLogic, InnmeldingLogic>();

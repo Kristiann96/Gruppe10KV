@@ -1,7 +1,11 @@
 ﻿using Dapper;
-using MySqlConnector;
-using System.Threading.Tasks;
 using Models.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Interfaces;
 using Interface;
 
 namespace DataAccess
@@ -15,55 +19,18 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
 
-        public async Task<bool> ErGyldigInnmelderEpost(string epost)
+        public async Task<InnmelderModel?> HentInnmelderTypeAsync(int innmeldingId)
         {
-            const string sql = @"
-            SELECT COUNT(1) 
-            FROM innmelder i
-            WHERE i.epost = @Epost";
-
             using var connection = _dbConnection.CreateConnection();
-            var count = await connection.QuerySingleOrDefaultAsync<int>(sql, new { Epost = epost });
-            return count > 0;
-        }
+            var sql = @"
+            SELECT 
+                i.innmelder_id AS InnmelderId,
+                i.innmelder_type AS InnmelderType
+            FROM innmelding im
+            JOIN innmelder i ON im.innmelder_id = i.innmelder_id
+            WHERE im.innmelding_id = @innmeldingId";
 
-        public async Task<InnmelderModel?> HentInnmelderMedEpost(string epost)
-        {
-            const string sql = @"
-            SELECT i.innmelder_id as InnmelderId, 
-                   i.person_id as PersonId,
-                   i.epost as Epost,
-                   i.innmelder_type as InnmelderType
-            FROM innmelder i
-            WHERE i.epost = @Epost";
-
-            using var connection = _dbConnection.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<InnmelderModel>(sql, new { Epost = epost });
-        }
-
-        public async Task<InnmelderModel?> HentInnmelding(int personId)
-        {
-            const string sql = @"
-            SELECT i.innmelder_id as InnmelderId, 
-                   i.person_id as PersonId,
-                   i.epost as Epost,
-                   i.innmelder_type as InnmelderType
-            FROM innmelder i
-            WHERE i.person_id = @PersonId";
-
-            using var connection = _dbConnection.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<InnmelderModel>(sql, new { PersonId = personId });
-        }
-
-        public async Task<int> HentInnmelderIdMedEpost(string epost)
-        {
-            const string sql = @"
-            SELECT i.innmelder_id as InnmelderId
-            FROM innmelder i
-            WHERE i.epost = @Epost";
-
-            using var connection = _dbConnection.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<int>(sql, new { Epost = epost });
+            return await connection.QuerySingleOrDefaultAsync<InnmelderModel>(sql, new { InnmeldingId = innmeldingId });
         }
     }
 }

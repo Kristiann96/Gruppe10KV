@@ -1,13 +1,15 @@
-﻿using System.Threading.Tasks;
-using Models.Entities;
+﻿using Models.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Interface
+namespace Interfaces
 {
     public interface IInnmelderRepository
     {
-        Task<bool> ErGyldigInnmelderEpost(string epost);
-        Task<InnmelderModel?> HentInnmelderMedEpost(string epost);
-        Task<InnmelderModel?> HentInnmelding(int personId);
-        Task<int> HentInnmelderIdMedEpost(string epost);
+        Task<InnmelderModel?> HentInnmelderTypeAsync(int innmeldingId);
+
     }
 }

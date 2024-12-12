@@ -16,7 +16,7 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
 
-        public async Task<(InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel)>
+        public async Task<(InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel, GjesteinnmelderModel)>
             GetInnmeldingMedDetaljerAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -35,9 +35,9 @@ namespace DataAccess
                 i.innmelder_id AS InnmelderId,
                 i.innmelder_type AS InnmelderType,
                 s.saksbehandler_id AS SaksbehandlerId,
-                s.stilling AS SaksbehadlderStilling,
-                s.jobbepost AS SaksbehandlerJobbepost,
-                s.jobbtelefon AS SaksbehandlerJobbtelefon,
+                s.stilling AS Stilling,
+                s.jobbepost AS Jobbepost,
+                s.jobbtelefon AS Jobbtelefon,
                 g.gjest_innmelder_id AS GjestInnmelderId
             FROM innmelding im
             LEFT JOIN innmelder i ON im.innmelder_id = i.innmelder_id
@@ -46,13 +46,13 @@ namespace DataAccess
             LEFT JOIN gjesteinnmelder g ON im.gjest_innmelder_id = g.gjest_innmelder_id
             WHERE im.innmelding_id = @InnmeldingId";
 
-            var result = await connection.QueryAsync<InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel,
-                (InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel)>(
+            var result = await connection.QueryAsync<InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel, GjesteinnmelderModel,
+                (InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel, GjesteinnmelderModel)>(
                 sql,
-                (innmelding, person, innmelder, saksbehandler) =>
-                    (innmelding, person, innmelder, saksbehandler),
+                (innmelding, person, innmelder, saksbehandler,gjesteinnmelder) =>
+                    (innmelding, person, innmelder, saksbehandler,gjesteinnmelder),
                 new { InnmeldingId = innmeldingId },
-                splitOn: "PersonId,InnmelderId,SaksbehandlerId"
+                splitOn: "PersonId,InnmelderId,SaksbehandlerId,GjestInnmelderId"
             );
 
             return result.FirstOrDefault();
