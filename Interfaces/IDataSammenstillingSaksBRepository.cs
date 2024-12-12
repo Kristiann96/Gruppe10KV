@@ -10,7 +10,7 @@ namespace Interfaces
 {
     public interface IDataSammenstillingSaksBRepository
     {
-        Task<(InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel)> GetInnmeldingMedDetaljerAsync(
+        Task<(InnmeldingModel, PersonModel, InnmelderModel, SaksbehandlerModel,GjesteinnmelderModel)> GetInnmeldingMedDetaljerAsync(
             int innmeldingId);
 
         Task<(IEnumerable<(InnmeldingModel, PersonModel, Geometri, GjesteinnmelderModel, InnmelderModel)> Data, int TotalPages)>

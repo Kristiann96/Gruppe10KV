@@ -1,0 +1,57 @@
+classDiagram
+    class Person {
+        -fornavn
+        -etternavn
+        -telefonnummer
+    }
+
+    class Innmelder {
+        -epost
+        -innmelderType
+    }
+
+    class Saksbehandler {
+        -jobbepost
+        -jobbtelefon
+        -stilling
+    }
+
+      class Vurdering {
+        -dato
+        -innhold
+        -vurderingstype
+    }
+
+    class GjesteInnmelder {
+        -epost
+    }
+
+    class Innmelding {
+        -tittel
+        -beskrivelse
+        -innmeldingstidspunkt
+        -status
+        -sisteEndring
+        -prioritet
+        -kartType
+    }
+
+    class Geometri {
+        -geometriData
+    }
+
+    class Tilbakemelding {
+        -dato
+        -innhold
+    }
+
+    Person <|-- Innmelder
+    Person <|-- Saksbehandler
+    Innmelder "1" -- "*" Innmelding : lager
+    GjesteInnmelder "1" -- "*" Innmelding : lager
+    Saksbehandler "1" -- "*" Innmelding : behandler
+    Innmelding "1" -- "*" Geometri : har
+    Innmelding "1" -- "*" Tilbakemelding : mottar
+    Saksbehandler "1" -- "*" Tilbakemelding : skriver
+    Vurdering "*" -- "1" Innmelding : mottar
+    Vurdering "*" -- "1" Innmelder : skriver

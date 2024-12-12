@@ -18,7 +18,7 @@ namespace DataAccess
         {
             _dbConnection = dbConnection;
         }
-        
+
         public async Task<IEnumerable<Geometri>> GetAllGeometriAsync()
         {
             using var connection = _dbConnection.CreateConnection();
@@ -26,7 +26,7 @@ namespace DataAccess
                 "SELECT geometri_id AS GeometriId, innmelding_id AS InnmeldingId, ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri;";
             return await connection.QueryAsync<Geometri>(sql);
         }
-        
+
         public async Task<Geometri> GetGeometriByInnmeldingIdAsync(int innmeldingId)
         {
             using var connection = _dbConnection.CreateConnection();
@@ -101,7 +101,10 @@ namespace DataAccess
                 "SELECT ST_AsGeoJSON(geometri_data) AS GeometriGeoJson FROM geometri WHERE innmelding_id = @InnmeldingId";
             return await connection.QuerySingleOrDefaultAsync<Geometri>(sql, new { InnmeldingId = innmeldingId });
         }
+
+        
     }
+
 }
 
 

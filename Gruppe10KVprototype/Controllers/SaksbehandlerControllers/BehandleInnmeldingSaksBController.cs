@@ -1,5 +1,6 @@
 using Logic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ViewModels;
 using Models.Models;
@@ -49,8 +50,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         {
             try
             {
-
-                var (innmelding, person, innmelder, saksbehandler) =
+                var (innmelding, person, innmelder, saksbehandler,gjesteinnmelder) =
                     await _dataSammenstillingSaksBRepository.GetInnmeldingMedDetaljerAsync(id);
 
                 if (innmelding == null)
@@ -59,16 +59,7 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                     return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
                 }
 
-
                 var geometri = await _geometriRepository.GetForBehandleInnmedingAsync(id);
-
-
-                var statusOptions = await TryGetEnumOptions(_enumLogic.GetFormattedStatusEnumValuesAsync);
-                var prioritetOptions = await TryGetEnumOptions(_enumLogic.GetFormattedPrioritetEnumValuesAsync);
-                var kartTypeOptions = await TryGetEnumOptions(_enumLogic.GetFormattedKartTypeEnumValuesAsync);
-                var innmelderOptions = await TryGetEnumOptions(_enumLogic.GetFormattedInnmelderTypeEnumValuesAsync);
-
-
                 var saksbehandlereMedPerson = await _saksbehandlerRepository.HentAlleSaksbehandlereMedPersonAsync()
                                               ?? new List<(SaksbehandlerModel, PersonModel)>();
 
@@ -84,25 +75,53 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                     Fornavn = person?.Fornavn,
                     Etternavn = person?.Etternavn,
                     Telefonnummer = person?.Telefonnummer,
+                    InnmelderId = innmelder?.InnmelderId?? 0,
                     InnmelderType = innmelder?.InnmelderType,
-
-                    SaksbehandlerStilling = saksbehandler?.Stilling,
-                    SaksbehandlerJobbepost = saksbehandler?.Jobbepost,
-                    SaksbehandlerJobbtelefon = saksbehandler?.Jobbtelefon,
-                    GeometriGeoJson = geometri.GeometriGeoJson,
-                    StatusOptions = statusOptions,
-                    PrioritetOptions = prioritetOptions,
-                    KartTypeOptions = kartTypeOptions,
-                    InnmelderTypeOptions = innmelderOptions,
+                    DisplayInnmelderType = _enumLogic.ConvertToDisplayFormat(innmelder?.InnmelderType),
+                    SaksbehandlerId = saksbehandler?.SaksbehandlerId ?? 0,
+                    Stilling = saksbehandler?.Stilling,
+                    Jobbepost = saksbehandler?.Jobbepost,
+                    Jobbtelefon = saksbehandler?.Jobbtelefon,
                     ValgtSaksbehandlerId = saksbehandler?.SaksbehandlerId,
-                    SaksbehandlereMedPerson = saksbehandlereMedPerson
+                    GjestInnmelderId = gjesteinnmelder?.GjestInnmelderId?? 0,
+                    GeometriGeoJson = geometri.GeometriGeoJson,
+                    
+                    SaksbehandlereMedPerson = saksbehandlereMedPerson,
+
+                    
+                    StatusEnums = (await _enumLogic.GetFormattedStatusEnumValuesAsync())
+                        .Select(value => new BehandleInnmeldingSaksBViewModel.ViewEnumOption
+                        {
+                            Value = _enumLogic.ConvertToDbFormat(value),
+                            DisplayName = value
+                        }),
+
+                    PrioritetEnums = (await _enumLogic.GetFormattedPrioritetEnumValuesAsync())
+                        .Select(value => new BehandleInnmeldingSaksBViewModel.ViewEnumOption
+                        {
+                            Value = _enumLogic.ConvertToDbFormat(value),
+                            DisplayName = value
+                        }),
+
+                    KartTypeEnums = (await _enumLogic.GetFormattedKartTypeEnumValuesAsync())
+                        .Select(value => new BehandleInnmeldingSaksBViewModel.ViewEnumOption
+                        {
+                            Value = _enumLogic.ConvertToDbFormat(value),
+                            DisplayName = value
+                        }),
+
+                    InnmelderTypeEnums = (await _enumLogic.GetFormattedInnmelderTypeEnumValuesAsync())
+                        .Select(value => new BehandleInnmeldingSaksBViewModel.ViewEnumOption
+                        {
+                            Value = _enumLogic.ConvertToDbFormat(value),
+                            DisplayName = value
+                        })
                 };
 
                 return View(viewModel);
             }
             catch (Exception)
             {
-
                 TempData["ErrorMessage"] = "Det oppstod en feil ved lasting av innmeldingen";
                 return RedirectToAction("OversiktAlleInnmeldingerSaksB", "OversiktAlleInnmeldingerSaksB");
             }
@@ -135,14 +154,11 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
         }
 
 
-        [HttpPost("{id}")]
-        public async Task<IActionResult> OppdateringAvInnmeldingSaksB(int id,
-            BehandleInnmeldingSaksBViewModel viewModel)
+        [HttpPost]
+        public async Task<IActionResult> OppdateringAvInnmeldingSaksB(int id, BehandleInnmeldingSaksBViewModel viewModel)
         {
             try
             {
-
-
                 var model = new InnmeldingModel
                 {
                     InnmeldingId = id,
@@ -151,40 +167,35 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
                     KartType = _enumLogic.ConvertToDbFormat(viewModel.KartType)
                 };
 
-                model.Status = _enumLogic.ConvertToDbFormat(model.Status);
-                model.Prioritet = _enumLogic.ConvertToDbFormat(model.Prioritet);
-                model.KartType = _enumLogic.ConvertToDbFormat(model.KartType);
-
-                var isStatusValid = await _enumLogic.ValidateStatusValueAsync(model.Status);
-                var isPrioritetValid = await _enumLogic.ValidatePrioritetValueAsync(model.Prioritet);
-                var isKartTypeValid = await _enumLogic.ValidateKartTypeValueAsync(model.KartType);
-
-                if (!isStatusValid || !isPrioritetValid || !isKartTypeValid)
+                var isValid = await ValidateEnumValues(model);
+                if (!isValid)
                 {
-                    TempData["ErrorMessage"] = "En eller flere verdier er ugyldige";
-                    return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id });
+                    return Json(new { success = false, message = "En eller flere verdier er ugyldige" });
                 }
 
                 var result = await _innmeldingRepository.OppdatereEnumSaksBAsync(id, model);
 
-                if (result)
+                return Json(new
                 {
-                    TempData["SuccessMessage"] = "Lagret";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Lagring feilet";
-                }
-
-                return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id });
+                    success = result,
+                    message = result ? "Endringer lagret" : "Kunne ikke lagre endringer"
+                });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Lagring feilet";
-                return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id });
+                return Json(new { success = false, message = "Det oppstod en feil ved lagring" });
             }
         }
-        
+
+        private async Task<bool> ValidateEnumValues(InnmeldingModel model)
+        {
+            var isStatusValid = await _enumLogic.ValidateStatusValueAsync(model.Status);
+            var isPrioritetValid = await _enumLogic.ValidatePrioritetValueAsync(model.Prioritet);
+            var isKartTypeValid = await _enumLogic.ValidateKartTypeValueAsync(model.KartType);
+
+            return isStatusValid && isPrioritetValid && isKartTypeValid;
+        }
+
         [HttpPost]
         public async Task<IActionResult> LagreSaksbehandler(int innmeldingId, int? saksbehandlerId)
         {
@@ -192,59 +203,54 @@ namespace Gruppe10KVprototype.Controllers.SaksbehandlerControllers
             {
                 var result = await _innmeldingRepository.OppdaterSaksbehandler(innmeldingId, saksbehandlerId);
 
-                if (result)
+                return Json(new
                 {
-                    TempData["SuccessMessage"] = "Saksbehandler er oppdatert";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Kunne ikke finne innmeldingen";
-                }
+                    success = result,
+                    message = result ? "Saksbehandler er oppdatert" : "Kunne ikke finne innmeldingen"
+                });
             }
             catch (Exception)
             {
-                TempData["ErrorMessage"] = "Kunne ikke oppdatere saksbehandler";
+                return Json(new
+                {
+                    success = false,
+                    message = "Kunne ikke oppdatere saksbehandler"
+                });
             }
-
-            return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id = innmeldingId });
         }
 
         [HttpPost]
-        public async Task<IActionResult> OppdaterInnmelderType(string innmelderType, int innmelderId, int innmeldingId)
+        public async Task<IActionResult> OppdaterInnmelderType([FromForm] string innmelderType, [FromForm] int innmelderId, [FromForm] int innmeldingId)
         {
             try
             {
-
-                var dbInnmelderType = _enumLogic.ConvertToDbFormat(innmelderType);
-
-
-                var isValid = await _enumLogic.ValidateInnmelderTypeValueAsync(dbInnmelderType);
+               
+                var isValid = await _enumLogic.ValidateInnmelderTypeValueAsync(innmelderType);
                 if (!isValid)
                 {
-                    TempData["ErrorMessage"] = "Ugyldig innmelder type";
-                    return await BehandleInnmeldingSaksB(innmeldingId);
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Ugyldig innmelder type"
+                    });
                 }
 
-
-                var model = new InnmeldingModel { InnmelderType = dbInnmelderType };
+                var model = new InnmeldingModel { InnmelderType = innmelderType };
                 var result = await _innmeldingRepository.OppdaterInnmelderType(innmelderId, model);
 
-                if (result)
+                return Json(new
                 {
-                    TempData["SuccessMessage"] = "Innmeldertype er oppdatert";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Kunne ikke finne innmelderen";
-                }
-
-
-                return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id = innmeldingId });
+                    success = result,
+                    message = result ? "Innmeldertype er oppdatert" : "Kunne ikke finne innmelderen"
+                });
             }
             catch (Exception)
             {
-                TempData["ErrorMessage"] = "Kunne ikke oppdatere innmeldertype";
-                return RedirectToAction(nameof(BehandleInnmeldingSaksB), new { id = innmeldingId });
+                return Json(new
+                {
+                    success = false,
+                    message = "Kunne ikke oppdatere innmeldertype"
+                });
             }
         }
     }

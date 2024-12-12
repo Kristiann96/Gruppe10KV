@@ -81,4 +81,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Saksbehandler\LandingsSideSaksB\KartvisningAlleInnmeldingerSaksB\" />
+  </ItemGroup>
+
 </Project>

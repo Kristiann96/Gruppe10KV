@@ -1,0 +1,219 @@
+﻿@model ViewModels.KartvisningAlleInnmeldingerSaksBViewModel
+
+@{
+    ViewData["Title"] = "Kartvisning - Alle Innmeldinger";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+<link rel="stylesheet" href="~/css/pages/TemporaryCSS/KartvisningAlleInnmeldingerSaksB.css" />
+
+<div class="container-fluid p-0">
+    <div id="welcomeModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">Velkommen til oversikt over alle innmeldinger</h2>
+            <p class="modal-text">
+                Her kan du enten velge flere innmeldinger ved å tegne et utsnitt med verktøyet, 
+                eller klikke direkte på en innmelding for å se oppsummering.
+            </p>
+            <button id="acceptBtn" class="modal-button">OK, jeg forstår</button>
+        </div>
+    </div>
+    <div id="map"></div>
+    <div id="validationMessage" class="validation-message"></div>
+
+    <div class="utsnitt-controls">
+        <button id="visUtsnittBtn" class="utsnitt-button" disabled>Vis utsnitt</button>
+        <button id="clearUtsnittBtn" class="utsnitt-button clear" disabled>Fjern utsnitt</button>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+
+
+<script src="~/js/maps/config/mapConfig.js"></script>
+<script src="~/js/maps/config/drawConfig.js"></script>
+<script src="~/js/maps/services/wmsService.js"></script>
+<script src="~/js/maps/utils/mapControls.js"></script>
+
+
+<script>
+   
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('map').style.pointerEvents = 'none';
+    });
+
+    
+    document.getElementById('acceptBtn').addEventListener('click', function() {
+    document.getElementById('welcomeModal').classList.add('hide');
+    document.getElementById('map').style.pointerEvents = 'auto';
+    });
+
+   
+    console.log('Initialiserer kart');
+    const map = MapConfig.initializeMap('map');
+    MapControls.initializeControls(map)
+    console.log('Kart initialisert:', map);
+
+  
+    function closePanel() {
+        document.getElementById('infoPanel').style.display = 'none';
+    }
+
+    
+
+    
+    const utvalgLag = new L.FeatureGroup();
+    const innmeldingLag = new L.FeatureGroup();
+    map.addLayer(utvalgLag);
+    map.addLayer(innmeldingLag);
+    console.log('Lag opprettet:', { utvalgLag, innmeldingLag });
+
+   
+    const drawControl = new L.Control.Draw({
+        draw: {
+            polygon: false,
+            polyline: false,
+            rectangle: true,
+            circle: false,
+            marker: false,
+            circlemarker: false
+        },
+        edit: {
+            featureGroup: utvalgLag,
+            remove: true
+        }
+    });
+    console.log('DrawControl opprettet:', drawControl);
+    map.addControl(drawControl);
+
+   
+    const geometriData = @Html.Raw(Model.GetGeometriDataAsJson());
+geometriData.forEach(function (data) {
+    try {
+        const rawGeoJson = JSON.parse(data.GeometriGeoJson);
+        const geoJsonFeature = {
+            type: "Feature",
+            geometry: {
+                type: rawGeoJson.type,
+                coordinates: rawGeoJson.coordinates
+            },
+            properties: { InnmeldingId: data.InnmeldingId }
+        };
+
+        const geoJsonLayer = L.geoJSON(geoJsonFeature, {
+            onEachFeature: function (feature, layer) {
+                let center;
+                
+                if (feature.geometry.type === 'Point') {
+                    center = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
+                } else {
+                    const bounds = layer.getBounds();
+                    center = bounds.getCenter();
+                }
+
+                const handleClick = function (event) {
+                    const coordinates = event.latlng;
+                    window.location.href = `/KartvisningAlleInnmeldingerSaksB/GetKommunenummer?innmeldingId=${data.InnmeldingId}&lat=${coordinates.lat}&lng=${coordinates.lng}`;
+                };
+
+                const marker = L.marker(center).addTo(map);
+                marker.on('click', handleClick);
+                layer.on('click', handleClick);
+            }
+        });
+
+        geoJsonLayer.addTo(innmeldingLag);
+    } catch (e) {
+        console.error('Feil ved parsing av geometri:', e, data);
+    }
+});
+
+    map.on(L.Draw.Event.CREATED, function (event) {
+        console.log('Tegning opprettet:', event);
+        utvalgLag.clearLayers();
+        utvalgLag.addLayer(event.layer);
+
+        const bounds = event.layer.getBounds();
+        const innmeldingerInnenforUtsnitt = [];
+
+       
+        console.log('Utsnitt bounds:', bounds);
+
+        
+        geometriData.forEach(function (data) {
+            try {
+                const geoJsonFeature = JSON.parse(data.GeometriGeoJson);
+                const layer = L.geoJSON(geoJsonFeature);
+                const layerBounds = layer.getBounds();
+
+                
+                console.log('Sjekker innmelding:', data.InnmeldingId);
+                console.log('Layer bounds:', layerBounds);
+
+                if (bounds.contains(layerBounds.getCenter())) {
+                    const center = layerBounds.getCenter();
+                    innmeldingerInnenforUtsnitt.push({
+                        id: data.InnmeldingId,
+                        lat: center.lat,
+                        lng: center.lng
+                    });
+                    console.log('Fant innmelding i utsnitt:', data.InnmeldingId);
+                }
+            } catch (e) {
+                console.error('Feil ved sjekk av geometri:', e, data);
+            }
+        });
+
+        console.log('Antall innmeldinger funnet:', innmeldingerInnenforUtsnitt.length);
+
+        
+        const visUtsnittBtn = document.getElementById('visUtsnittBtn');
+        const clearUtsnittBtn = document.getElementById('clearUtsnittBtn');
+
+        visUtsnittBtn.disabled = innmeldingerInnenforUtsnitt.length === 0;
+        clearUtsnittBtn.disabled = false;
+
+        if (innmeldingerInnenforUtsnitt.length > 0) {
+            visUtsnittBtn.dataset.innmeldinger = JSON.stringify(innmeldingerInnenforUtsnitt);
+            console.log('Knapper oppdatert, utsnitt inneholder innmeldinger');
+        } else {
+            console.log('Ingen innmeldinger funnet i utsnitt');
+        }
+
+       
+        if (drawControl._toolbars.draw._modes.rectangle.handler.enabled()) {
+            drawControl._toolbars.draw._modes.rectangle.handler.disable();
+        }
+    });
+
+    
+    document.getElementById('visUtsnittBtn').addEventListener('click', async function() {
+        const innmeldinger = JSON.parse(this.dataset.innmeldinger);
+        const firstInnmelding = innmeldinger[0];
+        
+        try {
+            const response = await fetch(`/KartvisningAlleInnmeldingerSaksB/GetKommunenummer?innmeldingId=${firstInnmelding.id}&lat=${firstInnmelding.lat}&lng=${firstInnmelding.lng}`);
+            if (response.redirected) {
+                // Samle alle innmelding-IDer og send med som parameter
+                const ids = innmeldinger.map(i => i.id).join(',');
+                window.location.href = `/KartvisningEnEllerFlereInnmeldingSaksB/KartvisningEnEllerFlereInnmeldingSaksB?innmeldingIds=${ids}`;
+            }
+        } catch (error) {
+            console.error('Feil ved henting av kommunenummer:', error);
+        }
+    });
+
+  
+    document.getElementById('clearUtsnittBtn').addEventListener('click', function() {
+        utvalgLag.clearLayers();
+        this.disabled = true;
+        document.getElementById('visUtsnittBtn').disabled = true;
+    });
+</script>

@@ -12,6 +12,7 @@ namespace Interface
         Task<IEnumerable<(Geometri Geometri, InnmeldingModel Innmelding)>> GetAktiveGeometriMedInnmeldingAsync();
         Task<bool> OppdatereGeometriAsync(int innmeldingId, string geometriGeoJson);
         Task<Geometri> GetForBehandleInnmedingAsync(int innmeldingId);
+
     }
 }
 
