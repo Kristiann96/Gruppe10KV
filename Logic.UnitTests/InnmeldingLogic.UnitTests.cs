@@ -11,6 +11,7 @@ namespace Logic.UnitTests
     {
         private Mock<ITransaksjonsRepository> _transaksjonsRepositoryMock;
         private Mock<IGeometriRepository> _geometriRepositoryMock;
+        private Mock<IGjesteinnmelderRepository> _gjesteinnmelderRepositoryMock;
         private InnmeldingLogic _logic;
         private const int TEST_INNMELDING_ID = 1;
         private const string VALID_GEOJSON = "{ \"type\": \"Point\", \"coordinates\": [10.0, 60.0] }";
@@ -21,9 +22,11 @@ namespace Logic.UnitTests
         {
             _transaksjonsRepositoryMock = new Mock<ITransaksjonsRepository>();
             _geometriRepositoryMock = new Mock<IGeometriRepository>();
+            _gjesteinnmelderRepositoryMock = new Mock<IGjesteinnmelderRepository>();
             _logic = new InnmeldingLogic(
                 _transaksjonsRepositoryMock.Object,
-                _geometriRepositoryMock.Object);
+                _geometriRepositoryMock.Object,
+                _gjesteinnmelderRepositoryMock.Object);
         }
 
         #region ValidereOgLagreNyInnmelding Tests
@@ -87,6 +90,7 @@ namespace Logic.UnitTests
             // Arrange
             var innmelding = CreateValidInnmelding();
             var geometri = CreateValidGeometri();
+            var gjesteinnmelderId = 123;
 
             if (shouldBeValid)
             {
@@ -94,7 +98,7 @@ namespace Logic.UnitTests
                     ? _transaksjonsRepositoryMock.Setup(x => x.LagreKomplettInnmeldingInnloggetAsync(
                         It.IsAny<string>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>()))
                     : _transaksjonsRepositoryMock.Setup(x => x.LagreKomplettInnmeldingAsync(
-                        It.IsAny<string>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>()));
+                        It.IsAny<int>(), It.IsAny<InnmeldingModel>(), It.IsAny<Geometri>()));
 
                 setupMethod.ReturnsAsync(true);
 

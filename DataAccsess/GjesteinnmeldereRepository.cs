@@ -15,15 +15,15 @@ namespace DataAccess
             _dbConnection = dbConnection;
         }
 
-        public async Task<int> HentGjesteinnmelderIdAsync(string? gjesteinnmelderEpost)
+        public async Task<int?> HentGjesteinnmelderIdAsync(string? gjesteinnmelderEpost)
         {
             using var connection = _dbConnection.CreateConnection();
 
             var sql = @"
-            SELECT gjesteinnmelder_id as gjesteinnmelderId  FROM gjesteinnmelder
-            WHERE gjesteinnmelder_epost = @gjesteinnmelderEpost;";
+            SELECT gjest_innmelder_id as gjesteinnmelderId FROM gjesteinnmelder
+            WHERE epost = @gjesteinnmelderEpost;";
 
-            var gjesteinnmelderId = await connection.QuerySingleOrDefaultAsync<int>(sql,
+            var gjesteinnmelderId = await connection.QuerySingleOrDefaultAsync<int?>(sql,
                 new { gjesteinnmelderEpost = gjesteinnmelderEpost });
 
             return gjesteinnmelderId;

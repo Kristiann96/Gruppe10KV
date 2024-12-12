@@ -19,7 +19,10 @@ namespace Logic
         private readonly IGjesteinnmelderRepository _gjesteinnmelderRepository;
         private readonly IGeometriRepository _geometriRepository;
 
-        public InnmeldingLogic(ITransaksjonsRepository transaksjonsRepository, IGeometriRepository geometriRepository, IGjesteinnmelderRepository gjesteinnmelderRepository)
+        public InnmeldingLogic(
+            ITransaksjonsRepository transaksjonsRepository, 
+            IGeometriRepository geometriRepository, 
+            IGjesteinnmelderRepository gjesteinnmelderRepository)
         {
             _transaksjonsRepository = transaksjonsRepository;
             _geometriRepository = geometriRepository;
