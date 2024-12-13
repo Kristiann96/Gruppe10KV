@@ -27,7 +27,7 @@ namespace Interface
         Task<int> OpprettGjesteinnmelderAsync(string epost);
 
 
-        Task<(bool success, int personId)> OpprettPersonOgInnmelder(
+       Task<(bool success, int personId, string? errorMessage)> OpprettPersonOgInnmelder(
             string fornavn,
             string etternavn,
             string telefonnummer,

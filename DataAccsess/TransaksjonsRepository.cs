@@ -113,39 +113,73 @@ namespace DataAccess
             }
         }
 
-        public async Task<(bool success, int personId)> OpprettPersonOgInnmelder(
-            string fornavn,
-            string etternavn,
-            string telefonnummer,
-            string epost)
+        public async Task<(bool success, int personId, string? errorMessage)> OpprettPersonOgInnmelder(
+     string fornavn,
+     string etternavn,
+     string telefonnummer,
+     string epost)
         {
             using var connection = _dbConnection.CreateConnection();
+            using var transaction = await connection.BeginTransactionAsync();
+
             try
             {
+                const string sjekkTelefonSql = "SELECT COUNT(*) FROM person WHERE telefonnummer = @Telefonnummer";
+                var telefonFinnes = await connection.ExecuteScalarAsync<int>(
+                    sjekkTelefonSql,
+                    new { Telefonnummer = telefonnummer },
+                    transaction) > 0;
+
+                if (telefonFinnes)
+                {
+                    throw new ForretningsRegelExceptionModel("Telefonnummer er allerede i bruk");
+                }
+
+                const string sjekkEpostSql = "SELECT COUNT(*) FROM innmelder WHERE epost = @Epost";
+                var epostFinnes = await connection.ExecuteScalarAsync<int>(
+                    sjekkEpostSql,
+                    new { Epost = epost },
+                    transaction) > 0;
+
+                if (epostFinnes)
+                {
+                    throw new ForretningsRegelExceptionModel("E-post er registrert, vennligst velg en annen");
+                }
+
+              
                 const string personSql = @"
-                INSERT INTO person (fornavn, etternavn, telefonnummer)
-                VALUES (@Fornavn, @Etternavn, @Telefonnummer);
-                SELECT LAST_INSERT_ID();";
+            INSERT INTO person (fornavn, etternavn, telefonnummer)
+            VALUES (@Fornavn, @Etternavn, @Telefonnummer);
+            SELECT LAST_INSERT_ID();";
 
                 var personId = await connection.QuerySingleAsync<int>(personSql,
-                    new { Fornavn = fornavn, Etternavn = etternavn, Telefonnummer = telefonnummer });
+                    new { Fornavn = fornavn, Etternavn = etternavn, Telefonnummer = telefonnummer },
+                    transaction);
 
                 const string innmelderSql = @"
-                INSERT INTO innmelder (person_id, innmelder_id, epost)
-                VALUES (@PersonId, @InnmelderId, @Epost);";
+            INSERT INTO innmelder (person_id, innmelder_id, epost)
+            VALUES (@PersonId, @InnmelderId, @Epost);";
 
                 var innmelderId = await connection.QuerySingleAsync<int>(
-                    "SELECT NEXTVAL(innmelder_id_seq)");
+                    "SELECT NEXTVAL(innmelder_id_seq)",
+                    transaction: transaction);
 
                 await connection.ExecuteAsync(innmelderSql,
-                    new { PersonId = personId, InnmelderId = innmelderId, Epost = epost });
+                    new { PersonId = personId, InnmelderId = innmelderId, Epost = epost },
+                    transaction);
 
-                return (true, personId);
+                await transaction.CommitAsync();
+                return (true, personId, null);
             }
-            catch (Exception)
+            catch (ForretningsRegelExceptionModel ex)
             {
-                return (false, 0);
-
+                await transaction.RollbackAsync();
+                return (false, 0, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return (false, 0, "Det oppstod en teknisk feil under registreringen. Vennligst prøv igjen senere.");
             }
         }
 
