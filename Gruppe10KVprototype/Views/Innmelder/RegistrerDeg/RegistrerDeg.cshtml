@@ -75,8 +75,8 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $(document).ready(function() {
-            $('form').on('submit', function(e) {
+        $(document).ready(function () {
+            $('form').on('submit', function (e) {
                 e.preventDefault();
                 var form = $(this);
 
@@ -84,7 +84,7 @@
                     url: form.attr('action'),
                     method: 'POST',
                     data: form.serialize(),
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             Swal.fire({
                                 title: 'Hurra!',
@@ -95,7 +95,6 @@
                                 timerProgressBar: true,
                                 iconColor: '#1a833b',
                                 didOpen: () => {
-                                   
                                     setTimeout(() => {
                                         window.location.href = response.redirectUrl;
                                     }, 2700);
@@ -110,7 +109,7 @@
                             });
                         }
                     },
-                    error: function() {
+                    error: function () {
                         Swal.fire({
                             title: 'Feil',
                             text: 'Noe gikk galt under registreringen. Vennligst prøv igjen.',
@@ -120,6 +119,6 @@
                     }
                 });
             });
-        });
+        });;
     </script>
 }

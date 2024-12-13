@@ -38,18 +38,27 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
         {
             if (!ModelState.IsValid)
             {
-                return View("RegistrerDeg", model);
+                return Json(new
+                {
+                    success = false,
+                    message = string.Join(" ", ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage))
+                });
             }
 
             try
             {
                 if (await _authService.DoesEmailExistAsync(model.Email))
                 {
-                    ModelState.AddModelError(string.Empty, "Denne e-postadressen er allerede registrert.");
-                    return View("RegistrerDeg", model);
+                    return Json(new
+                    {
+                        success = false,
+                        message = "E-post er registrert, vennligst velg en annen"
+                    });
                 }
 
-                var (success, personId) = await _transaksjonsRepository.OpprettPersonOgInnmelder(
+                var (success, personId, errorMessage) = await _transaksjonsRepository.OpprettPersonOgInnmelder(
                     model.Fornavn,
                     model.Etternavn,
                     model.Telefonnummer,
@@ -57,8 +66,11 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 
                 if (!success)
                 {
-                    ModelState.AddModelError(string.Empty, "Kunne ikke opprette bruker. Vennligst prøv igjen senere.");
-                    return View("RegistrerDeg", model);
+                    return Json(new
+                    {
+                        success = false,
+                        message = errorMessage ?? "Registrering feilet"
+                    });
                 }
 
                 var identityResult = await _authService.RegisterInnmelderAsync(
@@ -69,18 +81,17 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                 if (!identityResult.success)
                 {
                     // TODO: Her burde vi egentlig rulle tilbake person/innmelder opprettelsen
-                    foreach (var error in identityResult.errors)
+                    return Json(new
                     {
-                        ModelState.AddModelError(string.Empty, error);
-                    }
-
-                    return View("RegistrerDeg", model);
+                        success = false,
+                        message = string.Join(" ", identityResult.errors)
+                    });
                 }
 
                 return Json(new
                 {
                     success = true,
-                    message = "Registrering vellykket! Du vil nå bli videresendt til landingssiden.",
+                    message = "Registrering vellykket! Du vil nå bli videresendt til innlogging.",
                     redirectUrl = Url.Action("LandingsSide", "LandingsSide")
                 });
             }
@@ -90,7 +101,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                 return Json(new
                 {
                     success = false,
-                    message = "Det oppstod en feil under registrering. Vennligst prøv igjen senere."
+                    message = "Det oppstod en teknisk feil under registrering. Vennligst prøv igjen senere."
                 });
             }
         }
