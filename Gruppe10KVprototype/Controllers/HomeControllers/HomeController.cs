@@ -28,8 +28,12 @@ namespace Gruppe10KVprototype.Controllers.HomeControllers
 
                 return RedirectToAction("LandingsSide", "LandingsSide");
             }
-
-            return View();
+            
+            var model = new SuccessMeldingViewModel 
+            { 
+                Message = TempData["SuccessMessage"] as string 
+            };
+            return View(model);
         }
             
         public IActionResult Privacy()

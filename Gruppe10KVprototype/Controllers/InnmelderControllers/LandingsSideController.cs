@@ -1,6 +1,7 @@
 ﻿using AuthInterface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ViewModels.HomeViewModels;
 
 namespace Gruppe10KVprototype.Controllers.InnmelderControllers
 {
@@ -10,7 +11,11 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
     {
         public IActionResult LandingsSide()
         {
-            return View();
+            var model = new SuccessMeldingViewModel() 
+            { 
+                Message = TempData["SuccessMessage"] as string 
+            };
+            return View(model);
         }
     }
 }

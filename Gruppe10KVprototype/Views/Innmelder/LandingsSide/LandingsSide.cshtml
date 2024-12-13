@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ViewModels.HomeViewModels.SuccessMeldingViewModel
+
+@{
 
     Layout = "_Layout";
 }
@@ -14,26 +16,27 @@
 </head>
 
 <body>
+@await Html.PartialAsync("_SuccessMelding", Model)
     <div class="container">
         <div class="card-container">
-            
+
             <div class="cards">
                 <a href="@Url.Action("BidraTilKartforbedring", "BidraTilKartforbedring")" class="card">
                     <i class="fa-regular fa-handshake"></i>
                     <h2>Bidra til Kartkvalitet</h2>
                     <p>Hjelp oss med å forbedre kartkvaliteten ved å bekrefte eller avkrefte innmeldinger laget av andre.</p>
                 </a>
-                
+
                 <a href="@Url.Action("SporKartfeil", "SporKartfeil")" class="card">
                     <i class="fa-solid fa-map-location-dot"></i>
                     <h2>Lag innmelding med GPS</h2>
                     <p>Bruk din nåværende posisjon til å enkelt markere og melde inn kartfeil. Perfekt for feiloppdagelse mens du er på farten.</p>
                 </a>
-                
+
                 <a href="@Url.Action("KartfeilMarkering", "KartfeilMarkering")" class="card">
                     <i class="fa-solid fa-draw-polygon"></i>
                     <h2>Lag innmelding med tegneverktøy</h2>
-                        <p>Opprett innmelding med linje, punkt, rektangel eller polygon. Last opp bilde for tilleggs dokumentasjon</p>
+                    <p>Opprett innmelding med linje, punkt, rektangel eller polygon. Last opp bilde for tilleggs dokumentasjon</p>
                 </a>
 
                 <a href="@Url.Action("MineInnmeldinger", "MineInnmeldinger")" class="card">

@@ -77,6 +77,11 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
                     ModelState.AddModelError("", "Kunne ikke lagre innmeldingen. Vennligst prøv igjen.");
                     return View("KnyttInnmeldingTilPerson", model);
                 }
+                
+                TempData["SuccessMessage"] = innlogget 
+                    ? "Din innmelding er nå registrert og vil bli behandlet av våre saksbehandlere."
+                    : "Din innmelding er nå registrert. Opprett en bruker for å følge med på status.";
+                
                 return innlogget
                     ? RedirectToAction("LandingsSide", "LandingsSide")
                     : RedirectToAction("Index", "Home");
