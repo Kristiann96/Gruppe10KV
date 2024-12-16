@@ -11,7 +11,7 @@ namespace Gruppe10KVprototype.Controllers.InnmelderControllers
     {
         public IActionResult LandingsSide()
         {
-            var model = new SuccessMeldingViewModel() 
+            var model = new SuccessMeldingViewModel()
             { 
                 Message = TempData["SuccessMessage"] as string 
             };
