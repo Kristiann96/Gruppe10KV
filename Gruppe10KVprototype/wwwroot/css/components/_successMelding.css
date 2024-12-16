@@ -1,0 +1,54 @@
+.success-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    opacity: 0;
+    animation: successSlideIn 0.5s forwards, successFadeOut 0.5s 4.5s forwards;
+}
+
+.success-popup-content {
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-left: 4px solid #4CAF50;
+    min-width: 300px;
+}
+
+.success-icon {
+    color: #4CAF50;
+    font-size: 32px;
+}
+
+.success-message {
+    color: #333;
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+@keyframes successSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 100%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes successFadeOut {
+    from {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, 100%);
+    }
+}
