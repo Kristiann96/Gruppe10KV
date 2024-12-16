@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ViewModels.HomeViewModels.SuccessMeldingViewModel
+@{
     Layout = "_Layout";
 }
 
@@ -13,6 +14,7 @@
 </head>
 
 <body class="frontHomePage">
+@await Html.PartialAsync("_SuccessMelding", Model)
 <div class="posterPage">
     <div class="innmeldCard">
         <h1>Hei!</h1>
