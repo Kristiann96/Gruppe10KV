@@ -20,8 +20,8 @@ namespace DataAccess
             using var connection = _dbConnection.CreateConnection();
             var sql = @"
                 SELECT 
-                    SUM(CASE WHEN type = 'bekreftelse' THEN 1 ELSE 0 END) as antallBekreftelser,
-                    SUM(CASE WHEN type = 'avkreftelse' THEN 1 ELSE 0 END) as antallAvkreftelser
+                    SUM(CASE WHEN vurderingstype = 'bekreftelse' THEN 1 ELSE 0 END) as antallBekreftelser,
+                    SUM(CASE WHEN vurderingstype = 'avkreftelse' THEN 1 ELSE 0 END) as antallAvkreftelser
                 FROM vurdering 
                 WHERE innmelding_id = @InnmeldingId";
 
@@ -37,7 +37,7 @@ namespace DataAccess
                     vurdering_id as VurderingId,
                     innmelding_id as InnmeldingId,
                     innmelder_id as InnmelderId,
-                    type as Type,
+                    vurderingstype as Type,
                     kommentar as Kommentar,
                     dato as Dato
                 FROM vurdering 
@@ -54,7 +54,7 @@ namespace DataAccess
                 INSERT INTO vurdering (
                     innmelding_id, 
                     innmelder_id,
-                    type,
+                    vurderingstype,
                     kommentar
                 ) VALUES (
                     @InnmeldingId,
